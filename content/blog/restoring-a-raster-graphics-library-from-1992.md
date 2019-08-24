@@ -26,9 +26,13 @@ run the example... segfault!
 ### Following along with GDB
 existing codebase makes it hard to follow the exact control flow  
 use gdb to follow the critical path of X11 calls  
-talk about xfollow.c, link to tronche tutorial  
+talk about xfollow.c, link to tronche tutorial, start with xfollow.c  
+tweak alongside GDB in attempt to recreate the error  
+fix XCreateColormap: AllocAll -> AllocNone  
+fix XStoreNamedColor: comment out because CM is read-only  
+Now examples work, but storing custom colors doesn't  
 
-### Enabling custom colors
+### Colormaps and custom colors
 TODO: Currently X11 is grabbing a TrueColor visual, I need DirectColor (I think)  
 
 ### Mission accomplished!
