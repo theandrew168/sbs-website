@@ -5,13 +5,11 @@
   <url>
     <loc>https://shallowbrooksoftware.com/blog/</loc>
     <lastmod>2019-08-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
     <loc>https://shallowbrooksoftware.com/</loc>
     <lastmod>2019-08-08T00:00:00+00:00</lastmod>
-    <priority>0</priority>
   </url>
   
   <url>
@@ -21,12 +19,10 @@
   
   <url>
     <loc>https://shallowbrooksoftware.com/categories/</loc>
-    <priority>0</priority>
   </url>
   
   <url>
     <loc>https://shallowbrooksoftware.com/tags/</loc>
-    <priority>0</priority>
   </url>
   
 </urlset>

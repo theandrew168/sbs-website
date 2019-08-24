@@ -57,11 +57,6 @@ This list is also not exhaustive by any means.
 
 ### Til next time
 Thanks for taking the time to read about my interests and my plans for this site.
-As a small preview of what's to come, I've recently been reading _Computer Graphics: Principles and Practice (2nd Edition)_.
-It is a foundational graphics book first published in 1982.
-Some of the content is dated but most of the ideas presented are fundamental to computer graphics theory.
-
-The book uses two libraries to demonstrate principles of both 2D and 3D graphics: SRGP and SPHIGS, respectively.
-From what I've seen, both of these libraries suffer from considerable amounts of [dormant code rot](https://en.wikipedia.org/wiki/Software_rot).
-I'd really like to get them working again so that I can follow along with the book's examples.
-In the next posting, I plan to detail the process of evaluating the status of SRGP (Simple Raster Graphics Package), cleaning up the code rot, and getting it running again on a modern X11 desktop.
+I've got plenty of projects and ideas in my personal backlog so feel free to stop by every once in a while.
+As of late, I've been extremely interested in the foundations of rasterization.
+Expect to see some content related to graphics and rendering in the near future!
