@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+         
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Device Ownership: Introduction</title>
+        
+        <style>
+
+    html body {
+        font-family: 'Raleway', sans-serif;
+        background-color: white;
+    }
+
+    :root {
+        --accent: purple;
+        --border-width:  5px ;
+    }
+
+</style>
+
+
+<link rel="stylesheet" href="https://shallowbrooksoftware.com/css/main.css">
+
+
+
+
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+
+
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/solarized-dark.min.css"> 
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+ 
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/c.min.js"></script>  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/python.min.js"></script> 
+
+    <script>hljs.initHighlightingOnLoad();</script>
+
+
+
+
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<script>$(document).on('click', function() { $('.collapse').collapse('hide'); })</script>
+ <meta name="generator" content="Hugo 0.57.2" />
+        
+
+        
+    </head>
+
+    
+    
+    <script type="text/javascript" async
+      src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+    </script>
+    
+
+    <body>
+         
+        <nav class="navbar navbar-default navbar-fixed-top">
+
+            <div class="container">
+
+                <div class="navbar-header">
+
+                    <a class="navbar-brand visible-xs" href="#">Device Ownership: Introduction</a>
+
+                    <button class="navbar-toggle" data-target=".navbar-collapse" data-toggle="collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                </div>
+
+                <div class="collapse navbar-collapse">
+
+                    
+                        <ul class="nav navbar-nav">
+                            
+                                <li><a href="/">Home</a></li>
+                            
+                                <li><a href="/blog/">Blog</a></li>
+                            
+                        </ul>
+                    
+
+                    
+                        <ul class="nav navbar-nav navbar-right">
+                            
+                                <li class="navbar-icon"><a href="https://github.com/theandrew168/"><i class="fa fa-github"></i></a></li>
+                            
+                        </ul>
+                    
+
+                </div>
+
+            </div>
+
+        </nav>
+
+
+<main>
+
+    <div class="item">
+
+    
+    
+    
+
+    
+    
+
+    <h4><a href="/blog/device-ownership-introduction/">Device Ownership: Introduction</a></h4>
+    <h5>February 21, 2020</h5>
+    
+
+</div>
+
+
+    <br> <div class="text-justify">
+
+<h3 id="is-there-a-problem-with-modern-software">Is there a problem with modern software?</h3>
+
+<p>There has been a lot of buzz surrounding the slowness, instability, and complexity of modern software systems.
+It seems as though more and more people are feeling and observing bloat and bugginess in their day-to-day usage of computers.
+In many situations, the mediocrity of today&rsquo;s technology-based working environment has become commonplace.</p>
+
+<p>During my few years spent in industry, these sort of quotes were heard almost daily:</p>
+
+<ul>
+<li><em>Looks like <a href="https://en.wikipedia.org/wiki/Microsoft_Windows">Windows</a> crashed. What a surprise!</em></li>
+<li><em>Shoot, my PC decided to do updates&hellip; see you in an hour.</em></li>
+<li><em>This meeting room isn&rsquo;t working. Let&rsquo;s try to schedule a different one.</em></li>
+<li><em>Just keeping refreshing the page until the content renders correctly.</em></li>
+</ul>
+
+<p>Businesses and individuals lose countless hours to these types of problems every day but they are usually endured with a laugh.
+The stability of Windows is the source of many jokes.
+Backup plans are necessary for inconsistent meeting room reservations.
+Are these situations an inevitability of computer systems or has something gone wrong?</p>
+
+<h3 id="some-people-say-yes">Some people say &ldquo;yes!&rdquo;</h3>
+
+<p>Nikita Prokopov (tonsky) presents evidence for &ldquo;industry&rsquo;s lack of care for efficiency, simplicity, and excellence&rdquo; in blog post <a href="https://tonsky.me/blog/disenchantment/">Software Disenchantment</a>.
+Casey Muratori argues that the interaction between software and hardware has the potential to be simplified in his presentation <a href="https://caseymuratori.com/blog_0031">The 30 Million Line Problem</a>.
+Maciej Ceglowski describes how websites have gotten progressively larger and slower in his article <a href="https://idlewords.com/talks/website_obesity.htm">The Website Obesity Crisis</a>.
+Jonathan Blow compares software development to a historical context of technological advancement in his talk <a href="https://www.youtube.com/watch?v=pW-SOdj4Kkk">Preventing the Collapse of Civilization</a>.
+Lastly, Niklaus Wirth described causes for &ldquo;fat software&rdquo; back in his 1995 essay <a href="https://cr.yp.to/bib/1995/wirth.pdf">A Plea for Lean Software</a>.</p>
+
+<h3 id="what-role-does-this-series-play">What role does this series play?</h3>
+
+<p>I agree with the analysis and opinions laid out by the individuals listed above.
+I want to find out if (and where) modern implementations can be simplified by starting at the bottom and tracing new paths up to what we have today.
+This series serves as a journal of the research and development necessary to make computers perform useful tasks.
+Due to its openness and simplicity, the <a href="https://en.wikipedia.org/wiki/RISC-V">RISC-V</a> <a href="https://en.wikipedia.org/wiki/Instruction_set_architecture">ISA</a> has been chosen as the canvas on which to explore these ideas.</p>
+
+<h3 id="what-questions-do-i-want-to-explore">What questions do I want to explore?</h3>
+
+<p>How much code does it take to utilize all of the features of a given piece of hardware?
+How much code does it take to start from scratch and completely &ldquo;own&rdquo; the device?
+At such a low level, how portable is software from one RISC-V device to another?
+Are there high-level languages other than <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> that provide useful and performant abstractions of a system&rsquo;s underlying hardware?
+Do any other models of <a href="https://en.wikipedia.org/wiki/Operating_system">operating system</a> design have valuable tradeoffs over traditional <a href="https://en.wikipedia.org/wiki/Monolithic_kernel">monolithic kernels</a>?
+Will the lack of per-core licensing costs on RISC-V chips enable innovations that displace traditional kernels with leaner <a href="https://en.wikipedia.org/wiki/HAL_(software)">hardware abstraction layers</a> and <a href="https://en.wikipedia.org/wiki/Scheduling_(computing)">schedulers</a>?</p>
+
+<h3 id="what-to-expect">What to expect</h3>
+
+<p>In preparation for this series, I&rsquo;ve written a simple RISC-V assembler in the form of a <a href="https://www.python.org/">Python</a> package named <a href="https://pypi.org/project/simpleriscv/">simpleriscv</a>.
+Though potentially unsuitable for large projects, this package lowers the barrier to entry for those who are curious about RISC-V.
+It saves beginners from needing to <a href="https://github.com/riscv/riscv-gnu-toolchain">build custom GCC toolchains</a> for their specific RISC-V target(s).</p>
+
+<p>I&rsquo;ve chosen a few reasonably-priced RISC-V development boards to kick the series off.
+At the lower end, we have the <a href="https://www.seeedstudio.com/Sipeed-Longan-Nano-RISC-V-GD32VF103CBT6-Development-Board-p-4205.html">Sipeed Longan Nano</a> and <a href="https://www.seeedstudio.com/Wio-Lite-RISC-V-GD32VF103-p-4293.html">Wio Lite RISC-V</a>.
+These chips are exciting because they have a small LCD screen and WiFi module, respectively.
+In the middle of the road is SiFive&rsquo;s <a href="https://www.sifive.com/boards/hifive1-rev-b">HiFive1 Rev B</a>.
+This chip has a WiFi module as well and comes with a completely different CPU than the first two.
+I&rsquo;m confident that this selection will provide enough variety to compare and contrast what it takes to write portable code at such a low level.</p>
+
+<p>I hope you find this series interesting and informative!</p>
+</div>
+
+    
+    
+
+    
+
+    
+
+</main>
+
+        <footer>
+
+            <p class="copyright text-muted">&copy; All rights reserved. Powered by <a href="https://gohugo.io">Hugo</a> and <a href="https://github.com/calintat/minimal">Minimal</a></p>
+
+        </footer>
+       
+    </body>
+
+</html>
+

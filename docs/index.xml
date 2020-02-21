@@ -6,10 +6,20 @@
     <description>Recent content on Shallow Brook Software</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 08 Aug 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 21 Feb 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://shallowbrooksoftware.com/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Device Ownership: Introduction</title>
+      <link>https://shallowbrooksoftware.com/blog/device-ownership-introduction/</link>
+      <pubDate>Fri, 21 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://shallowbrooksoftware.com/blog/device-ownership-introduction/</guid>
+      <description>Is there a problem with modern software? There has been a lot of buzz surrounding the slowness, instability, and complexity of modern software systems. It seems as though more and more people are feeling and observing bloat and bugginess in their day-to-day usage of computers. In many situations, the mediocrity of today&amp;rsquo;s technology-based working environment has become commonplace.
+During my few years spent in industry, these sort of quotes were heard almost daily:</description>
+    </item>
     
     <item>
       <title>Shallow Brook Software</title>
