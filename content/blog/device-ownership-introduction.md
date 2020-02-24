@@ -6,7 +6,7 @@ tags: []
 ### Is there a problem with modern software?
 There has been a lot of buzz surrounding the slowness, instability, and complexity of modern software systems.
 It seems as though more and more people are feeling and observing bloat and bugginess in their day-to-day usage of computers.
-In many situations, the mediocrity of today's technology-based working environment has become commonplace.
+In many situations, the mediocrity of today's technology has become so common that it isn't even seen as an issue.
 
 During my few years spent in industry, these sort of quotes were heard almost daily:
 
@@ -15,17 +15,17 @@ During my few years spent in industry, these sort of quotes were heard almost da
 * *This meeting room isn't working. Let's try to schedule a different one.*
 * *Just keeping refreshing the page until the content renders correctly.*
 
-Businesses and individuals lose countless hours to these types of problems every day but they are usually endured with a laugh.
+Businesses and individuals lose countless hours to these types of problems every day but they are usually brushed off with a laugh.
 The stability of Windows is the source of many jokes.
 Backup plans are necessary for inconsistent meeting room reservations.
 Are these situations an inevitability of computer systems or has something gone wrong?
 
-### Some people say "yes!"
-Nikita Prokopov (tonsky) presents evidence for "industry's lack of care for efficiency, simplicity, and excellence" in blog post [Software Disenchantment](https://tonsky.me/blog/disenchantment/).
-Casey Muratori argues that the interaction between software and hardware has the potential to be simplified in his presentation [The 30 Million Line Problem](https://caseymuratori.com/blog_0031).
-Maciej Ceglowski describes how websites have gotten progressively larger and slower in his article [The Website Obesity Crisis](https://idlewords.com/talks/website_obesity.htm).
-Jonathan Blow compares software development to a historical context of technological advancement in his talk [Preventing the Collapse of Civilization](https://www.youtube.com/watch?v=pW-SOdj4Kkk).
-Lastly, Niklaus Wirth described causes for "fat software" back in his 1995 essay [A Plea for Lean Software](https://cr.yp.to/bib/1995/wirth.pdf).
+### Some people see room for improvement
+In his blog post [Software Disenchantment](https://tonsky.me/blog/disenchantment/), Nikita Prokopov (tonsky) presents evidence for "industry's lack of care for efficiency, simplicity, and excellence".
+In his presentation [The 30 Million Line Problem](https://caseymuratori.com/blog_0031), Casey Muratori argues that the interaction between software and hardware has the potential to be simplified.
+In his article [The Website Obesity Crisis](https://idlewords.com/talks/website_obesity.htm), Maciej Ceglowski describes how websites have gotten progressively larger and slower.
+In his talk [Preventing the Collapse of Civilization](https://www.youtube.com/watch?v=pW-SOdj4Kkk), Jonathan Blow compares modern software development to historical technological advancements.
+Lastly, in his 1995 essay  [A Plea for Lean Software](https://cr.yp.to/bib/1995/wirth.pdf), Niklaus Wirth describes causes for "fat software".
 
 ### What role does this series play?
 I agree with the analysis and opinions laid out by the individuals listed above.
@@ -52,5 +52,11 @@ These chips are exciting because they have a small LCD screen and WiFi module, r
 In the middle of the road is SiFive's [HiFive1 Rev B](https://www.sifive.com/boards/hifive1-rev-b).
 This chip has a WiFi module as well and comes with a completely different CPU than the first two.
 I'm confident that this selection will provide enough variety to compare and contrast what it takes to write portable code at such a low level.
+
+It is worth pointing out that most (if not all) of these chips come with pre-built [software development kits](https://en.wikipedia.org/wiki/Software_development_kit) that enable programmers to easily utilize all of the hardware's features.
+However, I don't plan to depend on them for any of the projects in this series.
+I want to pull out absolutely everything between my software and the hardware to ensure that I understand the full picture.
+Using the provided libraries make it easy to light up an LED but difficult to grasp all of the minutia that go into it.
+Despite not using them directly, these SDKs _do_ serve as a great source of reference material.
 
 I hope you find this series interesting and informative!

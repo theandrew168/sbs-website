@@ -141,7 +141,7 @@
 
 <p>There has been a lot of buzz surrounding the slowness, instability, and complexity of modern software systems.
 It seems as though more and more people are feeling and observing bloat and bugginess in their day-to-day usage of computers.
-In many situations, the mediocrity of today&rsquo;s technology-based working environment has become commonplace.</p>
+In many situations, the mediocrity of today&rsquo;s technology has become so common that it isn&rsquo;t even seen as an issue.</p>
 
 <p>During my few years spent in industry, these sort of quotes were heard almost daily:</p>
 
@@ -152,18 +152,18 @@ In many situations, the mediocrity of today&rsquo;s technology-based working env
 <li><em>Just keeping refreshing the page until the content renders correctly.</em></li>
 </ul>
 
-<p>Businesses and individuals lose countless hours to these types of problems every day but they are usually endured with a laugh.
+<p>Businesses and individuals lose countless hours to these types of problems every day but they are usually brushed off with a laugh.
 The stability of Windows is the source of many jokes.
 Backup plans are necessary for inconsistent meeting room reservations.
 Are these situations an inevitability of computer systems or has something gone wrong?</p>
 
-<h3 id="some-people-say-yes">Some people say &ldquo;yes!&rdquo;</h3>
+<h3 id="some-people-see-room-for-improvement">Some people see room for improvement</h3>
 
-<p>Nikita Prokopov (tonsky) presents evidence for &ldquo;industry&rsquo;s lack of care for efficiency, simplicity, and excellence&rdquo; in blog post <a href="https://tonsky.me/blog/disenchantment/">Software Disenchantment</a>.
-Casey Muratori argues that the interaction between software and hardware has the potential to be simplified in his presentation <a href="https://caseymuratori.com/blog_0031">The 30 Million Line Problem</a>.
-Maciej Ceglowski describes how websites have gotten progressively larger and slower in his article <a href="https://idlewords.com/talks/website_obesity.htm">The Website Obesity Crisis</a>.
-Jonathan Blow compares software development to a historical context of technological advancement in his talk <a href="https://www.youtube.com/watch?v=pW-SOdj4Kkk">Preventing the Collapse of Civilization</a>.
-Lastly, Niklaus Wirth described causes for &ldquo;fat software&rdquo; back in his 1995 essay <a href="https://cr.yp.to/bib/1995/wirth.pdf">A Plea for Lean Software</a>.</p>
+<p>In his blog post <a href="https://tonsky.me/blog/disenchantment/">Software Disenchantment</a>, Nikita Prokopov (tonsky) presents evidence for &ldquo;industry&rsquo;s lack of care for efficiency, simplicity, and excellence&rdquo;.
+In his presentation <a href="https://caseymuratori.com/blog_0031">The 30 Million Line Problem</a>, Casey Muratori argues that the interaction between software and hardware has the potential to be simplified.
+In his article <a href="https://idlewords.com/talks/website_obesity.htm">The Website Obesity Crisis</a>, Maciej Ceglowski describes how websites have gotten progressively larger and slower.
+In his talk <a href="https://www.youtube.com/watch?v=pW-SOdj4Kkk">Preventing the Collapse of Civilization</a>, Jonathan Blow compares modern software development to historical technological advancements.
+Lastly, in his 1995 essay  <a href="https://cr.yp.to/bib/1995/wirth.pdf">A Plea for Lean Software</a>, Niklaus Wirth describes causes for &ldquo;fat software&rdquo;.</p>
 
 <h3 id="what-role-does-this-series-play">What role does this series play?</h3>
 
@@ -193,6 +193,12 @@ These chips are exciting because they have a small LCD screen and WiFi module, r
 In the middle of the road is SiFive&rsquo;s <a href="https://www.sifive.com/boards/hifive1-rev-b">HiFive1 Rev B</a>.
 This chip has a WiFi module as well and comes with a completely different CPU than the first two.
 I&rsquo;m confident that this selection will provide enough variety to compare and contrast what it takes to write portable code at such a low level.</p>
+
+<p>It is worth pointing out that most (if not all) of these chips come with pre-built <a href="https://en.wikipedia.org/wiki/Software_development_kit">software development kits</a> that enable programmers to easily utilize all of the hardware&rsquo;s features.
+However, I don&rsquo;t plan to depend on them for any of the projects in this series.
+I want to pull out absolutely everything between my software and the hardware to ensure that I understand the full picture.
+Using the provided libraries make it easy to light up an LED but difficult to grasp all of the minutia that go into it.
+Despite not using them directly, these SDKs <em>do</em> serve as a great source of reference material.</p>
 
 <p>I hope you find this series interesting and informative!</p>
 </div>
