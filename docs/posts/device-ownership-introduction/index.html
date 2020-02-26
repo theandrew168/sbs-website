@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="author" content="Andrew Dailey">
+    <meta name="description" content="Simple software that babbles loudly">
+    <meta name="keywords" content="blog,developer,personal">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Device Ownership: Introduction"/>
+<meta name="twitter:description" content="Is there a problem with modern software? There has been a lot of buzz surrounding the slowness, instability, and complexity of modern software systems. It seems as though more and more people are feeling and observing bloat and bugginess in their day-to-day usage of computers. In many situations, the mediocrity of today&rsquo;s technology has become so common that it isn&rsquo;t even seen as an issue.
+During my few years spent in industry, these sort of quotes were heard almost daily:"/>
+
+    <meta property="og:title" content="Device Ownership: Introduction" />
+<meta property="og:description" content="Is there a problem with modern software? There has been a lot of buzz surrounding the slowness, instability, and complexity of modern software systems. It seems as though more and more people are feeling and observing bloat and bugginess in their day-to-day usage of computers. In many situations, the mediocrity of today&rsquo;s technology has become so common that it isn&rsquo;t even seen as an issue.
+During my few years spent in industry, these sort of quotes were heard almost daily:" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shallowbrooksoftware.com/posts/device-ownership-introduction/" />
+<meta property="article:published_time" content="2020-02-21T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-02-21T00:00:00+00:00" />
+
+
+    
+      <base href="https://shallowbrooksoftware.com/posts/device-ownership-introduction/">
+    
+    <title>
+  Device Ownership: Introduction · Shallow Brook Software
+</title>
+
+    
+      <link rel="canonical" href="https://shallowbrooksoftware.com/posts/device-ownership-introduction/">
+    
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+
+    
+      
+      
+      <link rel="stylesheet" href="/css/coder.min.a4f332213a21ce8eb521670c614470c58923aaaf385e2a73982c31dd7642decb.css" integrity="sha256-pPMyITohzo61IWcMYURwxYkjqq84XipzmCwx3XZC3ss=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://shallowbrooksoftware.com/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://shallowbrooksoftware.com/images/favicon-16x16.png" sizes="16x16">
+
+    <meta name="generator" content="Hugo 0.57.2" />
+  </head>
+
+  
+  
+  <body class="colorscheme-light">
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">
+      Shallow Brook Software
+    </a>
+    
+    <input type="checkbox" id="menu-toggle" />
+    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
+    <ul class="navigation-list">
+      
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://shallowbrooksoftware.com/about/">About</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://shallowbrooksoftware.com/posts/">Blog</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://shallowbrooksoftware.com/projects/">Projects</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://shallowbrooksoftware.com/contact/">Contact</a>
+          </li>
+        
+      
+      
+    </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">Device Ownership: Introduction</h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fas fa-calendar"></i>
+              <time datetime='2020-02-21T00:00:00Z'>
+                February 21, 2020
+              </time>
+            </span>
+          </div>
+          
+          <div class="tags">
+  <i class="fas fa-tag"></i>
+    <a href="/tags/risc-v/">risc-v</a>
+      <span class="separator">•</span>
+    <a href="/tags/firmware/">firmware</a></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        
+
+<h1 id="is-there-a-problem-with-modern-software">Is there a problem with modern software?</h1>
+
+<p>There has been a lot of buzz surrounding the slowness, instability, and complexity of modern software systems.
+It seems as though more and more people are feeling and observing bloat and bugginess in their day-to-day usage of computers.
+In many situations, the mediocrity of today&rsquo;s technology has become so common that it isn&rsquo;t even seen as an issue.</p>
+
+<p>During my few years spent in industry, these sort of quotes were heard almost daily:</p>
+
+<ul>
+<li><em>Looks like <a href="https://en.wikipedia.org/wiki/Microsoft_Windows">Windows</a> crashed. What a surprise!</em></li>
+<li><em>Shoot, my PC decided to do updates&hellip; see you in an hour.</em></li>
+<li><em>This meeting room isn&rsquo;t working. Let&rsquo;s try to schedule a different one.</em></li>
+<li><em>Just keeping refreshing the page until the content renders correctly.</em></li>
+</ul>
+
+<p>Businesses and individuals lose countless hours to these types of problems every day but they are usually brushed off with a laugh.
+The stability of Windows is the source of many jokes.
+Backup plans are necessary for inconsistent meeting room reservations.
+Are these situations an inevitability of computer systems or has something gone wrong?</p>
+
+<h1 id="some-people-see-room-for-improvement">Some people see room for improvement</h1>
+
+<p>In his blog post <a href="https://tonsky.me/blog/disenchantment/">Software Disenchantment</a>, Nikita Prokopov (tonsky) presents evidence for &ldquo;industry&rsquo;s lack of care for efficiency, simplicity, and excellence&rdquo;.
+In his presentation <a href="https://caseymuratori.com/blog_0031">The 30 Million Line Problem</a>, Casey Muratori argues that the interaction between software and hardware has the potential to be simplified.
+In his article <a href="https://idlewords.com/talks/website_obesity.htm">The Website Obesity Crisis</a>, Maciej Ceglowski describes how websites have gotten progressively larger and slower.
+In his talk <a href="https://www.youtube.com/watch?v=pW-SOdj4Kkk">Preventing the Collapse of Civilization</a>, Jonathan Blow compares modern software development to historical technological advancements.
+Lastly, in his 1995 essay  <a href="https://cr.yp.to/bib/1995/wirth.pdf">A Plea for Lean Software</a>, Niklaus Wirth describes causes for &ldquo;fat software&rdquo;.</p>
+
+<h1 id="what-role-does-this-series-play">What role does this series play?</h1>
+
+<p>I agree with the analysis and opinions laid out by the individuals listed above.
+I want to find out if (and where) modern implementations can be simplified by starting at the bottom and tracing new paths up to what we have today.
+This series serves as a journal of the research and development necessary to make computers perform useful tasks.
+Due to its openness and simplicity, the <a href="https://en.wikipedia.org/wiki/RISC-V">RISC-V</a> <a href="https://en.wikipedia.org/wiki/Instruction_set_architecture">ISA</a> has been chosen as the canvas on which to explore these ideas.</p>
+
+<h1 id="what-questions-do-i-want-to-explore">What questions do I want to explore?</h1>
+
+<p>How much code does it take to utilize all of the features of a given piece of hardware?
+How much code does it take to start from scratch and completely &ldquo;own&rdquo; the device?
+At such a low level, how portable is software from one RISC-V device to another?
+Are there high-level languages other than <a href="https://en.wikipedia.org/wiki/C_(programming_language)">C</a> that provide useful and performant abstractions of a system&rsquo;s underlying hardware?
+Do any other models of <a href="https://en.wikipedia.org/wiki/Operating_system">operating system</a> design have valuable tradeoffs over traditional <a href="https://en.wikipedia.org/wiki/Monolithic_kernel">monolithic kernels</a>?
+Will the lack of per-core licensing costs on RISC-V chips enable innovations that displace traditional kernels with leaner <a href="https://en.wikipedia.org/wiki/HAL_(software)">hardware abstraction layers</a> and <a href="https://en.wikipedia.org/wiki/Scheduling_(computing)">schedulers</a>?</p>
+
+<h1 id="what-to-expect">What to expect</h1>
+
+<p>In preparation for this series, I&rsquo;ve written a simple RISC-V assembler in the form of a <a href="https://www.python.org/">Python</a> package named <a href="https://pypi.org/project/simpleriscv/">simpleriscv</a>.
+Though potentially unsuitable for large projects, this package lowers the barrier to entry for those who are curious about RISC-V.
+It saves beginners from needing to <a href="https://github.com/riscv/riscv-gnu-toolchain">build custom GCC toolchains</a> for their specific RISC-V target(s).</p>
+
+<p>I&rsquo;ve chosen a few reasonably-priced RISC-V development boards to kick the series off.
+At the lower end, we have the <a href="https://www.seeedstudio.com/Sipeed-Longan-Nano-RISC-V-GD32VF103CBT6-Development-Board-p-4205.html">Sipeed Longan Nano</a> and <a href="https://www.seeedstudio.com/Wio-Lite-RISC-V-GD32VF103-p-4293.html">Wio Lite RISC-V</a>.
+These chips are exciting because they have a small LCD screen and WiFi module, respectively.
+In the middle of the road is SiFive&rsquo;s <a href="https://www.sifive.com/boards/hifive1-rev-b">HiFive1 Rev B</a>.
+This chip has a WiFi module as well and comes with a completely different CPU than the first two.
+I&rsquo;m confident that this selection will provide enough variety to compare and contrast what it takes to write portable code at such a low level.</p>
+
+<p>It is worth pointing out that most (if not all) of these chips come with pre-built <a href="https://en.wikipedia.org/wiki/Software_development_kit">software development kits</a> that enable programmers to easily utilize all of the hardware&rsquo;s features.
+However, I don&rsquo;t plan to depend on them for any of the projects in this series.
+I want to pull out absolutely everything between my software and the hardware to ensure that I understand the full picture.
+Using the provided libraries make it easy to light up an LED but difficult to grasp all of the minutia that go into it.
+Despite not using them directly, these SDKs <em>do</em> serve as a great source of reference material.</p>
+
+<p>I hope you find this series interesting and informative!</p>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        
+        
+        
+      </footer>
+    </article>
+
+    
+  </section>
+
+      </div>
+
+      <footer class="footer">
+  <section class="container">
+    
+      <p>simple software that babbles loudly</p>
+    
+    
+      
+        © 2020
+      
+       Andrew Dailey 
+    
+    
+       · 
+       <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+    
+    
+  </section>
+</footer>
+
+    </main>
+
+    
+
+    
+
+  </body>
+
+</html>

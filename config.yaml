@@ -1,0 +1,44 @@
+baseURL: https://shallowbrooksoftware.com/
+title: Shallow Brook Software
+theme: coder
+languageCode: en-us
+paginate: 20
+
+params:
+  author: Andrew Dailey
+  info: Software Hobbyist and Firmware Developer
+  description: Simple software that babbles loudly
+  footercontent: simple software that babbles loudly
+  keywords: blog,developer,personal
+  avatarurl: images/avatar.jpg
+  social:
+  - name: GitHub
+    icon: fab fa-github
+    url: https://github.com/theandrew168/
+    weight: 1
+  - name: RSS
+    icon: fas fa-rss
+    url: https://shallowbrooksoftware.com/index.xml
+    weight: 2
+    rel: alternate
+    type: application/rss+xml
+
+menu:
+  main:
+  - name: About
+    url: /about/
+    weight: 1
+  - name: Blog
+    url: /posts/
+    weight: 2
+  - name: Projects
+    url: /projects/
+    weight: 3
+  - name: Contact
+    url: /contact/
+    weight: 4
+
+taxonomies:
+  category: categories
+  series: series
+  tag: tags

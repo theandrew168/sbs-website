@@ -3,12 +3,22 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://shallowbrooksoftware.com/blog/</loc>
+    <loc>https://shallowbrooksoftware.com/posts/device-ownership-introduction/</loc>
     <lastmod>2020-02-21T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://shallowbrooksoftware.com/blog/device-ownership-introduction/</loc>
+    <loc>https://shallowbrooksoftware.com/tags/firmware/</loc>
+    <lastmod>2020-02-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/posts/</loc>
+    <lastmod>2020-02-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/tags/risc-v/</loc>
     <lastmod>2020-02-21T00:00:00+00:00</lastmod>
   </url>
   
@@ -18,8 +28,17 @@
   </url>
   
   <url>
-    <loc>https://shallowbrooksoftware.com/blog/shallow-brook-software/</loc>
+    <loc>https://shallowbrooksoftware.com/tags/</loc>
+    <lastmod>2020-02-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/posts/welcome-to-shallow-brook-software/</loc>
     <lastmod>2019-08-08T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/about/</loc>
   </url>
   
   <url>
@@ -27,7 +46,15 @@
   </url>
   
   <url>
-    <loc>https://shallowbrooksoftware.com/tags/</loc>
+    <loc>https://shallowbrooksoftware.com/contact/</loc>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/projects/</loc>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/series/</loc>
   </url>
   
 </urlset>
