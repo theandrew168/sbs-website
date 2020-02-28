@@ -1,6 +1,7 @@
 ---
-title: "Restoring a Raster Graphics Library From 1992"
 date: 2019-08-24
+title: "Restoring a Raster Graphics Library From 1992"
+slug: "restoring-a-raster-graphics-library-from-1992"
 tags: []
 draft: true
 ---

@@ -1,6 +1,7 @@
 ---
 date: 2020-02-21
-title: "Device Ownership: Introduction"
+title: "Device Ownership 000: Introduction"
+slug: "device-ownership-000"
 tags: ["risc-v", "firmware"]
 ---
 # Is there a problem with modern software?
@@ -42,6 +43,8 @@ Do any other models of [operating system](https://en.wikipedia.org/wiki/Operatin
 Will the lack of per-core licensing costs on RISC-V chips enable innovations that displace traditional kernels with leaner [hardware abstraction layers](https://en.wikipedia.org/wiki/HAL_(software)) and [schedulers](https://en.wikipedia.org/wiki/Scheduling_(computing))?
 
 # What to expect
+**Note that, at the moment, this series only supports Debian Linux and its derivative distributions such as Ubuntu, Linux Mint, and elementary OS.**
+
 In preparation for this series, I've written a simple RISC-V assembler in the form of a [Python](https://www.python.org/) package named [simpleriscv](https://pypi.org/project/simpleriscv/).
 Though potentially unsuitable for large projects, this package lowers the barrier to entry for those who are curious about RISC-V.
 It saves beginners from needing to [build custom GCC toolchains](https://github.com/riscv/riscv-gnu-toolchain) for their specific RISC-V target(s).

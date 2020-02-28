@@ -1,6 +1,7 @@
 ---
-title: "Device Ownership: Longan Nano - Controlling LEDs"
 date: 2020-02-19
+title: "Device Ownership 002: Longan Nano - Controlling LEDs"
+slug: "device-ownership-002"
 tags: ["risc-v", "firmware", "longan nano"]
 draft: true
 ---

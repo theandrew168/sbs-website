@@ -1,6 +1,7 @@
 ---
 date: 2019-08-08
 title: "Welcome to Shallow Brook Software"
+slug: "welcome-to-shallow-brook-software"
 tags: []
 ---
 # Intro
