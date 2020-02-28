@@ -84,10 +84,10 @@ sudo apt install python3-pip python3-venv
 
 To keep things organized, we will use a [virtual environment](https://docs.python.org/3/library/venv.html) to isolate our project-specific Python modules from the rest of our system.
 ```
-python -m venv venv/
+python3 -m venv venv/
 source venv/bin/activate
 ```
-Note that that `source` command above will be necessary any time you come back to the project!
+**Note that that `source` command above will be required any time you come back to work on the project!**
 
 With a virtual environment in place, we can install the RISC-V assembler used in this series: [simpleriscv](https://pypi.org/project/simpleriscv/).
 ```
@@ -96,14 +96,14 @@ pip install simpleriscv
 
 Last but not least, we can write our simple program to a file and assemble it. 
 ```
-echo "addi zero, zero, 0" >> smallest.asm
+echo "addi zero, zero, 0" > smallest.asm
 simpleriscv asm smallest.asm
 ```
 
 By default, simpleriscv places its output in a file named with a `.bin` extension in place of the original `.asm`.
 
 Congratulations!
-You wrote and assembled the world's smallest RISC-V program!
+You just wrote and assembled the world's smallest RISC-V program!
 
 # Uploading firmware with DFU
 clean this up  
