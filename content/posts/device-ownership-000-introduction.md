@@ -26,7 +26,11 @@ In his blog post [Software Disenchantment](https://tonsky.me/blog/disenchantment
 In his presentation [The 30 Million Line Problem](https://caseymuratori.com/blog_0031), Casey Muratori argues that the interaction between software and hardware has the potential to be simplified.
 In his article [The Website Obesity Crisis](https://idlewords.com/talks/website_obesity.htm), Maciej Ceglowski describes how websites have gotten progressively larger and slower.
 In his talk [Preventing the Collapse of Civilization](https://www.youtube.com/watch?v=pW-SOdj4Kkk), Jonathan Blow compares modern software development to historical technological advancements.
-Lastly, in his 1995 essay  [A Plea for Lean Software](https://cr.yp.to/bib/1995/wirth.pdf), Niklaus Wirth describes causes for "fat software".
+
+The observation that software complexity might be getting out of hand is not just a recent one.
+Back in 2006, Ben Mosely and Peter Marks analyzed accidental versus essential complexity in their paper, [Out of the Tar Pit](http://curtclifton.net/papers/MoseleyMarks06a.pdf).
+In his 1995 essay [A Plea for Lean Software](https://cr.yp.to/bib/1995/wirth.pdf), Niklaus Wirth describes causes for "fat software" and what steps can be taken to slim things back down.
+Lastly, while working for [Silicon Graphics](https://en.wikipedia.org/wiki/Silicon_Graphics) in 1993, Tom Davis sent out an internal memo titled [Software Usability II](https://yarchive.net/risks/sgi_irix.html) that laid out multiple bloat-related regressions in the [IRIX](https://en.wikipedia.org/wiki/IRIX) 5.1 release.
 
 # What role does this series play?
 I agree with the analysis and opinions laid out by the individuals listed above.
