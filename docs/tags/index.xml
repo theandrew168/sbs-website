@@ -6,7 +6,7 @@
     <description>Recent content in Tags on Shallow Brook Software</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 21 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 07 Mar 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://shallowbrooksoftware.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,16 +14,25 @@
     <item>
       <title>firmware</title>
       <link>https://shallowbrooksoftware.com/tags/firmware/</link>
-      <pubDate>Fri, 21 Feb 2020 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 07 Mar 2020 00:00:00 +0000</pubDate>
       
       <guid>https://shallowbrooksoftware.com/tags/firmware/</guid>
       <description></description>
     </item>
     
     <item>
+      <title>longan nano</title>
+      <link>https://shallowbrooksoftware.com/tags/longan-nano/</link>
+      <pubDate>Sat, 07 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://shallowbrooksoftware.com/tags/longan-nano/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>risc-v</title>
       <link>https://shallowbrooksoftware.com/tags/risc-v/</link>
-      <pubDate>Fri, 21 Feb 2020 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 07 Mar 2020 00:00:00 +0000</pubDate>
       
       <guid>https://shallowbrooksoftware.com/tags/risc-v/</guid>
       <description></description>
