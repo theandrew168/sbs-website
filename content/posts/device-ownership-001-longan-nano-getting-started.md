@@ -124,7 +124,7 @@ Even though this program is available through the `apt` package system, we need 
 
 Before building dfu-util, we need to install its dependencies.
 ```
-sudo apt install build-essential git libusb-1.0-0-dev
+sudo apt install autoconf build-essential git libusb-1.0-0-dev
 ```
 
 Now we can clone the source code, build the program, and install it.
