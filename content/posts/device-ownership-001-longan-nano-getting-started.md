@@ -134,7 +134,7 @@ git clone git://git.code.sf.net/p/dfu-util/dfu-util
 cd dfu-util
 ./autogen.sh
 ./configure
-make -j4
+make
 sudo make install
 cd ..
 rm -r dfu-util/
