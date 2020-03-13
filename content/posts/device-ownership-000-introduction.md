@@ -2,8 +2,9 @@
 date: 2020-02-21
 title: "Device Ownership 000: Introduction"
 slug: "device-ownership-000"
-tags: ["risc-v", "firmware"]
+tags: ["risc-v", "firmware", "device ownership"]
 ---
+
 # Is there a problem with modern software?
 There has been a lot of buzz surrounding the slowness, instability, and complexity of modern software systems.
 It seems as though more and more people are feeling and observing bloat and bugginess in their day-to-day usage of computers.

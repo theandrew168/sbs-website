@@ -1,40 +1,70 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://shallowbrooksoftware.com/posts/device-ownership-001/</loc>
-    <lastmod>2020-03-07T00:00:00+00:00</lastmod>
+    <loc>https://shallowbrooksoftware.com/tags/device-ownership/</loc>
+    <lastmod>2020-02-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/posts/device-ownership-005/</loc>
+    <lastmod>2020-02-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://shallowbrooksoftware.com/tags/firmware/</loc>
-    <lastmod>2020-03-07T00:00:00+00:00</lastmod>
+    <lastmod>2020-02-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://shallowbrooksoftware.com/tags/longan-nano/</loc>
-    <lastmod>2020-03-07T00:00:00+00:00</lastmod>
+    <lastmod>2020-02-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://shallowbrooksoftware.com/posts/</loc>
-    <lastmod>2020-03-07T00:00:00+00:00</lastmod>
+    <lastmod>2020-02-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://shallowbrooksoftware.com/tags/risc-v/</loc>
-    <lastmod>2020-03-07T00:00:00+00:00</lastmod>
+    <lastmod>2020-02-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://shallowbrooksoftware.com/</loc>
-    <lastmod>2020-03-07T00:00:00+00:00</lastmod>
+    <lastmod>2020-02-26T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://shallowbrooksoftware.com/tags/</loc>
-    <lastmod>2020-03-07T00:00:00+00:00</lastmod>
+    <lastmod>2020-02-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/posts/device-ownership-004/</loc>
+    <lastmod>2020-02-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/tags/setup/</loc>
+    <lastmod>2020-02-25T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/posts/device-ownership-003/</loc>
+    <lastmod>2020-02-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/posts/device-ownership-002/</loc>
+    <lastmod>2020-02-23T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/posts/device-ownership-001/</loc>
+    <lastmod>2020-02-22T00:00:00+00:00</lastmod>
   </url>
   
   <url>

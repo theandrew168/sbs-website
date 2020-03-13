@@ -1,10 +1,11 @@
 ---
-date: 2020-02-19
-title: "Device Ownership 002: Longan Nano - Controlling LEDs"
-slug: "device-ownership-002"
-tags: ["risc-v", "firmware", "longan nano"]
+date: 2020-03-13
+title: "Device Ownership 006: Longan Nano - Controlling LEDs"
+slug: "device-ownership-006"
+tags: ["risc-v", "firmware", "device ownership", "longan nano"]
 draft: true
 ---
+
 # Intro
 where we left off: we can write riscv assembly, upload it to the nano, and run it  
 but we couldn't see any output. how can we do that?  

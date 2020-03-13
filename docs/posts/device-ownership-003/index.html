@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="author" content="Andrew Dailey">
+    <meta name="description" content="Simple software that babbles loudly">
+    <meta name="keywords" content="blog,developer,personal">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Device Ownership 003: Setup - Device Firmware Upgrade"/>
+<meta name="twitter:description" content="Preparing for DFU Without our assembled smallest.bin file in hand, the next step is to hook up our Longan Nano and upload the program to the chip&rsquo;s flash storage. To accomplish this task, we must use the Device Firmware Upgrade protocol. This protocol enables a very simple method for upgrading the firmware of devices connected to your system over USB. If you are curious about the details, the official specification for DFU can be found here."/>
+
+    <meta property="og:title" content="Device Ownership 003: Setup - Device Firmware Upgrade" />
+<meta property="og:description" content="Preparing for DFU Without our assembled smallest.bin file in hand, the next step is to hook up our Longan Nano and upload the program to the chip&rsquo;s flash storage. To accomplish this task, we must use the Device Firmware Upgrade protocol. This protocol enables a very simple method for upgrading the firmware of devices connected to your system over USB. If you are curious about the details, the official specification for DFU can be found here." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shallowbrooksoftware.com/posts/device-ownership-003/" />
+<meta property="article:published_time" content="2020-02-24T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-02-24T00:00:00+00:00" />
+
+
+    
+      <base href="https://shallowbrooksoftware.com/posts/device-ownership-003/">
+    
+    <title>
+  Device Ownership 003: Setup - Device Firmware Upgrade · Shallow Brook Software
+</title>
+
+    
+      <link rel="canonical" href="https://shallowbrooksoftware.com/posts/device-ownership-003/">
+    
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+
+    
+      
+      
+      <link rel="stylesheet" href="/css/coder.min.a4f332213a21ce8eb521670c614470c58923aaaf385e2a73982c31dd7642decb.css" integrity="sha256-pPMyITohzo61IWcMYURwxYkjqq84XipzmCwx3XZC3ss=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://shallowbrooksoftware.com/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://shallowbrooksoftware.com/images/favicon-16x16.png" sizes="16x16">
+
+    <meta name="generator" content="Hugo 0.59.1" />
+  </head>
+
+  
+  
+  <body class="colorscheme-light">
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">
+      Shallow Brook Software
+    </a>
+    
+    <input type="checkbox" id="menu-toggle" />
+    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
+    <ul class="navigation-list">
+      
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://shallowbrooksoftware.com/about/">About</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://shallowbrooksoftware.com/posts/">Blog</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://shallowbrooksoftware.com/projects/">Projects</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://shallowbrooksoftware.com/contact/">Contact</a>
+          </li>
+        
+      
+      
+    </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">Device Ownership 003: Setup - Device Firmware Upgrade</h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fas fa-calendar"></i>
+              <time datetime='2020-02-24T00:00:00Z'>
+                February 24, 2020
+              </time>
+            </span>
+          </div>
+          
+          <div class="tags">
+  <i class="fas fa-tag"></i>
+    <a href="/tags/risc-v/">risc-v</a>
+      <span class="separator">•</span>
+    <a href="/tags/firmware/">firmware</a>
+      <span class="separator">•</span>
+    <a href="/tags/device-ownership/">device ownership</a>
+      <span class="separator">•</span>
+    <a href="/tags/setup/">setup</a></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        
+
+<h1 id="preparing-for-dfu">Preparing for DFU</h1>
+
+<p>Without our assembled <code>smallest.bin</code> file in hand, the next step is to hook up our Longan Nano and upload the program to the chip&rsquo;s flash storage.
+To accomplish this task, we must use the <a href="https://en.wikipedia.org/wiki/USB#Device_Firmware_Upgrade">Device Firmware Upgrade</a> protocol.
+This protocol enables a very simple method for upgrading the firmware of devices connected to your system over USB.
+If you are curious about the details, the official specification for DFU can be found <a href="https://www.usb.org/sites/default/files/DFU_1.1.pdf">here</a>.</p>
+
+<p>One important note about DFU is that the terms &ldquo;upload&rdquo; and &ldquo;download&rdquo; are expressed from the device&rsquo;s perspective.
+So, &ldquo;downloading&rdquo; firmware means writing an assembled, binary file from your system to the device.
+This is what we&rsquo;ll need to do in order to get our <code>smallest.bin</code> program onto the Longan Nano.
+Conversely, &ldquo;uploading&rdquo; firmware with DFU means reading all of the data on the device&rsquo;s flash storage and saving it a file on your local system.</p>
+
+<p>To program our device, we will be using a program called <a href="git clone git://git.code.sf.net/p/dfu-util/dfu-util">dfu-util</a>.
+Even though this program is available through the <code>apt</code> package system, we need to manually build a newer version that includes fixes for <a href="https://sourceforge.net/p/dfu-util/dfu-util/ci/529fa5147613218c75dfa441c64df9b28910fe1c/">multiple</a> <a href="https://sourceforge.net/p/dfu-util/dfu-util/ci/f2b7d4b1113ef6c3ada31a0654c9aefebcdb1de5/">bugs</a> in the GD32VF103 CPU&rsquo;s implementation of DFU.</p>
+
+<p>Before building dfu-util, we need to install its dependencies.</p>
+
+<pre><code>sudo apt install autoconf build-essential git libusb-1.0-0-dev pkg-config
+</code></pre>
+
+<p>Now we can clone the source code, build the program, and install it.
+The following steps include deleting the source code directory because we won&rsquo;t need it once dfu-util is installed.</p>
+
+<pre><code>git clone git://git.code.sf.net/p/dfu-util/dfu-util
+cd dfu-util
+./autogen.sh
+./configure
+make
+sudo make install
+cd ..
+rm -r dfu-util/
+</code></pre>
+
+<p>To verify that the install was successful, try out the command:</p>
+
+<pre><code>dfu-util --version
+</code></pre>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        
+        
+        
+      </footer>
+    </article>
+
+    
+  </section>
+
+      </div>
+
+      <footer class="footer">
+  <section class="container">
+    
+      <p>simple software that babbles loudly</p>
+    
+    
+      
+        © 2020
+      
+       Andrew Dailey 
+    
+    
+       · 
+       <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+    
+    
+  </section>
+</footer>
+
+    </main>
+
+    
+
+    
+
+  </body>
+
+</html>

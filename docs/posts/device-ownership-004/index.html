@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="author" content="Andrew Dailey">
+    <meta name="description" content="Simple software that babbles loudly">
+    <meta name="keywords" content="blog,developer,personal">
+
+    <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Device Ownership 004: Setup - Accessing USB Devices"/>
+<meta name="twitter:description" content="Identifying the device The ability to interact with most USB devices on Linux systems is restricted to the root user. However, the udev device manager exists to enable more granular access to specific devices for non-root users. In our case, we want to be able to perform read and write operations on the Longan Nano.
+Udev looks for special &ldquo;rules&rdquo; files in multiple system directories. The one we care about is /etc/udev/rules."/>
+
+    <meta property="og:title" content="Device Ownership 004: Setup - Accessing USB Devices" />
+<meta property="og:description" content="Identifying the device The ability to interact with most USB devices on Linux systems is restricted to the root user. However, the udev device manager exists to enable more granular access to specific devices for non-root users. In our case, we want to be able to perform read and write operations on the Longan Nano.
+Udev looks for special &ldquo;rules&rdquo; files in multiple system directories. The one we care about is /etc/udev/rules." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://shallowbrooksoftware.com/posts/device-ownership-004/" />
+<meta property="article:published_time" content="2020-02-25T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-02-25T00:00:00+00:00" />
+
+
+    
+      <base href="https://shallowbrooksoftware.com/posts/device-ownership-004/">
+    
+    <title>
+  Device Ownership 004: Setup - Accessing USB Devices · Shallow Brook Software
+</title>
+
+    
+      <link rel="canonical" href="https://shallowbrooksoftware.com/posts/device-ownership-004/">
+    
+
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700%7CMerriweather:300,700%7CSource+Code+Pro:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" integrity="sha384-KA6wR/X5RY4zFAHpv/CnoG2UW1uogYfdnP67Uv7eULvTveboZJg0qUpmJZb5VqzN" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous" />
+
+    
+      
+      
+      <link rel="stylesheet" href="/css/coder.min.a4f332213a21ce8eb521670c614470c58923aaaf385e2a73982c31dd7642decb.css" integrity="sha256-pPMyITohzo61IWcMYURwxYkjqq84XipzmCwx3XZC3ss=" crossorigin="anonymous" media="screen" />
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://shallowbrooksoftware.com/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://shallowbrooksoftware.com/images/favicon-16x16.png" sizes="16x16">
+
+    <meta name="generator" content="Hugo 0.59.1" />
+  </head>
+
+  
+  
+  <body class="colorscheme-light">
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/">
+      Shallow Brook Software
+    </a>
+    
+    <input type="checkbox" id="menu-toggle" />
+    <label class="menu-button float-right" for="menu-toggle"><i class="fas fa-bars"></i></label>
+    <ul class="navigation-list">
+      
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://shallowbrooksoftware.com/about/">About</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://shallowbrooksoftware.com/posts/">Blog</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://shallowbrooksoftware.com/projects/">Projects</a>
+          </li>
+        
+          <li class="navigation-item">
+            <a class="navigation-link" href="https://shallowbrooksoftware.com/contact/">Contact</a>
+          </li>
+        
+      
+      
+    </ul>
+    
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container post">
+    <article>
+      <header>
+        <div class="post-title">
+          <h1 class="title">Device Ownership 004: Setup - Accessing USB Devices</h1>
+        </div>
+        <div class="post-meta">
+          <div class="date">
+            <span class="posted-on">
+              <i class="fas fa-calendar"></i>
+              <time datetime='2020-02-25T00:00:00Z'>
+                February 25, 2020
+              </time>
+            </span>
+          </div>
+          
+          <div class="tags">
+  <i class="fas fa-tag"></i>
+    <a href="/tags/risc-v/">risc-v</a>
+      <span class="separator">•</span>
+    <a href="/tags/firmware/">firmware</a>
+      <span class="separator">•</span>
+    <a href="/tags/device-ownership/">device ownership</a>
+      <span class="separator">•</span>
+    <a href="/tags/setup/">setup</a></div>
+
+        </div>
+      </header>
+
+      <div>
+        
+        
+
+<h1 id="identifying-the-device">Identifying the device</h1>
+
+<p>The ability to interact with most USB devices on Linux systems is restricted to the root user.
+However, the <a href="https://en.wikipedia.org/wiki/Udev">udev</a> device manager exists to enable more granular access to specific devices for non-root users.
+In our case, we want to be able to perform read and write operations on the Longan Nano.</p>
+
+<p>Udev looks for special &ldquo;rules&rdquo; files in multiple system directories.
+The one we care about is <code>/etc/udev/rules.d/</code>.
+These rules files contain lines of key-value pairs that can be used to filter specific devices and change the permissions associated with them.
+To identity a specific USB device, we need to know two pieces of information: its vendor ID and its product ID.
+Every unique USB device can be identified by this pair of IDs.
+Once we know them, we can setup a rule that effectively says: &ldquo;if you see the Longan Nano, allow non-root users to interact with it&rdquo;.</p>
+
+<p>What would be a good way to find these IDs?
+Since some basic USB device information <em>is</em> available to non-root users by default, we can use a USB listing utility such as <code>lsusb</code>.
+Let&rsquo;s plug in the Longan Nano and see what we can see!
+After connecting a USB-C cable from your system to the device, try running <code>lsusb</code> and looking for something related to GigaDevice or DFU.</p>
+
+<pre><code>~/device_ownership$ lsusb
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 002: ID 0bda:0316 Realtek Semiconductor Corp. USB3.0-CRW
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 001 Device 003: ID 13d3:56a6 IMC Networks Integrated Camera
+Bus 001 Device 002: ID 8087:0a2b Intel Corp. 
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+</code></pre>
+
+<p>Unfortunately, nothing obvious shows up!
+This is actually expected and is related to how DFU works.
+See, when in DFU mode, a USB device acts like (and looks like) something completely different.
+By default, the Longan Nano does NOT enter DFU mode.
+Instead, it simply runs whatever program is currently loaded on its flash storage which may or may not involve interacting with the host sytem over USB.
+Unless explicitly programmed to do so, the Longan Nano won&rsquo;t even appear in the output of programs like <code>lsusb</code>.
+In order to &ldquo;see&rdquo; the device so that we can reprogram it, we need to somehow force it into DFU mode when it powers on.</p>
+
+<p>Different DFU-capcable chips have different ways of entering DFU mode.
+In the case of the Longan Nano, the magic lies within its two buttons: RESET and BOOT.
+The first button, RESET, does what you&rsquo;d expect it to: it resets the device.
+This is essentially the same as telling a modern computer to restart.
+It resets the chip&rsquo;s power connection which clears all of the CPU&rsquo;s internal state.</p>
+
+<p>The BOOT button, on the other hand, is a special button that tells the CPU to boot into DFU mode.
+This is exactly what we&rsquo;re after!
+In order to be sure that the CPU sees the signal from the BOOT button, it must be held down the while the chip is powered on or reset via the RESET button.
+Since the buttons are so small, I find it easiest to hold the BOOT button down, then press the RESET button at the same time.
+After both buttons are pressed, both buttons can be released at the same time.</p>
+
+<p><strong>Take note of this BOOT / RESET process! It will be used everytime we to download a new program to the device!</strong></p>
+
+<p>Now that the Longan Nano is in DFU mode, it should be visible to us via the <code>lsusb</code> command.
+Let&rsquo;s try it again:</p>
+
+<pre><code>~/device_ownership$ lsusb
+Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+Bus 002 Device 002: ID 0bda:0316 Realtek Semiconductor Corp. USB3.0-CRW
+Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
+Bus 001 Device 003: ID 13d3:56a6 IMC Networks Integrated Camera
+Bus 001 Device 002: ID 8087:0a2b Intel Corp. 
+Bus 001 Device 004: ID 28e9:0189 GDMicroelectronics GD32 0x418 DFU Bootloade
+Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+</code></pre>
+
+<p>There it is!
+The device with the description <code>GDMicroelectronics GD32 0x418 DFU Bootloade</code> is definitely the Longan Nano.
+The multiple instances of &ldquo;GD&rdquo; are short for &ldquo;GigaDevice&rdquo;, the CPU&rsquo;s manufacturer.
+To further increase our confidence, we can see most of the phrase <code>DFU Bootloader</code> in the device&rsquo;s description.
+Now that we know which line corresponds to the Longan Nano, we can find the two IDs we are after in the string <code>ID 28e9:0189</code>.
+The two IDs are separated by a colon.
+The first one is the vendor ID and the second is the product ID.
+For the Longan Nano device, its vendor ID is <code>23e9</code> and its product ID is <code>0189</code>.</p>
+
+<h1 id="accessing-the-device">Accessing the device</h1>
+
+<p>With all of that digging out of the way, we can finally write the udev rule that we need to allow us to interact with the device.
+The syntax used by udev rules is fairly straighforward.
+Each comma-separated, key-value pair is either a filter (denoted by a comparison operator such as <code>==</code>) or an assignment (denoted by the assignment operator <code>=</code>).
+In pseudo-code, this is what we want our udev rule to say.</p>
+
+<pre><code>if device.vendor_id == &quot;28e9&quot; and device.product_id == &quot;0189&quot;:
+    device.mode = &quot;0666&quot;  # this means &quot;everyone can read and write&quot;
+</code></pre>
+
+<p>In <a href="https://linux.die.net/man/7/udev">udev syntax</a>, our rule looks like this:</p>
+
+<pre><code>ATTRS{idVendor}==&quot;28e9&quot;, ATTRS{idProduct}==&quot;0189&quot;, MODE=&quot;0666&quot;
+</code></pre>
+
+<p>As mentioned earlier, udev rules are added by means of special rules files.
+We will name our file at <code>99-longan-nano.rules</code> and place it under <code>/etc/udev/rules.d/</code>.
+Below is a command to create the rules file with the single rule that we need and reload udev.</p>
+
+<pre><code>cat &lt;&lt;EOF | sudo tee /etc/udev/rules.d/99-longan-nano.rules
+ATTRS{idVendor}==&quot;28e9&quot;, ATTRS{idProduct}==&quot;0189&quot;, MODE=&quot;0666&quot;
+EOF
+</code></pre>
+
+<p>We then need to reload udev in order to pickup the new rule.</p>
+
+<pre><code>sudo udevadm control --reload
+</code></pre>
+
+<p>That should do it!
+The last step now is to unplug and reinsert the USB cable from your host machine.
+Udev applies its rules as devices are detected so a re-plug is necessary to pickup the new permissions.</p>
+
+<p>With all the correct permissions in place and the device in DFU mode, we should be able to see something using dfu-util.</p>
+
+<pre><code>~/device_ownership$ dfu-util --list
+Found DFU: [28e9:0189] ver=1000, devnum=7, cfg=1, intf=0, path=&quot;1-2&quot;, alt=1, name=&quot;@Option Bytes  /0x1FFFF800/01*016 g&quot;, serial=&quot;3CBJ&quot;
+Found DFU: [28e9:0189] ver=1000, devnum=7, cfg=1, intf=0, path=&quot;1-2&quot;, alt=0, name=&quot;@Internal Flash  /0x08000000/512*002Kg&quot;, serial=&quot;3CBJ&quot;
+</code></pre>
+
+<p>Very cool!
+This output actually shows two DFU alternatives: one for &ldquo;Option Bytes&rdquo; and one for &ldquo;Internal Flash&rdquo;.
+Since the GD32VF103 CPU executes code from it&rsquo;s internal flash storage, that second option is what we&rsquo;re after.
+To be more specific, once the CPU is initialized, it starts executing code from address 0x08000000 in its flash.</p>
+
+      </div>
+
+
+      <footer>
+        
+
+
+        
+        
+        
+      </footer>
+    </article>
+
+    
+  </section>
+
+      </div>
+
+      <footer class="footer">
+  <section class="container">
+    
+      <p>simple software that babbles loudly</p>
+    
+    
+      
+        © 2020
+      
+       Andrew Dailey 
+    
+    
+       · 
+       <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+    
+    
+  </section>
+</footer>
+
+    </main>
+
+    
+
+    
+
+  </body>
+
+</html>

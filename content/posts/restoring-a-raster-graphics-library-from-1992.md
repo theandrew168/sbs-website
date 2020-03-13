@@ -5,6 +5,7 @@ slug: "restoring-a-raster-graphics-library-from-1992"
 tags: []
 draft: true
 ---
+
 # Intro
 I've recently been reading _Computer Graphics: Principles and Practice (2nd Edition)_.
 It is a foundational graphics book first published in 1982.
