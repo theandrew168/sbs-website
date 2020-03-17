@@ -50,8 +50,8 @@ It resets the chip's power connection which clears all of the CPU's internal sta
 The BOOT button, on the other hand, is a special button that tells the CPU to boot into DFU mode.
 This is exactly what we're after!
 In order to be sure that the CPU sees the signal from the BOOT button, it must be held down the while the chip is powered on or reset via the RESET button.
-Since the buttons are so small, I find it easiest to hold the BOOT button down, then press the RESET button at the same time.
-After both buttons are pressed, both buttons can be released at the same time.
+Since the buttons are so small, I find it easiest to hold the BOOT button down, then press and release the RESET button.
+In short: press BOOT, press RESET, release RESET, release BOOT.
 
 **Take note of this BOOT / RESET process! It will be used everytime we to download a new program to the device!**
 
