@@ -1,7 +1,7 @@
 ---
-date: 2020-03-07
-title: "Device Ownership 001: Longan Nano - Getting Started"
-slug: "device-ownership-001"
+date: 2020-04-24
+title: "Bare-Metal Assembly on the Longan Nano"
+slug: "bare-metal-assembly-on-the-longan-nano"
 tags: ["risc-v", "firmware", "longan nano"]
 ---
 # Introduction
@@ -190,8 +190,8 @@ It resets the chip's power connection which clears all of the CPU's internal sta
 The BOOT button, on the other hand, is a special button that tells the CPU to boot into DFU mode.
 This is exactly what we're after!
 In order to be sure that the CPU sees the signal from the BOOT button, it must be held down the while the chip is powered on or reset via the RESET button.
-Since the buttons are so small, I find it easiest to hold the BOOT button down, then press the RESET button at the same time.
-After both buttons are pressed, both buttons can be released at the same time.
+Since the buttons are so small, I find it easiest to hold the BOOT button down, then press and release the RESET button.
+In short: press BOOT, press RESET, release RESET, release BOOT.
 
 **Take note of this BOOT / RESET process! It will be used everytime we to download a new program to the device!**
 
@@ -290,11 +290,5 @@ Who knew that doing absolutely nothing could be so much work?
 Most of what we covered wasn't even related to RISC-V or the code: it was just setup work and preparation.
 Don't let that worry you, though.
 Almost all of the explanations in this post (DFU mode, udev rules, using dfu-util) won't have to be covered again.
-
-In the next post we will do something slight more flashy: turning on an LED!
-Moving forward from there, the future is even brighter.
-We will look into using the device's timers to flash LEDs on and off.
-We will even get into using that big LCD screen on the front.
-Stick around for more of this series and some real action.
 
 Thanks for sticking around to the end!
