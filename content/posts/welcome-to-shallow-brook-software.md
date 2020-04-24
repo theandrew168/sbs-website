@@ -4,7 +4,6 @@ title: "Welcome to Shallow Brook Software"
 slug: "welcome-to-shallow-brook-software"
 tags: []
 ---
-
 # Intro
 Welcome to **Shallow Brook Software**!
 My name is Andrew Dailey and I'm a software hobbyist in Des Moines, Iowa, USA.

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>longan nano on Shallow Brook Software</title>
@@ -6,24 +6,15 @@
     <description>Recent content in longan nano on Shallow Brook Software</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 26 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 07 Mar 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://shallowbrooksoftware.com/tags/longan-nano/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Device Ownership 005: Longan Nano - Programming the Device</title>
-      <link>https://shallowbrooksoftware.com/posts/device-ownership-005/</link>
-      <pubDate>Wed, 26 Feb 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://shallowbrooksoftware.com/posts/device-ownership-005/</guid>
-      <description>Programming the device We now have all the information we need to download our smallest.bin program on the device. Remember from before that dfu-util shows us two alternative settings for upgrading firmware. Since we want to program the chip&amp;rsquo;s internal flash, we will need to specify the correct &amp;ldquo;alt&amp;rdquo; identifier (which is 0 in this case). Lastly, we need to specify the &amp;ldquo;range&amp;rdquo; of the Longan Nano&amp;rsquo;s flash storage: where it begins in memory and how large it is.</description>
-    </item>
-    
-    <item>
       <title>Device Ownership 001: Longan Nano - Getting Started</title>
       <link>https://shallowbrooksoftware.com/posts/device-ownership-001/</link>
-      <pubDate>Sat, 22 Feb 2020 00:00:00 +0000</pubDate>
+      <pubDate>Sat, 07 Mar 2020 00:00:00 +0000</pubDate>
       
       <guid>https://shallowbrooksoftware.com/posts/device-ownership-001/</guid>
       <description>Introduction The Sipeed Longan Nano is a small, affordable, 32-bit RISC-V chip. Despite its minimalism, the Longan Nano provides enough power and peripherals to learn RISC-V assembly and build exciting programs along the way.
