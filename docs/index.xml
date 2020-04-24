@@ -43,21 +43,16 @@ I am proficient in Python and C and am currently honing my skills with Go and Ru
     </item>
     
     <item>
-      <title>Contact</title>
-      <link>https://shallowbrooksoftware.com/contact/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://shallowbrooksoftware.com/contact/</guid>
-      <description>This page is under construction!</description>
-    </item>
-    
-    <item>
       <title>Projects</title>
       <link>https://shallowbrooksoftware.com/projects/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://shallowbrooksoftware.com/projects/</guid>
-      <description>This page is under construction!</description>
+      <description>JamQL Third-party Spotify application that allows the user to explore track using a fully-features SQL dialect and create playlists from the results.
+Skylark Cross-platform CHIP-8 emulator written in C.
+simpleriscv Simple, cross-platform RISC-V assembler.
+adventure Simple platform for developing cross-platform text adventure games.
+SRGP Simple Raster Graphics Package - C graphics library restoration from 1997.</description>
     </item>
     
   </channel>
