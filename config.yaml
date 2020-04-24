@@ -6,7 +6,7 @@ paginate: 20
 
 params:
   author: Andrew Dailey
-  info: Software Hobbyist and Firmware Developer
+  info: Independent Programmer
   description: Simple software that babbles loudly
   footercontent: simple software that babbles loudly
   keywords: blog,developer,personal
