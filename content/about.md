@@ -8,4 +8,4 @@ Programming is my primary hobby and I tend to focus on high-performance, systems
 I am proficient in Python and C and am currently honing my skills with Go and Rust.
 When it comes to writing C, I've spent plenty of time researching and testing the most effective way to achieve simple, cross-platform application builds.
 Most of the Makefiles for the C projects on my GitHub reflect this work.
-I also enjoy graphics-programming when I find the time: both rasterization and ray-tracing.
+I also enjoy graphics-related programming when I can find the spare time: both rasterization and ray-tracing.
