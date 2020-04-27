@@ -16,12 +16,10 @@ params:
     icon: fab fa-github
     url: https://github.com/theandrew168/
     weight: 1
-  - name: RSS
-    icon: fas fa-rss
-    url: https://shallowbrooksoftware.com/index.xml
+  - name: Email
+    icon: fa fa-envelope
+    url: mailto:info@shallowbrooksoftware.com
     weight: 2
-    rel: alternate
-    type: application/rss+xml
 
 menu:
   main:
