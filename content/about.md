@@ -1,7 +1,7 @@
 ---
 title: "About Me"
 ---
-My new is Andrew Dailey and I'm an independent programmer from Des Moines, Iowa.
+My name is Andrew Dailey and I'm an independent programmer from Des Moines, Iowa.
 I have multiple years of industry experience working a variety of jobs from Linux system administration to Python-based ETL to large-scale system automation.
 Programming is my primary hobby and I tend to focus on high-performance, systems software.
 
