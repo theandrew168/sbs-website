@@ -11,18 +11,10 @@
 
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Projects"/>
-<meta name="twitter:description" content="JamQL Third-party Spotify application that allows the user to explore track using a fully-features SQL dialect and create playlists from the results.
-Skylark Cross-platform CHIP-8 emulator written in C.
-simpleriscv Simple, cross-platform RISC-V assembler.
-adventure Simple platform for developing cross-platform text adventure games.
-SRGP Simple Raster Graphics Package - C graphics library restoration from 1997."/>
+<meta name="twitter:description" content="JamQL (website, source) This project started out as an idea for a way to create Spotify playlists based on a SQL-like query (hence the QL in JamQL). My plan was to integrate Spotify&rsquo;s Search API with SQLite&rsquo;s virtual table functionality in order to bridge the gap. I knew that an alternative to using SQLite would be to write my own simple query language and a corresponding lexer and parser for it."/>
 
     <meta property="og:title" content="Projects" />
-<meta property="og:description" content="JamQL Third-party Spotify application that allows the user to explore track using a fully-features SQL dialect and create playlists from the results.
-Skylark Cross-platform CHIP-8 emulator written in C.
-simpleriscv Simple, cross-platform RISC-V assembler.
-adventure Simple platform for developing cross-platform text adventure games.
-SRGP Simple Raster Graphics Package - C graphics library restoration from 1997." />
+<meta property="og:description" content="JamQL (website, source) This project started out as an idea for a way to create Spotify playlists based on a SQL-like query (hence the QL in JamQL). My plan was to integrate Spotify&rsquo;s Search API with SQLite&rsquo;s virtual table functionality in order to bridge the gap. I knew that an alternative to using SQLite would be to write my own simple query language and a corresponding lexer and parser for it." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shallowbrooksoftware.com/projects/" />
 
@@ -108,16 +100,66 @@ SRGP Simple Raster Graphics Package - C graphics library restoration from 1997."
       <h1>Projects</h1>
     </header>
 
-    <h2 id="jamql">JamQL</h2>
-<p>Third-party Spotify application that allows the user to explore track using a fully-features SQL dialect and create playlists from the results.</p>
-<h2 id="skylark">Skylark</h2>
-<p>Cross-platform <a href="https://en.wikipedia.org/wiki/CHIP-8">CHIP-8</a> emulator written in C.</p>
-<h2 id="simpleriscv">simpleriscv</h2>
-<p>Simple, cross-platform <a href="https://en.wikipedia.org/wiki/RISC-V">RISC-V</a> assembler.</p>
-<h2 id="adventure">adventure</h2>
-<p>Simple platform for developing cross-platform text adventure games.</p>
-<h2 id="srgp">SRGP</h2>
-<p>Simple Raster Graphics Package - C graphics library restoration from 1997.</p>
+    <h2 id="jamql-websitehttpsjamqlcom-sourcehttpsgithubcomtheandrew168jamql">JamQL (<a href="https://jamql.com">website</a>, <a href="https://github.com/theandrew168/jamql">source</a>)</h2>
+<p>This project started out as an idea for a way to create Spotify playlists based on a SQL-like query (hence the QL in JamQL).
+My plan was to integrate Spotify&rsquo;s <a href="https://developer.spotify.com/documentation/web-api/reference/search/search/">Search API</a> with SQLite&rsquo;s <a href="https://www.sqlite.org/vtab.html">virtual table</a> functionality in order to bridge the gap.
+I knew that an alternative to using SQLite would be to write my own simple query language and a corresponding lexer and parser for it.
+However, I felt like reinventing that wheel wouldn&rsquo;t be worth the trouble and that SQLite&rsquo;s virtual tables would be a perfect fit regardless.</p>
+<p>After getting into the weeds a bit, I realized that having users interact with the app purely through a query language wasn&rsquo;t great UX.
+Especially on mobile, restricting the interface to one giant text box wasn&rsquo;t very fun <em>or</em> usable.
+Instead, I decided to take things in a different direction.
+I remembered enjoying iTunes <a href="https://support.apple.com/guide/itunes/use-smart-playlists-itns3001/mac">Smart Playlist</a> feature back in the day and wondered if that&rsquo;d be a more viable approach.
+So, the current version of the site functions similar to those smart playlists: you can search tracks and create playlists based on a set of filters.</p>
+<p>I do plan to circle back to the query language idea at some point in the future.
+I&rsquo;d likely take the route of writing my own minimal language as well as a lexer and parser for it.
+Since I&rsquo;m still very much a novice when it comes to web design, I want to get the current interation working and looking great before tackling additional ways to jam.</p>
+<h5 id="relevant-skills">Relevant Skills</h5>
+<ul>
+<li>Go programming</li>
+<li>Go web application development</li>
+<li>Testing Go applications</li>
+<li>Introductory web design</li>
+<li>Web application security</li>
+<li>Full-stack development</li>
+<li>Fully automated deployments</li>
+<li>Zero downtime deployments</li>
+<li>Production-ready deployments</li>
+<li>Privileged port management via <a href="https://www.freedesktop.org/software/systemd/man/systemd.socket.html">systemd</a></li>
+</ul>
+<h2 id="skylark-sourcehttpsgithubcomtheandrew168skylark">Skylark (<a href="https://github.com/theandrew168/skylark">source</a>)</h2>
+<p>Cross-platform <a href="https://en.wikipedia.org/wiki/CHIP-8">CHIP-8</a> emulator.</p>
+<h5 id="relevant-skills-1">Relevant Skills</h5>
+<ul>
+<li>C programming</li>
+<li>Cross-compiling for non <a href="https://en.wikipedia.org/wiki/Unix-like">Unix-like</a> operating systems</li>
+<li>Build management with <a href="https://pubs.opengroup.org/onlinepubs/009695399/utilities/make.html">POSIX-compatible</a> Makefiles</li>
+<li>Testing C applications</li>
+<li>Hardware <a href="https://en.wikipedia.org/wiki/Emulator">emulation</a></li>
+<li>Binary instruction decoding</li>
+<li>2D graphics via <a href="https://www.libsdl.org/">SDL2</a></li>
+<li>Separation of IO-based and pure functional logic</li>
+</ul>
+<h2 id="simpleriscv-sourcehttpsgithubcomtheandrew168simpleriscv">SimpleRISCV (<a href="https://github.com/theandrew168/simpleriscv">source</a>)</h2>
+<p>Toy <a href="https://en.wikipedia.org/wiki/RISC-V">RISC-V</a> assembler.</p>
+<h5 id="relevant-skills-2">Relevant Skills</h5>
+<ul>
+<li>Python programming</li>
+<li>RISC-V <a href="https://riscv.org/specifications/">instruction set architecture</a></li>
+<li>Testing Python applications</li>
+<li>Publishing Python packages</li>
+<li>Lexing and parsing of assembly programs</li>
+<li>Binary instruction encoding</li>
+<li>Programming bare-metal devices</li>
+</ul>
+<h2 id="derzy-sourcehttpsgithubcomtheandrew168derzy">Derzy (<a href="https://github.com/theandrew168/derzy">source</a>)</h2>
+<p>Old college project exploring real-time graphics and OpenGL.</p>
+<h5 id="relevant-skills-3">Relevant Skills</h5>
+<ul>
+<li>C++ programming</li>
+<li>3D graphics via OpenGL</li>
+<li>Concepts of real-time rendering</li>
+<li>Build management with <a href="https://cmake.org/">CMake</a></li>
+</ul>
 
   </article>
 </section>
