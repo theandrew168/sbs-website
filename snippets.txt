@@ -1,0 +1,3 @@
+With more experience under my belt, I came back to this project with the goal of fixing its shortcomings.
+The problems I identified included a lack of cross-platform support, poor code structure, and the complete absense of tests.
+I thought it would be interesting to document this refactoring process so I wrote a [blog post](/posts/refactoring-my-old-chip8-emulator/) about it.

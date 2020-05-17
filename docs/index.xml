@@ -23,23 +23,13 @@ The Longan Nano comes with the following components:
     </item>
     
     <item>
-      <title>Welcome to Shallow Brook Software</title>
-      <link>https://shallowbrooksoftware.com/posts/welcome-to-shallow-brook-software/</link>
-      <pubDate>Thu, 08 Aug 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://shallowbrooksoftware.com/posts/welcome-to-shallow-brook-software/</guid>
-      <description>Intro Welcome to Shallow Brook Software! My name is Andrew Dailey and I&amp;rsquo;m a software hobbyist in Des Moines, Iowa, USA. This website is a simple platform for me to document the things I do and the thoughts I have. I also plan to utilize this as a portfolio for projects that I deem complete and worth showcasing.
-About the name The name of this site is an homage to the old phrase &amp;ldquo;A shallow brook babbles the loudest&amp;rdquo;.</description>
-    </item>
-    
-    <item>
       <title>About Me</title>
       <link>https://shallowbrooksoftware.com/about/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://shallowbrooksoftware.com/about/</guid>
-      <description>My name is Andrew Dailey and I&amp;rsquo;m an independent programmer from Des Moines, Iowa. I have multiple years of industry experience working a variety of jobs from Linux system administration to Python-based ETL to large-scale system automation. Programming is my primary hobby and I tend to focus on high-performance, systems software.
-I am proficient in Python and C and am currently honing my skills with Go and Rust. When it comes to writing C, I&amp;rsquo;ve spent plenty of time researching and testing the most effective way to achieve simple, cross-platform application builds.</description>
+      <description>Welcome to Shallow Brook Software!
+My name is Andrew Dailey and I&amp;rsquo;m an independent programmer from Des Moines, Iowa. I have a Bachelor of Science degree in Software Engineering from Iowa State University. I have multiple years of industry experience working a variety of positions including Linux system administration, Python-based ETL, and small-scale cluster automation. Software development is one of my primary hobbies and I tend to specialize in backend / systems programming.</description>
     </item>
     
     <item>

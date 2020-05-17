@@ -22,15 +22,5 @@ The Longan Nano comes with the following components:
  108 MHz GigaDevice GD32VF103[CBT6] 32-bit CPU 128 KB flash storage 32 KB sram memory 3 LEDs (red, green, and blue) 1 USB Type-C port 1 microSD card slot 160x80 pixel LCD (0.</description>
     </item>
     
-    <item>
-      <title>Welcome to Shallow Brook Software</title>
-      <link>https://shallowbrooksoftware.com/posts/welcome-to-shallow-brook-software/</link>
-      <pubDate>Thu, 08 Aug 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://shallowbrooksoftware.com/posts/welcome-to-shallow-brook-software/</guid>
-      <description>Intro Welcome to Shallow Brook Software! My name is Andrew Dailey and I&amp;rsquo;m a software hobbyist in Des Moines, Iowa, USA. This website is a simple platform for me to document the things I do and the thoughts I have. I also plan to utilize this as a portfolio for projects that I deem complete and worth showcasing.
-About the name The name of this site is an homage to the old phrase &amp;ldquo;A shallow brook babbles the loudest&amp;rdquo;.</description>
-    </item>
-    
   </channel>
 </rss>

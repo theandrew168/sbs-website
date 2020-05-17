@@ -30,7 +30,17 @@ Since I'm still very much a novice when it comes to web design, I want to get th
 * Privileged port management via [systemd](https://www.freedesktop.org/software/systemd/man/systemd.socket.html)
 
 ## Skylark ([source](https://github.com/theandrew168/skylark))
-Cross-platform [CHIP-8](https://en.wikipedia.org/wiki/CHIP-8) emulator.
+One of my earliest memories of being truly amazed by a programmer was first seeing Bisqwit's videos about writing an NES emulator ([Part 1](https://www.youtube.com/watch?v=y71lli8MS8s) and [Part 2](https://www.youtube.com/watch?v=XZWw745wPXY)).
+His efficient and straight-forward approach to solving the problem was truly unlike anything I'd ever seen.
+It was nothing short of incredible.
+
+After seeing his videos I was inspired to get into emulator development myself.
+A quick googling led me to [CHIP-8](https://en.wikipedia.org/wiki/CHIP-8).
+This simple, minimal instruction set is commonly referred to as the "Hello World" of emulator projects.
+I was able to scrap together an implementation after a few weeks of iterating.
+Despite being technically finished, it had numerous flaws that I didn't really realize until multiple years of C programming later.
+
+For anyone curious, the name Skylark is a reference to the character [Chip Skylark](https://en.wikipedia.org/wiki/Chris_Kirkpatrick) from the old Nickelodeon show [The Fairly OddParents](https://en.wikipedia.org/wiki/The_Fairly_OddParents).
 
 ##### Relevant Skills
 * C programming
