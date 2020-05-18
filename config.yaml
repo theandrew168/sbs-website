@@ -26,11 +26,11 @@ menu:
   - name: About
     url: /about/
     weight: 1
-  - name: Blog
-    url: /posts/
-    weight: 2
   - name: Projects
     url: /projects/
+    weight: 2
+  - name: Blog
+    url: /posts/
     weight: 3
 
 taxonomies:
