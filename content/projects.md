@@ -33,8 +33,9 @@ Since I'm still very much a novice when it comes to web design, I want to get th
 One of my earliest memories of being truly amazed by a programmer was first seeing Bisqwit's videos about writing an NES emulator ([Part 1](https://www.youtube.com/watch?v=y71lli8MS8s) and [Part 2](https://www.youtube.com/watch?v=XZWw745wPXY)).
 His efficient and straight-forward approach to solving the problem was truly unlike anything I'd ever seen.
 It was nothing short of incredible.
-
 After seeing his videos I was inspired to get into emulator development myself.
+
+I figured that starting with an NES emulator was bit too zealous and instead looked for something with a smaller scope.
 A quick googling led me to [CHIP-8](https://en.wikipedia.org/wiki/CHIP-8).
 This simple, minimal instruction set is commonly referred to as the "Hello World" of emulator projects.
 I was able to scrap together an implementation after a few weeks of iterating.
@@ -53,7 +54,22 @@ For anyone curious, the name Skylark is a reference to the character [Chip Skyla
 * Separation of IO-based and pure functional logic
 
 ## SimpleRISCV ([source](https://github.com/theandrew168/simpleriscv))
-Toy [RISC-V](https://en.wikipedia.org/wiki/RISC-V) assembler.
+Assembly programming has always been one of those arcane, fundamental skills that I always attributed to older, wiser, expert programmers who have been writing "code" since its inception.
+I remember thinking how crazy it was that early Pokemon games were written in assembly.
+The idea of programming for a specific CPU and set of peripherals sounds pure and unemcumbered.
+Sure, you may give up the potential for cross-CPU support but if that isn't a requirement then there is nothing lost.
+You might even be able to make better use of your hardware because you don't have to rely on "common denominator" abstrations.
+
+My desire to learn assembly led me to the [RISC-V](https://en.wikipedia.org/wiki/RISC-V) instruction set architecture (ISA).
+The combination of simplicity, newness, and freedom seemed like a perfect fit for a beginner.
+I ordered a couple of cheap RISC-V chips and started reading!
+My search for a no-frills and portable RISC-V assembler came up short: I really didn't want to fuss with compiling a custom GCC toolchain.
+Instead, I wrote a bit of Python to satisfy my very small RISC-V needs.
+
+SimpleRISCV is that project and while correct (as far as I know), it is very bare-bones.
+It only supports assembling single files and does absolutely no linking.
+The program is simply a RISC-V instruction encoder with a thin layer of label and constant handling above it.
+Nonetheless, it helped me get started with the platform and gave me an up-close experience with the ISA.
 
 ##### Relevant Skills
 * Python programming
@@ -65,7 +81,21 @@ Toy [RISC-V](https://en.wikipedia.org/wiki/RISC-V) assembler.
 * Programming bare-metal devices
 
 ## Derzy ([source](https://github.com/theandrew168/derzy))
-Old college project exploring real-time graphics and OpenGL.
+One of the first topics to really get me interested in programming was real-time rendering.
+After completing The Cherno's [Flappy Bird tutorial](https://www.youtube.com/watch?v=527bR2JHSR0) in single sitting, I knew that I wanted to learn more about this interesting [OpenGL](https://en.wikipedia.org/wiki/OpenGL) library.
+Despite not having a specific use-case in mind, I created this project as more of a sandbox for learning more about graphics.
+The Flappy Bird clone was a 2D game and I wanted to take it to the next level: 3D.
+
+Along with being my first introduction to 3D graphics, this project was also my first time programming in C++.
+I figured that this was a natural progression since the two languages I'd learned beforehand were C and Java.
+Many books were read in order to familiarlize myself with all this new content: OpenGL, C++, and CMake (the build system).
+After a few hundreds commits I had achieved most of the goals that I set out to accomplish.
+
+I wanted to supporting loading 3D models and rendering in them a decent-looking scene with a skybox.
+I wanted a camera that I could fly around the scene and see how the lighting looked from different angles.
+Fancy shader effects were also on the menu: reflection, refraction, and bloom.
+In hindsight, the design of this project was a bit too presumptuous with its abstractions.
+After painting myself into a corner with every attempt at structuring the code, I decided that something was systematically flawed with my approach and transitioned to other programming languages and paradigms.
 
 ##### Relevant Skills
 * C++ programming
