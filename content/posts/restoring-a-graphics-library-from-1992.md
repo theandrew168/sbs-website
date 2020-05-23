@@ -1,11 +1,10 @@
 ---
 date: 2020-05-17
-title: "Restoring a Raster Graphics Library From 1992"
-slug: "restoring-a-raster-graphics-library-from-1992"
+title: "Restoring a Graphics Library From 1992"
+slug: "restoring-a-graphics-library-from-1992"
 tags: ["c", "x11", "graphics"]
 draft: true
 ---
-# Intro
 I've recently been reading _Computer Graphics: Principles and Practice (2nd Edition)_.
 It is a foundational graphics book first published in 1982.
 Some of the content is dated but most of the ideas presented are fundamental to computer graphics theory.

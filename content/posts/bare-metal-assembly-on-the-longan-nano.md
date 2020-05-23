@@ -4,7 +4,6 @@ title: "Bare-Metal Assembly on the Longan Nano"
 slug: "bare-metal-assembly-on-the-longan-nano"
 tags: ["risc-v", "assembly"]
 ---
-# Introduction
 The [Sipeed Longan Nano](https://www.seeedstudio.com/Sipeed-Longan-Nano-RISC-V-GD32VF103CBT6-Development-Board-p-4205.html) is a small, affordable, 32-bit [RISC-V](https://en.wikipedia.org/wiki/RISC-V) chip.
 Despite its minimalism, the Longan Nano provides enough power and peripherals to learn RISC-V assembly and build exciting programs along the way.
 
