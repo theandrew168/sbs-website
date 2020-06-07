@@ -1,7 +1,7 @@
 ---
 date: 2020-05-17
-title: "Refactoring My Old CHIP-8 Emulator"
-slug: "refactoring-my-old-chip8-emulator"
+title: "Modernizing My Old CHIP-8 Emulator"
+slug: "modernizing-my-old-chip8-emulator"
 tags: ["c", "sdl2", "emulator"]
 draft: true
 ---
