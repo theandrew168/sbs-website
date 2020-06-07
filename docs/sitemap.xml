@@ -3,6 +3,46 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://shallowbrooksoftware.com/posts/a-multi-platform-modern-opengl-demo-with-sdl2/</loc>
+    <lastmod>2020-06-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/tags/c/</loc>
+    <lastmod>2020-06-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/tags/graphics/</loc>
+    <lastmod>2020-06-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/tags/opengl/</loc>
+    <lastmod>2020-06-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/posts/</loc>
+    <lastmod>2020-06-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/tags/sdl2/</loc>
+    <lastmod>2020-06-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/</loc>
+    <lastmod>2020-06-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/tags/</loc>
+    <lastmod>2020-06-07T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://shallowbrooksoftware.com/tags/assembly/</loc>
     <lastmod>2020-04-24T00:00:00+00:00</lastmod>
   </url>
@@ -13,22 +53,7 @@
   </url>
   
   <url>
-    <loc>https://shallowbrooksoftware.com/posts/</loc>
-    <lastmod>2020-04-24T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://shallowbrooksoftware.com/tags/risc-v/</loc>
-    <lastmod>2020-04-24T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://shallowbrooksoftware.com/</loc>
-    <lastmod>2020-04-24T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://shallowbrooksoftware.com/tags/</loc>
     <lastmod>2020-04-24T00:00:00+00:00</lastmod>
   </url>
   
