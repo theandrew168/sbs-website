@@ -4,7 +4,7 @@ title: "A Multi-Platform Modern OpenGL Demo with SDL2"
 slug: "a-multi-platform-modern-opengl-demo-with-sdl2"
 tags: ["c", "graphics", "opengl", "sdl2"]
 ---
-This post is largely inspired by [Chris Wellons'](https://nullprogram.com/) 2015 blog post about writing a [modern OpenGL demo](https://nullprogram.com/blog/2015/06/06/) that works on all three major desktop platforms (Windows, MacOS, and Linux).
+This post is largely inspired by [Chris Wellons'](https://nullprogram.com/) 2015 blog post about writing a [modern OpenGL demo](https://nullprogram.com/blog/2015/06/06/) that works on all three major desktop platforms (Windows, macOS, and Linux).
 I have come back to his post countless times over the years when looking for guidance on how to build any cross-platform C program.
 
 In Chris' version of this demo he makes use of [GLFW3](https://www.glfw.org/) for the window and input handling and uses [gl3w](https://github.com/skaslev/gl3w) for loading OpenGL functions.
@@ -74,30 +74,30 @@ Once the dependencies are installed, the build itself is as simple as possible:
 make
 ```
 
-### MacOS
-Building the demo on MacOS is a simple native build.
+### macOS
+Building the demo on macOS is a simple native build.
 Only two depenencies are required: make and SDL2.
 If using [brew](https://formulae.brew.sh/), they can be installed via:
 ```
 brew install make sdl2
 ```
 
-The build process for MacOS is exactly the same as Linux aside from using a different Makefile.
+The build process for macOS is exactly the same as Linux aside from using a different Makefile.
 ```
 make -f Makefile.macos
 ```
 
 ### Windows
-Building the demo for Windows requires cross-compiling from either Linux or MacOS.
+Building the demo for Windows requires cross-compiling from either Linux or macOS.
 This process relies on the amazing [mingw-w64](http://mingw-w64.org/doku.php) project which utilizes GCC tooling to build Windows executables and libraries.
-Cross-compiling from Linux or MacOS will require the following depenencies: make, wget, tar, and mingw-w64.
+Cross-compiling from Linux or macOS will require the following depenencies: make, wget, tar, and mingw-w64.
 
 If using a Debian-based Linux system, these can be install via:
 ```
 sudo apt install make wget tar mingw-w64
 ```
 
-If using MacOS with brew installed, the command is:
+If using macOS with brew installed, the command is:
 ```
 brew install make wget gnu-tar mingw-w64
 ```
@@ -125,7 +125,7 @@ My reasons for preferring SDL2 are three-fold:
 
 Here is a personal list of "pros" for choosing SDL2:
 * SDL2 is a one-stop-shop for cross-platform game development
-* SDL2 supports Windows, Linux, MacOS, iOS, Android, Nintendo Switch, and others
+* SDL2 supports Windows, Linux, macOS, iOS, Android, Nintendo Switch, and others
 * SDL2 supports mouse and keyboard, joysticks, game controllers, and multi-touch gestures
 * SDL2 supports low-level audio playback
 * SDL2 includes extra helpers for dealing with threads, timers, CPU detection, and power management

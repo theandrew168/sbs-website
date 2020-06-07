@@ -11,11 +11,11 @@
 
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="A Multi-Platform Modern OpenGL Demo with SDL2"/>
-<meta name="twitter:description" content="This post is largely inspired by Chris Wellons&rsquo; 2015 blog post about writing a modern OpenGL demo that works on all three major desktop platforms (Windows, MacOS, and Linux). I have come back to his post countless times over the years when looking for guidance on how to build any cross-platform C program.
+<meta name="twitter:description" content="This post is largely inspired by Chris Wellons&rsquo; 2015 blog post about writing a modern OpenGL demo that works on all three major desktop platforms (Windows, macOS, and Linux). I have come back to his post countless times over the years when looking for guidance on how to build any cross-platform C program.
 In Chris&rsquo; version of this demo he makes use of GLFW3 for the window and input handling and uses gl3w for loading OpenGL functions."/>
 
     <meta property="og:title" content="A Multi-Platform Modern OpenGL Demo with SDL2" />
-<meta property="og:description" content="This post is largely inspired by Chris Wellons&rsquo; 2015 blog post about writing a modern OpenGL demo that works on all three major desktop platforms (Windows, MacOS, and Linux). I have come back to his post countless times over the years when looking for guidance on how to build any cross-platform C program.
+<meta property="og:description" content="This post is largely inspired by Chris Wellons&rsquo; 2015 blog post about writing a modern OpenGL demo that works on all three major desktop platforms (Windows, macOS, and Linux). I have come back to his post countless times over the years when looking for guidance on how to build any cross-platform C program.
 In Chris&rsquo; version of this demo he makes use of GLFW3 for the window and input handling and uses gl3w for loading OpenGL functions." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shallowbrooksoftware.com/posts/a-multi-platform-modern-opengl-demo-with-sdl2/" />
@@ -128,7 +128,7 @@ In Chris&rsquo; version of this demo he makes use of GLFW3 for the window and in
 
       <div>
         
-        <p>This post is largely inspired by <a href="https://nullprogram.com/">Chris Wellons&rsquo;</a> 2015 blog post about writing a <a href="https://nullprogram.com/blog/2015/06/06/">modern OpenGL demo</a> that works on all three major desktop platforms (Windows, MacOS, and Linux).
+        <p>This post is largely inspired by <a href="https://nullprogram.com/">Chris Wellons&rsquo;</a> 2015 blog post about writing a <a href="https://nullprogram.com/blog/2015/06/06/">modern OpenGL demo</a> that works on all three major desktop platforms (Windows, macOS, and Linux).
 I have come back to his post countless times over the years when looking for guidance on how to build any cross-platform C program.</p>
 <p>In Chris&rsquo; version of this demo he makes use of <a href="https://www.glfw.org/">GLFW3</a> for the window and input handling and uses <a href="https://github.com/skaslev/gl3w">gl3w</a> for loading OpenGL functions.
 I have used GLFW3 in the past but tend to prefer <a href="https://www.libsdl.org/">SDL2</a> for its <a href="https://wiki.libsdl.org/Introduction">wealth of features</a> and <a href="https://wiki.libsdl.org/SDL_PollEvent">polling-based event model</a>.
@@ -188,20 +188,20 @@ On a Debian-based Linux system, they can be installed via:</p>
 <pre><code>sudo apt install make libsdl2-dev
 </code></pre><p>Once the dependencies are installed, the build itself is as simple as possible:</p>
 <pre><code>make
-</code></pre><h3 id="macos">MacOS</h3>
-<p>Building the demo on MacOS is a simple native build.
+</code></pre><h3 id="macos">macOS</h3>
+<p>Building the demo on macOS is a simple native build.
 Only two depenencies are required: make and SDL2.
 If using <a href="https://formulae.brew.sh/">brew</a>, they can be installed via:</p>
 <pre><code>brew install make sdl2
-</code></pre><p>The build process for MacOS is exactly the same as Linux aside from using a different Makefile.</p>
+</code></pre><p>The build process for macOS is exactly the same as Linux aside from using a different Makefile.</p>
 <pre><code>make -f Makefile.macos
 </code></pre><h3 id="windows">Windows</h3>
-<p>Building the demo for Windows requires cross-compiling from either Linux or MacOS.
+<p>Building the demo for Windows requires cross-compiling from either Linux or macOS.
 This process relies on the amazing <a href="http://mingw-w64.org/doku.php">mingw-w64</a> project which utilizes GCC tooling to build Windows executables and libraries.
-Cross-compiling from Linux or MacOS will require the following depenencies: make, wget, tar, and mingw-w64.</p>
+Cross-compiling from Linux or macOS will require the following depenencies: make, wget, tar, and mingw-w64.</p>
 <p>If using a Debian-based Linux system, these can be install via:</p>
 <pre><code>sudo apt install make wget tar mingw-w64
-</code></pre><p>If using MacOS with brew installed, the command is:</p>
+</code></pre><p>If using macOS with brew installed, the command is:</p>
 <pre><code>brew install make wget gnu-tar mingw-w64
 </code></pre><p>With all dependencies installed and ready to go, the demo can be cross-compiled.</p>
 <pre><code>make -f Makefile.mingw
@@ -223,7 +223,7 @@ My reasons for preferring SDL2 are three-fold:</p>
 <p>Here is a personal list of &ldquo;pros&rdquo; for choosing SDL2:</p>
 <ul>
 <li>SDL2 is a one-stop-shop for cross-platform game development</li>
-<li>SDL2 supports Windows, Linux, MacOS, iOS, Android, Nintendo Switch, and others</li>
+<li>SDL2 supports Windows, Linux, macOS, iOS, Android, Nintendo Switch, and others</li>
 <li>SDL2 supports mouse and keyboard, joysticks, game controllers, and multi-touch gestures</li>
 <li>SDL2 supports low-level audio playback</li>
 <li>SDL2 includes extra helpers for dealing with threads, timers, CPU detection, and power management</li>
