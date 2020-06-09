@@ -131,7 +131,7 @@ In Chris&rsquo; version of this demo he makes use of GLFW3 for the window and in
         <p>This post is largely inspired by <a href="https://nullprogram.com/">Chris Wellons&rsquo;</a> 2015 blog post about writing a <a href="https://nullprogram.com/blog/2015/06/06/">modern OpenGL demo</a> that works on all three major desktop platforms (Windows, macOS, and Linux).
 I have come back to his post countless times over the years when looking for guidance on how to build any cross-platform C program.</p>
 <p>In Chris&rsquo; version of this demo he makes use of <a href="https://www.glfw.org/">GLFW3</a> for the window and input handling and uses <a href="https://github.com/skaslev/gl3w">gl3w</a> for loading OpenGL functions.
-I have used GLFW3 in the past but tend to prefer <a href="https://www.libsdl.org/">SDL2</a> for its <a href="https://wiki.libsdl.org/Introduction">wealth of features</a> and <a href="https://wiki.libsdl.org/SDL_PollEvent">polling-based event model</a>.
+I have used GLFW3 in the past, but tend to prefer <a href="https://www.libsdl.org/">SDL2</a> for its <a href="https://wiki.libsdl.org/Introduction">wealth of features</a> and <a href="https://wiki.libsdl.org/SDL_PollEvent">polling-based event model</a>.
 Therefore, in my version, I wanted to use SDL2 for the window and input handling and load the OpenGL functions myself.
 Loading OpenGL functions is a fiddly, quirky topic that deserves its own blog post.
 However, it doesn&rsquo;t require too much code once the nuances are understood.</p>
@@ -172,7 +172,7 @@ The default Makefile (the one without a platform suffix) builds the Linux versio
 The <code>src/opengl.c</code> file contains the implementations of the three components listed in the header.
 Lastly, <code>src/main.c</code> implements the demo: create a window, initialize an OpenGL context, load the modern OpenGL functions, and render a rotating square.</p>
 <h1 id="building">Building</h1>
-<p>Build cross-platform C applications isn&rsquo;t that hard but it does require some intentional, upfront planning.
+<p>Building cross-platform C applications isn&rsquo;t that hard but it does require some intentional, upfront planning.
 I have to thank Chris and his writings again for this facet of the demo, too.
 He has written multiple posts on how to keep C projects simple and portable.
 I highly recommend the following posts to anyone interested in writing clean, simple, and portable C projects:</p>
@@ -183,14 +183,14 @@ I highly recommend the following posts to anyone interested in writing clean, si
 </ul>
 <h3 id="linux">Linux</h3>
 <p>Building the demo on Linux is a simple native build.
-Only two depenencies are required: make and SDL2.
+Only two dependencies are required: make and SDL2.
 On a Debian-based Linux system, they can be installed via:</p>
 <pre><code>sudo apt install make libsdl2-dev
 </code></pre><p>Once the dependencies are installed, the build itself is as simple as possible:</p>
 <pre><code>make
 </code></pre><h3 id="macos">macOS</h3>
 <p>Building the demo on macOS is a simple native build.
-Only two depenencies are required: make and SDL2.
+Only two dependencies are required: make and SDL2.
 If using <a href="https://formulae.brew.sh/">brew</a>, they can be installed via:</p>
 <pre><code>brew install make sdl2
 </code></pre><p>The build process for macOS is exactly the same as Linux aside from using a different Makefile.</p>
@@ -198,7 +198,7 @@ If using <a href="https://formulae.brew.sh/">brew</a>, they can be installed via
 </code></pre><h3 id="windows">Windows</h3>
 <p>Building the demo for Windows requires cross-compiling from either Linux or macOS.
 This process relies on the amazing <a href="http://mingw-w64.org/doku.php">mingw-w64</a> project which utilizes GCC tooling to build Windows executables and libraries.
-Cross-compiling from Linux or macOS will require the following depenencies: make, wget, tar, and mingw-w64.</p>
+Cross-compiling from Linux or macOS will require the following dependencies: make, wget, tar, and mingw-w64.</p>
 <p>If using a Debian-based Linux system, these can be install via:</p>
 <pre><code>sudo apt install make wget tar mingw-w64
 </code></pre><p>If using macOS with brew installed, the command is:</p>

@@ -8,7 +8,7 @@ This post is largely inspired by [Chris Wellons'](https://nullprogram.com/) 2015
 I have come back to his post countless times over the years when looking for guidance on how to build any cross-platform C program.
 
 In Chris' version of this demo he makes use of [GLFW3](https://www.glfw.org/) for the window and input handling and uses [gl3w](https://github.com/skaslev/gl3w) for loading OpenGL functions.
-I have used GLFW3 in the past but tend to prefer [SDL2](https://www.libsdl.org/) for its [wealth of features](https://wiki.libsdl.org/Introduction) and [polling-based event model](https://wiki.libsdl.org/SDL_PollEvent).
+I have used GLFW3 in the past, but tend to prefer [SDL2](https://www.libsdl.org/) for its [wealth of features](https://wiki.libsdl.org/Introduction) and [polling-based event model](https://wiki.libsdl.org/SDL_PollEvent).
 Therefore, in my version, I wanted to use SDL2 for the window and input handling and load the OpenGL functions myself.
 Loading OpenGL functions is a fiddly, quirky topic that deserves its own blog post.
 However, it doesn't require too much code once the nuances are understood.
@@ -53,7 +53,7 @@ The `src/opengl.c` file contains the implementations of the three components lis
 Lastly, `src/main.c` implements the demo: create a window, initialize an OpenGL context, load the modern OpenGL functions, and render a rotating square.
 
 # Building
-Build cross-platform C applications isn't that hard but it does require some intentional, upfront planning.
+Building cross-platform C applications isn't that hard but it does require some intentional, upfront planning.
 I have to thank Chris and his writings again for this facet of the demo, too.
 He has written multiple posts on how to keep C projects simple and portable.
 I highly recommend the following posts to anyone interested in writing clean, simple, and portable C projects:
@@ -63,7 +63,7 @@ I highly recommend the following posts to anyone interested in writing clean, si
 
 ### Linux
 Building the demo on Linux is a simple native build.
-Only two depenencies are required: make and SDL2.
+Only two dependencies are required: make and SDL2.
 On a Debian-based Linux system, they can be installed via:
 ```
 sudo apt install make libsdl2-dev
@@ -76,7 +76,7 @@ make
 
 ### macOS
 Building the demo on macOS is a simple native build.
-Only two depenencies are required: make and SDL2.
+Only two dependencies are required: make and SDL2.
 If using [brew](https://formulae.brew.sh/), they can be installed via:
 ```
 brew install make sdl2
@@ -90,7 +90,7 @@ make -f Makefile.macos
 ### Windows
 Building the demo for Windows requires cross-compiling from either Linux or macOS.
 This process relies on the amazing [mingw-w64](http://mingw-w64.org/doku.php) project which utilizes GCC tooling to build Windows executables and libraries.
-Cross-compiling from Linux or macOS will require the following depenencies: make, wget, tar, and mingw-w64.
+Cross-compiling from Linux or macOS will require the following dependencies: make, wget, tar, and mingw-w64.
 
 If using a Debian-based Linux system, these can be install via:
 ```
@@ -133,8 +133,8 @@ Here is a personal list of "pros" for choosing SDL2:
 * SDL2 is released under the permissible [zlib license](https://opensource.org/licenses/Zlib)
 * SDL2's reference docs are very detailed
 * The SDL2 ecosystem includes "extension projects" that add specific functionality:
-* [SDL_image](https://www.libsdl.org/projects/SDL_image/) adds image loading
-* [SDL_mixer](https://www.libsdl.org/projects/SDL_mixer/) adds sound mixing
+* [SDL\_image](https://www.libsdl.org/projects/SDL_image/) adds image loading
+* [SDL\_mixer](https://www.libsdl.org/projects/SDL_mixer/) adds sound mixing
 * [SDL_net](https://www.libsdl.org/projects/SDL_net/) adds networking
 * [SDL_ttf](https://www.libsdl.org/projects/SDL_ttf/) adds TrueType font rendering
 
