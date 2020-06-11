@@ -168,8 +168,8 @@ The default Makefile (the one without a platform suffix) builds the Linux versio
     ├── main.c
     ├── opengl.c
     └── opengl.h
-</code></pre><p>The <code>src/opengl.h</code> header contains three things: OpenGL function(-pointer) declarations, a function for loading the aforementioned functions, and then some miscellaneous helpers.
-The <code>src/opengl.c</code> file contains the implementations of the three components listed in the header.
+</code></pre><p>The <code>src/opengl.h</code> and <code>src/opengl.c</code> files contain two things: OpenGL function declarations and the code to dynamically load them at runtime.
+The function <code>opengl_load_functions()</code> should be called once after obtaining a valid OpenGL context.
 Lastly, <code>src/main.c</code> implements the demo: create a window, initialize an OpenGL context, load the modern OpenGL functions, and render a rotating square.</p>
 <h1 id="building">Building</h1>
 <p>Building cross-platform C applications isn&rsquo;t that hard but it does require some intentional, upfront planning.

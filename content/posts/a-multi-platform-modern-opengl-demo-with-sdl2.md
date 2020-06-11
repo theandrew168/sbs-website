@@ -48,8 +48,8 @@ The default Makefile (the one without a platform suffix) builds the Linux versio
     └── opengl.h
 ```
 
-The `src/opengl.h` header contains three things: OpenGL function(-pointer) declarations, a function for loading the aforementioned functions, and then some miscellaneous helpers.
-The `src/opengl.c` file contains the implementations of the three components listed in the header.
+The `src/opengl.h` and `src/opengl.c` files contain two things: OpenGL function declarations and the code to dynamically load them at runtime.
+The function `opengl_load_functions()` should be called once after obtaining a valid OpenGL context.
 Lastly, `src/main.c` implements the demo: create a window, initialize an OpenGL context, load the modern OpenGL functions, and render a rotating square.
 
 # Building
