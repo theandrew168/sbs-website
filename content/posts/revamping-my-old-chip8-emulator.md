@@ -1,7 +1,7 @@
 ---
 date: 2020-07-05
-title: "Modernizing My Old CHIP-8 Emulator"
-slug: "modernizing-my-old-chip8-emulator"
+title: "Revamping My Old CHIP-8 Emulator"
+slug: "revamping-my-old-chip8-emulator"
 tags: ["c", "sdl2", "emulator"]
 draft: true
 ---
@@ -197,20 +197,89 @@ I'm much happier with the way it is written now.
 You can find the full, current version [here](https://github.com/theandrew168/skylark/blob/master/Makefile).
 
 # Functional Foundations
-talk about data flow  
-link to hoist your IO talk  
-talk about how that applies here  
+some of these old functions were very "messy" in terms of what they do  
+a good function should be very clear about what data comes in and what data goes out  
+it sould also have no side effects  
+here's an example of one of the old functions  
+what does it do? hard to say by looking at the args / ret value  
+how do you design good functions?  
+
+start high-level: decode an instruction  
+think about the data in and out conceptually: machine code goes in, instruction comes out  
+then map it down to your language: uint16_t goes in, struct instruction comes out  
+okay, instruction decoding is easy. what about _doing_ the operations?  
+
+what about an operation? conceptually: instruction + emu state = new emu stat  
+you can think about every instruction in this way: what does it do to the state of the system?  
+in OOP world, these would likely be public methods of some sort of CHIP8 class  
+but in C world, we can keep a clean separation between functions and data  
+so, mapped to c terms, an operation takes instruction and the current emu state and ends with the new state  
+this isn't _quite_ pure cuz we pass the struct chip8 as a mutable ptr but could be made pure by the caller  
+
+overall, almost every function in a system can be shaped in a way that is closer to purity  
+dealing with IO can be a special case which I usually leave IO-based code at the top (in main) and don't let it seep down into the rest of the pure code  
 graphics and keyboard is the IO, all else can be pure  
+Brandon Rhodes talks about this in his talk [Hoist Your I/O](https://www.youtube.com/watch?v=PBQN62oUnN8)  
 
 # Tactical Testing
-uses minunit with a small edit  
-usual testing structure  
-test the pure functional stuff  
+goals: simple and modular  
+doesn't need a whole bunch of features  
+I want tests to add value to the project, not bog it down  
+used to use minunit, but switched to something with less macros (no macros, actually)  
+
+the main focus is unit testing  
+but there is no reason it couldnt do more  
+if a project has no tests, then it is wrong  
+
+here is the gist: main_test.c includes all the other foo_test.c files  
+uses a standard test_func typedef  
+runs em all and counts the results  
+returns based on how many tests failed  
+
+downsides: need a way to ID the tests in output  
+have to be extra wordy with the error message  
+macros could _maybe_ help here but I haven't found it worth it  
+I like to verify the behavior, lock it in place, and move on  
 
 # Plentiful Platforms
-native for unix-like via posix-compat make  
-cross-compile for windows via minwgw-w64
+the orig version was linux-only mainly because i didn't know how to do more  
+I since found a better way from chris's blog  
+in short: native for unix-like via posix-compat make and cross-compile for windows via minwgw-w64  
+
+native is simple: linux is default and .macos is for macOS  
+they are also exactly the same but macOS differs on some lib stuff sometimes (opengl)  
+libs are expected to be installed on the system during build time: SDL2, etc  
+
+windows is a bit fussier, but not by much  
+use mingw as the compiler and c99  
+would need diff impls for POSIX things (sockets, low-level IO, etc)  
+Makefile names need changed: .so to .dll, executables have .exe  
+
+windows libs are a diff story  
+since this is xcompile, might as well just DL the pre-built static libs and link them in  
+this makes things quite portable  
+so, on build, wget the SDL2 libs, extract em, and link it in!  
+its that easy and the resulting exe needs _nothing_ installed on the windows machine in order to run  
+its a great solution to a potentially very messy problem!  
 
 # Above and Beyond
-baking ROMs into the binary  
-game selection screen  
+one unique thing about CHIP-8 is that there are only a handful of games (like 23ish)  
+plus the DRM for these games is basically non-existent (everyone just keeps them in their repo)  
+so, it'd be cool to just "bake" these into the emulator some how  
+there aren't many and they aren't that big so it wouldn't bloat the executable very much  
+it would also mean that users don't need to have the ROMs on their system to use the emulator  
+
+how we gonna do this?  
+chris has a post about it: LINK  
+this is where `rom2c` comes in!  
+convert all the roms to C source and build them in  
+now we just need a way to select one when the emulator starts  
+
+selection screen?  
+dunno how fancy this will be  
+I'll figure it out - need to write more code  
+
+thats it!  
+thanks for reading about this process  
+I've learned a lot of the past few years and hope you picked something up from this  
+til next time  
