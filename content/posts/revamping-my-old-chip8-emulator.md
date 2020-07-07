@@ -1,5 +1,5 @@
 ---
-date: 2020-07-05
+date: 2020-07-07
 title: "Revamping My Old CHIP-8 Emulator"
 slug: "revamping-my-old-chip8-emulator"
 tags: ["c", "sdl2", "emulator"]
@@ -47,17 +47,14 @@ I've since learned an effective approach for writing cross-platform C applicatio
 # Mighty Makefile
 The [original Makefile](https://github.com/theandrew168/skylark/blob/a24585b48de2923fd016f379c7b0ad8cbb0a9d75/Makefile) had a fairly linear process: use GNU Make extensions to list all of the source files, use a suffix rule to compile C source files into object files, and then link the target binary.
 Simplified, it looks like this:
-```
-# glob all of the source files and name object files
+```Makefile
 SRCS = $(wildcard src/*.c)
 HEAD = $(wildcard src/*.h)
 OBJS = $(patsubst %.c, %.o, $(SRCS))
 
-# the main executable depends on all object files
 skylark: $(OBJS)
     $(CC) -o $@ $^ $(LDFLAGS)
 
-# inference rule to compile C source to object files
 %.o: %.c $(HEAD)
     $(CC) $(CFLAGS) -c $< -o $@
 ```
@@ -84,7 +81,7 @@ This table of build targets can be easily expressed via Make's simple system of 
 
 ### POSIX Preamble
 Our Makefile starts out with a few lines of behavior specification:
-```
+```Makefile
 .POSIX:
 .SUFFIXES:
 ```
@@ -99,7 +96,7 @@ Individual suffixes will be added back in when and where they are necessary.
 ### Variables
 I like to keep all of the configurable build variables right at the top of the Makefile.
 These encompass details such as which C compiler to use, what extra libraries to link with, and various other settings and flags.
-```
+```Makefile
 AR      = ar
 CC      = cc
 CFLAGS  = -std=c99
@@ -119,7 +116,7 @@ The next sections defines all of the build artifacts and which ones should be bu
 This can be adjusted based on personal preference.
 In my case, I only build the main emulator and the tests executable by default.
 To build everything, you can use `make all`.
-```
+```Makefile
 default: skylark skylark_tests
 all: libskylark.a libskylark.so skylark skylark_tests dis rom2c
 ```
@@ -128,21 +125,21 @@ With all that bookkeeping out of the way, we can start compiling things.
 
 ### Libraries
 Let's start off by declaring the source files that should be built into the `libskylark` libraries and their corresponding object file names (just swapping the `.c` for `.o` in this case).
-```
+```Makefile
 libskylark_sources = src/chip8.c src/isa.c
 libskylark_objects = $(libskylark_sources:.c=.o)
 ```
 
 Now we can express dependencies between object and source / header files.
 These lists are what allow Make to rebuild _only_ the parts of the project that are affected by a given file change.
-```
+```Makefile
 src/chip8.o: src/chip8.c src/chip8.h src/isa.h
 src/isa.o: src/isa.c src/isa.h
 ```
 
 We can then specify the targets for each library.
 They both depend on the compiled object files.
-```
+```Makefile
 libskylark.a: $(libskylark_objects)
     $(AR) rcs $@ $(libskylark_objects)
 
@@ -154,7 +151,7 @@ The last step is to add is an inference rule for compiling C source files into o
 Inference rules apply their actions to files with suffixes that match the rule.
 They are handy for one-to-one steps like we have here (one object file for one C source file).
 They are _not_ as useful for many-to-one steps such as linking executables and libraries.
-```
+```Makefile
 .SUFFIXES: .c .o
 .c.o:
     $(CC) $(CFLAGS) -c -o $@ $<
@@ -165,7 +162,7 @@ With both a static and shared library already built, executables became trivial 
 All we need is it to specify a C source file that contains a `main` function, compile it, and then link it with one of the libraries.
 I'm linking with the static library here for simplicity.
 I would only ever really use the shared library for sharing skylark's functionality with other developers and not for building executables locally.
-```
+```Makefile
 skylark: src/main.c libskylark.a
     $(CC) $(CFLAGS) $(LDFLAGS) -o $@ src/main.c libskylark.a $(LDLIBS)
 ```
@@ -173,7 +170,7 @@ skylark: src/main.c libskylark.a
 ### Tests Executable
 Building the tests executable is similar to the main executable except that it has more than just a single `main` file.
 To keep the project modular, the tests for each emulator section are kept separate in their own files.
-```
+```Makefile
 skylark_tests_sources = src/chip8_test.c src/isa_test.c
 skylark_tests: $(skylark_tests_sources) src/main_test.c libskylark.a
     $(CC) $(CFLAGS) -o $@ src/main_test.c libskylark.a
@@ -182,7 +179,7 @@ skylark_tests: $(skylark_tests_sources) src/main_test.c libskylark.a
 ### Loose Ends
 With all of the important artifacts out of the way, all that remain are the two "helper" programs: `dis` and `rom2c`.
 These, similar to the main executable, are just single-file programs that can be linked with a skylark library if necessary.
-```
+```Makefile
 dis: tools/dis.c libskylark.a
     $(CC) $(CFLAGS) -o $@ tools/dis.c libskylark.a
 
@@ -197,29 +194,54 @@ I'm much happier with the way it is written now.
 You can find the full, current version [here](https://github.com/theandrew168/skylark/blob/master/Makefile).
 
 # Functional Foundations
-some of these old functions were very "messy" in terms of what they do  
-a good function should be very clear about what data comes in and what data goes out  
-it sould also have no side effects  
-here's an example of one of the old functions  
-what does it do? hard to say by looking at the args / ret value  
-how do you design good functions?  
+Some of the functions in the original version are very "messy" in terms of what they do.
+In my opinion, a good function should be clear about the data that goes in and the new data that comes out.
+In addition to this, a good function should have no side-effects.
+Side-effects make a function more difficult to reason about in isolation and harder to test.
 
-start high-level: decode an instruction  
-think about the data in and out conceptually: machine code goes in, instruction comes out  
-then map it down to your language: uint16_t goes in, struct instruction comes out  
-okay, instruction decoding is easy. what about _doing_ the operations?  
+Here is an example of a function from the old version that I'm not satisfied by:
+```C
+void chip8_emulate_cycle(void);
+```
 
-what about an operation? conceptually: instruction + emu state = new emu stat  
-you can think about every instruction in this way: what does it do to the state of the system?  
-in OOP world, these would likely be public methods of some sort of CHIP8 class  
-but in C world, we can keep a clean separation between functions and data  
-so, mapped to c terms, an operation takes instruction and the current emu state and ends with the new state  
-this isn't _quite_ pure cuz we pass the struct chip8 as a mutable ptr but could be made pure by the caller  
+What on earth does this function do?
+At a high level, it probably emulates a CHIP-8 cycle, but what does this mean in terms of actual data transformation?
+Given this definition, it is almost impossible to know.
+Furthermore, how would you test this function?
+On the surface, no data goes in and no data comes out.
+Looking at the implementation, however, we can see that this function does a few things: decode the next instruction and then perform the corresponding operation.
+How can we make this function more readable and testable?
 
-overall, almost every function in a system can be shaped in a way that is closer to purity  
-dealing with IO can be a special case which I usually leave IO-based code at the top (in main) and don't let it seep down into the rest of the pure code  
-graphics and keyboard is the IO, all else can be pure  
-Brandon Rhodes talks about this in his talk [Hoist Your I/O](https://www.youtube.com/watch?v=PBQN62oUnN8)  
+In my experience, the best way to design a system like this is to map out the different data types and how they transform and interact.
+Do this both at a conceptual level and also in terms that are specific to your programming language.
+For the problem of emulating a CHIP-8 cycle, I came up with three important data types:
+* **instructions** encoded as machine code (represented as `uint16_t`)
+* **instructions** decoded as a map type (represented as `struct instruction`)
+* **CHIP-8** internal state (RAM, stack, registers, etc) (represented as `struct chip8`)
+
+In terms of these high level data types, the process of emulating a cycle goes as follows:
+1. Fetch the next machine code **instruction**
+2. Decode it into an **instruction** map type
+3. Apply the operation to the **CHIP-8** state
+
+We can implement these transformations as pure functions:
+```C
+int instruction_decode(struct instruction* inst, uint16_t code);
+int operation_apply(struct chip8* chip8, const struct instruction* inst);
+```
+
+The first function takes an encoded instruction (as a `uint16_t`) and decodes in into a `struct instruction`.
+The second takes an instruction and applies its operation to the `struct chip8`.
+Note that even though these functions mutate one of their arguments, it doesn't make them impure.
+If all arguments and the data they point to are the same, then the functions result in the same changes.
+Effective immutability of these parameters could be achieved by the caller making copies before / after the call.
+This strategy might not be [referentially transpartent](https://en.wikipedia.org/wiki/Referential_transparency) but it is still simple to reason about and test.
+
+Overall, almost every function in a system can be shaped in a way that is closer to purity.
+Dealing with I/O (keyboard input, graphical output, etc) is always an exception to this, however.
+Due to this, I always leave I/O-based code at the top of the project (as close to `main` as possible) and don't let it seep down into the rest of the functional core.
+This idea stems from a great talk by Brandon Rhodes called [Hoist Your I/O](https://www.youtube.com/watch?v=PBQN62oUnN8).
+In this Python-based presentation, he explains the value of keeping I/O-based and pure functional code separated.
 
 # Tactical Testing
 goals: simple and modular  
@@ -279,6 +301,7 @@ selection screen?
 dunno how fancy this will be  
 I'll figure it out - need to write more code  
 
+# Conclusion
 thats it!  
 thanks for reading about this process  
 I've learned a lot of the past few years and hope you picked something up from this  
