@@ -67,14 +67,12 @@ What I would prefer is a more free-form, ad hoc mapping between source files and
 ### Build Goals
 More specifically, I'd like to be able to build the following targets:
 
-| Target | Sources | Description |
+| Target | Dependencies | Description |
 | --- | --- | --- |
-| libskylark.a | `src/chip8.c`, `src/isa.c` | a static library |
-| libskylark.so | `src/chip8.c`, `src/isa.c` | a shared library |
-| skylark | `src/main.c` | the CHIP-8 emulator |
-| skylark_tests | `src/main_test.c` | an executable that runs the project's tests | 
-| dis | `tools/dis.c` | a minimal CHIP-8 disassembler |
-| rom2c | `tools/rom2c.c` | a tool for converting CHIP-8 ROMs to C source |
+| libskylark.a | All non-main sources | a static library |
+| libskylark.so | All non-main sources | a shared library |
+| skylark | `libskylark.a`, `src/main.c` | the actual CHIP-8 emulator |
+| skylark_tests | `libskylark.a`, `src/main_test.c` | a binary that runs the project's tests | 
 
 Fortunately, this situation is exactly what Make was built to solve.
 This table of build targets can be easily expressed via Make's simple system of targets, rules, and dependencies.
@@ -118,7 +116,7 @@ In my case, I only build the main emulator and the tests executable by default.
 To build everything, you can use `make all`.
 ```Makefile
 default: skylark skylark_tests
-all: libskylark.a libskylark.so skylark skylark_tests dis rom2c
+all: libskylark.a libskylark.so skylark skylark_tests
 ```
 
 With all that bookkeeping out of the way, we can start compiling things.
@@ -126,15 +124,16 @@ With all that bookkeeping out of the way, we can start compiling things.
 ### Libraries
 Let's start off by declaring the source files that should be built into the `libskylark` libraries and their corresponding object file names (just swapping the `.c` for `.o` in this case).
 ```Makefile
-libskylark_sources = src/chip8.c src/isa.c
+libskylark_sources = src/chip8.c src/instruction.c src/operation.c
 libskylark_objects = $(libskylark_sources:.c=.o)
 ```
 
 Now we can express dependencies between object and source / header files.
 These lists are what allow Make to rebuild _only_ the parts of the project that are affected by a given file change.
 ```Makefile
-src/chip8.o: src/chip8.c src/chip8.h src/isa.h
-src/isa.o: src/isa.c src/isa.h
+src/chip8.o: src/chip8.c src/chip8.h src/instruction.h
+src/instruction.o: src/instruction.c src/instruction.h
+src/operation.o: src/operation.c src/operation.h src/instruction.h src/chip8.h
 ```
 
 We can then specify the targets for each library.
@@ -174,17 +173,6 @@ To keep the project modular, the tests for each emulator section are kept separa
 skylark_tests_sources = src/chip8_test.c src/isa_test.c
 skylark_tests: $(skylark_tests_sources) src/main_test.c libskylark.a
     $(CC) $(CFLAGS) -o $@ src/main_test.c libskylark.a
-```
-
-### Loose Ends
-With all of the important artifacts out of the way, all that remain are the two "helper" programs: `dis` and `rom2c`.
-These, similar to the main executable, are just single-file programs that can be linked with a skylark library if necessary.
-```Makefile
-dis: tools/dis.c libskylark.a
-    $(CC) $(CFLAGS) -o $@ tools/dis.c libskylark.a
-
-rom2c: tools/rom2c.c
-    $(CC) $(CFLAGS) -o $@ tools/rom2c.c
 ```
 
 ### Summary
@@ -244,24 +232,48 @@ This idea stems from a great talk by Brandon Rhodes called [Hoist Your I/O](http
 In this Python-based presentation, he explains the value of keeping I/O-based and pure functional code separated.
 
 # Tactical Testing
-goals: simple and modular  
-doesn't need a whole bunch of features  
-I want tests to add value to the project, not bog it down  
-used to use minunit, but switched to something with less macros (no macros, actually)  
+To be completely honest, most of the C code that I've written hasn't ever been "formally" tested.
+I would sometimes throw in minimal testing header like [minunit](http://www.jera.com/techinfo/jtns/jtn002.html) but wouldn't fully utilize it.
+This lack of testing isn't a problem when writing in other languages such as Python or Go.
+For Python I use [pytest](https://docs.pytest.org/en/stable/) and for Go I use the builtin [testing](https://golang.org/pkg/testing/) package.
+Perhaps it has always been a convenience issue?
+Or maybe the added build complexity wasn't worth it to me?
+Either way, things have changed!
 
-the main focus is unit testing  
-but there is no reason it couldnt do more  
-if a project has no tests, then it is wrong  
+My current approach for testing C programs is extremely minimal.
+I had a few goals in mind when bringing it all together:
+* keep it **simple** (with little overhead to the project)
+* keep it **modular** (such that each section of the code has its own tests)
+* keep it **data-driven** (with lists of test data and expected outcomes)
 
-here is the gist: main_test.c includes all the other foo_test.c files  
-uses a standard test_func typedef  
-runs em all and counts the results  
-returns based on how many tests failed  
+All of these goals come from how pleasant of an experience it was to write tests within a Go project.
+I don't really have a need for before and after hooks.
+I have no need for mocks.
+I want a straightfoward way to validate some behavior and return `true` or `false`.
+Overall, I want something that adds value to the project: not something that bogs it down.
 
-downsides: need a way to ID the tests in output  
-have to be extra wordy with the error message  
-macros could _maybe_ help here but I haven't found it worth it  
-I like to verify the behavior, lock it in place, and move on  
+Here is the gist of it:
+1. Each test function adheres to a standard interface
+2. The tests for a given module are placed in `<module>_test.c`
+3. All of the tests are collected, executed, and counted in `main_test.c`
+4. The `main_test.c` file gets compiled into `skylark_tests`
+5. When executed, `skylark_tests` reports the results and exits accordingly
+
+The data-driven aspect of the individual tests comes mostly from C99's [designated initializers](https://en.cppreference.com/w/c/language/struct_initialization).
+By using an an array of literal structs I can enumerate pairs of test inputs and their expected outputs.
+These pairs are then looped over and if anything doesn't line up, we print an error and return `false`.
+Otherwise, the test passes and returns `true`.
+You can see an example of this being applied to instruction decoding in [instruction_test.c](https://github.com/theandrew168/skylark/blob/master/src/instruction_test.c).
+In a similar fasion, all of the tests are collected and iterated over in [main_test.c](https://github.com/theandrew168/skylark/blob/master/src/main_test.c) as an array of:
+```C
+typedef bool (*test_func)(void);
+```
+
+This approach is clean and simple but it does have some downsides.
+For one, the output upon error has no location info unless explicitly provided.
+This means that all errors should be extra wordy and include _what_ is being tested.
+There might be a way to make this cleaner with some macros but thus far I've not found a system that works well and is worth the added complexity.
+I just enough testing power to verify the behavior, lock it in place, and move on.
 
 # Plentiful Platforms
 the orig version was linux-only mainly because i didn't know how to do more  
@@ -283,23 +295,6 @@ this makes things quite portable
 so, on build, wget the SDL2 libs, extract em, and link it in!  
 its that easy and the resulting exe needs _nothing_ installed on the windows machine in order to run  
 its a great solution to a potentially very messy problem!  
-
-# Above and Beyond
-one unique thing about CHIP-8 is that there are only a handful of games (like 23ish)  
-plus the DRM for these games is basically non-existent (everyone just keeps them in their repo)  
-so, it'd be cool to just "bake" these into the emulator some how  
-there aren't many and they aren't that big so it wouldn't bloat the executable very much  
-it would also mean that users don't need to have the ROMs on their system to use the emulator  
-
-how we gonna do this?  
-chris has a post about it: LINK  
-this is where `rom2c` comes in!  
-convert all the roms to C source and build them in  
-now we just need a way to select one when the emulator starts  
-
-selection screen?  
-dunno how fancy this will be  
-I'll figure it out - need to write more code  
 
 # Conclusion
 thats it!  
