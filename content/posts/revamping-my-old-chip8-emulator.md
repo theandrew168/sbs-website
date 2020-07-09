@@ -1,9 +1,8 @@
 ---
-date: 2020-07-07
+date: 2020-07-09
 title: "Revamping My Old CHIP-8 Emulator"
 slug: "revamping-my-old-chip8-emulator"
 tags: ["c", "sdl2", "emulator"]
-draft: true
 ---
 Back in 2017 I was really interested in emulator development.
 I read that [CHIP-8](https://en.wikipedia.org/wiki/CHIP-8) was a great introductory system and decided to write my own emulator for it.
@@ -77,109 +76,57 @@ More specifically, I'd like to be able to build the following targets:
 Fortunately, this situation is exactly what Make was built to solve.
 This table of build targets can be easily expressed via Make's simple system of targets, rules, and dependencies.
 
-### POSIX Preamble
-Our Makefile starts out with a few lines of behavior specification:
+### Restructured
+Below is a simplified representation of the new Makefile.
 ```Makefile
-.POSIX:
-.SUFFIXES:
-```
-
-The first line `.POSIX:` tells Make to strictly adhere to POSIX functionality.
-This is an important safeguard against unknowingly using GNU-specific Make extensions.
-
-The second line `.SUFFIXES:` disables all default inference rules.
-In order to keep every part of the build explicit, we don't want any implicit inference rules building things for us without our intention.
-Individual suffixes will be added back in when and where they are necessary.
-
-### Variables
-I like to keep all of the configurable build variables right at the top of the Makefile.
-These encompass details such as which C compiler to use, what extra libraries to link with, and various other settings and flags.
-```Makefile
-AR      = ar
-CC      = cc
-CFLAGS  = -std=c99
-CFLAGS += -fPIC -g -Og
-CFLAGS += -Wall -Wextra -Wpedantic
-CFLAGS += -Wno-unused-parameter
-CFLAGS += -Isrc/ -I/usr/include/SDL2
-LDFLAGS =
-LDLIBS  = -lSDL2
-```
-
-These variables can all be easily overriden on the command line.
-For example, to build the project using `clang` instead of your platform's default compiler, simply override the `CC` variable: `make CC=clang`.
-
-### Targets
-The next sections defines all of the build artifacts and which ones should be built by default.
-This can be adjusted based on personal preference.
-In my case, I only build the main emulator and the tests executable by default.
-To build everything, you can use `make all`.
-```Makefile
-default: skylark skylark_tests
-all: libskylark.a libskylark.so skylark skylark_tests
-```
-
-With all that bookkeeping out of the way, we can start compiling things.
-
-### Libraries
-Let's start off by declaring the source files that should be built into the `libskylark` libraries and their corresponding object file names (just swapping the `.c` for `.o` in this case).
-```Makefile
-libskylark_sources = src/chip8.c src/instruction.c src/operation.c
+# declare library sources
+libskylark_sources = src/chip8.c src/inst.c src/op.c
 libskylark_objects = $(libskylark_sources:.c=.o)
-```
 
-Now we can express dependencies between object and source / header files.
-These lists are what allow Make to rebuild _only_ the parts of the project that are affected by a given file change.
-```Makefile
-src/chip8.o: src/chip8.c src/chip8.h src/instruction.h
-src/instruction.o: src/instruction.c src/instruction.h
-src/operation.o: src/operation.c src/operation.h src/instruction.h src/chip8.h
-```
+# express dependencies between object and source files
+src/chip8.o: src/chip8.c src/chip8.h src/inst.h
+src/inst.o: src/inst.c src/inst.h
+src/op.o: src/op.c src/op.h src/inst.h src/chip8.h
 
-We can then specify the targets for each library.
-They both depend on the compiled object files.
-```Makefile
+# build the static library
 libskylark.a: $(libskylark_objects)
     $(AR) rcs $@ $(libskylark_objects)
 
+# build the shared library
 libskylark.so: $(libskylark_objects)
     $(CC) $(LDFLAGS) -shared -o $@ $(libskylark_objects) $(LDLIBS)
-```
 
-The last step is to add is an inference rule for compiling C source files into object files.
-Inference rules apply their actions to files with suffixes that match the rule.
-They are handy for one-to-one steps like we have here (one object file for one C source file).
-They are _not_ as useful for many-to-one steps such as linking executables and libraries.
-```Makefile
+# build the main executable
+skylark: src/main.c libskylark.a
+    $(CC) $(CFLAGS) $(LDFLAGS) -o $@ src/main.c libskylark.a $(LDLIBS)
+
+# build the tests executable
+skylark_tests_sources = src/chip8_test.c src/inst_test.c src/op_test.c
+skylark_tests: $(skylark_tests_sources) src/main_test.c libskylark.a
+    $(CC) $(CFLAGS) -o $@ src/main_test.c libskylark.a
+
+# inference rule for compiling source files to object files
 .SUFFIXES: .c .o
 .c.o:
     $(CC) $(CFLAGS) -c -o $@ $<
 ```
 
-### Main Executable
-With both a static and shared library already built, executables became trivial to build.
-All we need is it to specify a C source file that contains a `main` function, compile it, and then link it with one of the libraries.
-I'm linking with the static library here for simplicity.
-I would only ever really use the shared library for sharing skylark's functionality with other developers and not for building executables locally.
-```Makefile
-skylark: src/main.c libskylark.a
-    $(CC) $(CFLAGS) $(LDFLAGS) -o $@ src/main.c libskylark.a $(LDLIBS)
-```
+Though longer than the original, this version builds more targets and retains more flexibility.
+This is the exact "loose mapping" of source files to build targets that I was going for.
+The libraries depend on the source files, the executables depend on the libraries, and everyone is happy.
+Additionally, the explicit expression of interdependencies between modules allows Make to optimize the changes and only rebuild what is necessary.
 
-### Tests Executable
-Building the tests executable is similar to the main executable except that it has more than just a single `main` file.
-To keep the project modular, the tests for each emulator section are kept separate in their own files.
-```Makefile
-skylark_tests_sources = src/chip8_test.c src/isa_test.c
-skylark_tests: $(skylark_tests_sources) src/main_test.c libskylark.a
-    $(CC) $(CFLAGS) -o $@ src/main_test.c libskylark.a
-```
+Here is a nice graph of Skylark's build hierarchy:
+
+{{<figure src="/images/skylark-graph.png" alt="Skylark Build Graph">}}
 
 ### Summary
 That wraps the Makefile revamp!
 It is definitely a lot more flexible than the old version and does a lot more work.
 I'm much happier with the way it is written now.
-You can find the full, current version [here](https://github.com/theandrew168/skylark/blob/master/Makefile).
+You can find the full, current version here:
+* https://github.com/theandrew168/skylark/blob/master/Makefile
+
 
 # Functional Foundations
 Some of the functions in the original version are very "messy" in terms of what they do.
@@ -270,34 +217,44 @@ typedef bool (*test_func)(void);
 ```
 
 This approach is clean and simple but it does have some downsides.
-For one, the output upon error has no location info unless explicitly provided.
-This means that all errors should be extra wordy and include _what_ is being tested.
+For one, the error messages contain no test idenfitication by default.
+This means that all error message must be extra verbose and include _what_ is being tested.
 There might be a way to make this cleaner with some macros but thus far I've not found a system that works well and is worth the added complexity.
-I just enough testing power to verify the behavior, lock it in place, and move on.
+I strictly want just enough testing power to verify a function's behavior, lock it in place, and move on.
 
 # Plentiful Platforms
-the orig version was linux-only mainly because i didn't know how to do more  
-I since found a better way from chris's blog  
-in short: native for unix-like via posix-compat make and cross-compile for windows via minwgw-w64  
+The original version of Skylark was limited to Linux mainly because I didn't know how to achieve anything else.
+However, cross-platform C programs are now something that I can confidently build.
+Most of this progress is thanks for Chris Wellons and his [amazing blog](https://nullprogram.com/).
+He has written many posts about writing portable C.
+I even wrote a [post of my own](/posts/a-multi-platform-modern-opengl-demo-with-sdl2/) about this!
+It describes how to write and build cross-platform, multimedia applications using [SDL2](https://www.libsdl.org/index.php) and [OpenGL](https://www.opengl.org/).
 
-native is simple: linux is default and .macos is for macOS  
-they are also exactly the same but macOS differs on some lib stuff sometimes (opengl)  
-libs are expected to be installed on the system during build time: SDL2, etc  
+In short, the process is as follows:
+* Each platform has its own Makefile
+* Unix-like systems build the project natively
+* Windows builds are cross-compiled (using [mingw-w64](http://mingw-w64.org/doku.php)) from a Unix-like system
 
-windows is a bit fussier, but not by much  
-use mingw as the compiler and c99  
-would need diff impls for POSIX things (sockets, low-level IO, etc)  
-Makefile names need changed: .so to .dll, executables have .exe  
+The Makefiles themselves are structured similarly.
+The Linux (`Makefile`) and macOS (`Makefile.macos`) Makefiles are nearly identical.
+They occasionally vary in terms of some library names, include directories, and linker flags.
+The Windows Makefile (`Makefile.mingw`) is different in a few notable ways:
+1. Shared libraries have the extension `.dll` instead of `.so`
+2. Executables have the extension `.exe`
+3. Dependencies are downloaded as pre-built libraries
 
-windows libs are a diff story  
-since this is xcompile, might as well just DL the pre-built static libs and link them in  
-this makes things quite portable  
-so, on build, wget the SDL2 libs, extract em, and link it in!  
-its that easy and the resulting exe needs _nothing_ installed on the windows machine in order to run  
-its a great solution to a potentially very messy problem!  
+When it comes to dependencies, the approach differs depending on the platform.
+The Linux and macOS builds expect libraries to be installed prior to building (SDL2, in this case).
+For Windows, however, it is simpler to download the pre-built libraries at build time and statically link them into the target binary.
+
+This method for handling libraries for Windows builds is very simple and effective.
+By linking them in statically, the resulting `.exe` is able to be distributed with _zero_ extra dependencies.
+Just build, distribute, and run!
+It is a great solution to a potentially very messy problem.
 
 # Conclusion
-thats it!  
-thanks for reading about this process  
-I've learned a lot of the past few years and hope you picked something up from this  
-til next time  
+There we go!
+My CHIP-8 emulator is now completely revamped and modernized.
+I've thrown all of my newfound experience at it and made it shine.
+I hope that this journey has been interesting and that you picked up a useful trick or two.
+Thanks again for reading and I'll see you next time!

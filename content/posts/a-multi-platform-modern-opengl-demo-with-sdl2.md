@@ -7,7 +7,7 @@ tags: ["c", "graphics", "opengl", "sdl2"]
 This post is largely inspired by [Chris Wellons'](https://nullprogram.com/) 2015 blog post about writing a [modern OpenGL demo](https://nullprogram.com/blog/2015/06/06/) that works on all three major desktop platforms (Windows, macOS, and Linux).
 I have come back to his post countless times over the years when looking for guidance on how to build any cross-platform C program.
 
-In Chris' version of this demo he makes use of [GLFW3](https://www.glfw.org/) for the window and input handling and uses [gl3w](https://github.com/skaslev/gl3w) for loading OpenGL functions.
+In Chris' version of this demo he makes use of [GLFW3](https://www.glfw.org/) for the window and input handling and uses [gl3w](https://github.com/skaslev/gl3w) for loading [OpenGL](https://www.opengl.org/) functions.
 I have used GLFW3 in the past, but tend to prefer [SDL2](https://www.libsdl.org/) for its [wealth of features](https://wiki.libsdl.org/Introduction) and [polling-based event model](https://wiki.libsdl.org/SDL_PollEvent).
 Therefore, in my version, I wanted to use SDL2 for the window and input handling and load the OpenGL functions myself.
 Loading OpenGL functions is a fiddly, quirky topic that deserves its own [blog post](/posts/loading-opengl-fuctions-for-fun-and-profit/).
