@@ -1,5 +1,3 @@
-What's the deal with OpenGL functions defs / loading / contexts / using
-Refactoring My Old CHIP-8 Emulator
 How to correctly disssemble a CHIP-8 ROM
 Restoring a Graphics Library from 1992 - Rewrite SRGP in X11 (or SDL2???)
 Restoring another Graphics Library from 1992 - Rewrite SPHIGS in X11 (or SDL2???)

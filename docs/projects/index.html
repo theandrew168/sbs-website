@@ -126,6 +126,35 @@ Since I&rsquo;m still very much a novice when it comes to web design, I want to 
 <li>Production-ready deployments</li>
 <li>Privileged port management via <a href="https://www.freedesktop.org/software/systemd/man/systemd.socket.html">systemd</a></li>
 </ul>
+<h2 id="squeaky-examplehttpsgithubcomtheandrew168squeakyblobmasterexamplesbreakoutscm-sourcehttpsgithubcomtheandrew168squeaky">Squeaky (<a href="https://github.com/theandrew168/squeaky/blob/master/examples/breakout.scm">example</a>, <a href="https://github.com/theandrew168/squeaky">source</a>)</h2>
+<p>Squeaky is a proof of concept programming language for making games.
+It is an implementation of <a href="https://en.wikipedia.org/wiki/Scheme_(programming_language)">Scheme</a> (subset of R5RS) with a focus on writing simple and portable multimedia applications.
+The initial goal was to support many features (2D graphics, 3D graphics, and networking to name a few).
+However, after achieving the minimal viable product of cross-platform, line-based graphics, I felt as though I had learned enough and made enough progress to wrap this project up and move on.
+I plan to study more complex compiler topics such as code generation and executable formats (ELF vs PE) and may return to this project in the future.</p>
+<p>Back in college a good buddy of mine took a course on programming languages.
+I knew nothing more about that topic than the fact that multiple different languages exist.
+I wanted to know more.
+How is a programming language made?
+Can they even be made?
+I thought that programming languages were somehow atomic: unable to be broken down into smaller pieces.
+But then my experience with Python taught me something interesting: Python is <em>written</em> in C (<a href="https://github.com/python/cpython">CPython</a> is, at least).</p>
+<p>That realization truly broke down a big mysterious wall for me.
+Programming languages are just programs that read text and do stuff.
+Some interpret the text literally while others &ldquo;compile&rdquo; the text&rsquo;s meaning into a leaner, compressed form.
+There are many books on language design and implementation.
+Some notable ones include <a href="https://en.wikipedia.org/wiki/Compilers:_Principles,_Techniques,_and_Tools">The Dragon Book</a> and <a href="https://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs">SICP</a>.
+My fascination with the latter and with game development led to this proof of concept.</p>
+<h5 id="relevant-skills-1">Relevant Skills</h5>
+<ul>
+<li>C programming</li>
+<li>Scheme programming</li>
+<li>Cross-compiling for non <a href="https://en.wikipedia.org/wiki/Unix-like">Unix-like</a> operating systems</li>
+<li>Build management with <a href="https://pubs.opengroup.org/onlinepubs/009695399/utilities/make.html">POSIX-compatible</a> Makefiles</li>
+<li>Programming language design</li>
+<li>Functional API design</li>
+<li>Garbage collection</li>
+</ul>
 <h2 id="skylark-sourcehttpsgithubcomtheandrew168skylark">Skylark (<a href="https://github.com/theandrew168/skylark">source</a>)</h2>
 <p>One of my earliest memories of being truly amazed by a programmer was first seeing Bisqwit&rsquo;s videos about writing an NES emulator (<a href="https://www.youtube.com/watch?v=y71lli8MS8s">Part 1</a> and <a href="https://www.youtube.com/watch?v=XZWw745wPXY">Part 2</a>).
 His efficient and straight-forward approach to solving the problem was truly unlike anything I&rsquo;d ever seen.
@@ -137,7 +166,7 @@ This simple, minimal instruction set is commonly referred to as the &ldquo;Hello
 I was able to scrap together an implementation after a few weeks of iterating.
 Despite being technically finished, it had numerous flaws that I didn&rsquo;t really realize until multiple years of C programming later.</p>
 <p>For anyone curious, the name Skylark is a reference to the character <a href="https://en.wikipedia.org/wiki/Chris_Kirkpatrick">Chip Skylark</a> from the old Nickelodeon show <a href="https://en.wikipedia.org/wiki/The_Fairly_OddParents">The Fairly OddParents</a>.</p>
-<h5 id="relevant-skills-1">Relevant Skills</h5>
+<h5 id="relevant-skills-2">Relevant Skills</h5>
 <ul>
 <li>C programming</li>
 <li>Cross-compiling for non <a href="https://en.wikipedia.org/wiki/Unix-like">Unix-like</a> operating systems</li>
@@ -163,7 +192,7 @@ Instead, I wrote a bit of Python to satisfy my very small RISC-V needs.</p>
 It only supports assembling single files and does absolutely no linking.
 The program is simply a RISC-V instruction encoder with a thin layer of label and constant handling above it.
 Nonetheless, it helped me get started with the platform and gave me an up-close experience with the ISA.</p>
-<h5 id="relevant-skills-2">Relevant Skills</h5>
+<h5 id="relevant-skills-3">Relevant Skills</h5>
 <ul>
 <li>Python programming</li>
 <li>RISC-V <a href="https://riscv.org/specifications/">instruction set architecture</a></li>
@@ -187,7 +216,7 @@ I wanted a camera that I could fly around the scene and see how the lighting loo
 Fancy shader effects were also on the menu: reflection, refraction, and bloom.
 In hindsight, the design of this project was a bit too presumptuous with its abstractions.
 After painting myself into a corner with every attempt at structuring the code, I decided that something was systematically flawed with my approach and transitioned to other programming languages and paradigms.</p>
-<h5 id="relevant-skills-3">Relevant Skills</h5>
+<h5 id="relevant-skills-4">Relevant Skills</h5>
 <ul>
 <li>C++ programming</li>
 <li>3D graphics via OpenGL</li>

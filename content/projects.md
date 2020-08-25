@@ -29,6 +29,37 @@ Since I'm still very much a novice when it comes to web design, I want to get th
 * Production-ready deployments
 * Privileged port management via [systemd](https://www.freedesktop.org/software/systemd/man/systemd.socket.html)
 
+## Squeaky ([example](https://github.com/theandrew168/squeaky/blob/master/examples/breakout.scm), [source](https://github.com/theandrew168/squeaky))
+Squeaky is a proof of concept programming language for making games.
+It is an implementation of [Scheme](https://en.wikipedia.org/wiki/Scheme_(programming_language)) (subset of R5RS) with a focus on writing simple and portable multimedia applications.
+The initial goal was to support many features (2D graphics, 3D graphics, and networking to name a few).
+However, after achieving the minimal viable product of cross-platform, line-based graphics, I felt as though I had learned enough and made enough progress to wrap this project up and move on.
+I plan to study more complex compiler topics such as code generation and executable formats (ELF vs PE) and may return to this project in the future.
+
+Back in college a good buddy of mine took a course on programming languages.
+I knew nothing more about that topic than the fact that multiple different languages exist.
+I wanted to know more.
+How is a programming language made?
+Can they even be made?
+I thought that programming languages were somehow atomic: unable to be broken down into smaller pieces.
+But then my experience with Python taught me something interesting: Python is _written_ in C ([CPython](https://github.com/python/cpython) is, at least).
+
+That realization truly broke down a big mysterious wall for me.
+Programming languages are just programs that read text and do stuff.
+Some interpret the text literally while others "compile" the text's meaning into a leaner, compressed form.
+There are many books on language design and implementation.
+Some notable ones include [The Dragon Book](https://en.wikipedia.org/wiki/Compilers:_Principles,_Techniques,_and_Tools) and [SICP](https://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs).
+My fascination with the latter and with game development led to this proof of concept.
+
+##### Relevant Skills
+* C programming
+* Scheme programming
+* Cross-compiling for non [Unix-like](https://en.wikipedia.org/wiki/Unix-like) operating systems
+* Build management with [POSIX-compatible](https://pubs.opengroup.org/onlinepubs/009695399/utilities/make.html) Makefiles
+* Programming language design
+* Functional API design
+* Garbage collection
+
 ## Skylark ([source](https://github.com/theandrew168/skylark))
 One of my earliest memories of being truly amazed by a programmer was first seeing Bisqwit's videos about writing an NES emulator ([Part 1](https://www.youtube.com/watch?v=y71lli8MS8s) and [Part 2](https://www.youtube.com/watch?v=XZWw745wPXY)).
 His efficient and straight-forward approach to solving the problem was truly unlike anything I'd ever seen.
