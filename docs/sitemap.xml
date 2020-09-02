@@ -3,12 +3,47 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>https://shallowbrooksoftware.com/tags/c/</loc>
-    <lastmod>2020-08-25T00:00:00+00:00</lastmod>
+    <loc>https://shallowbrooksoftware.com/tags/design/</loc>
+    <lastmod>2020-09-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/posts/designing-python-web-servers/</loc>
+    <lastmod>2020-09-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/tags/networking/</loc>
+    <lastmod>2020-09-02T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://shallowbrooksoftware.com/posts/</loc>
+    <lastmod>2020-09-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/tags/python/</loc>
+    <lastmod>2020-09-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/tags/server/</loc>
+    <lastmod>2020-09-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/</loc>
+    <lastmod>2020-09-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/tags/</loc>
+    <lastmod>2020-09-02T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/tags/c/</loc>
     <lastmod>2020-08-25T00:00:00+00:00</lastmod>
   </url>
   
@@ -19,16 +54,6 @@
   
   <url>
     <loc>https://shallowbrooksoftware.com/tags/sdl2/</loc>
-    <lastmod>2020-08-25T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://shallowbrooksoftware.com/</loc>
-    <lastmod>2020-08-25T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://shallowbrooksoftware.com/tags/</loc>
     <lastmod>2020-08-25T00:00:00+00:00</lastmod>
   </url>
   
