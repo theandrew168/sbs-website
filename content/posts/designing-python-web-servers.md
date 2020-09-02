@@ -8,7 +8,7 @@ I've spent the last few days designing and benchmarking extremely minimal pure-P
 There is a tech myth / superstition that exposing python web servers to the internet is a bad idea but I've seen little to no evidence as to why this is supposedly the case.
 Are they too slow?
 Are they too insecure for some reason?
-One this is for sure: performance must always be measured, not guessed.
+One thing is for sure: performance must always be measured, not guessed.
 
 # Benchmark
 The servers were tested whilst running on a minimal [DigitalOcean](https://www.digitalocean.com/) Droplet (1 CPU, 1GB RAM).

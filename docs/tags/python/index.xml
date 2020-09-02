@@ -17,7 +17,7 @@
       <pubDate>Wed, 02 Sep 2020 00:00:00 +0000</pubDate>
       
       <guid>https://shallowbrooksoftware.com/posts/designing-python-web-servers/</guid>
-      <description>I&amp;rsquo;ve spent the last few days designing and benchmarking extremely minimal pure-Python web servers. There is a tech myth / superstition that exposing python web servers to the internet is a bad idea but I&amp;rsquo;ve seen little to no evidence as to why this is supposedly the case. Are they too slow? Are they too insecure for some reason? One this is for sure: performance must always be measured, not guessed.</description>
+      <description>I&amp;rsquo;ve spent the last few days designing and benchmarking extremely minimal pure-Python web servers. There is a tech myth / superstition that exposing python web servers to the internet is a bad idea but I&amp;rsquo;ve seen little to no evidence as to why this is supposedly the case. Are they too slow? Are they too insecure for some reason? One thing is for sure: performance must always be measured, not guessed.</description>
     </item>
     
   </channel>
