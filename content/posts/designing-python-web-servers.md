@@ -10,6 +10,33 @@ Are they too slow?
 Are they too insecure for some reason?
 One thing is for sure: performance must always be measured, not guessed.
 
+# Designs
+The designs I tested can be grouped into 4 broad categories: sequential, forking, threading, and asynchronous.
+
+### Sequential
+Sequential servers are the simplest and most straightfoward.
+They process all clients in the order they arrive, one at a time.
+This means that every client has to wait in a potentially very long line before they get service.
+I expect this approach to be mediocre.
+
+### Forking
+Forking servers spawn a new operating system process for each client that arrives.
+This means that clients don't have to wait on each other but more of the server's resources will be consumed.
+Additionally, spawning new processes tends to have noticable overhead when many clients connect rapidly.
+I expect this approach to be visibly affected by this overhead.
+
+### Threading
+Threading servers are similar to forking servers except that they spawn a thread to handle each client instead of a process.
+Threads tend to have lower overhead than processes but aren't quite as independent when it comes to grabbing time on the CPU.
+They share memory as well as some other server resources.
+I expect this approach to perform well since web servers tend be bound by IO, not the CPU.
+
+### Asynchronous
+Asynchronous servers double down on the IO-heavy workload of web servers.
+They keep all client connections together in such a way that no connections are ever waited on.
+Only when data is ready to be read from a client does the server "wake up" and process it.
+I expect this approach to perform very well since it is tailored to fit IO-bound workloads.
+
 # Benchmark
 The servers were tested whilst running on a minimal [DigitalOcean](https://www.digitalocean.com/) Droplet (1 CPU, 1GB RAM).
 All of them are using a TCP listen backlog of 128.
@@ -32,9 +59,9 @@ It clearly shows how much room for improvement exists within each design.
 | Server | RPS | Mean Latency | Mode Latency | Worst Latency | % NGINX (RPS) |
 | --- | --- | --- | --- | --- | --- |
 | [NGINX](https://github.com/nginx/nginx) | 672.36 | 0.07 | 0.11 | 0.64 | 100.00 |
-| [simple1.py](https://github.com/theandrew168/bloggulus/blob/master/design/simple1.py) | 54.23 | 0.84 | 0.92 | 8.10 | 8.07 |
-| [simple2.py](https://github.com/theandrew168/bloggulus/blob/master/design/simple2.py) | 52.77 | 0.84 | 0.91 | 7.85 | 7.85 |
-| [simple3.py](https://github.com/theandrew168/bloggulus/blob/master/design/simple3.py) | 45.71 | 0.78 | 1.64 | 15.88 | 6.80 |
+| [sequential1.py](https://github.com/theandrew168/bloggulus/blob/master/design/sequential1.py) | 54.23 | 0.84 | 0.92 | 8.10 | 8.07 |
+| [sequential2.py](https://github.com/theandrew168/bloggulus/blob/master/design/sequential2.py) | 52.77 | 0.84 | 0.91 | 7.85 | 7.85 |
+| [sequential3.py](https://github.com/theandrew168/bloggulus/blob/master/design/sequential3.py) | 45.71 | 0.78 | 1.64 | 15.88 | 6.80 |
 | [forking1.py](https://github.com/theandrew168/bloggulus/blob/master/design/forking1.py) | 8.70 | 5.60 | 5.14 | 10.14 | 1.29 |
 | [forking2.py](https://github.com/theandrew168/bloggulus/blob/master/design/forking2.py) | 81.83 | 0.54 | 0.87 | 7.60 | 12.17 |
 | [threading1.py](https://github.com/theandrew168/bloggulus/blob/master/design/threading1.py) | 78.71 | 0.52 | 0.87 | 7.52 | 11.71 |
@@ -44,7 +71,7 @@ It clearly shows how much room for improvement exists within each design.
 | [nonblocking.py](https://github.com/theandrew168/bloggulus/blob/master/design/nonblocking.py) | 79.33 | 0.53 | 0.63 | 5.23 | 11.80 |
 | [async.py](https://github.com/theandrew168/bloggulus/blob/master/design/async.py) | 82.97 | 0.53 | 0.84 | 7.35 | 12.34 |
 
-# Conclusions
+# Analysis
 Pretty interesting stuff!
 Some designs were awful, some were middle-of-the-road, and some were decent.
 As expected, the simple sequential servers were quite average and all floated around that 50 RPS range.
@@ -62,13 +89,36 @@ These two designs both multiplex the socket IO handling around which clients are
 The two "pool" designs did decent but not as well as their unpooled counterparts.
 The overhead of managing the pool must be coming into play here.
 
-Aside from these numbers, another important design facet is whether or not a particular design allows me to "bring my own socket".
-Some designs open the listening socket themselves which doesn't play nice with how I deploy my apps into production.
-I like to get my privileged sockets (for ports 80 and 443) from [systemd](https://www.freedesktop.org/software/systemd/man/systemd.socket.html) which passes the already listening file descriptors to my app.
-Due to this, I need to be able to bring my own socket to whichever design I choose.
+# Existing Servers
+Just for completeness, I wanted to see how a few existing Python-based web servers stacked up against my quick and dirty designs.
+Unsurprisingly, they beat me by a long shot!
+Most of them did, at least.
 
-Moving forward, I'm planning to pick one or two of these designs to take into profiling and optimization.
-I really want to see how much closer I can get to NGINX's performance.
-I also plan to integrate TLS via Let's Encrypt in a similar manner to Go's [autocert](https://pkg.go.dev/golang.org/x/crypto/acme/autocert?tab=doc) package.
+| Server | RPS | Mean Latency | Mode Latency | Worst Latency | % NGINX (RPS) |
+| --- | --- | --- | --- | --- | --- |
+| [NGINX](https://github.com/nginx/nginx) | 672.36 | 0.07 | 0.11 | 0.64 | 100.00 |
+| [Gunicorn[sync]](https://docs.gunicorn.org/en/latest/design.html#sync-workers) | 46.31 | 0.99 | 0.95 | 8.23 | 6.89 |
+| [Gunicorn[gevent]](https://docs.gunicorn.org/en/latest/design.html#async-workers) | 338.36 | 0.14 | 0.09 | 0.43 | 50.32 |
+| [Waitress](https://docs.pylonsproject.org/projects/waitress/en/stable/index.html) | 449.07 | 0.10 | 0.09 | 0.42 | 66.79 |
 
-Thanks for reading!
+The synchronous Gunicorn did about as well as my own sequential servers which is to be expected.
+Gunicorn with [gevent](http://www.gevent.org/) based workers did extremely well.
+Gevent is a well-optimized implementation of asynchronous IO with its core event loop written in C (as either [libev](http://software.schmorp.de/pkg/libev.html) or [libuv](http://libuv.org/)).
+I figured that it would be a high performer and I wasn't wrong.
+
+Waitress was the underdog for me but... Wow!
+I was really blown away by its performance.
+It even gives NGINX a run for its money by smashing through 67% of its requests per second.
+Even more amazing is that Waitress is a pure-Python implementation with zero external dependencies.
+Talk about good engineering.
+
+I'm definitely going to spend some time reading the source of Waitress to understand more about how they achieve such impressive performance.
+Thankfully, they have a well-written [design overview](https://docs.pylonsproject.org/projects/waitress/en/stable/design.html) which will be a good place to start.
+
+# Conclusion
+Moving forward, I plan to use to Waitress as my web server of choice for upcoming Python web projects.
+The performance is great (as we've seen) and it supports a "bring your own socket" model of initialization.
+This is important to me because the apps I deploy to production get their privileged listen sockets (on ports 80 and 443) from [systemd](https://www.freedesktop.org/software/systemd/man/systemd.socket.html) as raw file descriptors.
+
+Fun fact!
+Waitress is part of the [Pylons Project](https://pylonsproject.org/) which is also responsible for building my perferred web framework: [Pyramid](https://trypyramid.com/). Thanks for reading!

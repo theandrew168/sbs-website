@@ -131,6 +131,28 @@ There is a tech myth / superstition that exposing python web servers to the inte
 Are they too slow?
 Are they too insecure for some reason?
 One thing is for sure: performance must always be measured, not guessed.</p>
+<h1 id="designs">Designs</h1>
+<p>The designs I tested can be grouped into 4 broad categories: sequential, forking, threading, and asynchronous.</p>
+<h3 id="sequential">Sequential</h3>
+<p>Sequential servers are the simplest and most straightfoward.
+They process all clients in the order they arrive, one at a time.
+This means that every client has to wait in a potentially very long line before they get service.
+I expect this approach to be mediocre.</p>
+<h3 id="forking">Forking</h3>
+<p>Forking servers spawn a new operating system process for each client that arrives.
+This means that clients don&rsquo;t have to wait on each other but more of the server&rsquo;s resources will be consumed.
+Additionally, spawning new processes tends to have noticable overhead when many clients connect rapidly.
+I expect this approach to be visibly affected by this overhead.</p>
+<h3 id="threading">Threading</h3>
+<p>Threading servers are similar to forking servers except that they spawn a thread to handle each client instead of a process.
+Threads tend to have lower overhead than processes but aren&rsquo;t quite as independent when it comes to grabbing time on the CPU.
+They share memory as well as some other server resources.
+I expect this approach to perform well since web servers tend be bound by IO, not the CPU.</p>
+<h3 id="asynchronous">Asynchronous</h3>
+<p>Asynchronous servers double down on the IO-heavy workload of web servers.
+They keep all client connections together in such a way that no connections are ever waited on.
+Only when data is ready to be read from a client does the server &ldquo;wake up&rdquo; and process it.
+I expect this approach to perform very well since it is tailored to fit IO-bound workloads.</p>
 <h1 id="benchmark">Benchmark</h1>
 <p>The servers were tested whilst running on a minimal <a href="https://www.digitalocean.com/">DigitalOcean</a> Droplet (1 CPU, 1GB RAM).
 All of them are using a TCP listen backlog of 128.
@@ -165,7 +187,7 @@ It clearly shows how much room for improvement exists within each design.</p>
 <td>100.00</td>
 </tr>
 <tr>
-<td><a href="https://github.com/theandrew168/bloggulus/blob/master/design/simple1.py">simple1.py</a></td>
+<td><a href="https://github.com/theandrew168/bloggulus/blob/master/design/sequential1.py">sequential1.py</a></td>
 <td>54.23</td>
 <td>0.84</td>
 <td>0.92</td>
@@ -173,7 +195,7 @@ It clearly shows how much room for improvement exists within each design.</p>
 <td>8.07</td>
 </tr>
 <tr>
-<td><a href="https://github.com/theandrew168/bloggulus/blob/master/design/simple2.py">simple2.py</a></td>
+<td><a href="https://github.com/theandrew168/bloggulus/blob/master/design/sequential2.py">sequential2.py</a></td>
 <td>52.77</td>
 <td>0.84</td>
 <td>0.91</td>
@@ -181,7 +203,7 @@ It clearly shows how much room for improvement exists within each design.</p>
 <td>7.85</td>
 </tr>
 <tr>
-<td><a href="https://github.com/theandrew168/bloggulus/blob/master/design/simple3.py">simple3.py</a></td>
+<td><a href="https://github.com/theandrew168/bloggulus/blob/master/design/sequential3.py">sequential3.py</a></td>
 <td>45.71</td>
 <td>0.78</td>
 <td>1.64</td>
@@ -254,7 +276,7 @@ It clearly shows how much room for improvement exists within each design.</p>
 </tr>
 </tbody>
 </table>
-<h1 id="conclusions">Conclusions</h1>
+<h1 id="analysis">Analysis</h1>
 <p>Pretty interesting stuff!
 Some designs were awful, some were middle-of-the-road, and some were decent.
 As expected, the simple sequential servers were quite average and all floated around that 50 RPS range.
@@ -270,14 +292,73 @@ The <code>nonblocking.py</code> and <code>async.py</code> servers also performed
 These two designs both multiplex the socket IO handling around which clients are ready for action <em>right now</em>.
 The two &ldquo;pool&rdquo; designs did decent but not as well as their unpooled counterparts.
 The overhead of managing the pool must be coming into play here.</p>
-<p>Aside from these numbers, another important design facet is whether or not a particular design allows me to &ldquo;bring my own socket&rdquo;.
-Some designs open the listening socket themselves which doesn&rsquo;t play nice with how I deploy my apps into production.
-I like to get my privileged sockets (for ports 80 and 443) from <a href="https://www.freedesktop.org/software/systemd/man/systemd.socket.html">systemd</a> which passes the already listening file descriptors to my app.
-Due to this, I need to be able to bring my own socket to whichever design I choose.</p>
-<p>Moving forward, I&rsquo;m planning to pick one or two of these designs to take into profiling and optimization.
-I really want to see how much closer I can get to NGINX&rsquo;s performance.
-I also plan to integrate TLS via Let&rsquo;s Encrypt in a similar manner to Go&rsquo;s <a href="https://pkg.go.dev/golang.org/x/crypto/acme/autocert?tab=doc">autocert</a> package.</p>
-<p>Thanks for reading!</p>
+<h1 id="existing-servers">Existing Servers</h1>
+<p>Just for completeness, I wanted to see how a few existing Python-based web servers stacked up against my quick and dirty designs.
+Unsurprisingly, they beat me by a long shot!
+Most of them did, at least.</p>
+<table>
+<thead>
+<tr>
+<th>Server</th>
+<th>RPS</th>
+<th>Mean Latency</th>
+<th>Mode Latency</th>
+<th>Worst Latency</th>
+<th>% NGINX (RPS)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/nginx/nginx">NGINX</a></td>
+<td>672.36</td>
+<td>0.07</td>
+<td>0.11</td>
+<td>0.64</td>
+<td>100.00</td>
+</tr>
+<tr>
+<td><a href="https://docs.gunicorn.org/en/latest/design.html#sync-workers">Gunicorn[sync]</a></td>
+<td>46.31</td>
+<td>0.99</td>
+<td>0.95</td>
+<td>8.23</td>
+<td>6.89</td>
+</tr>
+<tr>
+<td><a href="https://docs.gunicorn.org/en/latest/design.html#async-workers">Gunicorn[gevent]</a></td>
+<td>338.36</td>
+<td>0.14</td>
+<td>0.09</td>
+<td>0.43</td>
+<td>50.32</td>
+</tr>
+<tr>
+<td><a href="https://docs.pylonsproject.org/projects/waitress/en/stable/index.html">Waitress</a></td>
+<td>449.07</td>
+<td>0.10</td>
+<td>0.09</td>
+<td>0.42</td>
+<td>66.79</td>
+</tr>
+</tbody>
+</table>
+<p>The synchronous Gunicorn did about as well as my own sequential servers which is to be expected.
+Gunicorn with <a href="http://www.gevent.org/">gevent</a> based workers did extremely well.
+Gevent is a well-optimized implementation of asynchronous IO with its core event loop written in C (as either <a href="http://software.schmorp.de/pkg/libev.html">libev</a> or <a href="http://libuv.org/">libuv</a>).
+I figured that it would be a high performer and I wasn&rsquo;t wrong.</p>
+<p>Waitress was the underdog for me but&hellip; Wow!
+I was really blown away by its performance.
+It even gives NGINX a run for its money by smashing through 67% of its requests per second.
+Even more amazing is that Waitress is a pure-Python implementation with zero external dependencies.
+Talk about good engineering.</p>
+<p>I&rsquo;m definitely going to spend some time reading the source of Waitress to understand more about how they achieve such impressive performance.
+Thankfully, they have a well-written <a href="https://docs.pylonsproject.org/projects/waitress/en/stable/design.html">design overview</a> which will be a good place to start.</p>
+<h1 id="conclusion">Conclusion</h1>
+<p>Moving forward, I plan to use to Waitress as my web server of choice for upcoming Python web projects.
+The performance is great (as we&rsquo;ve seen) and it supports a &ldquo;bring your own socket&rdquo; model of initialization.
+This is important to me because the apps I deploy to production get their privileged listen sockets (on ports 80 and 443) from <a href="https://www.freedesktop.org/software/systemd/man/systemd.socket.html">systemd</a> as raw file descriptors.</p>
+<p>Fun fact!
+Waitress is part of the <a href="https://pylonsproject.org/">Pylons Project</a> which is also responsible for building my perferred web framework: <a href="https://trypyramid.com/">Pyramid</a>. Thanks for reading!</p>
 
       </div>
 
