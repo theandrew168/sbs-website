@@ -120,5 +120,4 @@ Moving forward, I plan to use to Waitress as my web server of choice for upcomin
 The performance is great (as we've seen) and it supports a "bring your own socket" model of initialization.
 This is important to me because the apps I deploy to production get their privileged listen sockets (on ports 80 and 443) from [systemd](https://www.freedesktop.org/software/systemd/man/systemd.socket.html) as raw file descriptors.
 
-Fun fact!
-Waitress is part of the [Pylons Project](https://pylonsproject.org/) which is also responsible for building my perferred web framework: [Pyramid](https://trypyramid.com/). Thanks for reading!
+Thanks for reading!
