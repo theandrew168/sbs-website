@@ -45,7 +45,7 @@ For the actual load testing, I used a tool called [hey](https://github.com/rakyl
 
 It performs 2000 requests spread across 50 concurrent connections:
 ```
-hey -n 2000 -c 50 http://bloggulus.com
+hey -n 2000 -c 50 http://<hostname>
 ```
 
 # Results
@@ -59,17 +59,17 @@ It clearly shows how much room for improvement exists within each design.
 | Server | RPS | Mean Latency | Mode Latency | Worst Latency | % NGINX (RPS) |
 | --- | --- | --- | --- | --- | --- |
 | [NGINX](https://github.com/nginx/nginx) | 672.36 | 0.07 | 0.11 | 0.64 | 100.00 |
-| [sequential1.py](https://github.com/theandrew168/bloggulus/blob/master/design/sequential1.py) | 54.23 | 0.84 | 0.92 | 8.10 | 8.07 |
-| [sequential2.py](https://github.com/theandrew168/bloggulus/blob/master/design/sequential2.py) | 52.77 | 0.84 | 0.91 | 7.85 | 7.85 |
-| [sequential3.py](https://github.com/theandrew168/bloggulus/blob/master/design/sequential3.py) | 45.71 | 0.78 | 1.64 | 15.88 | 6.80 |
-| [forking1.py](https://github.com/theandrew168/bloggulus/blob/master/design/forking1.py) | 8.70 | 5.60 | 5.14 | 10.14 | 1.29 |
-| [forking2.py](https://github.com/theandrew168/bloggulus/blob/master/design/forking2.py) | 81.83 | 0.54 | 0.87 | 7.60 | 12.17 |
-| [threading1.py](https://github.com/theandrew168/bloggulus/blob/master/design/threading1.py) | 78.71 | 0.52 | 0.87 | 7.52 | 11.71 |
-| [threading2.py](https://github.com/theandrew168/bloggulus/blob/master/design/threading2.py) | 79.06 | 0.51 | 0.88 | 7.73 | 11.76 |
-| [processpool.py](https://github.com/theandrew168/bloggulus/blob/master/design/processpool.py) | 48.52 | 0.71 | 1.01 | 8.81 | 7.22 |
-| [threadpool.py](https://github.com/theandrew168/bloggulus/blob/master/design/threadpool.py) | 70.04 | 0.62 | 0.87 | 7.49 | 10.42 |
-| [nonblocking.py](https://github.com/theandrew168/bloggulus/blob/master/design/nonblocking.py) | 79.33 | 0.53 | 0.63 | 5.23 | 11.80 |
-| [async.py](https://github.com/theandrew168/bloggulus/blob/master/design/async.py) | 82.97 | 0.53 | 0.84 | 7.35 | 12.34 |
+| [sequential1.py](https://github.com/theandrew168/web-server-designs/blob/master/sequential1.py) | 54.23 | 0.84 | 0.92 | 8.10 | 8.07 |
+| [sequential2.py](https://github.com/theandrew168/web-server-designs/blob/master/sequential2.py) | 52.77 | 0.84 | 0.91 | 7.85 | 7.85 |
+| [sequential3.py](https://github.com/theandrew168/web-server-designs/blob/master/sequential3.py) | 45.71 | 0.78 | 1.64 | 15.88 | 6.80 |
+| [forking1.py](https://github.com/theandrew168/web-server-designs/blob/master/forking1.py) | 8.70 | 5.60 | 5.14 | 10.14 | 1.29 |
+| [forking2.py](https://github.com/theandrew168/web-server-designs/blob/master/forking2.py) | 81.83 | 0.54 | 0.87 | 7.60 | 12.17 |
+| [threading1.py](https://github.com/theandrew168/web-server-designs/blob/master/threading1.py) | 78.71 | 0.52 | 0.87 | 7.52 | 11.71 |
+| [threading2.py](https://github.com/theandrew168/web-server-designs/blob/master/threading2.py) | 79.06 | 0.51 | 0.88 | 7.73 | 11.76 |
+| [processpool.py](https://github.com/theandrew168/web-server-designs/blob/master/processpool.py) | 48.52 | 0.71 | 1.01 | 8.81 | 7.22 |
+| [threadpool.py](https://github.com/theandrew168/web-server-designs/blob/master/threadpool.py) | 70.04 | 0.62 | 0.87 | 7.49 | 10.42 |
+| [nonblocking.py](https://github.com/theandrew168/web-server-designs/blob/master/nonblocking.py) | 79.33 | 0.53 | 0.63 | 5.23 | 11.80 |
+| [async.py](https://github.com/theandrew168/web-server-designs/blob/master/async.py) | 82.97 | 0.53 | 0.84 | 7.35 | 12.34 |
 
 # Analysis
 Pretty interesting stuff!

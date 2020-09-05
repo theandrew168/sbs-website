@@ -159,7 +159,7 @@ All of them are using a TCP listen backlog of 128.
 Printing each request to stdout is disabled during the benchmark.
 For the actual load testing, I used a tool called <a href="https://github.com/rakyll/hey">hey</a>.</p>
 <p>It performs 2000 requests spread across 50 concurrent connections:</p>
-<pre><code>hey -n 2000 -c 50 http://bloggulus.com
+<pre><code>hey -n 2000 -c 50 http://&lt;hostname&gt;
 </code></pre><h1 id="results">Results</h1>
 <p>I started with a load test against <a href="https://nginx.org/en/">NGINX</a> as a baseline.
 I then measured all of the other servers in the same way.</p>
@@ -187,7 +187,7 @@ It clearly shows how much room for improvement exists within each design.</p>
 <td>100.00</td>
 </tr>
 <tr>
-<td><a href="https://github.com/theandrew168/bloggulus/blob/master/design/sequential1.py">sequential1.py</a></td>
+<td><a href="https://github.com/theandrew168/web-server-designs/blob/master/sequential1.py">sequential1.py</a></td>
 <td>54.23</td>
 <td>0.84</td>
 <td>0.92</td>
@@ -195,7 +195,7 @@ It clearly shows how much room for improvement exists within each design.</p>
 <td>8.07</td>
 </tr>
 <tr>
-<td><a href="https://github.com/theandrew168/bloggulus/blob/master/design/sequential2.py">sequential2.py</a></td>
+<td><a href="https://github.com/theandrew168/web-server-designs/blob/master/sequential2.py">sequential2.py</a></td>
 <td>52.77</td>
 <td>0.84</td>
 <td>0.91</td>
@@ -203,7 +203,7 @@ It clearly shows how much room for improvement exists within each design.</p>
 <td>7.85</td>
 </tr>
 <tr>
-<td><a href="https://github.com/theandrew168/bloggulus/blob/master/design/sequential3.py">sequential3.py</a></td>
+<td><a href="https://github.com/theandrew168/web-server-designs/blob/master/sequential3.py">sequential3.py</a></td>
 <td>45.71</td>
 <td>0.78</td>
 <td>1.64</td>
@@ -211,7 +211,7 @@ It clearly shows how much room for improvement exists within each design.</p>
 <td>6.80</td>
 </tr>
 <tr>
-<td><a href="https://github.com/theandrew168/bloggulus/blob/master/design/forking1.py">forking1.py</a></td>
+<td><a href="https://github.com/theandrew168/web-server-designs/blob/master/forking1.py">forking1.py</a></td>
 <td>8.70</td>
 <td>5.60</td>
 <td>5.14</td>
@@ -219,7 +219,7 @@ It clearly shows how much room for improvement exists within each design.</p>
 <td>1.29</td>
 </tr>
 <tr>
-<td><a href="https://github.com/theandrew168/bloggulus/blob/master/design/forking2.py">forking2.py</a></td>
+<td><a href="https://github.com/theandrew168/web-server-designs/blob/master/forking2.py">forking2.py</a></td>
 <td>81.83</td>
 <td>0.54</td>
 <td>0.87</td>
@@ -227,7 +227,7 @@ It clearly shows how much room for improvement exists within each design.</p>
 <td>12.17</td>
 </tr>
 <tr>
-<td><a href="https://github.com/theandrew168/bloggulus/blob/master/design/threading1.py">threading1.py</a></td>
+<td><a href="https://github.com/theandrew168/web-server-designs/blob/master/threading1.py">threading1.py</a></td>
 <td>78.71</td>
 <td>0.52</td>
 <td>0.87</td>
@@ -235,7 +235,7 @@ It clearly shows how much room for improvement exists within each design.</p>
 <td>11.71</td>
 </tr>
 <tr>
-<td><a href="https://github.com/theandrew168/bloggulus/blob/master/design/threading2.py">threading2.py</a></td>
+<td><a href="https://github.com/theandrew168/web-server-designs/blob/master/threading2.py">threading2.py</a></td>
 <td>79.06</td>
 <td>0.51</td>
 <td>0.88</td>
@@ -243,7 +243,7 @@ It clearly shows how much room for improvement exists within each design.</p>
 <td>11.76</td>
 </tr>
 <tr>
-<td><a href="https://github.com/theandrew168/bloggulus/blob/master/design/processpool.py">processpool.py</a></td>
+<td><a href="https://github.com/theandrew168/web-server-designs/blob/master/processpool.py">processpool.py</a></td>
 <td>48.52</td>
 <td>0.71</td>
 <td>1.01</td>
@@ -251,7 +251,7 @@ It clearly shows how much room for improvement exists within each design.</p>
 <td>7.22</td>
 </tr>
 <tr>
-<td><a href="https://github.com/theandrew168/bloggulus/blob/master/design/threadpool.py">threadpool.py</a></td>
+<td><a href="https://github.com/theandrew168/web-server-designs/blob/master/threadpool.py">threadpool.py</a></td>
 <td>70.04</td>
 <td>0.62</td>
 <td>0.87</td>
@@ -259,7 +259,7 @@ It clearly shows how much room for improvement exists within each design.</p>
 <td>10.42</td>
 </tr>
 <tr>
-<td><a href="https://github.com/theandrew168/bloggulus/blob/master/design/nonblocking.py">nonblocking.py</a></td>
+<td><a href="https://github.com/theandrew168/web-server-designs/blob/master/nonblocking.py">nonblocking.py</a></td>
 <td>79.33</td>
 <td>0.53</td>
 <td>0.63</td>
@@ -267,7 +267,7 @@ It clearly shows how much room for improvement exists within each design.</p>
 <td>11.80</td>
 </tr>
 <tr>
-<td><a href="https://github.com/theandrew168/bloggulus/blob/master/design/async.py">async.py</a></td>
+<td><a href="https://github.com/theandrew168/web-server-designs/blob/master/async.py">async.py</a></td>
 <td>82.97</td>
 <td>0.53</td>
 <td>0.84</td>
