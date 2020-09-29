@@ -1,6 +1,37 @@
 ---
 title: "Projects"
 ---
+## Bloggulus ([website](https://bloggulus.com), [source](https://github.com/theandrew168/bloggulus))
+Bloggulus is a "meta blog" that aggregates numerous other blogs into a single location.
+I built this primarily for my own use.
+Previously, I had been using a Firefox extension (called Feeder) to track my blogs but I wanted something more personalized.
+I also wanted an excuse to build something with [Flask](https://flask.palletsprojects.com/en/1.1.x/), [SQLite](https://www.sqlite.org/index.html), and [Peewee](phttp://docs.peewee-orm.com/en/latest/).
+This project started out based on the [Django](https://www.djangoproject.com/) framework but I found that to be overkill.
+Flask was able to provide exactly what I needed in terms of flexbility and minimalism.
+
+Bloggulus is hosted on a small [DigitalOcean](https://www.digitalocean.com/) droplet (the $5/month one).
+[Gunicorn](https://gunicorn.org/) is used as the app's [WSGI server](https://www.python.org/dev/peps/pep-3333/) and [NGINX](http://nginx.org/) is deployed as a reverse proxy.
+The domain is registered through [Google Domains](http://nginx.org/) and the TLS cert comes from [Let's Encrypt](https://letsencrypt.org/).
+Once an hour, an automated process checks each blog's [RSS feed](https://en.wikipedia.org/wiki/RSS) for new content.
+All blog posts are stored and indexed in an FTS (full-text search) table for quick and easy searching.
+
+By default, the Bloggulus home page shows all recent posts with the newest being located at the top.
+All of the followed blogs feed into a single stream of posts.
+The pagination links at the bottom of the page can be used to navigate forward and backward through long lists of results.
+Bloggulus' searching capabilities are powered by SQLite's [FTS (full-text search)](https://www.sqlite.org/fts3.html) feature.
+
+##### Relevant Skills
+* Python programming
+* Python web application development
+* Flask development
+* Full-stack development
+* Deployment automation
+* Linux server administration
+* Data modeling with SQLite
+* Content indexing and full-text search
+* NGINX reverse proxy configuration
+* TLS setup via Let's Encrypt
+
 ## JamQL ([website](https://jamql.com), [source](https://github.com/theandrew168/jamql))
 This project started out as an idea for a way to create Spotify playlists based on a SQL-like query (hence the QL in JamQL).
 My plan was to integrate Spotify's [Search API](https://developer.spotify.com/documentation/web-api/reference/search/search/) with SQLite's [virtual table](https://www.sqlite.org/vtab.html) functionality in order to bridge the gap.

@@ -11,10 +11,10 @@
 
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Projects"/>
-<meta name="twitter:description" content="JamQL (website, source) This project started out as an idea for a way to create Spotify playlists based on a SQL-like query (hence the QL in JamQL). My plan was to integrate Spotify&rsquo;s Search API with SQLite&rsquo;s virtual table functionality in order to bridge the gap. I knew that an alternative to using SQLite would be to write my own simple query language and a corresponding lexer and parser for it."/>
+<meta name="twitter:description" content="Bloggulus (website, source) Bloggulus is a &ldquo;meta blog&rdquo; that aggregates numerous other blogs into a single location. I built this primarily for my own use. Previously, I had been using a Firefox extension (called Feeder) to track my blogs but I wanted something more personalized. I also wanted an excuse to build something with Flask, SQLite, and Peewee. This project started out based on the Django framework but I found that to be overkill."/>
 
     <meta property="og:title" content="Projects" />
-<meta property="og:description" content="JamQL (website, source) This project started out as an idea for a way to create Spotify playlists based on a SQL-like query (hence the QL in JamQL). My plan was to integrate Spotify&rsquo;s Search API with SQLite&rsquo;s virtual table functionality in order to bridge the gap. I knew that an alternative to using SQLite would be to write my own simple query language and a corresponding lexer and parser for it." />
+<meta property="og:description" content="Bloggulus (website, source) Bloggulus is a &ldquo;meta blog&rdquo; that aggregates numerous other blogs into a single location. I built this primarily for my own use. Previously, I had been using a Firefox extension (called Feeder) to track my blogs but I wanted something more personalized. I also wanted an excuse to build something with Flask, SQLite, and Peewee. This project started out based on the Django framework but I found that to be overkill." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shallowbrooksoftware.com/projects/" />
 
@@ -100,7 +100,36 @@
       <h1>Projects</h1>
     </header>
 
-    <h2 id="jamql-websitehttpsjamqlcom-sourcehttpsgithubcomtheandrew168jamql">JamQL (<a href="https://jamql.com">website</a>, <a href="https://github.com/theandrew168/jamql">source</a>)</h2>
+    <h2 id="bloggulus-websitehttpsblogguluscom-sourcehttpsgithubcomtheandrew168bloggulus">Bloggulus (<a href="https://bloggulus.com">website</a>, <a href="https://github.com/theandrew168/bloggulus">source</a>)</h2>
+<p>Bloggulus is a &ldquo;meta blog&rdquo; that aggregates numerous other blogs into a single location.
+I built this primarily for my own use.
+Previously, I had been using a Firefox extension (called Feeder) to track my blogs but I wanted something more personalized.
+I also wanted an excuse to build something with <a href="https://flask.palletsprojects.com/en/1.1.x/">Flask</a>, <a href="https://www.sqlite.org/index.html">SQLite</a>, and <a href="phttp://docs.peewee-orm.com/en/latest/">Peewee</a>.
+This project started out based on the <a href="https://www.djangoproject.com/">Django</a> framework but I found that to be overkill.
+Flask was able to provide exactly what I needed in terms of flexbility and minimalism.</p>
+<p>Bloggulus is hosted on a small <a href="https://www.digitalocean.com/">DigitalOcean</a> droplet (the $5/month one).
+<a href="https://gunicorn.org/">Gunicorn</a> is used as the app&rsquo;s <a href="https://www.python.org/dev/peps/pep-3333/">WSGI server</a> and <a href="http://nginx.org/">NGINX</a> is deployed as a reverse proxy.
+The domain is registered through <a href="http://nginx.org/">Google Domains</a> and the TLS cert comes from <a href="https://letsencrypt.org/">Let&rsquo;s Encrypt</a>.
+Once an hour, an automated process checks each blog&rsquo;s <a href="https://en.wikipedia.org/wiki/RSS">RSS feed</a> for new content.
+All blog posts are stored and indexed in an FTS (full-text search) table for quick and easy searching.</p>
+<p>By default, the Bloggulus home page shows all recent posts with the newest being located at the top.
+All of the followed blogs feed into a single stream of posts.
+The pagination links at the bottom of the page can be used to navigate forward and backward through long lists of results.
+Bloggulus&rsquo; searching capabilities are powered by SQLite&rsquo;s <a href="https://www.sqlite.org/fts3.html">FTS (full-text search)</a> feature.</p>
+<h5 id="relevant-skills">Relevant Skills</h5>
+<ul>
+<li>Python programming</li>
+<li>Python web application development</li>
+<li>Flask development</li>
+<li>Full-stack development</li>
+<li>Deployment automation</li>
+<li>Linux server administration</li>
+<li>Data modeling with SQLite</li>
+<li>Content indexing and full-text search</li>
+<li>NGINX reverse proxy configuration</li>
+<li>TLS setup via Let&rsquo;s Encrypt</li>
+</ul>
+<h2 id="jamql-websitehttpsjamqlcom-sourcehttpsgithubcomtheandrew168jamql">JamQL (<a href="https://jamql.com">website</a>, <a href="https://github.com/theandrew168/jamql">source</a>)</h2>
 <p>This project started out as an idea for a way to create Spotify playlists based on a SQL-like query (hence the QL in JamQL).
 My plan was to integrate Spotify&rsquo;s <a href="https://developer.spotify.com/documentation/web-api/reference/search/search/">Search API</a> with SQLite&rsquo;s <a href="https://www.sqlite.org/vtab.html">virtual table</a> functionality in order to bridge the gap.
 I knew that an alternative to using SQLite would be to write my own simple query language and a corresponding lexer and parser for it.
@@ -113,7 +142,7 @@ So, the current version of the site functions similar to those smart playlists: 
 <p>I do plan to circle back to the query language idea at some point in the future.
 I&rsquo;d likely take the route of writing my own minimal language as well as a lexer and parser for it.
 Since I&rsquo;m still very much a novice when it comes to web design, I want to get the current interation working and looking great before tackling additional ways to jam.</p>
-<h5 id="relevant-skills">Relevant Skills</h5>
+<h5 id="relevant-skills-1">Relevant Skills</h5>
 <ul>
 <li>Go programming</li>
 <li>Go web application development</li>
@@ -145,7 +174,7 @@ Some interpret the text literally while others &ldquo;compile&rdquo; the text&rs
 There are many books on language design and implementation.
 Some notable ones include <a href="https://en.wikipedia.org/wiki/Compilers:_Principles,_Techniques,_and_Tools">The Dragon Book</a> and <a href="https://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs">SICP</a>.
 My fascination with the latter and with game development led to this proof of concept.</p>
-<h5 id="relevant-skills-1">Relevant Skills</h5>
+<h5 id="relevant-skills-2">Relevant Skills</h5>
 <ul>
 <li>C programming</li>
 <li>Scheme programming</li>
@@ -166,7 +195,7 @@ This simple, minimal instruction set is commonly referred to as the &ldquo;Hello
 I was able to scrap together an implementation after a few weeks of iterating.
 Despite being technically finished, it had numerous flaws that I didn&rsquo;t really realize until multiple years of C programming later.</p>
 <p>For anyone curious, the name Skylark is a reference to the character <a href="https://en.wikipedia.org/wiki/Chris_Kirkpatrick">Chip Skylark</a> from the old Nickelodeon show <a href="https://en.wikipedia.org/wiki/The_Fairly_OddParents">The Fairly OddParents</a>.</p>
-<h5 id="relevant-skills-2">Relevant Skills</h5>
+<h5 id="relevant-skills-3">Relevant Skills</h5>
 <ul>
 <li>C programming</li>
 <li>Cross-compiling for non <a href="https://en.wikipedia.org/wiki/Unix-like">Unix-like</a> operating systems</li>
@@ -192,7 +221,7 @@ Instead, I wrote a bit of Python to satisfy my very small RISC-V needs.</p>
 It only supports assembling single files and does absolutely no linking.
 The program is simply a RISC-V instruction encoder with a thin layer of label and constant handling above it.
 Nonetheless, it helped me get started with the platform and gave me an up-close experience with the ISA.</p>
-<h5 id="relevant-skills-3">Relevant Skills</h5>
+<h5 id="relevant-skills-4">Relevant Skills</h5>
 <ul>
 <li>Python programming</li>
 <li>RISC-V <a href="https://riscv.org/specifications/">instruction set architecture</a></li>
@@ -216,7 +245,7 @@ I wanted a camera that I could fly around the scene and see how the lighting loo
 Fancy shader effects were also on the menu: reflection, refraction, and bloom.
 In hindsight, the design of this project was a bit too presumptuous with its abstractions.
 After painting myself into a corner with every attempt at structuring the code, I decided that something was systematically flawed with my approach and transitioned to other programming languages and paradigms.</p>
-<h5 id="relevant-skills-4">Relevant Skills</h5>
+<h5 id="relevant-skills-5">Relevant Skills</h5>
 <ul>
 <li>C++ programming</li>
 <li>3D graphics via OpenGL</li>

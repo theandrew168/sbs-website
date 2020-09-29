@@ -85,7 +85,7 @@ My name is Andrew Dailey and I&amp;rsquo;m an independent programmer from Des Mo
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://shallowbrooksoftware.com/projects/</guid>
-      <description>JamQL (website, source) This project started out as an idea for a way to create Spotify playlists based on a SQL-like query (hence the QL in JamQL). My plan was to integrate Spotify&amp;rsquo;s Search API with SQLite&amp;rsquo;s virtual table functionality in order to bridge the gap. I knew that an alternative to using SQLite would be to write my own simple query language and a corresponding lexer and parser for it.</description>
+      <description>Bloggulus (website, source) Bloggulus is a &amp;ldquo;meta blog&amp;rdquo; that aggregates numerous other blogs into a single location. I built this primarily for my own use. Previously, I had been using a Firefox extension (called Feeder) to track my blogs but I wanted something more personalized. I also wanted an excuse to build something with Flask, SQLite, and Peewee. This project started out based on the Django framework but I found that to be overkill.</description>
     </item>
     
   </channel>
