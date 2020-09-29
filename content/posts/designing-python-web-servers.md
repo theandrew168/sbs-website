@@ -116,8 +116,13 @@ I'm definitely going to spend some time reading the source of Waitress to unders
 Thankfully, they have a well-written [design overview](https://docs.pylonsproject.org/projects/waitress/en/stable/design.html) which will be a good place to start.
 
 # Conclusion
-Moving forward, I plan to use to Waitress as my web server of choice for upcoming Python web projects.
+On the surface, it looks like Waitress should be my web server of choice.
 The performance is great (as we've seen) and it supports a "bring your own socket" model of initialization.
-This is important to me because the apps I deploy to production get their privileged listen sockets (on ports 80 and 443) from [systemd](https://www.freedesktop.org/software/systemd/man/systemd.socket.html) as raw file descriptors.
+However, another subtle requirement is that the server must support graceful restarts (wait for existing traffic to finish before exiting).
+As far as I can tell, Waitress does not support this while Gunicorn does.
 
-Thanks for reading!
+Plus, when deployed behind NGINX, all of these web servers designs and libraries perform the same: around 450 RPS.
+This means that I can use a simple Gunicorn configuration and not even bother with gevent.
+NGINX must be doing some sort of buffering magic to make this happen.
+
+It really is something!

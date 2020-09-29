@@ -3,6 +3,7 @@ date: 2020-09-28
 title: "Ideas for Simple and Portable Assembly"
 slug: "ideas-for-simple-and-portable-assembly"
 tags: ["python", "assembly", "forth"]
+draft: true
 ---
 There has been a lot of buzz surrounding the slowness, instability, and complexity of modern software systems.
 It seems as though more and more people are feeling and observing bloat and bugginess in their day-to-day usage of computers.

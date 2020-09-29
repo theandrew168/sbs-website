@@ -3,6 +3,7 @@ date: 2020-09-28
 title: "Bloggulus: A Personalized Blog Aggregator"
 slug: "bloggulus-personalized-blog-aggregator"
 tags: ["python", "flask", "peewee", "sqlite"]
+draft: true
 ---
 what it is  
 why i built it  
