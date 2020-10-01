@@ -202,8 +202,7 @@ If you are curious about the details, the official specification for DFU can be 
 So, &ldquo;downloading&rdquo; firmware means writing an assembled, binary file from your system to the device.
 This is what we&rsquo;ll need to do in order to get our <code>smallest.bin</code> program onto the Longan Nano.
 Conversely, &ldquo;uploading&rdquo; firmware with DFU means reading all of the data on the device&rsquo;s flash storage and saving it a file on your local system.</p>
-<p>To program our device, we will be using a program called [dfu-util](git clone git://git.code.sf.net/p/dfu-util/dfu-util
-).
+<p>To program our device, we will be using a program called <a href="git://git.code.sf.net/p/dfu-util/dfu-util">dfu-util</a>.
 Even though this program is available through the <code>apt</code> package system, we need to manually build a newer version that includes fixes for <a href="https://sourceforge.net/p/dfu-util/dfu-util/ci/529fa5147613218c75dfa441c64df9b28910fe1c/">multiple</a> <a href="https://sourceforge.net/p/dfu-util/dfu-util/ci/f2b7d4b1113ef6c3ada31a0654c9aefebcdb1de5/">bugs</a> in the GD32VF103 CPU&rsquo;s implementation of DFU.</p>
 <p>Before building dfu-util, we need to install its dependencies.</p>
 <pre><code>sudo apt install autoconf build-essential git libusb-1.0-0-dev pkg-config
