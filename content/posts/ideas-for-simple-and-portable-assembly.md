@@ -36,11 +36,16 @@ Is C too high?
 Maybe too high with libc but not if freestanding?  
 Maybe there is another path to high-level value?  
 Portable ASM + Forth? Sounds fun, at least.  
+General OS (browser) vs specific problems  
+Collapse OS?  
+Is it feasible to just "restart computing" ala SpaceX?  
 
 # Idea 1: How High is too High?
 slide from JB's talk: about high level langs and that something went wrong somewhere  
 is Linux OK? Windows? or have modern OS's gone too far?  
 Rene Rebe talks about this: microkernel, etc  
+Is it okay that all OS API's are C?  
+Or is that an issue for security / maintainability?  
 
 # Idea 2: Different for Arbitrary Reasons
 again, JB's talk  
@@ -48,7 +53,7 @@ if code could be injected into a CPU, it'd run
 diff OS's have diff formats: ELF, PE, Mach-O  
 is that progress?  
 
-# Idea 3: Portability Required Planning
+# Idea 3: Portability Requires Planning
 Rob Pike's talk on the Go assembler / compiler  
 assembly dialects express mostly the same ideas  
 same concepts, just maybe different syntax or approach  

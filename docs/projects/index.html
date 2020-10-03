@@ -11,10 +11,10 @@
 
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Projects"/>
-<meta name="twitter:description" content="Bloggulus (website, source) Bloggulus is a &ldquo;meta blog&rdquo; that aggregates numerous other blogs into a single location. I built this primarily for my own use. Previously, I had been using a Firefox extension (called Feeder) to track my blogs but I wanted something more personalized. I also wanted an excuse to build something with Flask, SQLite, and Peewee. This project started out based on the Django framework but I found that to be overkill."/>
+<meta name="twitter:description" content="Bloggulus (website, source) Bloggulus is a &ldquo;meta blog&rdquo; that aggregates numerous other blogs into a single location. Previously, I had been using a Firefox extension to track my blogs but I wanted something more personalized. I also found myself spending too much time on Reddit and Hacker News. Like many others, I’d even sometimes read only the comments and not the actual content. That’s definitely a waste of time! So, I created a website that intentionally lacks a social commenting system and only pulls in posts from the blogs that I trust."/>
 
     <meta property="og:title" content="Projects" />
-<meta property="og:description" content="Bloggulus (website, source) Bloggulus is a &ldquo;meta blog&rdquo; that aggregates numerous other blogs into a single location. I built this primarily for my own use. Previously, I had been using a Firefox extension (called Feeder) to track my blogs but I wanted something more personalized. I also wanted an excuse to build something with Flask, SQLite, and Peewee. This project started out based on the Django framework but I found that to be overkill." />
+<meta property="og:description" content="Bloggulus (website, source) Bloggulus is a &ldquo;meta blog&rdquo; that aggregates numerous other blogs into a single location. Previously, I had been using a Firefox extension to track my blogs but I wanted something more personalized. I also found myself spending too much time on Reddit and Hacker News. Like many others, I’d even sometimes read only the comments and not the actual content. That’s definitely a waste of time! So, I created a website that intentionally lacks a social commenting system and only pulls in posts from the blogs that I trust." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shallowbrooksoftware.com/projects/" />
 
@@ -101,21 +101,25 @@
     </header>
 
     <h2 id="bloggulus-websitehttpsblogguluscom-sourcehttpsgithubcomtheandrew168bloggulus">Bloggulus (<a href="https://bloggulus.com">website</a>, <a href="https://github.com/theandrew168/bloggulus">source</a>)</h2>
-<p>Bloggulus is a &ldquo;meta blog&rdquo; that aggregates numerous other blogs into a single location.
-I built this primarily for my own use.
-Previously, I had been using a Firefox extension (called Feeder) to track my blogs but I wanted something more personalized.
-I also wanted an excuse to build something with <a href="https://flask.palletsprojects.com/en/1.1.x/">Flask</a>, <a href="https://www.sqlite.org/index.html">SQLite</a>, and <a href="phttp://docs.peewee-orm.com/en/latest/">Peewee</a>.
-This project started out based on the <a href="https://www.djangoproject.com/">Django</a> framework but I found that to be overkill.
-Flask was able to provide exactly what I needed in terms of flexbility and minimalism.</p>
+<p><a href="https://bloggulus.com">Bloggulus</a> is a &ldquo;meta blog&rdquo; that aggregates numerous other blogs into a single location.
+Previously, I had been using a <a href="https://addons.mozilla.org/en-US/firefox/addon/feeder/">Firefox extension</a> to track my blogs but I wanted something more personalized.
+I also found myself spending too much time on Reddit and Hacker News.
+Like many others, I’d even sometimes read only the comments and not the actual content.
+That’s definitely a waste of time!
+So, I created a website that intentionally lacks a social commenting system and only pulls in posts from the blogs that I trust.</p>
+<p>I also wanted an excuse to build something with <a href="https://flask.palletsprojects.com/en/1.1.x/">Flask</a>, <a href="https://www.sqlite.org/index.html">SQLite</a>, and <a href="phttp://docs.peewee-orm.com/en/latest/">Peewee</a>.
+A special thanks goes out to <a href="http://charlesleifer.com/">Charles Leifer&rsquo;s amazing blog</a> for inspiring me to use these tools together.
+Together, they are definitely greater than the sum of their parts.</p>
 <p>Bloggulus is hosted on a small <a href="https://www.digitalocean.com/">DigitalOcean</a> droplet (the $5/month one).
 <a href="https://gunicorn.org/">Gunicorn</a> is used as the app&rsquo;s <a href="https://www.python.org/dev/peps/pep-3333/">WSGI server</a> and <a href="http://nginx.org/">NGINX</a> is deployed as a reverse proxy.
-The domain is registered through <a href="http://nginx.org/">Google Domains</a> and the TLS cert comes from <a href="https://letsencrypt.org/">Let&rsquo;s Encrypt</a>.
+The domain is registered through <a href="https://domains.google/">Google Domains</a> and the TLS cert comes from <a href="https://letsencrypt.org/">Let&rsquo;s Encrypt</a>.
 Once an hour, an automated process checks each blog&rsquo;s <a href="https://en.wikipedia.org/wiki/RSS">RSS feed</a> for new content.
-All blog posts are stored and indexed in an FTS (full-text search) table for quick and easy searching.</p>
-<p>By default, the Bloggulus home page shows all recent posts with the newest being located at the top.
-All of the followed blogs feed into a single stream of posts.
-The pagination links at the bottom of the page can be used to navigate forward and backward through long lists of results.
-Bloggulus&rsquo; searching capabilities are powered by SQLite&rsquo;s <a href="https://www.sqlite.org/fts3.html">FTS (full-text search)</a> feature.</p>
+All blog posts are stored and indexed in an <a href="https://www.sqlite.org/fts3.html">FTS (full-text search)</a> table for quick and easy searching.</p>
+<p>The frontend portion of Bloggulus is pretty simple.
+It is all rendered server-side (via Flask’s <a href="https://jinja.palletsprojects.com/en/2.11.x/">Jinja</a> templating) and styled using <a href="https://tailwindcss.com/">Tailwind CSS</a>.
+Web design is definitely one of my weaker stills at the moment but practice is the only way to improve!
+I intentionally brought together simple colors and hard lines to let the blog posts be the focus.
+The color scheme did accidentally end up looking kind of like <a href="https://www.amazon.com/">Amazon’s</a>, though.</p>
 <h5 id="relevant-skills">Relevant Skills</h5>
 <ul>
 <li>Python programming</li>

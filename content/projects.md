@@ -2,23 +2,28 @@
 title: "Projects"
 ---
 ## Bloggulus ([website](https://bloggulus.com), [source](https://github.com/theandrew168/bloggulus))
-Bloggulus is a "meta blog" that aggregates numerous other blogs into a single location.
-I built this primarily for my own use.
-Previously, I had been using a Firefox extension (called Feeder) to track my blogs but I wanted something more personalized.
+[Bloggulus](https://bloggulus.com) is a "meta blog" that aggregates numerous other blogs into a single location.
+Previously, I had been using a [Firefox extension](https://addons.mozilla.org/en-US/firefox/addon/feeder/) to track my blogs but I wanted something more personalized.
+I also found myself spending too much time on Reddit and Hacker News.
+Like many others, I’d even sometimes read only the comments and not the actual content.
+That’s definitely a waste of time!
+So, I created a website that intentionally lacks a social commenting system and only pulls in posts from the blogs that I trust.
+
 I also wanted an excuse to build something with [Flask](https://flask.palletsprojects.com/en/1.1.x/), [SQLite](https://www.sqlite.org/index.html), and [Peewee](phttp://docs.peewee-orm.com/en/latest/).
-This project started out based on the [Django](https://www.djangoproject.com/) framework but I found that to be overkill.
-Flask was able to provide exactly what I needed in terms of flexbility and minimalism.
+A special thanks goes out to [Charles Leifer's amazing blog](http://charlesleifer.com/) for inspiring me to use these tools together.
+Together, they are definitely greater than the sum of their parts.
 
 Bloggulus is hosted on a small [DigitalOcean](https://www.digitalocean.com/) droplet (the $5/month one).
 [Gunicorn](https://gunicorn.org/) is used as the app's [WSGI server](https://www.python.org/dev/peps/pep-3333/) and [NGINX](http://nginx.org/) is deployed as a reverse proxy.
-The domain is registered through [Google Domains](http://nginx.org/) and the TLS cert comes from [Let's Encrypt](https://letsencrypt.org/).
+The domain is registered through [Google Domains](https://domains.google/) and the TLS cert comes from [Let's Encrypt](https://letsencrypt.org/).
 Once an hour, an automated process checks each blog's [RSS feed](https://en.wikipedia.org/wiki/RSS) for new content.
-All blog posts are stored and indexed in an FTS (full-text search) table for quick and easy searching.
+All blog posts are stored and indexed in an [FTS (full-text search)](https://www.sqlite.org/fts3.html) table for quick and easy searching.
 
-By default, the Bloggulus home page shows all recent posts with the newest being located at the top.
-All of the followed blogs feed into a single stream of posts.
-The pagination links at the bottom of the page can be used to navigate forward and backward through long lists of results.
-Bloggulus' searching capabilities are powered by SQLite's [FTS (full-text search)](https://www.sqlite.org/fts3.html) feature.
+The frontend portion of Bloggulus is pretty simple.
+It is all rendered server-side (via Flask’s [Jinja](https://jinja.palletsprojects.com/en/2.11.x/) templating) and styled using [Tailwind CSS](https://tailwindcss.com/).
+Web design is definitely one of my weaker stills at the moment but practice is the only way to improve!
+I intentionally brought together simple colors and hard lines to let the blog posts be the focus.
+The color scheme did accidentally end up looking kind of like [Amazon’s](https://www.amazon.com/), though.
 
 ##### Relevant Skills
 * Python programming

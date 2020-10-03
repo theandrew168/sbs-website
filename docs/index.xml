@@ -85,7 +85,7 @@ My name is Andrew Dailey and I&amp;rsquo;m an independent programmer from Des Mo
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://shallowbrooksoftware.com/projects/</guid>
-      <description>Bloggulus (website, source) Bloggulus is a &amp;ldquo;meta blog&amp;rdquo; that aggregates numerous other blogs into a single location. I built this primarily for my own use. Previously, I had been using a Firefox extension (called Feeder) to track my blogs but I wanted something more personalized. I also wanted an excuse to build something with Flask, SQLite, and Peewee. This project started out based on the Django framework but I found that to be overkill.</description>
+      <description>Bloggulus (website, source) Bloggulus is a &amp;ldquo;meta blog&amp;rdquo; that aggregates numerous other blogs into a single location. Previously, I had been using a Firefox extension to track my blogs but I wanted something more personalized. I also found myself spending too much time on Reddit and Hacker News. Like many others, I’d even sometimes read only the comments and not the actual content. That’s definitely a waste of time! So, I created a website that intentionally lacks a social commenting system and only pulls in posts from the blogs that I trust.</description>
     </item>
     
   </channel>
