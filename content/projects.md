@@ -4,7 +4,7 @@ title: "Projects"
 ## Bloggulus ([website](https://bloggulus.com), [source](https://github.com/theandrew168/bloggulus))
 [Bloggulus](https://bloggulus.com) is a "meta blog" that aggregates numerous other blogs into a single location.
 Previously, I had been using a [Firefox extension](https://addons.mozilla.org/en-US/firefox/addon/feeder/) to track my blogs but I wanted something more personalized.
-I also found myself spending too much time on Reddit and Hacker News.
+I also found myself spending too much time on [Reddit](https://www.amazon.com/) and [Hacker News](https://www.amazon.com/).
 Like many others, I’d even sometimes read only the comments and not the actual content.
 That’s definitely a waste of time!
 So, I created a website that intentionally lacks a social commenting system and only pulls in posts from the blogs that I trust.
