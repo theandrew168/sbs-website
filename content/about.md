@@ -13,7 +13,7 @@ When it comes to writing C, I've spent plenty of time researching and testing th
 Most of the Makefiles for the C projects on my GitHub reflect this work.
 I also enjoy graphics-related programming when I find the time: both rasterization and ray-tracing.
 
-Additionally, I have have a large amount of experience automating tasks with [Ansible](https://docs.ansible.com/ansible/latest/index.html).
+Additionally, I have a large amount of experience automating tasks with [Ansible](https://docs.ansible.com/ansible/latest/index.html).
 From initializing and setting up new servers to to installing, configuring, and maintaining clustered applications, I've used Ansible to solve a wide breadth of problems.
 I believe that the structure of an Ansible project is the most important factor to keeping things simple, flexible, and effective.
 As a result, I've developed useful strategies for defining relationships between playbooks and roles, delegating variables, and using custom filters to implement dynamic decision-making.
