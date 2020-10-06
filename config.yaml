@@ -18,7 +18,7 @@ params:
     weight: 1
   - name: Email
     icon: fa fa-envelope
-    url: mailto:info@shallowbrooksoftware.com
+    url: mailto:andrew@shallowbrooksoftware.com
     weight: 2
 
 menu:
