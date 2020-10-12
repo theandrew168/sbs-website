@@ -9,7 +9,9 @@ Despite its minimalism, the Longan Nano provides enough power and peripherals to
 
 The Longan Nano comes with the following components:
 
-* 108 MHz GigaDevice GD32VF103[CBT6] 32-bit CPU
+* GigaDevice GD32VF103[CBT6] 32-bit CPU
+* 8 MHz default clock speed (IRC8M)
+* 108 MHz maximum clock speed
 * 128 KB flash storage
 * 32 KB sram memory
 * 3 LEDs (red, green, and blue)
@@ -92,7 +94,7 @@ source venv/bin/activate
 
 With a virtual environment in place, we can install the RISC-V assembler used in this series: [simpleriscv](https://pypi.org/project/simpleriscv/).
 ```
-pip install simpleriscv
+pip install simpleriscv==0.0.5
 ```
 
 Last but not least, we can write our simple program to a file and assemble it. 
