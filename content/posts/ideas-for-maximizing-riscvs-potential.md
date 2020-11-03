@@ -43,7 +43,12 @@ Not only what the root cause may be, but also what can be done to mitigate it.
 The videos and articles mentioned prior have all helped guide me toward the following ideas.
 
 # Idea 1: Where Things Went Wrong
-slide from JB's talk: about high level langs and that something went wrong somewhere  
+In Jonathan Blow's talk, he identifies that somewhere along the path of building higher and higher abstractions, we went too far.
+At some point, the return on investment for programming in higher-level languages started to flatten out.
+Shouldn't our programmers be more productive and their programs more robust?
+This doesn't seem to be the case.
+Sure, technology accomplishes much more now than it used to, but does the modern scale of features match the amplified scale of complexity and fragility?
+
 is Linux OK? Windows? or have modern OS's gone too far?  
 Rene Rebe talks about this: microkernel, etc  
 Is it okay that all OS API's are C?  
@@ -120,3 +125,7 @@ By choosing an abstration layer, however, you limit your project to whatever fun
 You are now limited to the "common denominator" of database functionality.
 That useful SQLite-only feature is now lost.
 It is possible that explicitly choosing SQLite for the project may have been a better option.
+
+I want to enable and encourage other developers to explore bare-metal development.
+By investing in the RISC-V ISA and its ecosystem, we no longer need an abstration over the assembly language by which it speaks.
+RISC-V assembly can be a new foundation for future servers, programs, and operating systems.
