@@ -139,27 +139,22 @@ Perhaps it would even be fairly secure.
 **"There are two ways of constructing a software design: One way is to make it so simple that there are obviously no deficiencies, and the other way is to make it so complicated that there are no obvious deficiencies. The first method is far more difficult."** - C. A. R. Hoare
 
 # Idea 5: The Bronzebeard Project
-Bare-metal RISC-V Forth implementation  
-Uses a simple assembler written in both Python
-Think the "arduino ecosystem of riscv"  
-Native GUIs, beginner friendly ala Thonny  
+I want to explore the potential of a fresh software ecosystem founded on top of RISC-V assembly.
+I've written basic, standalone assembler with no dependency on existing toolchains.
+Can I make small-scale devices such as the [Longan Nano](https://www.seeedstudio.com/Sipeed-Longan-Nano-RISC-V-GD32VF103CBT6-Development-Board-p-4205.html), [Wio Lite](https://www.seeedstudio.com/Wio-Lite-RISC-V-GD32VF103-p-4293.html), and [HiFive1 Rev B](https://www.sifive.com/boards/hifive1-rev-b) useful without all of the default frameworks and SDKs?
+If not using those, then what does the toolset look like?
+Assembly is really the lowest level you can effectively go so that's where I've started.
 
-Avoid the big toolchain!  
-Can I make these little devices useful without using heavy toolchains, frameworks, or SDKs?  
-What toolset is best for that?  
-Raw assembly is a given: you can't avoid that, but you can avoid the toolchains  
+In Abelson and Sussman's [Structure and Interpretation of Computer Programs](https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book-Z-H-10.html#%_sec_1.1), they describe the core elements of programming:
+* **primitive expressions** - which represent the simplest entities the language is concerned with
+* **means of combination** - by which compound elements are built from simpler ones
+* **means of abstraction** - by which compound elements can be named and manipulated as units
 
-How can you quickly and minimally achieve the SICP 3: primitives, combination, abstration?  
-Would this scale any better?  
-Talk about exponential quantities of code to build bigger stuff  
-Pull numbers from CollapseOS (everything is just a few hundred lines of Forth)  
-Is it possible to keep LoC constant when building more and more advanced programs?  
-plopping Linux on RISC-V would waste some potential  
-
-You _can_ do it with regular languages but you have to make the right design choices  
-Does Forth's minimalism make this easier?  
-Does Forth make it harder to paint yourself into a corner?  
-Forth expresses purely aggregations of smaller ideas (like a more pure Lisp)  
+How simply and effectively can these elements be achieved when starting from scratch?
+Forth is the most minimal approach I've seen.
+Furthermore, I think that Forth's design is rooted so literally upon these three elements that it almost _encourages_ productive abstrations.
+It limits you to the "good" kind of abstraction: combining smaller units of low-level functionality into larger and larger high-level procedures.
+I consider a "bad" abstraction to be when extra code is added in preemptive concern for future changes that rarely occur.
 
 # Conclusion
 In short, there is simply too much code and complexity underlying most modern systems.
@@ -168,13 +163,16 @@ Programming languages such as C are valuable for their ability to paint over the
 Perhaps that isn't always a good thing.
 I think that there is sometimes value in doing just the opposite: making a conscious and well-intended choice to utilize a single platform to its fullest.
 
-this is all heavily opinionated without a lot of science  
-its my opinion based on what i've seen and the research ive done  
-modern OSs and computing is definitely a marvel but its not perfect  
-there are a lot of signs that point to things being quite bad  
-if people just think the same way, then nothing will ever change  
-if poeple assume that what we have now is "good enough", then nothing will ever change  
+All of these ideas are heavily opinionated without a lot of science or evidence.
+They are simply my opinion based on what I've experienced and the research I've done.
+Modern operating systems and general computing are definitely a marvel but they are far from perfect.
+There are many signs that point to things actually being quite poor.
+If people ignore this problem then nothing will ever change.
+If people just think the same way they always have then nothing will ever change.
+if poeple assume that what we have now is "good enough" then nothing will ever change.
 
 I want to enable and encourage other developers to explore bare-metal development.
+I want to build an ecosystem that accessible to everyone with a computer, regardless of their operating system or prior programming experience.
+Think of the [Arduino IDE](https://www.arduino.cc/en/Guide/Environment) but for RISC-V assembly development.
 By investing in the RISC-V ISA and its ecosystem, we no longer need an abstration over the assembly language by which it speaks.
 RISC-V assembly can be a new foundation for future servers, programs, and operating systems.
