@@ -169,7 +169,7 @@ Modern operating systems and general computing are definitely a marvel but they 
 There are many signs that point to things actually being quite poor.
 If people ignore this problem then nothing will ever change.
 If people just think the same way they always have then nothing will ever change.
-if poeple assume that what we have now is "good enough" then nothing will ever change.
+If people assume that what we have now is "good enough" then nothing will ever change.
 
 I want to enable and encourage other developers to explore bare-metal development.
 I want to build an ecosystem that accessible to everyone with a computer, regardless of their operating system or prior programming experience.
