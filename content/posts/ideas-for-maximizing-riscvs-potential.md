@@ -1,5 +1,5 @@
 ---
-date: 2020-11-02
+date: 2020-11-10
 title: "Ideas for Maximizing RISC-V's Potential"
 slug: "ideas-for-maxinimizing-riscvs-potential"
 tags: ["risc-v", "assembly", "forth"]
@@ -41,6 +41,12 @@ I don't want to accept that the tools we use everyday are incapable of being fas
 I've spent a lot of time thinking about this problem.
 Not only what the root cause may be, but also what can be done to mitigate it.
 The videos and articles mentioned prior have all helped guide me toward the following ideas.
+In short, my ideas are the following:
+1. The usage of high-level languages started off great but has gone too far
+2. Modern software and tools has too much code and too much complexity
+3. We don't need 100% of current functionality in order for something to be useful
+4. There are other routes to achieving value than an OS and a bunch of C code
+5. The Bronzebeard project is my attempt to validate my claims
 
 # Idea 1: Where Things Went Wrong
 In Jonathan Blow's talk, he identifies that somewhere along the path of building higher and higher abstractions, we went too far.
@@ -49,23 +55,42 @@ Shouldn't our programmers be more productive and their programs more robust?
 This doesn't seem to be the case.
 Sure, technology accomplishes much more now than it used to, but does the modern scale of features match the amplified scale of complexity and fragility?
 
-is Linux OK? Windows? or have modern OS's gone too far?  
-Rene Rebe talks about this: microkernel, etc  
-Is it okay that all OS API's are C?  
-Or is that an issue for security / maintainability?  
+Are modern operating systems the epitome of software efficiency?
+By this, I mean to ask if they bring enough value to the table to justify their costs.
+What costs? Linux is free!
+I'm not referring to monetary costs: I'm referring to complexity and the volume of code between you and chunk of silicon at the heart of your machine.
+
+To be fair, I'm not really a good position to answer this question.
+I have zero kernel development experience at all.
+However, there do exist veteran programmers who take issue with the state of modern kernel development.
+[René Rebe](https://rene.rebe.de/) supports an ongoing conversation about this exact topic.
+Though his [YouTube channel](https://www.youtube.com/user/renerebe), René present frequent ideas and criticisms relating to operating system design and implementation.
+He explains how better languages and better designs (such as [microkernel](https://en.wikipedia.org/wiki/Microkernel)) could be an important step in OS innovation.
 
 # Idea 2: Too Much Code, Too Much Complexity
-how do code quantity and complexity relate? what is their relationship?  
-on their own, they are both sort of empty measures, just words  
-but at a point, it does start to detract  
-even if the code is great, at a scale where no single person can understand it all, its GG  
-its why I appreciate Rust, but I don't think "safer" languages is the answer  
+Most of the time, code quantity is really a poor measure of anything.
+Talking about a project's "lines of code" doesn't usually add much value.
+However, as a project's size increases, so does it's learning curve.
+In my opinion, the easiest code to understand and maintain is code that doesn't exist.
+A large amount of recent language debate has pertained to matters of safety.
+Many agree that C is an "unsafe" language while Go and Rust are "safer" alternatives.
+While I do concur that safety is important, I think that quantity may be more significant.
 
-any solution that involves piling more stuff on top is NOT the answer  
-I like Go because it cut stuff out! Bootstraps from ASM and itself  
-is there just too much code  
-no one can understand it all  
-how could cross-cutting bugs ever be fixed  
+I think at some scale, the safety of a language doesn't really matter.
+Thirty million line of code in _any_ language is going to result in subtle, cross-cutting bugs.
+As soon as a project grows to the point where no single developer can understand the whole picture, I think it's game over.
+At such a scale, achieving optimal performance and reliability becomes impossible because human intercommunication is lossy and inefficient.
+I think that innovation will come not from writing _safer_ code, but from writing _less_ code.
+
+Another issue that arises from a boundless code quantity is the matter of making changes.
+If your foundation is a massive, unintelligible tangle of code, how you identify where to make the change?
+Most of the time, the solution is just pile some more code on top of what's already there.
+After enough years of this, iteration slows to a crawl.
+Every change breaks something else and even minor feature additions can take months.
+
+One of the things I really admire about the [Go]() programming language is its conscious choice to avoid native APIs and the C language in general.
+By bootstrapping itself from assembly and making syscalls directly, Go avoids inheriting the baggage of operating systems.
+By baggage, I'm referring to things such as a tightly-coupled `libc` on \*nix systems and the non-standardized `msvcrt.dll` on Windows.
 
 # Idea 3: What Makes Something Useful?
 do you need a full multi-user OS to be useful  
@@ -96,6 +121,7 @@ maybe that is better for security than choice of language
 # Idea 5: The Bronzebeard Project
 Bare-metal RISC-V Forth implementation  
 Uses a simple assembler co-written in both Python and Go  
+Avoid the big toolchain!  
 Can I make these little devices useful without using heavy toolchains, frameworks, or SDKs?  
 What toolset is best for that?  
 Raw assembly is a given: you can't avoid that, but you can avoid the toolchains  
