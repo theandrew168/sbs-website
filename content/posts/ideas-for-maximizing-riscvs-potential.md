@@ -93,34 +93,57 @@ By bootstrapping itself from assembly and making syscalls directly, Go avoids in
 By baggage, I'm referring to things such as a tightly-coupled `libc` on \*nix systems and the non-standardized `msvcrt.dll` on Windows.
 
 # Idea 3: What Makes Something Useful?
-do you need a full multi-user OS to be useful  
-what about a webserver?  
-is that _less_ secure because of the multi-user model  
-what about performance?  
+Is a fully-featured, multi-user OS necessary to be useful?
+Do focused applications such as a webserver need that?
+In fact, is something like a webserver made _less_ secure because of the multi-user model and features behind it?
+Perhaps even the performance of a dedicated server could be better without the extra overhead.
+Especially in the embedded space, is a multi-user OS necessary?
+If you had an IoT device or some simple controller, does that need the concept of a user?
+How much code does something like that really need at all?
 
-especially in the embedded space  
-if you need to control a motor, do you need a multi-user OS?  
-do you need MQTT and lambda functions and cloud-based infra?  
-
-how do you express that net value added by achieving the same with less?  
-or even the value added if you accomplish 90% features with 10% of the code  
-its def a win for readability and maintainability  
-easiest code to test / maintain is code that doesn't exist  
+When it comes to "value", there are two equally-important angles to consider.
+The first and most common angle is the value added by doing more stuff.
+New features are the primary embodient of this.
+More code added in order to do more things.
+The second and less common angle is the value added _implicity_ by doing the same stuff with less resources.
+If a program can do the same thing with half the code, that's value added.
+If it can do the same task in half the time, that's also value added.
+If you could accomplish 90% of the existing features with only 10% of the code, that's potentially a big win.
 
 # Idea 4: Other Paths to Success
-talk about investing in RISC-V assembly  
-does portability matter as much here?  
-plopping Linux on RISC-V would waste some potential  
-what other ways are there to achieve interactivity and solve problems?  
+What other routes are there to making a computer useful?
+Is installing a C-based operating system a required prerequisite?
+You _could_ just write some bare-metal C or Rust, of course.
+But even both of those carry with them a sizable amount of complexity in terms of their compilers and toolchains ([GCC](https://gcc.gnu.org/), [LLVM](http://llvm.org/), etc).
+Don't get me wrong, these are amazing tools!
+But if your goal is understand your entire stack, then adding either of them to your process is a major setback.
 
-can we get there with a few thousand lines of code instead of 30 million?  
-or can we get to 90% of the usefulness with only 10% of the code  
-devs could actually understand the entire system  
-maybe that is better for security than choice of language  
+What about writing your program or application directly in assembly?
+Oof, that'd hurt portability... right?
+I'd say "yes" if the goal was to support multiple architectures.
+However, I'd say "no" if a calculated choice was made to target a _specific_ architecture.
+Given the title of this blog, you probably know where I'm going: RISC-V.
+What if you were to simple invest in RISC-V and embrace its assembly dialect as the foundation for modern programs?
+Think about how much compiler and operating system cruft you could leave behind!
+
+If you were to hit the reset button and completely start over, what would it take to achieve usefulness?
+How many instructions?
+How many lines of assembly?
+Do we need C or Rust?
+Assembly may not be the most productive language but there are simple high-level alternatives.
+I think that Forth is definitely a contender and worth taking a look at.
+A minimal Forth implementation can be built in a few hundred instructions and then a useful, interactive system can built in a few hundred Forth words.
+That sounds pretty efficient!
+Perhaps it would even be fairly secure.
+
+**"There are two ways of constructing a software design: One way is to make it so simple that there are obviously no deficiencies, and the other way is to make it so complicated that there are no obvious deficiencies. The first method is far more difficult."** - C. A. R. Hoare
 
 # Idea 5: The Bronzebeard Project
 Bare-metal RISC-V Forth implementation  
-Uses a simple assembler co-written in both Python and Go  
+Uses a simple assembler written in both Python
+Think the "arduino ecosystem of riscv"  
+Native GUIs, beginner friendly ala Thonny  
+
 Avoid the big toolchain!  
 Can I make these little devices useful without using heavy toolchains, frameworks, or SDKs?  
 What toolset is best for that?  
@@ -131,6 +154,7 @@ Would this scale any better?
 Talk about exponential quantities of code to build bigger stuff  
 Pull numbers from CollapseOS (everything is just a few hundred lines of Forth)  
 Is it possible to keep LoC constant when building more and more advanced programs?  
+plopping Linux on RISC-V would waste some potential  
 
 You _can_ do it with regular languages but you have to make the right design choices  
 Does Forth's minimalism make this easier?  
@@ -144,13 +168,12 @@ Programming languages such as C are valuable for their ability to paint over the
 Perhaps that isn't always a good thing.
 I think that there is sometimes value in doing just the opposite: making a conscious and well-intended choice to utilize a single platform to its fullest.
 
-A similar viewpoint can be taken when it comes to databases and ORMs.
-While the the ability to target multiple databases may be valuable in some ways, there is also something lost.
-Maybe SQLite has a specific feature that'd benefit your project.
-By choosing an abstration layer, however, you limit your project to whatever functionality is common between each supported database.
-You are now limited to the "common denominator" of database functionality.
-That useful SQLite-only feature is now lost.
-It is possible that explicitly choosing SQLite for the project may have been a better option.
+this is all heavily opinionated without a lot of science  
+its my opinion based on what i've seen and the research ive done  
+modern OSs and computing is definitely a marvel but its not perfect  
+there are a lot of signs that point to things being quite bad  
+if people just think the same way, then nothing will ever change  
+if poeple assume that what we have now is "good enough", then nothing will ever change  
 
 I want to enable and encourage other developers to explore bare-metal development.
 By investing in the RISC-V ISA and its ecosystem, we no longer need an abstration over the assembly language by which it speaks.
