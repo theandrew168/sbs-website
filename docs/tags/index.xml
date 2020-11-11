@@ -6,10 +6,37 @@
     <description>Recent content in Tags on Shallow Brook Software</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 02 Sep 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 11 Nov 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://shallowbrooksoftware.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>assembly</title>
+      <link>https://shallowbrooksoftware.com/tags/assembly/</link>
+      <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://shallowbrooksoftware.com/tags/assembly/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>forth</title>
+      <link>https://shallowbrooksoftware.com/tags/forth/</link>
+      <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://shallowbrooksoftware.com/tags/forth/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>risc-v</title>
+      <link>https://shallowbrooksoftware.com/tags/risc-v/</link>
+      <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://shallowbrooksoftware.com/tags/risc-v/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>design</title>
@@ -98,24 +125,6 @@
       <pubDate>Wed, 17 Jun 2020 00:00:00 +0000</pubDate>
       
       <guid>https://shallowbrooksoftware.com/tags/opengl/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>assembly</title>
-      <link>https://shallowbrooksoftware.com/tags/assembly/</link>
-      <pubDate>Fri, 24 Apr 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://shallowbrooksoftware.com/tags/assembly/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>risc-v</title>
-      <link>https://shallowbrooksoftware.com/tags/risc-v/</link>
-      <pubDate>Fri, 24 Apr 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://shallowbrooksoftware.com/tags/risc-v/</guid>
       <description></description>
     </item>
     
