@@ -95,7 +95,7 @@ My name is Andrew Dailey and I&amp;rsquo;m an independent programmer from Des Mo
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://shallowbrooksoftware.com/projects/</guid>
-      <description>Bloggulus (website, source) Bloggulus is a &amp;ldquo;meta blog&amp;rdquo; that aggregates numerous other blogs into a single location. Previously, I had been using a Firefox extension to track my blogs but I wanted something more personalized. I also found myself spending too much time on Reddit and Hacker News. Like many others, I’d even sometimes read only the comments and not the actual content. That’s definitely a waste of time! So, I created a website that intentionally lacks a social commenting system and only pulls in posts from the blogs that I trust.</description>
+      <description>Bronzebeard (source, example) Bronzebeard is a collection of tools for writing RISC-V assembly and working with hobbyist development devices. It is designed for programs that will run on bare metal with no reliance on an operating systems, frameworks, SDKs, or existing software of any kind. A simple, standalone assembler is the centerpiece. It has been written in order to be free from large, complex toolchains. This keeps the project portable, minimal, and easy to understand.</description>
     </item>
     
   </channel>

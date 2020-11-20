@@ -11,10 +11,10 @@
 
     <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Projects"/>
-<meta name="twitter:description" content="Bloggulus (website, source) Bloggulus is a &ldquo;meta blog&rdquo; that aggregates numerous other blogs into a single location. Previously, I had been using a Firefox extension to track my blogs but I wanted something more personalized. I also found myself spending too much time on Reddit and Hacker News. Like many others, I’d even sometimes read only the comments and not the actual content. That’s definitely a waste of time! So, I created a website that intentionally lacks a social commenting system and only pulls in posts from the blogs that I trust."/>
+<meta name="twitter:description" content="Bronzebeard (source, example) Bronzebeard is a collection of tools for writing RISC-V assembly and working with hobbyist development devices. It is designed for programs that will run on bare metal with no reliance on an operating systems, frameworks, SDKs, or existing software of any kind. A simple, standalone assembler is the centerpiece. It has been written in order to be free from large, complex toolchains. This keeps the project portable, minimal, and easy to understand."/>
 
     <meta property="og:title" content="Projects" />
-<meta property="og:description" content="Bloggulus (website, source) Bloggulus is a &ldquo;meta blog&rdquo; that aggregates numerous other blogs into a single location. Previously, I had been using a Firefox extension to track my blogs but I wanted something more personalized. I also found myself spending too much time on Reddit and Hacker News. Like many others, I’d even sometimes read only the comments and not the actual content. That’s definitely a waste of time! So, I created a website that intentionally lacks a social commenting system and only pulls in posts from the blogs that I trust." />
+<meta property="og:description" content="Bronzebeard (source, example) Bronzebeard is a collection of tools for writing RISC-V assembly and working with hobbyist development devices. It is designed for programs that will run on bare metal with no reliance on an operating systems, frameworks, SDKs, or existing software of any kind. A simple, standalone assembler is the centerpiece. It has been written in order to be free from large, complex toolchains. This keeps the project portable, minimal, and easy to understand." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://shallowbrooksoftware.com/projects/" />
 
@@ -100,7 +100,37 @@
       <h1>Projects</h1>
     </header>
 
-    <h2 id="bloggulus-websitehttpsblogguluscom-sourcehttpsgithubcomtheandrew168bloggulus">Bloggulus (<a href="https://bloggulus.com">website</a>, <a href="https://github.com/theandrew168/bloggulus">source</a>)</h2>
+    <h2 id="bronzebeard-sourcehttpsgithubcomtheandrew168bronzebeard-examplehttpsgithubcomtheandrew168bronzebeardblobmasterexamplesledasm">Bronzebeard (<a href="https://github.com/theandrew168/bronzebeard">source</a>, <a href="https://github.com/theandrew168/bronzebeard/blob/master/examples/led.asm">example</a>)</h2>
+<p>Bronzebeard is a collection of tools for writing RISC-V assembly and working with hobbyist development devices.
+It is designed for programs that will run on bare metal with no reliance on an operating systems, frameworks, SDKs, or existing software of any kind.
+A simple, standalone assembler is the centerpiece.
+It has been written in order to be free from large, complex toolchains.
+This keeps the project portable, minimal, and easy to understand.
+At the moment, Bronzebeard only targets the <a href="https://www.seeedstudio.com/Sipeed-Longan-Nano-RISC-V-GD32VF103CBT6-Development-Board-p-4205.html">Longan Nano</a>.
+However, there are plans in the near future to broaden support to also include the <a href="https://www.seeedstudio.com/Wio-Lite-RISC-V-GD32VF103-p-4293.html">Wio Lite</a> and <a href="https://www.sifive.com/boards/hifive1-rev-b">HiFive1 Rev B</a>.</p>
+<p>Assembly programming has always been one of those arcane, fundamental skills that I always attributed to older, wiser, expert programmers who have been writing &ldquo;code&rdquo; since its inception.
+I remember thinking how crazy it was that early Pokemon games were written in assembly.
+The idea of programming for a specific CPU and set of peripherals sounds pure and unemcumbered.
+Sure, you may give up the potential for cross-CPU support but if that isn&rsquo;t a requirement then there is nothing lost.
+You might even be able to make better use of your hardware because you don&rsquo;t have to rely on &ldquo;common denominator&rdquo; abstractions.</p>
+<p>My desire to learn assembly led me to the <a href="https://en.wikipedia.org/wiki/RISC-V">RISC-V</a> instruction set architecture (ISA).
+The combination of simplicity, newness, and freedom seemed like a perfect fit for a beginner.
+I ordered a couple of cheap RISC-V chips and started reading!
+My search for a no-frills and portable RISC-V assembler came up short: I really didn&rsquo;t want to fuss with compiling a custom GCC toolchain.
+Instead, I wrote a bit of Python to enable a less painful means of writing and building RISC-V assembly.</p>
+<h5 id="relevant-skills">Relevant Skills</h5>
+<ul>
+<li>Python programming</li>
+<li>RISC-V assembly programming</li>
+<li>Forth programming</li>
+<li>Multi-pass assembler design</li>
+<li>Lexing and parsing simple grammars</li>
+<li>Bare-metal program design</li>
+<li>Device firmware upgrade (DFU) standard</li>
+<li>USB programming via <a href="https://libusb.info">libusb</a></li>
+<li>Cross-platform Python development</li>
+</ul>
+<h2 id="bloggulus-websitehttpsblogguluscom-sourcehttpsgithubcomtheandrew168bloggulus">Bloggulus (<a href="https://bloggulus.com">website</a>, <a href="https://github.com/theandrew168/bloggulus">source</a>)</h2>
 <p><a href="https://bloggulus.com">Bloggulus</a> is a &ldquo;meta blog&rdquo; that aggregates numerous other blogs into a single location.
 Previously, I had been using a <a href="https://addons.mozilla.org/en-US/firefox/addon/feeder/">Firefox extension</a> to track my blogs but I wanted something more personalized.
 I also found myself spending too much time on <a href="https://bloggulus.com">Reddit</a> and <a href="https://bloggulus.com">Hacker News</a>.
@@ -120,7 +150,7 @@ It is all rendered server-side (via Flask’s <a href="https://jinja.palletsproj
 Web design is definitely one of my weaker stills at the moment but practice is the only way to improve!
 I intentionally brought together simple colors and hard lines to let the blog posts be the focus.
 The color scheme did accidentally end up looking kind of like <a href="https://www.amazon.com/">Amazon’s</a>, though.</p>
-<h5 id="relevant-skills">Relevant Skills</h5>
+<h5 id="relevant-skills-1">Relevant Skills</h5>
 <ul>
 <li>Python programming</li>
 <li>Python web application development</li>
@@ -146,7 +176,7 @@ So, the current version of the site functions similar to those smart playlists: 
 <p>I do plan to circle back to the query language idea at some point in the future.
 I&rsquo;d likely take the route of writing my own minimal language as well as a lexer and parser for it.
 Since I&rsquo;m still very much a novice when it comes to web design, I want to get the current interation working and looking great before tackling additional ways to jam.</p>
-<h5 id="relevant-skills-1">Relevant Skills</h5>
+<h5 id="relevant-skills-2">Relevant Skills</h5>
 <ul>
 <li>Go programming</li>
 <li>Go web application development</li>
@@ -178,7 +208,7 @@ Some interpret the text literally while others &ldquo;compile&rdquo; the text&rs
 There are many books on language design and implementation.
 Some notable ones include <a href="https://en.wikipedia.org/wiki/Compilers:_Principles,_Techniques,_and_Tools">The Dragon Book</a> and <a href="https://en.wikipedia.org/wiki/Structure_and_Interpretation_of_Computer_Programs">SICP</a>.
 My fascination with the latter and with game development led to this proof of concept.</p>
-<h5 id="relevant-skills-2">Relevant Skills</h5>
+<h5 id="relevant-skills-3">Relevant Skills</h5>
 <ul>
 <li>C programming</li>
 <li>Scheme programming</li>
@@ -199,7 +229,7 @@ This simple, minimal instruction set is commonly referred to as the &ldquo;Hello
 I was able to scrap together an implementation after a few weeks of iterating.
 Despite being technically finished, it had numerous flaws that I didn&rsquo;t really realize until multiple years of C programming later.</p>
 <p>For anyone curious, the name Skylark is a reference to the character <a href="https://en.wikipedia.org/wiki/Chris_Kirkpatrick">Chip Skylark</a> from the old Nickelodeon show <a href="https://en.wikipedia.org/wiki/The_Fairly_OddParents">The Fairly OddParents</a>.</p>
-<h5 id="relevant-skills-3">Relevant Skills</h5>
+<h5 id="relevant-skills-4">Relevant Skills</h5>
 <ul>
 <li>C programming</li>
 <li>Cross-compiling for non <a href="https://en.wikipedia.org/wiki/Unix-like">Unix-like</a> operating systems</li>
@@ -209,31 +239,6 @@ Despite being technically finished, it had numerous flaws that I didn&rsquo;t re
 <li>Binary instruction decoding</li>
 <li>2D graphics via <a href="https://www.libsdl.org/">SDL2</a></li>
 <li>Separation of IO-based and pure functional logic</li>
-</ul>
-<h2 id="simpleriscv-sourcehttpsgithubcomtheandrew168simpleriscv">SimpleRISCV (<a href="https://github.com/theandrew168/simpleriscv">source</a>)</h2>
-<p>Assembly programming has always been one of those arcane, fundamental skills that I always attributed to older, wiser, expert programmers who have been writing &ldquo;code&rdquo; since its inception.
-I remember thinking how crazy it was that early Pokemon games were written in assembly.
-The idea of programming for a specific CPU and set of peripherals sounds pure and unemcumbered.
-Sure, you may give up the potential for cross-CPU support but if that isn&rsquo;t a requirement then there is nothing lost.
-You might even be able to make better use of your hardware because you don&rsquo;t have to rely on &ldquo;common denominator&rdquo; abstrations.</p>
-<p>My desire to learn assembly led me to the <a href="https://en.wikipedia.org/wiki/RISC-V">RISC-V</a> instruction set architecture (ISA).
-The combination of simplicity, newness, and freedom seemed like a perfect fit for a beginner.
-I ordered a couple of cheap RISC-V chips and started reading!
-My search for a no-frills and portable RISC-V assembler came up short: I really didn&rsquo;t want to fuss with compiling a custom GCC toolchain.
-Instead, I wrote a bit of Python to satisfy my very small RISC-V needs.</p>
-<p>SimpleRISCV is that project and while correct (as far as I know), it is very bare-bones.
-It only supports assembling single files and does absolutely no linking.
-The program is simply a RISC-V instruction encoder with a thin layer of label and constant handling above it.
-Nonetheless, it helped me get started with the platform and gave me an up-close experience with the ISA.</p>
-<h5 id="relevant-skills-4">Relevant Skills</h5>
-<ul>
-<li>Python programming</li>
-<li>RISC-V <a href="https://riscv.org/specifications/">instruction set architecture</a></li>
-<li>Testing Python applications</li>
-<li>Publishing Python packages</li>
-<li>Lexing and parsing of assembly programs</li>
-<li>Binary instruction encoding</li>
-<li>Programming bare-metal devices</li>
 </ul>
 <h2 id="derzy-sourcehttpsgithubcomtheandrew168derzy">Derzy (<a href="https://github.com/theandrew168/derzy">source</a>)</h2>
 <p>One of the first topics to really get me interested in programming was real-time rendering.

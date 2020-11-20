@@ -1,6 +1,38 @@
 ---
 title: "Projects"
 ---
+## Bronzebeard ([source](https://github.com/theandrew168/bronzebeard), [example](https://github.com/theandrew168/bronzebeard/blob/master/examples/led.asm))
+Bronzebeard is a collection of tools for writing RISC-V assembly and working with hobbyist development devices.
+It is designed for programs that will run on bare metal with no reliance on an operating systems, frameworks, SDKs, or existing software of any kind.
+A simple, standalone assembler is the centerpiece.
+It has been written in order to be free from large, complex toolchains.
+This keeps the project portable, minimal, and easy to understand.
+At the moment, Bronzebeard only targets the [Longan Nano](https://www.seeedstudio.com/Sipeed-Longan-Nano-RISC-V-GD32VF103CBT6-Development-Board-p-4205.html).
+However, there are plans in the near future to broaden support to also include the [Wio Lite](https://www.seeedstudio.com/Wio-Lite-RISC-V-GD32VF103-p-4293.html) and [HiFive1 Rev B](https://www.sifive.com/boards/hifive1-rev-b).
+
+Assembly programming has always been one of those arcane, fundamental skills that I always attributed to older, wiser, expert programmers who have been writing "code" since its inception.
+I remember thinking how crazy it was that early Pokemon games were written in assembly.
+The idea of programming for a specific CPU and set of peripherals sounds pure and unemcumbered.
+Sure, you may give up the potential for cross-CPU support but if that isn't a requirement then there is nothing lost.
+You might even be able to make better use of your hardware because you don't have to rely on "common denominator" abstractions.
+
+My desire to learn assembly led me to the [RISC-V](https://en.wikipedia.org/wiki/RISC-V) instruction set architecture (ISA).
+The combination of simplicity, newness, and freedom seemed like a perfect fit for a beginner.
+I ordered a couple of cheap RISC-V chips and started reading!
+My search for a no-frills and portable RISC-V assembler came up short: I really didn't want to fuss with compiling a custom GCC toolchain.
+Instead, I wrote a bit of Python to enable a less painful means of writing and building RISC-V assembly.
+
+##### Relevant Skills
+* Python programming
+* RISC-V assembly programming
+* Forth programming
+* Multi-pass assembler design
+* Lexing and parsing simple grammars
+* Bare-metal program design
+* Device firmware upgrade (DFU) standard
+* USB programming via [libusb](https://libusb.info)
+* Cross-platform Python development
+
 ## Bloggulus ([website](https://bloggulus.com), [source](https://github.com/theandrew168/bloggulus))
 [Bloggulus](https://bloggulus.com) is a "meta blog" that aggregates numerous other blogs into a single location.
 Previously, I had been using a [Firefox extension](https://addons.mozilla.org/en-US/firefox/addon/feeder/) to track my blogs but I wanted something more personalized.
@@ -119,33 +151,6 @@ For anyone curious, the name Skylark is a reference to the character [Chip Skyla
 * Binary instruction decoding
 * 2D graphics via [SDL2](https://www.libsdl.org/)
 * Separation of IO-based and pure functional logic
-
-## SimpleRISCV ([source](https://github.com/theandrew168/simpleriscv))
-Assembly programming has always been one of those arcane, fundamental skills that I always attributed to older, wiser, expert programmers who have been writing "code" since its inception.
-I remember thinking how crazy it was that early Pokemon games were written in assembly.
-The idea of programming for a specific CPU and set of peripherals sounds pure and unemcumbered.
-Sure, you may give up the potential for cross-CPU support but if that isn't a requirement then there is nothing lost.
-You might even be able to make better use of your hardware because you don't have to rely on "common denominator" abstrations.
-
-My desire to learn assembly led me to the [RISC-V](https://en.wikipedia.org/wiki/RISC-V) instruction set architecture (ISA).
-The combination of simplicity, newness, and freedom seemed like a perfect fit for a beginner.
-I ordered a couple of cheap RISC-V chips and started reading!
-My search for a no-frills and portable RISC-V assembler came up short: I really didn't want to fuss with compiling a custom GCC toolchain.
-Instead, I wrote a bit of Python to satisfy my very small RISC-V needs.
-
-SimpleRISCV is that project and while correct (as far as I know), it is very bare-bones.
-It only supports assembling single files and does absolutely no linking.
-The program is simply a RISC-V instruction encoder with a thin layer of label and constant handling above it.
-Nonetheless, it helped me get started with the platform and gave me an up-close experience with the ISA.
-
-##### Relevant Skills
-* Python programming
-* RISC-V [instruction set architecture](https://riscv.org/specifications/)
-* Testing Python applications
-* Publishing Python packages
-* Lexing and parsing of assembly programs
-* Binary instruction encoding
-* Programming bare-metal devices
 
 ## Derzy ([source](https://github.com/theandrew168/derzy))
 One of the first topics to really get me interested in programming was real-time rendering.
