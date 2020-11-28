@@ -121,8 +121,8 @@ For the sake of brevity, I'll just be using two modern OpenGL functions in my ex
 // opengl.h
 #include <SDL2/SDL_opengl.h>
 
-PFNGLCREATESHADERPROC glCreateShader;
-PFNGLDELETESHADERPROC glDeleteShader;
+extern PFNGLCREATESHADERPROC glCreateShader;
+extern PFNGLDELETESHADERPROC glDeleteShader;
 ```
 
 ### OpenGL function definitions
@@ -257,7 +257,7 @@ Keep this list in mind as we explore each of the four helper macros.
 This macro declares an OpenGL function pointer.
 ```
 #define OPENGL_DECLARE(func_name, func_type)  \
-    func_type func_name;
+    extern func_type func_name;
 ```
 
 It is used in our project's OpenGL-specific header file to expose the symbols that other parts of our application will link to.

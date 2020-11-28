@@ -241,8 +241,8 @@ For the sake of brevity, I&rsquo;ll just be using two modern OpenGL functions in
 <pre><code>// opengl.h
 #include &lt;SDL2/SDL_opengl.h&gt;
 
-PFNGLCREATESHADERPROC glCreateShader;
-PFNGLDELETESHADERPROC glDeleteShader;
+extern PFNGLCREATESHADERPROC glCreateShader;
+extern PFNGLDELETESHADERPROC glDeleteShader;
 </code></pre><h3 id="opengl-function-definitions">OpenGL function definitions</h3>
 <p>Similar to original example, the default definition for our function pointers will simply be <code>NULL</code>.
 Once again, these functions <strong>MUST NOT</strong> be called until after the real locations have been loaded and validated.</p>
@@ -346,7 +346,7 @@ Then, we will be able to define a list of all the functions we need and swap out
 <h3 id="opengl_declare">OPENGL_DECLARE</h3>
 <p>This macro declares an OpenGL function pointer.</p>
 <pre><code>#define OPENGL_DECLARE(func_name, func_type)  \
-    func_type func_name;
+    extern func_type func_name;
 </code></pre><p>It is used in our project&rsquo;s OpenGL-specific header file to expose the symbols that other parts of our application will link to.</p>
 <pre><code>// opengl.h
 #define OPENGL_FUNCTION OPENGL_DECLARE
