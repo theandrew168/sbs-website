@@ -18,9 +18,10 @@ Everything is just bytes at the end of the day.
 The trick that first caught my eye was how the project implemented volume servers.
 I cracked open the solitary [volume](https://github.com/geohot/minikeyvalue/blob/master/volume) executable and saw that it was nothing more than a Bash script that started an [NGINX](http://nginx.org/en/) in the foreground.
 Even more interesting was how the NGINX config file was handled.
-Instead of requiring any prerequisite setup, he just templated some env vars into a string and threw it out to a temporary file via [mktemp](https://man7.org/linux/man-pages/man3/mktemp.3.html)!
+Instead of requiring any prerequisite setup, he just templated some env vars into a string and threw it out to a temporary file via [mktemp](https://man7.org/linux/man-pages/man3/mktemp.3.html).
 
-This struck a chord of relief with me due to how much effort I've spent in the past trying to effectively coordinate Python-based web applications with NGINX reverse proxies via [Ansible](https://docs.ansible.com/ansible/latest/index.html).
+This blew my mind!
+I've spent many hours in the past trying to effectively coordinate Python-based web applications and NGINX reverse proxies via [Ansible](https://docs.ansible.com/ansible/latest/index.html).
 I always believed that NGINX had to be configured separately due to having a mandatory [config file](https://www.nginx.com/resources/wiki/start/topics/examples/full/).
 I would write a role to run the [WSGI server](https://gunicorn.org/) on some locally-visible port and then the proxy would listen globally on 80/443.
 Each component would also have its own [systemd](https://www.freedesktop.org/wiki/Software/systemd/) unit file.
@@ -120,10 +121,9 @@ with run_in_background(['nginx', '-c', ...]):
 ```
 
 # Performance
-I wanted to see how my version performed against George's in a small set of benchmarks.
+I wanted to see how the two versions of this project performed in a small set of benchmarks.
 I'm not a fan of testing locally so I spun up a small cluster of $5 [Digital Ocean](https://www.digitalocean.com/) droplets in order to introduce proper network latency.
-I used one index server and three volume servers for all of the benchmarks.
-The tests were as follows:
+I used one index server and three volume servers for all of the benchmarks and ensured that each version was tested under the same circumstances.
 
 | **Benchmark** | **Description** |
 | --- | --- |

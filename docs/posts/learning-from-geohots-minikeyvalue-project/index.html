@@ -138,8 +138,9 @@ Everything is just bytes at the end of the day.</p>
 <p>The trick that first caught my eye was how the project implemented volume servers.
 I cracked open the solitary <a href="https://github.com/geohot/minikeyvalue/blob/master/volume">volume</a> executable and saw that it was nothing more than a Bash script that started an <a href="http://nginx.org/en/">NGINX</a> in the foreground.
 Even more interesting was how the NGINX config file was handled.
-Instead of requiring any prerequisite setup, he just templated some env vars into a string and threw it out to a temporary file via <a href="https://man7.org/linux/man-pages/man3/mktemp.3.html">mktemp</a>!</p>
-<p>This struck a chord of relief with me due to how much effort I&rsquo;ve spent in the past trying to effectively coordinate Python-based web applications with NGINX reverse proxies via <a href="https://docs.ansible.com/ansible/latest/index.html">Ansible</a>.
+Instead of requiring any prerequisite setup, he just templated some env vars into a string and threw it out to a temporary file via <a href="https://man7.org/linux/man-pages/man3/mktemp.3.html">mktemp</a>.</p>
+<p>This blew my mind!
+I&rsquo;ve spent many hours in the past trying to effectively coordinate Python-based web applications and NGINX reverse proxies via <a href="https://docs.ansible.com/ansible/latest/index.html">Ansible</a>.
 I always believed that NGINX had to be configured separately due to having a mandatory <a href="https://www.nginx.com/resources/wiki/start/topics/examples/full/">config file</a>.
 I would write a role to run the <a href="https://gunicorn.org/">WSGI server</a> on some locally-visible port and then the proxy would listen globally on 80/443.
 Each component would also have its own <a href="https://www.freedesktop.org/wiki/Software/systemd/">systemd</a> unit file.</p>
@@ -221,10 +222,9 @@ Once the server is told to stop, the context manager exits and the reverse proxy
     <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">KeyboardInterrupt</span>:
         <span style="color:#66d9ef">pass</span>
 </code></pre></div><h1 id="performance">Performance</h1>
-<p>I wanted to see how my version performed against George&rsquo;s in a small set of benchmarks.
+<p>I wanted to see how the two versions of this project performed in a small set of benchmarks.
 I&rsquo;m not a fan of testing locally so I spun up a small cluster of $5 <a href="https://www.digitalocean.com/">Digital Ocean</a> droplets in order to introduce proper network latency.
-I used one index server and three volume servers for all of the benchmarks.
-The tests were as follows:</p>
+I used one index server and three volume servers for all of the benchmarks and ensured that each version was tested under the same circumstances.</p>
 <table>
 <thead>
 <tr>
