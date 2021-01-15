@@ -2,7 +2,7 @@
 date: 2020-09-02
 title: "Designing Python Web Servers"
 slug: "designing-python-web-servers"
-tags: ["python", "server", "design", "networking"]
+tags: ["python"]
 ---
 I've spent the last few days designing and benchmarking extremely minimal pure-Python web servers.
 There is a tech myth / superstition that exposing python web servers to the internet is a bad idea but I've seen little to no evidence as to why this is supposedly the case.
