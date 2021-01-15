@@ -3,6 +3,41 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
+    <loc>https://shallowbrooksoftware.com/tags/database/</loc>
+    <lastmod>2021-01-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/tags/go/</loc>
+    <lastmod>2021-01-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/posts/learning-from-geohots-minikeyvalue-project/</loc>
+    <lastmod>2021-01-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/posts/</loc>
+    <lastmod>2021-01-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/tags/python/</loc>
+    <lastmod>2021-01-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/</loc>
+    <lastmod>2021-01-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://shallowbrooksoftware.com/tags/</loc>
+    <lastmod>2021-01-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>https://shallowbrooksoftware.com/tags/assembly/</loc>
     <lastmod>2020-11-11T00:00:00+00:00</lastmod>
   </url>
@@ -18,32 +53,12 @@
   </url>
   
   <url>
-    <loc>https://shallowbrooksoftware.com/posts/</loc>
-    <lastmod>2020-11-11T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://shallowbrooksoftware.com/tags/risc-v/</loc>
     <lastmod>2020-11-11T00:00:00+00:00</lastmod>
   </url>
   
   <url>
-    <loc>https://shallowbrooksoftware.com/</loc>
-    <lastmod>2020-11-11T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://shallowbrooksoftware.com/tags/</loc>
-    <lastmod>2020-11-11T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://shallowbrooksoftware.com/posts/designing-python-web-servers/</loc>
-    <lastmod>2020-09-02T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>https://shallowbrooksoftware.com/tags/python/</loc>
     <lastmod>2020-09-02T00:00:00+00:00</lastmod>
   </url>
   
