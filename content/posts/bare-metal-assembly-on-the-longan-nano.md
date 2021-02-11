@@ -73,14 +73,7 @@ Now that our simple program is written and understood, how do we convert it to s
 This section details the steps necessary to "assemble" our simple program.
 Assembling is the process of converting human-readable assembly language text to a specific binary representation that a CPU can understand.
 
-To start, we create a directory to hold the our project's development files.
-In an open terminal window:
-```
-mkdir device_ownership
-cd device_ownership/
-```
-
-Then, since the [assembler](https://en.wikipedia.org/wiki/Assembly_language#Assembler) we are going to use is written in [Python](https://www.python.org), we will install all of the system packages necessary to install additional Python modules.
+Since the [assembler](https://en.wikipedia.org/wiki/Assembly_language#Assembler) we are going to use is written in [Python](https://www.python.org), we will install all of the system packages necessary to install additional Python modules.
 ```
 sudo apt install python3-pip python3-venv
 ```
@@ -88,22 +81,20 @@ sudo apt install python3-pip python3-venv
 To keep things organized, we will use a [virtual environment](https://docs.python.org/3/library/venv.html) to isolate our project-specific Python modules from the rest of our system.
 ```
 python3 -m venv venv/
-source venv/bin/activate
+. ./venv/bin/activate
 ```
-**Note that that `source` command above will be required any time you come back to work on the project!**
+**Note that this last command above will be required any time you come back to work on the project!**
 
-With a virtual environment in place, we can install the RISC-V assembler used in this series: [simpleriscv](https://pypi.org/project/simpleriscv/).
+With a virtual environment in place, we can install the simple RISC-V assembler built for this project: [bronzebeard](https://pypi.org/project/bronzebeard/).
 ```
-pip install simpleriscv==0.0.5
+pip install bronzebeard
 ```
 
 Last but not least, we can write our simple program to a file and assemble it. 
 ```
 echo "addi zero, zero, 0" > smallest.asm
-simpleriscv asm smallest.asm
+python3 -m bronzebeard.asm smallest.asm smallest.bin
 ```
-
-By default, simpleriscv places its output in a file named with a `.bin` extension in place of the original `.asm`.
 
 Congratulations!
 You just wrote and assembled the world's smallest RISC-V program!
@@ -113,73 +104,8 @@ Without our assembled `smallest.bin` file in hand, the next step is to hook up o
 To accomplish this task, we must use the [Device Firmware Upgrade](https://en.wikipedia.org/wiki/USB#Device_Firmware_Upgrade) protocol.
 This protocol enables a very simple method for upgrading the firmware of devices connected to your system over USB.
 If you are curious about the details, the official specification for DFU can be found [here](https://www.usb.org/sites/default/files/DFU_1.1.pdf).
-
-One important note about DFU is that the terms "upload" and "download" are expressed from the device's perspective.
-So, "downloading" firmware means writing an assembled, binary file from your system to the device.
-This is what we'll need to do in order to get our `smallest.bin` program onto the Longan Nano.
-Conversely, "uploading" firmware with DFU means reading all of the data on the device's flash storage and saving it a file on your local system.
-
-To program our device, we will be using a program called [dfu-util](git://git.code.sf.net/p/dfu-util/dfu-util).
-Even though this program is available through the `apt` package system, we need to manually build a newer version that includes fixes for [multiple](https://sourceforge.net/p/dfu-util/dfu-util/ci/529fa5147613218c75dfa441c64df9b28910fe1c/) [bugs](https://sourceforge.net/p/dfu-util/dfu-util/ci/f2b7d4b1113ef6c3ada31a0654c9aefebcdb1de5/) in the GD32VF103 CPU's implementation of DFU.
-
-Before building dfu-util, we need to install its dependencies.
-```
-sudo apt install autoconf build-essential git libusb-1.0-0-dev pkg-config
-```
-
-Now we can clone the source code, build the program, and install it.
-The following steps include deleting the source code directory because we won't need it once dfu-util is installed.
-```
-git clone git://git.code.sf.net/p/dfu-util/dfu-util
-cd dfu-util
-./autogen.sh
-./configure
-make
-sudo make install
-cd ..
-rm -r dfu-util/
-```
-
-To verify that the install was successful, try out the command:
-```
-dfu-util --version
-```
-
-# Identifying the device
-The ability to interact with most USB devices on Linux systems is restricted to the root user.
-However, the [udev](https://en.wikipedia.org/wiki/Udev) device manager exists to enable more granular access to specific devices for non-root users.
-In our case, we want to be able to perform read and write operations on the Longan Nano.
-
-Udev looks for special "rules" files in multiple system directories.
-The one we care about is `/etc/udev/rules.d/`.
-These rules files contain lines of key-value pairs that can be used to filter specific devices and change the permissions associated with them.
-To identity a specific USB device, we need to know two pieces of information: its vendor ID and its product ID.
-Every unique USB device can be identified by this pair of IDs.
-Once we know them, we can setup a rule that effectively says: "if you see the Longan Nano, allow non-root users to interact with it".
-
-What would be a good way to find these IDs?
-Since some basic USB device information _is_ available to non-root users by default, we can use a USB listing utility such as `lsusb`.
-Let's plug in the Longan Nano and see what we can see!
-After connecting a USB-C cable from your system to the device, try running `lsusb` and looking for something related to GigaDevice or DFU.
-
-```
-~/device_ownership$ lsusb
-Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 002 Device 002: ID 0bda:0316 Realtek Semiconductor Corp. USB3.0-CRW
-Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 001 Device 003: ID 13d3:56a6 IMC Networks Integrated Camera
-Bus 001 Device 002: ID 8087:0a2b Intel Corp. 
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-```
-
-Unfortunately, nothing obvious shows up!
-This is actually expected and is related to how DFU works.
-See, when in DFU mode, a USB device acts like (and looks like) something completely different.
-By default, the Longan Nano does NOT enter DFU mode.
-Instead, it simply runs whatever program is currently loaded on its flash storage which may or may not involve interacting with the host sytem over USB.
-Unless explicitly programmed to do so, the Longan Nano won't even appear in the output of programs like `lsusb`.
-In order to "see" the device so that we can reprogram it, we need to somehow force it into DFU mode when it powers on.
+Thankfully, the Bronzebeard project includes a minimal DFU uploader!
+Consult the [setup instructions](https://github.com/theandrew168/bronzebeard#setup) in Bronzebeard's README for details on how to setup the proper USB tools.
 
 Different DFU-capcable chips have different ways of entering DFU mode.
 In the case of the Longan Nano, the magic lies within its two buttons: RESET and BOOT.
@@ -195,87 +121,14 @@ In short: press BOOT, press RESET, release RESET, release BOOT.
 
 **Take note of this BOOT / RESET process! It will be used everytime we to download a new program to the device!**
 
-Now that the Longan Nano is in DFU mode, it should be visible to us via the `lsusb` command.
-Let's try it again:
-
-```
-~/device_ownership$ lsusb
-Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 002 Device 002: ID 0bda:0316 Realtek Semiconductor Corp. USB3.0-CRW
-Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 001 Device 003: ID 13d3:56a6 IMC Networks Integrated Camera
-Bus 001 Device 002: ID 8087:0a2b Intel Corp. 
-Bus 001 Device 004: ID 28e9:0189 GDMicroelectronics GD32 0x418 DFU Bootloade
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-```
-
-There it is!
-The device with the description `GDMicroelectronics GD32 0x418 DFU Bootloade` is definitely the Longan Nano.
-The multiple instances of "GD" are short for "GigaDevice", the CPU's manufacturer.
-To further increase our confidence, we can see most of the phrase `DFU Bootloader` in the device's description.
-Now that we know which line corresponds to the Longan Nano, we can find the two IDs we are after in the string `ID 28e9:0189`.
-The two IDs are separated by a colon.
-The first one is the vendor ID and the second is the product ID.
-For the Longan Nano device, its vendor ID is `23e9` and its product ID is `0189`.
-
-# Accessing the device
-With all of that digging out of the way, we can finally write the udev rule that we need to allow us to interact with the device.
-The syntax used by udev rules is fairly straighforward.
-Each comma-separated, key-value pair is either a filter (denoted by a comparison operator such as `==`) or an assignment (denoted by the assignment operator `=`).
-In pseudo-code, this is what we want our udev rule to say.
-```
-if device.vendor_id == "28e9" and device.product_id == "0189":
-    device.mode = "0666"  # this means "everyone can read and write"
-```
-
-In [udev syntax](https://linux.die.net/man/7/udev), our rule looks like this:
-```
-ATTRS{idVendor}=="28e9", ATTRS{idProduct}=="0189", MODE="0666"
-```
-
-As mentioned earlier, udev rules are added by means of special rules files.
-We will name our file at `99-longan-nano.rules` and place it under `/etc/udev/rules.d/`.
-Below is a command to create the rules file with the single rule that we need and reload udev.
-```
-cat <<EOF | sudo tee /etc/udev/rules.d/99-longan-nano.rules
-ATTRS{idVendor}=="28e9", ATTRS{idProduct}=="0189", MODE="0666"
-EOF
-```
-
-We then need to reload udev in order to pickup the new rule.
-```
-sudo udevadm control --reload
-```
-
-That should do it!
-The last step now is to unplug and reinsert the USB cable from your host machine.
-Udev applies its rules as devices are detected so a re-plug is necessary to pickup the new permissions.
-
-With all the correct permissions in place and the device in DFU mode, we should be able to see something using dfu-util.
-```
-~/device_ownership$ dfu-util --list
-Found DFU: [28e9:0189] ver=1000, devnum=7, cfg=1, intf=0, path="1-2", alt=1, name="@Option Bytes  /0x1FFFF800/01*016 g", serial="3CBJ"
-Found DFU: [28e9:0189] ver=1000, devnum=7, cfg=1, intf=0, path="1-2", alt=0, name="@Internal Flash  /0x08000000/512*002Kg", serial="3CBJ"
-```
-
-Very cool!
-This output actually shows two DFU alternatives: one for "Option Bytes" and one for "Internal Flash".
-Since the GD32VF103 CPU executes code from it's internal flash storage, that second option is what we're after.
-To be more specific, once the CPU is initialized, it starts executing code from address 0x08000000 in its flash.
-
 # Programming the device
-We now have all the information we need to download our `smallest.bin` program on the device.
-Remember from above that dfu-util shows us two alternative settings for upgrading firmware.
-Since we want to program the chip's internal flash, we will need to specify the correct "alt" identifier (which is 0 in this case).
-Lastly, we need to specify the "range" of the Longan Nano's flash storage: where it begins in memory and how large it is.
-We know that it starts at address 0x08000000 and is 128 kilobytes in size.
-Converting this size to bytes gives us 131072 bytes.
-In hexadecimal, this number is represented as 0x20000.
+We now have all the information we need to upload our `smallest.bin` program to the device.
+One thing that the DFU uploader needs is the USB identifier for the device.
+If you are on a Linux or macOS system, the command `lsusb` can be helpful for finding this info.
 
-Putting everything together in a way that dfu-util understands yields the following command.
+In our case, we are programming the Longan Nano so the device ID is already known:
 ```
-dfu-util --download smallest.bin --alt 0 --dfuse-address 0x08000000:0x20000
+python3 -m bronzebeard.dfu 28e9:0189 smallest.bin
 ```
 
 To take the Longan Nano out of DFU mode and back to normal, simply press the RESET button.
@@ -285,10 +138,9 @@ This program won't do anything.
 Nothing will light up, nothing will flash, nothing will beep.
 Do not discredit this achievement, though!
 
-# All that work for nothing?!
+# All that work for nothing?
 Who knew that doing absolutely nothing could be so much work?
 Most of what we covered wasn't even related to RISC-V or the code: it was just setup work and preparation.
 Don't let that worry you, though.
-Almost all of the explanations in this post (DFU mode, udev rules, using dfu-util) won't have to be covered again.
-
-Thanks for sticking around to the end!
+Executing bare-metal code like this is the first step in achieving great things.
+For some next steps, try turning on some LEDs, reading an SD card, or even controlling the builtin LCD!
