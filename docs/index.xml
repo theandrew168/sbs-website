@@ -96,16 +96,7 @@ The Longan Nano comes with the following components:
       
       <guid>https://shallowbrooksoftware.com/about/</guid>
       <description>Welcome to Shallow Brook Software!
-My name is Andrew Dailey and I&amp;rsquo;m an independent programmer from Des Moines, Iowa. I have a Bachelor of Science degree in Software Engineering from Iowa State University. I have multiple years of industry experience working a variety of positions including Linux system administration, Python-based ETL, and medium-scale cluster automation. Software development is one of my primary hobbies and I tend to specialize in backend / systems programming.</description>
-    </item>
-    
-    <item>
-      <title>Projects</title>
-      <link>https://shallowbrooksoftware.com/projects/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>https://shallowbrooksoftware.com/projects/</guid>
-      <description>Bronzebeard (source, example) Bronzebeard is a collection of tools for writing RISC-V assembly and working with hobbyist development devices. It is designed for programs that will run on bare metal with no reliance on an operating systems, frameworks, SDKs, or existing software of any kind. A simple, standalone assembler is the centerpiece. It has been written in order to be free from large, complex toolchains. This keeps the project portable, minimal, and easy to understand.</description>
+My name is Andrew Dailey and I&amp;rsquo;m an independent programmer from Des Moines, Iowa. I have a Bachelor of Science degree in Software Engineering from Iowa State University. I have multiple years of industry experience working a variety of positions including Linux system administration, Python-based ETL, and large-scale cluster automation. Software development is one of my primary hobbies and I tend to specialize in backend / systems programming.</description>
     </item>
     
   </channel>

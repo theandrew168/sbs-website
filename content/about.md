@@ -5,15 +5,17 @@ Welcome to **Shallow Brook Software**!
 
 My name is Andrew Dailey and I'm an independent programmer from Des Moines, Iowa.
 I have a Bachelor of Science degree in Software Engineering from Iowa State University.
-I have multiple years of industry experience working a variety of positions including Linux system administration, Python-based ETL, and medium-scale cluster automation.
+I have multiple years of industry experience working a variety of positions including Linux system administration, Python-based ETL, and large-scale cluster automation.
 Software development is one of my primary hobbies and I tend to specialize in backend / systems programming.
 
-I am proficient in Python, C, and Go and am interested in exploring Rust.
-I've created and deployed multiple full-stack web applications such as [JamQL](https://jamql.com) and [Bloggulus](https://bloggulus.com).
+I am proficient in the Python, C, and Go programming languages.
+I've created and deployed multiple full-stack web applications ([Bloggulus](https://bloggulus.com) is a recent example).
 Simplicity and maintainability are my highest priorities when designing any piece of software.
 My goal is to deliver solutions that perfectly fit the size and scope of the problems they solve: nothing more and nothing less!
 I'm not the type to pitch an over-engineered bundle of technical debt when all you need is a few scripts.
+
 [Digital Ocean](https://www.digitalocean.com/) is currently my hosting platform of choice thanks to its clean interface and fair pricing.
+I've also played with [Linode](https://www.linode.com/) and think that it is another great provider.
 
 Additionally, I have a large amount of experience automating tasks with [Ansible](https://docs.ansible.com/ansible/latest/index.html).
 From initializing and setting up new servers to to installing, configuring, and maintaining clustered applications, I've used Ansible to solve a wide breadth of problems.
@@ -29,6 +31,3 @@ I do believe that the steadily increasing complexity of software systems is a re
 
 I dislike complexity and always strive to implement the simplest possible solutions to the problems I encounter.
 I admire the [Unix philosophy](https://en.wikipedia.org/wiki/Unix_philosophy) of designing minimal, modular software.
-Coincidentally, I've come to associate simple, minimal websites to focused, powerful, and refined software.
-My two primary examples of this are [zlib](https://www.zlib.net/) and [libpng](http://www.libpng.org/pub/png/).
-It's a bit of a weak connection but I appreciate it nonetheless.
