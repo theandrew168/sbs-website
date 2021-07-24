@@ -20,4 +20,4 @@ server:
 
 .PHONY: clean
 clean:
-	rm -fr dist/ resources/
+	rm -fr dist/ public/ resources/

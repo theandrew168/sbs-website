@@ -1,5 +1,6 @@
 # Hugo output dirs
 dist/
+public/
 resources/
 
 sbs
