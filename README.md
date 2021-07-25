@@ -2,7 +2,7 @@
 Shallow Brook Software's main website
 
 ## Running
-Assuming that [Hugo](https://gohugo.io/) is installed, simply run:
+Assuming a recent version of Go is [installed](https://golang.org/dl/), simply run:
 ```
-hugo server -D
+go run main.go
 ```
