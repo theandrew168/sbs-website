@@ -1,7 +1,7 @@
 .POSIX:
 .SUFFIXES:
 
-default: dist
+default: build
 
 .PHONY: build
 build:
@@ -12,12 +12,9 @@ dist: build
 	rm -fr dist/
 	mkdir dist/
 	cp sbs dist/
-	hugo -d dist/
-
-.PHONY: server
-server:
-	hugo server -D
+	cp -r static dist/
+	cp -r templates dist/
 
 .PHONY: clean
 clean:
-	rm -fr dist/ public/ resources/
+	rm -fr sbs dist/
