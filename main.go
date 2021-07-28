@@ -24,6 +24,25 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+func HandleContact(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+		http.Error(w, err.Error(), 500)
+		return
+	}
+
+	// TODO: notify myself somehow
+	email := r.PostFormValue("email")
+	if email != "" {
+		log.Printf("contact email: %s\n", email)
+	}
+
+	// TODO: flash some sort of "we'll be in touch" message
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+	return
+}
+
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -33,6 +52,7 @@ func main() {
 
 	router := httprouter.New()
 	router.HandlerFunc("GET", "/", HandleIndex)
+	router.HandlerFunc("POST", "/contact", HandleContact)
 	router.ServeFiles("/static/*filepath", http.Dir("./static"))
 
 	log.Printf("Listening on %s\n", addr)

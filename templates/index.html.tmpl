@@ -17,7 +17,172 @@
 </head>
 
 <body class="font-family-karla">
-	Welcome to Shallow Brook Software!
+
+	<!-- header -->
+	<header>
+		<nav class="container mx-auto px-8 py-4 flex items-center mt-8 lg:mt-12">
+			<a class="text-xl hover:text-gray-500" href="/">Shallow Brook Software</a>
+		</nav>
+	</header>
+
+	<!-- hero -->
+	<section>
+		<div class="container mx-auto px-8 flex flex-col-reverse lg:flex-row items-center gap-12 mt-8 lg:mt-16">
+
+			<!-- content -->
+			<div class="flex flex-1 flex-col items-center lg:items-start">
+				<h2 class="text-3xl md:text-4xl lg:text-5xl text-center lg:text-left mb-6">
+					Welcome to Shallow Brook Software
+				</h2>
+				<p class="text-lg text-center lg:text-left mb-6">
+					A small, independent software development business located in Des Moines, Iowa.
+				</p>
+			</div>
+
+			<!-- image -->
+			<div class="flex flex-1 justify-center mb-10 md:mb-16 lg:mb-0 z-10">
+				<img
+					class="w-5/6 h-5/6 sm:w-3/4 sm:h-3/4 lg:w-full lg:h-full"
+					src="/static/img/work_time.png"
+					alt=""
+				/>
+			</div>
+		</div>
+	</section>
+
+	<!-- services -->
+	<section class="bg-gray-50 py-20 mt-20 lg:mt-48">
+
+		<!-- heading -->
+		<div class="sm:w-3/4 mx-auto px-4">
+			<h1 class="text-3xl text-center">Services</h1>
+			<p class="text-center mt-4">
+				Our business focuses on backend automation, development, and maintenance.
+				We embrace simple and modern solutions for each and every problem we solve.
+			</p>
+		</div>
+
+		<!-- web hosting -->
+		<div class="px-4 mt-24 lg:mt-44">
+			<div class="container mx-auto px-8 flex flex-col lg:flex-row items-center justify-center gap-x-24">
+				<!-- image -->
+				<div class="flex flex-1 justify-center z-10 mb-10 lg:mb-0">
+					<img
+						class="w-5/6 h-5/6 sm:w-3/4 sm:h-3/4 lg:w-full lg:h-full"
+						src="/static/img/website_designer.png"
+						alt=""
+					/>
+				</div>
+				<!-- content -->
+				<div class="flex flex-1 flex-col items-center lg:items-start">
+					<h1 class="text-3xl">Web Hosting</h1>
+					<p class="my-4 text-center lg:text-left sm:w-3/4 lg:w-full">
+						Specialized web hosting backed by reliable, cloud-based providers.
+						Experience managing GoDaddy, SquareSpace, Wix, and WordPress websites.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- devops and automation -->
+		<div class="px-4 mt-20 lg:mt-36">
+			<div class="container mx-auto px-8 flex flex-col lg:flex-row-reverse items-center justify-center gap-x-24">
+				<!-- image -->
+				<div class="flex flex-1 justify-center z-10 mb-10 lg:mb-0">
+					<img
+						class="w-5/6 h-5/6 sm:w-3/4 sm:h-3/4 lg:w-full lg:h-full"
+						src="/static/img/deconstructed_robot.png"
+						alt=""
+					/>
+				</div>
+				<!-- content -->
+				<div class="flex flex-1 flex-col items-center lg:items-start">
+					<h1 class="text-3xl">DevOps and Automation</h1>
+					<p class="my-4 text-center lg:text-left sm:w-3/4 lg:w-full">
+						Programmatic system administration using popular open-source tools such as Ansible and Terraform.
+						Dedication to clean and idempotent automation design.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- database management -->
+		<div class="px-4 mt-20 lg:mt-36">
+			<div class="container mx-auto px-8 flex flex-col lg:flex-row items-center justify-center gap-x-24">
+				<!-- image -->
+				<div class="flex flex-1 justify-center z-10 mb-10 lg:mb-0">
+					<img
+						class="w-5/6 h-5/6 sm:w-3/4 sm:h-3/4 lg:w-full lg:h-full"
+						src="/static/img/server.png"
+						alt=""
+					/>
+				</div>
+				<!-- content -->
+				<div class="flex flex-1 flex-col items-center lg:items-start">
+					<h1 class="text-3xl">Database Management</h1>
+					<p class="my-4 text-center lg:text-left sm:w-3/4 lg:w-full">
+						Updates, migrations, and backups for popular databases such as PostgreSQL and MySQL.
+						Background in data modeling, performance tuning, and query optimization.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- monitoring and alerts -->
+		<div class="px-4 mt-20 lg:mt-36">
+			<div class="container mx-auto px-8 flex flex-col lg:flex-row-reverse items-center justify-center gap-x-24">
+				<!-- image -->
+				<div class="flex flex-1 justify-center z-10 mb-10 lg:mb-0">
+					<img
+						class="w-5/6 h-5/6 sm:w-3/4 sm:h-3/4 lg:w-full lg:h-full"
+						src="/static/img/broken_robot.png"
+						alt=""
+					/>
+				</div>
+				<!-- content -->
+				<div class="flex flex-1 flex-col items-center lg:items-start">
+					<h1 class="text-3xl">Monitoring and Alerts</h1>
+					<p class="my-4 text-center lg:text-left sm:w-3/4 lg:w-full">
+						Continuous, 24/7 uptime tracking with client-visible dashboards.
+						Real-time notifications based on degraded performance or loss of service.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- contact -->
+	<section class="bg-green-400 text-white py-20">
+		<div class="container mx-auto px-8">
+			<form method="POST" action="/contact" class="sm:w-3/4 lg:w-2/4 mx-auto">
+				<p class="text-center mb-8">Proudly solving tech problems in the midwest</p>
+				<h1 class="text-3xl text-center">Let us know how we can help!</h1>
+				<div class="flex flex-col sm:flex-row gap-6 mt-8">
+					<input
+						type="email"
+						id="email"
+						name="email"
+						placeholder="Enter your mail address"
+						class="focus:outline-none flex-1 px-2 py-3 rounded-md text-black"
+					/>
+					<button
+						type="submit"
+						class="shadow-md py-3 px-6 rounded-md transition duration-300 bg-indigo-600 hover:bg-indigo-800"
+					>
+						Contact Us
+					</button>
+				</div>
+			</form>
+		</div>
+	</section>
+
+	<!-- footer -->
+	<footer>
+		<div class="container mx-auto px-8 py-8 flex items-center justify-between">
+			<a class="hover:text-gray-500" href="/">Shallow Brook Software</a>
+			<a class="hover:text-gray-500" href="https://storyset.com/internet">Internet illustrations by Storyset</a>
+		</div>
+	</footer>
 </body>
 
 </html>
