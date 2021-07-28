@@ -1,9 +1,5 @@
-# Hugo output dirs
-dist/
-public/
-resources/
-
 sbs
+sendgrid.env
 
 # Binaries for programs and plugins
 *.exe
