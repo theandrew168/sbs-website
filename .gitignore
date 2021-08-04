@@ -1,4 +1,6 @@
 sbs
+dist/
+posts/
 
 # Binaries for programs and plugins
 *.exe

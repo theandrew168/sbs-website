@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Shallow Brook Software - Blog Posts</title>
+
+	<meta charset="utf-8" />
+	<meta name="description" content="Independent software development in Des Moines, Iowa" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<link rel="stylesheet" href="/static/css/tailwind.min.css" />
+	<script src="/static/js/alpine.min.js" defer></script>
+	<style>
+		@import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
+		.font-family-karla { font-family: karla; }
+	</style>
+</head>
+
+<body class="font-family-karla">
+
+	<!-- header -->
+	<header>
+		<nav class="container mx-auto px-8 py-4 flex items-center mt-8 lg:mt-12">
+			<a class="text-xl hover:text-gray-500" href="/">Shallow Brook Software</a>
+		</nav>
+	</header>
+
+	<!-- posts -->
+	<section>
+		<div class="container mx-auto px-8 mt-8 lg:mt-16">
+			{{range .}}
+			<div class="py-4">
+				<a class="hover:text-gray-500" href="/posts/{{.Name}}">{{.Name}}</a>
+			</div>
+			{{end}}
+		</div>
+	</section>
+
+	<!-- footer -->
+	<footer>
+		<div class="container mx-auto px-8 py-8 flex items-center justify-between">
+			<a class="hover:text-gray-500" href="/">Shallow Brook Software</a>
+			<a class="hover:text-gray-500" href="https://storyset.com/internet">Internet illustrations by Storyset</a>
+		</div>
+	</footer>
+</body>
+
+</html>

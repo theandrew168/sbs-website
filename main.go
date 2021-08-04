@@ -84,6 +84,7 @@ func main() {
 	router := httprouter.New()
 	router.HandlerFunc("GET", "/", app.HandleIndex)
 	router.HandlerFunc("POST", "/contact", app.HandleContact)
+	router.ServeFiles("/posts/*filepath", http.Dir("./posts"))
 	router.ServeFiles("/static/*filepath", http.Dir("./static"))
 
 	log.Printf("Listening on %s\n", addr)
