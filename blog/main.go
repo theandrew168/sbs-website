@@ -11,15 +11,15 @@ import (
 	"time"
 
 	"github.com/yuin/goldmark"
-	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark-meta"
+	"github.com/yuin/goldmark/parser"
 )
 
 type Post struct {
-	Date time.Time
+	Date  time.Time
 	Title string
-	Slug string
-	Tags []string
+	Slug  string
+	Tags  []string
 }
 
 func main() {
@@ -89,10 +89,10 @@ func main() {
 
 		// save the post metadata for rendering and the index
 		post := Post{
-			Date: date,
+			Date:  date,
 			Title: title,
-			Slug: slug,
-			Tags: tags,
+			Slug:  slug,
+			Tags:  tags,
 		}
 
 		name := strings.TrimSuffix(file.Name(), ext)
