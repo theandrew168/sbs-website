@@ -7,6 +7,7 @@ require (
 	github.com/sendgrid/rest v2.6.4+incompatible // indirect
 	github.com/sendgrid/sendgrid-go v3.10.0+incompatible
 	github.com/stretchr/testify v1.7.0 // indirect
-	github.com/yuin/goldmark v1.4.0 // indirect
+	github.com/yuin/goldmark v1.4.0
+	github.com/yuin/goldmark-meta v1.0.0
 	golang.org/x/net v0.0.0-20210726213435-c6fcb2dbf985 // indirect
 )

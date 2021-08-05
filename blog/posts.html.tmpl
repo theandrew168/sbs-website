@@ -30,7 +30,7 @@
 		<div class="container mx-auto px-8 mt-8 lg:mt-16">
 			{{range .}}
 			<div class="py-4">
-				<a class="hover:text-gray-500" href="/posts/{{.Name}}">{{.Name}}</a>
+				<a class="hover:text-gray-500" href="/posts/{{.Slug}}">{{.Date.Format "Jan 2, 2006"}} - {{.Title}}</a>
 			</div>
 			{{end}}
 		</div>
