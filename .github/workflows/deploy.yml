@@ -25,7 +25,7 @@ jobs:
     # intentionally absent from the Makefile due to destructive behavior
     - name: Strip unused CSS
       run: |
-        purgecss -c scripts/purgecss.config.js -con templates/* -css static/css/* -o static/css/
+        purgecss -c scripts/purgecss.config.js -con templates/*.tmpl -con posts/*.html -con posts/**/*.html -css static/css/* -o static/css/
     - name: Build project
       run: |
         make dist
@@ -38,11 +38,11 @@ jobs:
         source: dist/*
         strip_components: 1
         target: /home/${{ secrets.SBS_SSH_USER }}/
-    - name: Restart service
+    - name: Restart web service
       uses: appleboy/ssh-action@master
       with:
         host: ${{ secrets.SBS_HOSTNAME }}
         username: ${{ secrets.SBS_SSH_USER }}
         key: ${{ secrets.SBS_SSH_KEY }}
         script: |
-          sudo systemctl restart sbs
+          sudo systemctl restart sbs-web

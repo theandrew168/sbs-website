@@ -3,11 +3,11 @@ package main
 import (
 	"bytes"
 	"flag"
-	"html/template"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
+	"text/template"
 	"time"
 
 	"github.com/yuin/goldmark"
@@ -16,10 +16,11 @@ import (
 )
 
 type Post struct {
-	Date  time.Time
-	Title string
-	Slug  string
-	Tags  []string
+	Date    time.Time
+	Title   string
+	Slug    string
+	Tags    []string
+	Content string
 }
 
 func main() {
@@ -71,6 +72,8 @@ func main() {
 			log.Fatal(err)
 		}
 
+		content := buf.String()
+
 		// grab metadata
 		metaData := meta.Get(context)
 
@@ -93,6 +96,7 @@ func main() {
 			Title: title,
 			Slug:  slug,
 			Tags:  tags,
+			Content: content,
 		}
 
 		name := strings.TrimSuffix(file.Name(), ext)

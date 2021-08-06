@@ -118,7 +118,7 @@ Additionally, the explicit expression of interdependencies between modules allow
 
 Here is a nice graph of Skylark's build hierarchy:
 
-{{<figure src="/images/skylark-graph.png" alt="Skylark Build Graph">}}
+![Skylark build graph](/static/img/skylark-graph.png)
 
 ### Summary
 That wraps the Makefile revamp!
