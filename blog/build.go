@@ -3,6 +3,7 @@ package main
 import (
 	"bytes"
 	"flag"
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -11,9 +12,92 @@ import (
 	"time"
 
 	"github.com/yuin/goldmark"
+	"github.com/yuin/goldmark-highlighting"
 	"github.com/yuin/goldmark-meta"
+	"github.com/yuin/goldmark/ast"
+	"github.com/yuin/goldmark/extension"
 	"github.com/yuin/goldmark/parser"
+	"github.com/yuin/goldmark/renderer"
+	"github.com/yuin/goldmark/renderer/html"
+	"github.com/yuin/goldmark/util"
 )
+
+// References for custom HTML rendering:
+// https://github.com/yuin/goldmark-highlighting
+// https://github.com/yuin/goldmark-highlighting/blob/master/highlighting.go
+
+// Config struct holds options for the extension.
+type Config struct {
+	html.Config
+}
+
+// NewConfig returns a new Config with defaults.
+func NewConfig() Config {
+	return Config{
+		Config: html.NewConfig(),
+	}
+}
+
+// Option interface is a functional option interface for the extension.
+type Option struct {
+	renderer.Option
+}
+
+// HTMLRenderer struct is a renderer.NodeRenderer implementation for the extension.
+type HTMLRenderer struct {
+	Config
+}
+
+// NewHTMLRenderer builds a new HTMLRenderer with given options and returns it.
+func NewHTMLRenderer(opts ...Option) renderer.NodeRenderer {
+	r := HTMLRenderer{
+		Config: NewConfig(),
+	}
+	return &r
+}
+
+// RegisterFuncs implements NodeRenderer.RegisterFuncs.
+func (r *HTMLRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
+	reg.Register(ast.KindImage, r.renderImage)
+}
+
+func (r *HTMLRenderer) renderImage(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
+	if !entering {
+		return ast.WalkContinue, nil
+	}
+
+	n := node.(*ast.Image)
+	src := util.EscapeHTML(util.URLEscape(n.Destination, true))
+	alt := util.EscapeHTML(n.Text(source))
+
+	element := `<img class="todo-custom-class" src="%s" alt="%s" />`
+	w.WriteString(fmt.Sprintf(element, src, alt))
+	return ast.WalkContinue, nil
+}
+
+type sbs struct {
+	options []Option
+}
+
+// SBS is a goldmark.Extender implementation.
+var SBS = &sbs{
+	options: []Option{},
+}
+
+// NewSBS returns a new extension with given options.
+func NewSBS(opts ...Option) goldmark.Extender {
+	e := sbs{
+		options: opts,
+	}
+	return &e
+}
+
+// Extend implements goldmark.Extender.
+func (e *sbs) Extend(m goldmark.Markdown) {
+	m.Renderer().AddOptions(renderer.WithNodeRenderers(
+		util.Prioritized(NewHTMLRenderer(e.options...), 200),
+	))
+}
 
 type Post struct {
 	Date    time.Time
@@ -37,7 +121,13 @@ func main() {
 	// setup markdown parser
 	markdown := goldmark.New(
 		goldmark.WithExtensions(
+			extension.Table,
+			highlighting.Highlighting,
 			meta.Meta,
+			SBS,
+		),
+		goldmark.WithRendererOptions(
+			html.WithXHTML(),
 		),
 	)
 
@@ -92,10 +182,10 @@ func main() {
 
 		// save the post metadata for rendering and the index
 		post := Post{
-			Date:  date,
-			Title: title,
-			Slug:  slug,
-			Tags:  tags,
+			Date:    date,
+			Title:   title,
+			Slug:    slug,
+			Tags:    tags,
 			Content: content,
 		}
 
