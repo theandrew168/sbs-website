@@ -10,6 +10,6 @@ Internet illustrations come from [Storyset](https://storyset.com/internet).
 ## Running
 Assuming a recent version of Go is [installed](https://golang.org/dl/), simply run:
 ```
-go run blog/build.go
+go run scripts/blogify.go
 go run cmd/web/main.go
 ```

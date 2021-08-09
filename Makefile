@@ -5,7 +5,7 @@ default: build
 
 .PHONY: build
 build:
-	go run blog/build.go
+	go run scripts/blogify.go
 	go build -o sbs-web cmd/web/main.go
 
 .PHONY: dist

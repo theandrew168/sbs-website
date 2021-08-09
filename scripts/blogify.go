@@ -112,7 +112,7 @@ func main() {
 	destdir := flag.String("destdir", "posts/", "blog html output dir")
 
 	// read in the post template
-	postTmpl := filepath.Join(*srcdir, "post.html.tmpl")
+	postTmpl := filepath.Join(*srcdir, "templates", "post.html.tmpl")
 	ts, err := template.ParseFiles(postTmpl)
 	if err != nil {
 		log.Fatal(err)
@@ -217,7 +217,7 @@ func main() {
 	}
 
 	// read in the posts template
-	postsTmpl := filepath.Join(*srcdir, "posts.html.tmpl")
+	postsTmpl := filepath.Join(*srcdir, "templates", "posts.html.tmpl")
 	ts, err = template.ParseFiles(postsTmpl)
 	if err != nil {
 		log.Fatal(err)
