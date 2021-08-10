@@ -119,9 +119,7 @@ func (r *HTMLRenderer) renderImage(w util.BufWriter, source []byte, node ast.Nod
 	n := node.(*ast.Image)
 	src := util.EscapeHTML(util.URLEscape(n.Destination, true))
 	alt := util.EscapeHTML(n.Text(source))
-	style := []string{
-		"todo-custom-class",
-	}
+	style := []string{}
 
 	element := `<img class="%s" src="%s" alt="%s" />`
 	fmt.Fprintf(w, element, strings.Join(style, " "), src, alt)
