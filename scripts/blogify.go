@@ -7,6 +7,8 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"sort"
+	"strconv"
 	"strings"
 	"text/template"
 	"time"
@@ -58,7 +60,55 @@ func NewHTMLRenderer(opts ...Option) renderer.NodeRenderer {
 
 // RegisterFuncs implements NodeRenderer.RegisterFuncs.
 func (r *HTMLRenderer) RegisterFuncs(reg renderer.NodeRendererFuncRegisterer) {
+	reg.Register(ast.KindHeading, r.renderHeading)
+	reg.Register(ast.KindParagraph, r.renderParagraph)
 	reg.Register(ast.KindImage, r.renderImage)
+	reg.Register(ast.KindLink, r.renderLink)
+}
+
+func (r *HTMLRenderer) renderHeading(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
+	n := node.(*ast.Heading)
+	tag := "h" + strconv.Itoa(n.Level)
+	sizes := map[int]string{
+		0: "text-3xl",
+		1: "text-2xl",
+		2: "text-xl",
+		3: "text-xl",
+		4: "text-xl",
+		5: "text-xl",
+		6: "text-xl",
+	}
+
+	style := []string{
+		"mb-6 mt-12",
+	}
+	style = append(style, sizes[n.Level])
+
+	if entering {
+		element := `<%s class="%s">`
+		fmt.Fprintf(w, element, tag, strings.Join(style, " "))
+	} else {
+		element := "</%s>\n"
+		fmt.Fprintf(w, element, tag)
+	}
+
+	return ast.WalkContinue, nil
+}
+
+func (r *HTMLRenderer) renderParagraph(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
+	style := []string{
+		"my-4",
+	}
+
+	if entering {
+		element := `<p class="%s">`
+		fmt.Fprintf(w, element, strings.Join(style, " "))
+	} else {
+		element := "</p>\n"
+		fmt.Fprintf(w, element)
+	}
+
+	return ast.WalkContinue, nil
 }
 
 func (r *HTMLRenderer) renderImage(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
@@ -69,9 +119,30 @@ func (r *HTMLRenderer) renderImage(w util.BufWriter, source []byte, node ast.Nod
 	n := node.(*ast.Image)
 	src := util.EscapeHTML(util.URLEscape(n.Destination, true))
 	alt := util.EscapeHTML(n.Text(source))
+	style := []string{
+		"todo-custom-class",
+	}
 
-	element := `<img class="todo-custom-class" src="%s" alt="%s" />`
-	w.WriteString(fmt.Sprintf(element, src, alt))
+	element := `<img class="%s" src="%s" alt="%s" />`
+	fmt.Fprintf(w, element, strings.Join(style, " "), src, alt)
+	return ast.WalkContinue, nil
+}
+
+func (r *HTMLRenderer) renderLink(w util.BufWriter, source []byte, node ast.Node, entering bool) (ast.WalkStatus, error) {
+	n := node.(*ast.Link)
+	href := util.EscapeHTML(util.URLEscape(n.Destination, true))
+	style := []string{
+		"text-green-500 hover:text-green-600",
+	}
+
+	if entering {
+		element := `<a class="%s" href="%s">`
+		fmt.Fprintf(w, element, strings.Join(style, " "), href)
+	} else {
+		element := "</a>\n"
+		fmt.Fprintf(w, element)
+	}
+
 	return ast.WalkContinue, nil
 }
 
@@ -215,6 +286,11 @@ func main() {
 		// record the post for later
 		posts = append(posts, post)
 	}
+
+	// sort posts in reverse chronological order
+	sort.Slice(posts, func(i, j int) bool {
+		return posts[i].Date.After(posts[j].Date)
+	})
 
 	// read in the posts template
 	postsTmpl := filepath.Join(*srcdir, "templates", "posts.html.tmpl")
