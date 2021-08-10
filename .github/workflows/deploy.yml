@@ -22,6 +22,9 @@ jobs:
     - name: Install PurgeCSS
       run: |
         npm install -g purgecss
+    - name: Build blog
+      run: |
+        make blog
     # intentionally absent from the Makefile due to destructive behavior
     # can't use the blog templates since some style comes from blogify.go
     - name: Strip unused CSS

@@ -3,9 +3,12 @@
 
 default: build
 
-.PHONY: build
-build:
+.PHONY: blog
+blog:
 	go run scripts/blogify.go
+
+.PHONY: 
+build: blog
 	go build -o sbs-web cmd/web/main.go
 
 .PHONY: dist
