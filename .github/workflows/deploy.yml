@@ -23,6 +23,7 @@ jobs:
       run: |
         npm install -g purgecss
     # intentionally absent from the Makefile due to destructive behavior
+    # can't use the blog templates since some style comes from blogify.go
     - name: Strip unused CSS
       run: |
         purgecss -c scripts/purgecss.config.js -con templates/*.tmpl -con posts/*.html -con posts/**/*.html -css static/css/* -o static/css/
