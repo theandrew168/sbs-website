@@ -137,7 +137,7 @@ func (r *HTMLRenderer) renderLink(w util.BufWriter, source []byte, node ast.Node
 		element := `<a class="%s" href="%s">`
 		fmt.Fprintf(w, element, strings.Join(style, " "), href)
 	} else {
-		element := "</a>\n"
+		element := "</a>"
 		fmt.Fprintf(w, element)
 	}
 
