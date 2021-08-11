@@ -130,7 +130,7 @@ func (r *HTMLRenderer) renderLink(w util.BufWriter, source []byte, node ast.Node
 	n := node.(*ast.Link)
 	href := util.EscapeHTML(util.URLEscape(n.Destination, true))
 	style := []string{
-		"text-green-500 hover:text-green-600",
+		"text-green-600 hover:text-green-700",
 	}
 
 	if entering {
