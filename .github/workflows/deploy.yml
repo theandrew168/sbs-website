@@ -28,8 +28,14 @@ jobs:
     # intentionally absent from the Makefile due to destructive behavior
     # can't use the blog templates since some style comes from blogify.go
     - name: Strip unused CSS
-      run: |
-        purgecss -c scripts/purgecss.config.js -con templates/*.tmpl -con posts/*.html -con posts/**/*.html -css static/css/* -o static/css/
+      run: >
+        purgecss
+        -c scripts/purgecss.config.js
+        -con templates/*.tmpl
+        -con posts/*.html
+        -con posts/**/*.html
+        -css static/css/*
+        -o static/css/
     - name: Build project
       run: |
         make dist
@@ -49,4 +55,4 @@ jobs:
         username: ${{ secrets.SBS_SSH_USER }}
         key: ${{ secrets.SBS_SSH_KEY }}
         script: |
-          sudo systemctl restart sbs-web
+          sudo systemctl restart sbs
