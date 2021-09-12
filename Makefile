@@ -9,7 +9,7 @@ blog:
 
 .PHONY: 
 build: blog
-	go build -o sbs cmd/web/main.go
+	go build -o sbs main.go
 
 .PHONY: dist
 dist: build
