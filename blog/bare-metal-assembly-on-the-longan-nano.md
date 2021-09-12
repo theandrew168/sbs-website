@@ -93,14 +93,14 @@ pip install bronzebeard
 Last but not least, we can write our simple program to a file and assemble it. 
 ```
 echo "addi zero, zero, 0" > smallest.asm
-python3 -m bronzebeard.asm smallest.asm smallest.bin
+bronzebeard smallest.asm
 ```
 
 Congratulations!
 You just wrote and assembled the world's smallest RISC-V program!
 
 # Preparing for DFU
-Without our assembled `smallest.bin` file in hand, the next step is to hook up our Longan Nano and upload the program to the chip's flash storage.
+Without our assembled `bb.out` file in hand, the next step is to hook up our Longan Nano and upload the program to the chip's flash storage.
 To accomplish this task, we must use the [Device Firmware Upgrade](https://en.wikipedia.org/wiki/USB#Device_Firmware_Upgrade) protocol.
 This protocol enables a very simple method for upgrading the firmware of devices connected to your system over USB.
 If you are curious about the details, the official specification for DFU can be found [here](https://www.usb.org/sites/default/files/DFU_1.1.pdf).
@@ -122,13 +122,13 @@ In short: press BOOT, press RESET, release RESET, release BOOT.
 **Take note of this BOOT / RESET process! It will be used everytime we to download a new program to the device!**
 
 # Programming the device
-We now have all the information we need to upload our `smallest.bin` program to the device.
+We now have all the information we need to upload our `bb.out` program to the device.
 One thing that the DFU uploader needs is the USB identifier for the device.
 If you are on a Linux or macOS system, the command `lsusb` can be helpful for finding this info.
 
 In our case, we are programming the Longan Nano so the device ID is already known:
 ```
-python3 -m bronzebeard.dfu 28e9:0189 smallest.bin
+bronzebeard-dfu 28e9:0189 bb.out
 ```
 
 To take the Longan Nano out of DFU mode and back to normal, simply press the RESET button.
