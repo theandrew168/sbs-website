@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-type logMailer struct {}
+type logMailer struct{}
 
 func NewLogMailer() *logMailer {
 	mailer := logMailer{}
