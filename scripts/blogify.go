@@ -13,6 +13,7 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/gorilla/feeds"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark-highlighting"
 	"github.com/yuin/goldmark-meta"
@@ -184,7 +185,7 @@ func main() {
 	postTmpl := filepath.Join(*srcdir, "templates", "post.html.tmpl")
 	ts, err := template.ParseFiles(postTmpl)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
 
 	// setup markdown parser
@@ -206,7 +207,7 @@ func main() {
 	// find source markdown files
 	files, err := os.ReadDir(*srcdir)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
 
 	// convert each markdown post to html
@@ -220,7 +221,7 @@ func main() {
 		infile := filepath.Join(*srcdir, file.Name())
 		source, err := os.ReadFile(infile)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalln(err)
 		}
 
 		// parse the markdown source
@@ -228,7 +229,7 @@ func main() {
 		context := parser.NewContext()
 		err = markdown.Convert([]byte(source), &buf, parser.WithContext(context))
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalln(err)
 		}
 
 		content := buf.String()
@@ -239,7 +240,7 @@ func main() {
 		// resolve metadata types
 		date, err := time.Parse("2006-01-02", metaData["date"].(string))
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalln(err)
 		}
 		title := metaData["title"].(string)
 		slug := metaData["slug"].(string)
@@ -264,21 +265,21 @@ func main() {
 		// create the output dir
 		err = os.MkdirAll(outdir, 0755)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalln(err)
 		}
 
 		// create the output html file
 		outfile := filepath.Join(outdir, "index.html")
 		f, err := os.Create(outfile)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalln(err)
 		}
 		defer f.Close()
 
 		// markdown content + html template = blog post!
 		err = ts.Execute(f, &post)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalln(err)
 		}
 
 		// record the post for later
@@ -294,19 +295,58 @@ func main() {
 	postsTmpl := filepath.Join(*srcdir, "templates", "posts.html.tmpl")
 	ts, err = template.ParseFiles(postsTmpl)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
 
 	// create the posts (ToC) html file
 	outfile := filepath.Join(*destdir, "index.html")
 	f, err := os.Create(outfile)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
 	}
+	defer f.Close()
 
 	// read and apply the posts template
 	err = ts.Execute(f, posts)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalln(err)
+	}
+
+	// generate RSS feed
+	feed := &feeds.Feed{
+		Title:   "Shallow Brook Software",
+		Link:    &feeds.Link{Href: "https://shallowbrooksoftware.com/posts/"},
+		Updated: posts[0].Date,
+		Author:  &feeds.Author{
+			Name:  "Andrew Dailey",
+			Email: "andrew@shallowbrooksoftware.com",
+		},
+	}
+
+	for _, post := range posts {
+		link := &feeds.Link{Href: feed.Link.Href + post.Slug}
+		item := &feeds.Item{
+			Title:   post.Title,
+			Link:    link,
+			Created: post.Date,
+		}
+		feed.Items = append(feed.Items, item)
+	}
+
+	atom, err := feed.ToAtom()
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	outfile = filepath.Join(*destdir, "atom.xml")
+	f, err = os.Create(outfile)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	defer f.Close()
+
+	_, err = f.WriteString(atom)
+	if err != nil {
+		log.Fatalln(err)
 	}
 }
