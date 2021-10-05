@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/julienschmidt/httprouter"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	"github.com/theandrew168/sbs-website/mail"
 )
@@ -84,6 +85,7 @@ func main() {
 	router := httprouter.New()
 	router.HandlerFunc("GET", "/", app.HandleIndex)
 	router.HandlerFunc("POST", "/contact", app.HandleContact)
+	router.Handler("GET", "/metrics", promhttp.Handler())
 	router.ServeFiles("/posts/*filepath", http.Dir("./posts"))
 	router.ServeFiles("/static/*filepath", http.Dir("./static"))
 
