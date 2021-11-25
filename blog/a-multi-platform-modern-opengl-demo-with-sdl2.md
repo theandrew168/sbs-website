@@ -26,7 +26,7 @@ This tradeoff is definitely worth it, though, given that the graphical needs of 
 # The Demo
 The demo itself is very minimal: a small window containing a rotating red square that exits upon hitting the `ESCAPE`, `Q`, or the close button in the corner.
 
-![SDL2 OpenGL Demo](/static/img/sdl2-opengl-demo.png)
+![SDL2 OpenGL Demo](/static/img/sdl2-opengl-demo.webp)
 
 The source can be found here:
 * https://github.com/theandrew168/sdl2-opengl-demo
