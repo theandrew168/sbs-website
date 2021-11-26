@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
 	"html/template"
 	"log"
@@ -12,6 +13,9 @@ import (
 
 	"github.com/theandrew168/sbs-website/mail"
 )
+
+//go:embed static/img/logo.webp
+var logo []byte
 
 type Application struct {
 	mailer mail.Mailer
@@ -88,6 +92,10 @@ func main() {
 	router.Handler("GET", "/metrics", promhttp.Handler())
 	router.ServeFiles("/posts/*filepath", http.Dir("./posts"))
 	router.ServeFiles("/static/*filepath", http.Dir("./static"))
+	router.HandlerFunc("GET", "/favicon.ico", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "image/webp")
+		w.Write(logo)
+	})
 
 	log.Printf("Listening on %s\n", addr)
 	log.Fatal(http.ListenAndServe(addr, router))
