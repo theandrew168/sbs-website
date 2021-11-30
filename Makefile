@@ -20,6 +20,10 @@ dist: build
 	cp -r static dist/
 	cp -r templates dist/
 
+.PHONY: test
+test:
+	go test -count=1 -v ./...
+
 .PHONY: clean
 clean:
 	rm -fr sbs dist/ posts/
