@@ -11,5 +11,5 @@ Internet Illustrations come from [Storyset](https://storyset.com/internet).
 Assuming a recent version of Go is [installed](https://golang.org/dl/), simply run:
 ```
 go run scripts/blogify.go
-go run cmd/web/main.go
+go run main.go
 ```

@@ -1,0 +1,16 @@
+[Unit]
+Description=sbs
+Documentation=https://github.com/theandrew168/sbs-website
+After=network.target network-online.target
+Requires=network-online.target
+
+[Service]
+Type=notify
+Restart=on-failure
+RestartSec=5
+User=sbs
+Group=sbs
+ExecStart=sbs -conf /etc/sbs.conf
+
+[Install]
+WantedBy=multi-user.target

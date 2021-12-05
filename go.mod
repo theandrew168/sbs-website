@@ -4,9 +4,11 @@ go 1.16
 
 require (
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
+	github.com/coreos/go-systemd v0.0.0-20191104093116-d3cd4ed1dbcf
+	github.com/go-chi/chi/v5 v5.0.7
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/gorilla/feeds v1.1.1
-	github.com/julienschmidt/httprouter v1.3.0
+	github.com/klauspost/compress v1.13.6
 	github.com/kr/pretty v0.3.0 // indirect
 	github.com/prometheus/client_golang v1.11.0
 	github.com/prometheus/common v0.32.1 // indirect

@@ -7,22 +7,13 @@ default: build
 blog:
 	go run scripts/blogify.go
 
-.PHONY: 
+.PHONY: build
 build: blog
-	go build -o sbs main.go
+	go build -o sbs .
 
-.PHONY: dist
-dist: build
-	rm -fr dist/
-	mkdir dist/
-	cp sbs dist/
-	cp -r posts dist/
-	cp -r static dist/
-	cp -r templates dist/
-
-.PHONY: test
-test:
-	go test -count=1 -v ./...
+.PHONY: run
+run: blog
+	go run .
 
 .PHONY: clean
 clean:

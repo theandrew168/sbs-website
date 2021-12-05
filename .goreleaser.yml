@@ -1,0 +1,52 @@
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - main: .
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+
+archives:
+  - files:
+      - none*
+    format_overrides:
+      - goos: windows
+        format: zip
+
+nfpms:
+  - package_name: sbs
+    homepage: https://github.com/theandrew168/sbs-website
+    maintainer: Andrew Dailey <andrew@shallowbrooksoftware.com>
+    description:  Shallow Brook Software's main website
+    license: MIT
+    formats:
+      - deb
+    bindir: /usr/bin
+    contents:
+      - src: scripts/sbs.service
+        dst: /lib/systemd/system/sbs.service
+      - src: sbs.conf
+        dst: /etc/sbs.conf
+        type: config
+    scripts:
+      postinstall: scripts/postinstall.sh
+      preremove: scripts/preremove.sh
+      postremove: scripts/postremove.sh
+
+checksum:
+  name_template: checksums.txt
+
+snapshot:
+  name_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
