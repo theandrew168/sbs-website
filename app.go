@@ -52,7 +52,7 @@ func (app *Application) Router() http.Handler {
 	r.MethodNotAllowed(app.methodNotAllowedResponse)
 
 	r.Get("/", app.HandleIndex)
-	r.Post("/content", app.HandleContact)
+	r.Post("/contact", app.HandleContact)
 
 	return r
 }
