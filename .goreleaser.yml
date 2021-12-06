@@ -4,6 +4,7 @@ before:
 
 builds:
   - main: .
+    binary: sbs
     env:
       - CGO_ENABLED=0
     goos:
