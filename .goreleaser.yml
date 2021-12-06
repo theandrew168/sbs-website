@@ -1,3 +1,5 @@
+project_name: sbs
+
 before:
   hooks:
     - go mod tidy
