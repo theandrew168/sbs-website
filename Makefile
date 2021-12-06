@@ -13,7 +13,7 @@ build: blog
 
 .PHONY: run
 run: blog
-	go run .
+	go run . -conf sbs.conf
 
 .PHONY: clean
 clean:
