@@ -28,23 +28,18 @@ var logo []byte
 
 func main() {
 	logger := log.New(os.Stdout, "", log.Lshortfile)
-//	conf := flag.String("conf", "/etc/sbs.conf", "app config file")
+
+	conf := flag.String("conf", "/etc/sbs.conf", "app config file")
 	flag.Parse()
 
-	// TODO: replace env var with conf file
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "5000"
+	cfg, err := ReadConfigFile(*conf)
+	if err != nil {
+		logger.Fatalln(err)
 	}
 
-	// use SendGridMailer in prod else default to LogMailer
 	var mailer Mailer
-	if os.Getenv("ENV") == "production" {
-		sendGridAPIKey := os.Getenv("SENDGRID_API_KEY")
-		if sendGridAPIKey == "" {
-			log.Fatal("Missing required env var: SENDGRID_API_KEY")
-		}
-		mailer = NewSendGridMailer(sendGridAPIKey)
+	if cfg.SendGridAPIKey != "" {
+		mailer = NewSendGridMailer(cfg.SendGridAPIKey)
 	} else {
 		mailer = NewLogMailer()
 	}
@@ -74,7 +69,7 @@ func main() {
 		w.Write([]byte("pong"))
 	})
 
-	addr := fmt.Sprintf("127.0.0.1:%s", port)
+	addr := fmt.Sprintf("127.0.0.1:%s", cfg.Port)
 	srv := &http.Server{
 		Addr:    addr,
 		Handler: r,

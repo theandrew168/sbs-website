@@ -3,6 +3,7 @@ module github.com/theandrew168/sbs-website
 go 1.16
 
 require (
+	github.com/BurntSushi/toml v0.3.1
 	github.com/cespare/xxhash/v2 v2.1.2 // indirect
 	github.com/coreos/go-systemd v0.0.0-20191104093116-d3cd4ed1dbcf
 	github.com/go-chi/chi/v5 v5.0.7
