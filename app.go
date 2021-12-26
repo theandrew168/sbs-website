@@ -91,12 +91,21 @@ func (app *Application) HandleContact(w http.ResponseWriter, r *http.Request) {
 
 	err = app.mailer.SendMail(from, from, to, to, subject, body)
 	if err != nil {
-		app.logger.Println(err)
+		app.serverErrorResponse(w, r, err)
+		return
 	}
 
-	// TODO: flash some sort of "we'll be in touch" message
-	http.Redirect(w, r, "/", 303)
-	return
+	ts, err := template.ParseFS(app.templates, "thanks.partial.tmpl")
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
+
+	err = ts.Execute(w, nil)
+	if err != nil {
+		app.serverErrorResponse(w, r, err)
+		return
+	}
 }
 
 func (app *Application) errorResponse(w http.ResponseWriter, r *http.Request, status int, tmpl string) {

@@ -9,6 +9,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 	<link rel="stylesheet" href="/static/css/tailwind.min.css" />
+	<script src="/static/js/htmx.min.js" defer></script>
 	<script data-goatcounter="https://sbs.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 	<style>
 		@import url('https://fonts.googleapis.com/css?family=Karla:400,700&display=swap');
@@ -154,10 +155,10 @@
 	</section>
 
 	<!-- contact -->
-	<section class="bg-green-400 text-white py-32">
+	<section class="bg-green-400 text-white flex flex-col justify-center h-80">
 		<div class="container mx-auto px-8">
-			<form method="POST" action="/contact" class="sm:w-3/4 lg:w-2/4 mx-auto">
-				<h1 class="text-3xl text-center">Let us know how we can help!</h1>
+			<form class="sm:w-3/4 lg:w-2/4 mx-auto" hx-post="/contact" hx-swap="outerHTML">
+				<h1 class="text-center text-3xl font-bold">Let us know how we can help!</h1>
 				<div class="flex flex-col sm:flex-row gap-6 mt-8">
 					<input
 						type="email"
@@ -181,7 +182,7 @@
 	<footer>
 		<div class="container mx-auto px-8 py-8 flex items-center justify-between">
 			<a class="hover:text-gray-500" href="/">Shallow Brook Software</a>
-			<a class="hover:text-gray-500" href="https://storyset.com/internet">Internet Illustrations by Storyset</a>
+			<a class="hover:text-gray-500 text-right" href="https://storyset.com/internet">Internet Illustrations by Storyset</a>
 		</div>
 	</footer>
 </body>
