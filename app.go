@@ -58,7 +58,12 @@ func (app *Application) Router() http.Handler {
 }
 
 func (app *Application) HandleIndex(w http.ResponseWriter, r *http.Request) {
-	ts, err := template.ParseFS(app.templates, "index.html.tmpl")
+	files := []string{
+		"index.page.tmpl",
+		"base.layout.tmpl",
+	}
+
+	ts, err := template.ParseFS(app.templates, files...)
 	if err != nil {
 		app.serverErrorResponse(w, r, err)
 		return
@@ -109,8 +114,13 @@ func (app *Application) HandleContact(w http.ResponseWriter, r *http.Request) {
 }
 
 func (app *Application) errorResponse(w http.ResponseWriter, r *http.Request, status int, tmpl string) {
+	files := []string{
+		tmpl,
+		"base.layout.tmpl",
+	}
+
 	// attempt to parse error template
-	ts, err := template.ParseFS(app.templates, tmpl)
+	ts, err := template.ParseFS(app.templates, files...)
 	if err != nil {
 		app.logger.Println(err)
 		http.Error(w, "Internal server error", 500)
