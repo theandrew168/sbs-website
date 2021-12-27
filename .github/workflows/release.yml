@@ -25,26 +25,12 @@ jobs:
       run: |
         curl -L https://github.com/tailwindlabs/tailwindcss/releases/download/v3.0.7/tailwindcss-linux-x64 -o /usr/local/bin/tailwindcss
         chmod +x /usr/local/bin/tailwindcss
-    - name: Setup NodeJS
-      uses: actions/setup-node@v2
-      with:
-        node-version: 14
-    - name: Install PurgeCSS
-      run: |
-        npm install -g purgecss
     - name: Build blog
       run: |
         make blog
-    # intentionally absent from the Makefile due to destructive behavior
-    - name: Strip unused CSS
-      run: >
-        purgecss
-        -c scripts/purgecss.config.js
-        -con templates/*.tmpl
-        -con posts/*.html
-        -con posts/**/*.html
-        -css static/css/*
-        -o static/css/
+    - name: Build css
+      run: |
+        make css
     - name: Run GoReleaser
       uses: goreleaser/goreleaser-action@v2
       with:

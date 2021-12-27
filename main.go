@@ -29,7 +29,7 @@ var logo []byte
 func main() {
 	logger := log.New(os.Stdout, "", log.Lshortfile)
 
-	conf := flag.String("conf", "/etc/sbs.conf", "app config file")
+	conf := flag.String("conf", "sbs.conf", "app config file")
 	flag.Parse()
 
 	cfg, err := ReadConfigFile(*conf)
