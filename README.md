@@ -8,10 +8,10 @@ He does some great design work.
 Internet Illustrations come from [Storyset](https://storyset.com/internet).
 
 ## Setup
-This project depends on the [Go programming language](https://golang.org/dl/) and the [tailwindcss CLI](https://tailwindcss.com/blog/standalone-cli).
+This project depends on the [Go programming language](https://golang.org/dl/) and the [TailwindCSS CLI](https://tailwindcss.com/blog/standalone-cli).
 
 ## Running
-In one terminal, let tailwind watch for CSS changes:
+In one terminal, let Tailwind watch for CSS changes:
 ```bash
 # make watch
 tailwindcss --watch -i static/css/tailwind.input.css -o static/css/tailwind.min.css
