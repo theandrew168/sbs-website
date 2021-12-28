@@ -8,7 +8,7 @@ blog:
 	go run scripts/blogify.go
 
 .PHONY: css
-css:
+css: blog
 	tailwindcss -m -i static/css/tailwind.input.css -o static/css/tailwind.min.css
 
 .PHONY: build
