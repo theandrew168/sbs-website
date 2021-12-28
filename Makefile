@@ -9,18 +9,15 @@ blog:
 
 .PHONY: css
 css:
-	tailwindcss --minify -i static/css/tailwind.input.css -o static/css/tailwind.min.css
+	tailwindcss -m -i static/css/tailwind.input.css -o static/css/tailwind.min.css
 
 .PHONY: build
 build: blog css
 	go build -o sbs .
 
-.PHONY: watch
-watch:
-	tailwindcss --watch -i static/css/tailwind.input.css -o static/css/tailwind.min.css
-
 .PHONY: run
 run: blog
+	tailwindcss --watch -m -i static/css/tailwind.input.css -o static/css/tailwind.min.css &
 	go run .
 
 .PHONY: clean
