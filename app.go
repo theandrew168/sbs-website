@@ -142,15 +142,15 @@ func (app *Application) errorResponse(w http.ResponseWriter, r *http.Request, st
 }
 
 func (app *Application) notFoundResponse(w http.ResponseWriter, r *http.Request) {
-	app.errorResponse(w, r, 404, "404.html.tmpl")
+	app.errorResponse(w, r, 404, "404.page.tmpl")
 }
 
 func (app *Application) methodNotAllowedResponse(w http.ResponseWriter, r *http.Request) {
-	app.errorResponse(w, r, 405, "405.html.tmpl")
+	app.errorResponse(w, r, 405, "405.page.tmpl")
 }
 
 func (app *Application) serverErrorResponse(w http.ResponseWriter, r *http.Request, err error) {
 	// skip 2 frames to identify original caller
 	app.logger.Output(2, err.Error())
-	app.errorResponse(w, r, 500, "500.html.tmpl")
+	app.errorResponse(w, r, 500, "500.page.tmpl")
 }

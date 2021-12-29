@@ -17,8 +17,8 @@ build: blog css
 
 .PHONY: run
 run: blog
-	tailwindcss --watch -m -i static/css/tailwind.input.css -o static/css/tailwind.min.css &
-	go run .
+	go run . &
+	tailwindcss --watch -m -i static/css/tailwind.input.css -o static/css/tailwind.min.css
 
 .PHONY: clean
 clean:

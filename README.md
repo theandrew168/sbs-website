@@ -11,10 +11,11 @@ Internet Illustrations come from [Storyset](https://storyset.com/internet).
 This project depends on the [Go programming language](https://golang.org/dl/) and the [TailwindCSS CLI](https://tailwindcss.com/blog/standalone-cli).
 
 ## Running
-Build the blog, let Tailwind watch for CSS changes (in a background process), and run the web server:
+If actively working on frontend templates, set `ENV=dev` to tell the server to reload templates from the filesystem on every page load.
+Build the blog, run the web server (in a background process), and let Tailwind watch for CSS changes:
 ```bash
-# make run
+# ENV=dev make run
 go run scripts/blogify.go
-tailwindcss --watch -m -i static/css/tailwind.input.css -o static/css/tailwind.min.css &
-go run .
+ENV=dev go run . &
+tailwindcss --watch -m -i static/css/tailwind.input.css -o static/css/tailwind.min.css
 ```

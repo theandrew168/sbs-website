@@ -42,13 +42,13 @@
 			src: url("/static/font/karla/Karla-BoldItalic.ttf") format("truetype");
 		}
 
-		html {
+		.font-family-karla {
 			font-family: "Karla", sans-serif;
 		}
 	</style>
 </head>
 
-<body>
+<body class="font-family-karla flex flex-col min-h-screen">
 
 	<!-- header -->
 	<header>
@@ -58,8 +58,8 @@
 		</nav>
 	</header>
 
-	<!-- main -->
-	<main>
+	<!-- main content -->
+	<main class="flex-grow">
 		{{template "main" .}}
 	</main>
 
