@@ -17,5 +17,5 @@ Build the blog, run the web server (in a background process), and let Tailwind w
 # ENV=dev make run
 go run scripts/blogify.go
 ENV=dev go run . &
-tailwindcss --watch -m -i static/css/tailwind.input.css -o static/css/tailwind.min.css
+tailwindcss --watch -m -i tailwind.input.css -o static/css/tailwind.min.css
 ```
