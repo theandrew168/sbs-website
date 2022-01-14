@@ -17,7 +17,7 @@ type sendGridMailer struct {
 	sendGridAPIKey string
 }
 
-func NewSendGridMailer(sendGridAPIKey string) *sendGridMailer {
+func NewSendGridMailer(sendGridAPIKey string) Mailer {
 	mailer := sendGridMailer{
 		sendGridAPIKey: sendGridAPIKey,
 	}
@@ -42,7 +42,7 @@ func (m *sendGridMailer) SendMail(fromName, fromEmail, toName, toEmail, subject,
 
 type logMailer struct{}
 
-func NewLogMailer() *logMailer {
+func NewLogMailer() Mailer {
 	mailer := logMailer{}
 	return &mailer
 }
