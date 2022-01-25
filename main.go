@@ -9,6 +9,7 @@ import (
 	"net"
 	"net/http"
 	"os"
+	"strings"
 	"time"
 
 	"github.com/coreos/go-systemd/daemon"
@@ -27,7 +28,7 @@ var staticFS embed.FS
 var logo []byte
 
 func main() {
-	logger := log.New(os.Stdout, "", log.Lshortfile)
+	logger := log.New(os.Stdout, "", 0)
 
 	conf := flag.String("conf", "sbs.conf", "app config file")
 	flag.Parse()
@@ -51,8 +52,16 @@ func main() {
 	postsServer := http.FileServer(http.FS(posts))
 	gzipPostsServer := gzhttp.GzipHandler(postsServer)
 
-	// setup http.Handler for static files
-	static, _ := fs.Sub(staticFS, "static")
+	var static fs.FS
+	if strings.HasPrefix(os.Getenv("ENV"), "dev") {
+		// reload static files from filesystem if var ENV starts with "dev"
+		// NOTE: os.DirFS is rooted from where the app is ran, not this file
+		static = os.DirFS("./static/")
+	} else {
+		// else use the embedded templates dir
+		static, _ = fs.Sub(staticFS, "static")
+	}
+
 	staticServer := http.FileServer(http.FS(static))
 	gzipStaticServer := gzhttp.GzipHandler(staticServer)
 
