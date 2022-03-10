@@ -39,8 +39,8 @@ func main() {
 	}
 
 	var mailer Mailer
-	if cfg.SendGridAPIKey != "" {
-		mailer = NewSendGridMailer(cfg.SendGridAPIKey)
+	if cfg.PostmarkAPIKey != "" {
+		mailer = NewPostmarkMailer(cfg.PostmarkAPIKey)
 	} else {
 		mailer = NewLogMailer()
 	}

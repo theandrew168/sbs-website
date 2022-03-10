@@ -13,7 +13,7 @@ var (
 )
 
 type Config struct {
-	SendGridAPIKey string `toml:"sendgrid_api_key"`
+	PostmarkAPIKey string `toml:"postmark_api_key"`
 	Port           string `toml:"port"`
 }
 

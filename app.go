@@ -24,7 +24,7 @@ type Application struct {
 	logger    *log.Logger
 }
 
-func NewApplication(mailer Mailer, logger* log.Logger) *Application {
+func NewApplication(mailer Mailer, logger *log.Logger) *Application {
 	var templates fs.FS
 	if strings.HasPrefix(os.Getenv("ENV"), "dev") {
 		// reload templates from filesystem if var ENV starts with "dev"
@@ -96,8 +96,7 @@ func (app *Application) HandleContact(w http.ResponseWriter, r *http.Request) {
 
 	err = app.mailer.SendMail(from, from, to, to, subject, body)
 	if err != nil {
-		app.serverErrorResponse(w, r, err)
-		return
+		app.logger.Println(err)
 	}
 
 	ts, err := template.ParseFS(app.templates, "thanks.partial.tmpl")
@@ -150,7 +149,6 @@ func (app *Application) methodNotAllowedResponse(w http.ResponseWriter, r *http.
 }
 
 func (app *Application) serverErrorResponse(w http.ResponseWriter, r *http.Request, err error) {
-	// skip 2 frames to identify original caller
-	app.logger.Output(2, err.Error())
+	app.logger.Println(err)
 	app.errorResponse(w, r, 500, "500.page.tmpl")
 }

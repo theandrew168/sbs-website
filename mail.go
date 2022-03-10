@@ -1,44 +1,69 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
+	"fmt"
 	"log"
+	"net/http"
 	"strings"
-
-	"github.com/sendgrid/sendgrid-go"
-	"github.com/sendgrid/sendgrid-go/helpers/mail"
 )
 
 type Mailer interface {
 	SendMail(fromName, fromEmail, toName, toEmail, subject, body string) error
 }
 
-
-type sendGridMailer struct {
-	sendGridAPIKey string
+type postmarkMailer struct {
+	postmarkAPIKey string
 }
 
-func NewSendGridMailer(sendGridAPIKey string) Mailer {
-	mailer := sendGridMailer{
-		sendGridAPIKey: sendGridAPIKey,
+func NewPostmarkMailer(postmarkAPIKey string) Mailer {
+	m := postmarkMailer{
+		postmarkAPIKey: postmarkAPIKey,
 	}
-	return &mailer
+	return &m
 }
 
-func (m *sendGridMailer) SendMail(fromName, fromEmail, toName, toEmail, subject, body string) error {
-	from := mail.NewEmail(fromName, fromEmail)
-	to := mail.NewEmail(toName, toEmail)
-	message := mail.NewSingleEmailPlainText(from, subject, to, body)
+func (m *postmarkMailer) SendMail(fromName, fromEmail, toName, toEmail, subject, body string) error {
+	message := struct {
+		From     string `json:"From"`
+		To       string `json:"To"`
+		Subject  string `json:"Subject"`
+		TextBody string `json:"TextBody"`
+	}{
+		From:     fromEmail,
+		To:       toEmail,
+		Subject:  subject,
+		TextBody: body,
+	}
 
-	client := sendgrid.NewSendClient(m.sendGridAPIKey)
-	response, err := client.Send(message)
+	b, err := json.Marshal(message)
 	if err != nil {
 		return err
 	}
 
-	log.Printf("SendGridMailer: message sent to %s, status code %d\n", toEmail, response.StatusCode)
+	client := &http.Client{}
+	endpoint := "https://api.postmarkapp.com/email"
+	req, err := http.NewRequest("POST", endpoint, bytes.NewBuffer(b))
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("Accept", "application/json")
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-Postmark-Server-Token", m.postmarkAPIKey)
+	resp, err := client.Do(req)
+	if err != nil {
+		return err
+	}
+
+	// error if status isn't a 2xx
+	if resp.Status[0] != '2' {
+		return fmt.Errorf("failed to send email: %s", resp.Status)
+	}
+
 	return nil
 }
-
 
 type logMailer struct{}
 
