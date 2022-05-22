@@ -13,4 +13,4 @@ run:
 
 .PHONY: clean
 clean:
-	rm -fr docs/ resources/
+	rm -fr resources/
