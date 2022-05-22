@@ -3,23 +3,14 @@
 
 default: build
 
-.PHONY: blog
-blog:
-	go run scripts/blogify.go
-
-.PHONY: css
-css: blog
-	tailwindcss -m -i tailwind.input.css -o static/css/tailwind.min.css
-
 .PHONY: build
-build: blog css
-	go build -o sbs .
+build:
+	hugo -d docs/
 
 .PHONY: run
-run: blog
-	ENV=dev go run . &
-	tailwindcss --watch -m -i tailwind.input.css -o static/css/tailwind.min.css
+run:
+	hugo server -D
 
 .PHONY: clean
 clean:
-	rm -fr sbs dist/ posts/
+	rm -fr resources/

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>emulator on Shallow Brook Software</title>
+    <link>https://shallowbrooksoftware.com/tags/emulator/</link>
+    <description>Recent content in emulator on Shallow Brook Software</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 09 Jul 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://shallowbrooksoftware.com/tags/emulator/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Revamping My Old CHIP-8 Emulator</title>
+      <link>https://shallowbrooksoftware.com/posts/revamping-my-old-chip8-emulator/</link>
+      <pubDate>Thu, 09 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://shallowbrooksoftware.com/posts/revamping-my-old-chip8-emulator/</guid>
+      <description>Back in 2017 I was really interested in emulator development. I read that CHIP-8 was a great introductory system and decided to write my own emulator for it. I was a C programming novice at the time but figured it&amp;rsquo;d still be a good choice for a project that dealt with a lot of low-level details and mechanics. After a few weeks of work I was able to successfully emulate CHIP-8 games but knew that there were some lingering bugs.</description>
+    </item>
+    
+  </channel>
+</rss>

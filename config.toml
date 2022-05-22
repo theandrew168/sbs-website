@@ -1,0 +1,45 @@
+baseurl = "https://shallowbrooksoftware.com/"
+title = "Shallow Brook Software"
+theme = "hugo-coder"
+languagecode = "en"
+defaultcontentlaguage = "en"
+paginate = 20
+
+[params]
+author = "Andrew Dailey"
+description = "Simple software that babbles loudly"
+keywords = "blog,developer,personal"
+info = ["Independent Programmer"]
+avatarurl = "images/avatar.jpg"
+dateFormat = "January 2, 2006"
+footercontent = "simple software that babbles loudly"
+
+[[params.social]]
+name = "GitHub"
+icon = "fa fa-2x fa-github"
+url = "https://github.com/theandrew168/"
+weight = 1
+
+[[params.social]]
+name = "Email"
+icon = "fa fa-2x fa-envelope"
+url = "mailto:andrew@shallowbrooksoftware.com"
+weight = 2
+
+[languages.en]
+langaugeName = ":us:"
+
+[menu]
+[[menu.main]]
+name = "About"
+url = "/about/"
+weight = 1
+[[menu.main]]
+name = "Blog"
+url = "/posts/"
+weight = 2
+
+[taxonomies]
+category = "categories"
+series = "series"
+tag = "tags"

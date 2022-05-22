@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Shallow Brook Software</title>
+    <link>https://shallowbrooksoftware.com/tags/</link>
+    <description>Recent content in Tags on Shallow Brook Software</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 14 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://shallowbrooksoftware.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>database</title>
+      <link>https://shallowbrooksoftware.com/tags/database/</link>
+      <pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://shallowbrooksoftware.com/tags/database/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>go</title>
+      <link>https://shallowbrooksoftware.com/tags/go/</link>
+      <pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://shallowbrooksoftware.com/tags/go/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>python</title>
+      <link>https://shallowbrooksoftware.com/tags/python/</link>
+      <pubDate>Thu, 14 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://shallowbrooksoftware.com/tags/python/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>assembly</title>
+      <link>https://shallowbrooksoftware.com/tags/assembly/</link>
+      <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://shallowbrooksoftware.com/tags/assembly/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>forth</title>
+      <link>https://shallowbrooksoftware.com/tags/forth/</link>
+      <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://shallowbrooksoftware.com/tags/forth/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>risc-v</title>
+      <link>https://shallowbrooksoftware.com/tags/risc-v/</link>
+      <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://shallowbrooksoftware.com/tags/risc-v/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>c</title>
+      <link>https://shallowbrooksoftware.com/tags/c/</link>
+      <pubDate>Tue, 25 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://shallowbrooksoftware.com/tags/c/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>scheme</title>
+      <link>https://shallowbrooksoftware.com/tags/scheme/</link>
+      <pubDate>Tue, 25 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://shallowbrooksoftware.com/tags/scheme/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>sdl2</title>
+      <link>https://shallowbrooksoftware.com/tags/sdl2/</link>
+      <pubDate>Tue, 25 Aug 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://shallowbrooksoftware.com/tags/sdl2/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>emulator</title>
+      <link>https://shallowbrooksoftware.com/tags/emulator/</link>
+      <pubDate>Thu, 09 Jul 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://shallowbrooksoftware.com/tags/emulator/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>graphics</title>
+      <link>https://shallowbrooksoftware.com/tags/graphics/</link>
+      <pubDate>Wed, 17 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://shallowbrooksoftware.com/tags/graphics/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>opengl</title>
+      <link>https://shallowbrooksoftware.com/tags/opengl/</link>
+      <pubDate>Wed, 17 Jun 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://shallowbrooksoftware.com/tags/opengl/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
