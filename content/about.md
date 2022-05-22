@@ -17,8 +17,8 @@ I'm not the type to pitch an over-engineered bundle of technical debt when all y
 [Digital Ocean](https://www.digitalocean.com/) is currently my hosting platform of choice thanks to its clean interface and fair pricing.
 I've also played with [Linode](https://www.linode.com/) and think that it is another great provider.
 
-Additionally, I have a large amount of experience automating tasks with [Ansible](https://docs.ansible.com/ansible/latest/index.html).
-From initializing and setting up new servers to to installing, configuring, and maintaining clustered applications, I've used Ansible to solve a wide breadth of problems.
+Additionally, I have a large amount of experience automating tasks with [Terraform](https://www.terraform.io/) and [Ansible](https://docs.ansible.com/ansible/latest/index.html).
+From initializing and setting up new servers to to installing, configuring, and maintaining clustered applications, I've used these tools to solve a wide breadth of problems.
 I believe that the structure of an Ansible project is the most important factor to keeping things simple, flexible, and effective.
 As a result, I've developed useful strategies for defining relationships between playbooks and roles, delegating variables, and using custom filters to implement dynamic decision-making.
 
