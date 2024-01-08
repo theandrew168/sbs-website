@@ -26,9 +26,6 @@ icon = "fa fa-2x fa-envelope"
 url = "mailto:andrew@shallowbrooksoftware.com"
 weight = 2
 
-[languages.en]
-langaugeName = ":us:"
-
 [menu]
 [[menu.main]]
 name = "About"
