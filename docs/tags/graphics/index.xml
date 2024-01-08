@@ -6,26 +6,21 @@
     <description>Recent content in graphics on Shallow Brook Software</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 17 Jun 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://shallowbrooksoftware.com/tags/graphics/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 17 Jun 2020 00:00:00 +0000</lastBuildDate>
+    <atom:link href="https://shallowbrooksoftware.com/tags/graphics/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Loading OpenGL Functions for Fun and Profit</title>
       <link>https://shallowbrooksoftware.com/posts/loading-opengl-functions-for-fun-and-profit/</link>
       <pubDate>Wed, 17 Jun 2020 00:00:00 +0000</pubDate>
-      
       <guid>https://shallowbrooksoftware.com/posts/loading-opengl-functions-for-fun-and-profit/</guid>
-      <description>While writing my previous blog post, I realized that there is a general information gap around dynamically loading OpenGL functions. When developers encounter this task on new OpenGL-related projects, they tend to reach for a premade loader such as glew, gl3w, glLoadGen, or GLAD. A more detailed list along with an overview of what all these libraries do can be found here.
-&amp;ldquo;An OpenGL Loading Library is a library that loads pointers to OpenGL functions at runtime, core as well as extensions.</description>
+      <description>While writing my previous blog post, I realized that there is a general information gap around dynamically loading OpenGL functions. When developers encounter this task on new OpenGL-related projects, they tend to reach for a premade loader such as glew, gl3w, glLoadGen, or GLAD. A more detailed list along with an overview of what all these libraries do can be found here.&#xA;&amp;ldquo;An OpenGL Loading Library is a library that loads pointers to OpenGL functions at runtime, core as well as extensions.</description>
     </item>
-    
     <item>
       <title>A Multi-Platform Modern OpenGL Demo with SDL2</title>
       <link>https://shallowbrooksoftware.com/posts/a-multi-platform-modern-opengl-demo-with-sdl2/</link>
       <pubDate>Sun, 07 Jun 2020 00:00:00 +0000</pubDate>
-      
       <guid>https://shallowbrooksoftware.com/posts/a-multi-platform-modern-opengl-demo-with-sdl2/</guid>
-      <description>This post is largely inspired by Chris Wellons&amp;rsquo; 2015 blog post about writing a modern OpenGL demo that works on all three major desktop platforms (Windows, macOS, and Linux). I have come back to his post countless times over the years when looking for guidance on how to build any cross-platform C program.
-In Chris&amp;rsquo; version of this demo he makes use of GLFW3 for the window and input handling and uses gl3w for loading OpenGL functions.</description>
+      <description>This post is largely inspired by Chris Wellons&amp;rsquo; 2015 blog post about writing a modern OpenGL demo that works on all three major desktop platforms (Windows, macOS, and Linux). I have come back to his post countless times over the years when looking for guidance on how to build any cross-platform C program.&#xA;In Chris&amp;rsquo; version of this demo he makes use of GLFW3 for the window and input handling and uses gl3w for loading OpenGL functions.</description>
     </item>
-    
   </channel>
 </rss>

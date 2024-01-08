@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="light dark">
+<head>
+  <title>
+  Learning From geohot&#39;s minikeyvalue Project · Shallow Brook Software
+</title>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
 
-    
 
-    <meta name="author" content="Andrew Dailey">
-    <meta name="description" content="I first became aware of minikeyvalue while watching a recording of George&rsquo;s programming livestream. This project was written in Python and the design was simple: an HTTP-based interface for storing, getting, and deleting arbitrary content. Many folks call this type of thing a &ldquo;distributed key-value store&rdquo;. The project was originally inspired by SeaweedFS but had the goal of being much, much simpler (ideally less than 1000 lines of code).
+
+
+<meta name="author" content="Andrew Dailey">
+<meta name="description" content="I first became aware of minikeyvalue while watching a recording of George&rsquo;s programming livestream. This project was written in Python and the design was simple: an HTTP-based interface for storing, getting, and deleting arbitrary content. Many folks call this type of thing a &ldquo;distributed key-value store&rdquo;. The project was originally inspired by SeaweedFS but had the goal of being much, much simpler (ideally less than 1000 lines of code).
 The architecture of the program is straightforward: a single &ldquo;index server&rdquo; distributes and organizes data between any number of &ldquo;volume servers&rdquo;.">
-    <meta name="keywords" content="blog,developer,personal">
+<meta name="keywords" content="blog,developer,personal">
 
-    <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Learning From geohot&#39;s minikeyvalue Project"/>
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Learning From geohot&#39;s minikeyvalue Project"/>
 <meta name="twitter:description" content="I first became aware of minikeyvalue while watching a recording of George&rsquo;s programming livestream. This project was written in Python and the design was simple: an HTTP-based interface for storing, getting, and deleting arbitrary content. Many folks call this type of thing a &ldquo;distributed key-value store&rdquo;. The project was originally inspired by SeaweedFS but had the goal of being much, much simpler (ideally less than 1000 lines of code).
 The architecture of the program is straightforward: a single &ldquo;index server&rdquo; distributes and organizes data between any number of &ldquo;volume servers&rdquo;."/>
 
-    <meta property="og:title" content="Learning From geohot&#39;s minikeyvalue Project" />
+<meta property="og:title" content="Learning From geohot&#39;s minikeyvalue Project" />
 <meta property="og:description" content="I first became aware of minikeyvalue while watching a recording of George&rsquo;s programming livestream. This project was written in Python and the design was simple: an HTTP-based interface for storing, getting, and deleting arbitrary content. Many folks call this type of thing a &ldquo;distributed key-value store&rdquo;. The project was originally inspired by SeaweedFS but had the goal of being much, much simpler (ideally less than 1000 lines of code).
 The architecture of the program is straightforward: a single &ldquo;index server&rdquo; distributes and organizes data between any number of &ldquo;volume servers&rdquo;." />
 <meta property="og:type" content="article" />
@@ -28,43 +31,55 @@ The architecture of the program is straightforward: a single &ldquo;index server
 
 
 
-    <title>
-  Learning From geohot&#39;s minikeyvalue Project · Shallow Brook Software
-</title>
 
-    
-      <link rel="canonical" href="https://shallowbrooksoftware.com/posts/learning-from-geohots-minikeyvalue-project/">
-    
 
-    <link rel="preload" href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as="font" type="font/woff2" crossorigin>
+<link rel="canonical" href="https://shallowbrooksoftware.com/posts/learning-from-geohots-minikeyvalue-project/">
 
-    
-      
-      
-      <link rel="stylesheet" href="/css/coder.min.d9fddbffe6f27e69985dc5fe0471cdb0e57fbf4775714bc3d847accb08f4a1f6.css" integrity="sha256-2f3b/&#43;byfmmYXcX&#43;BHHNsOV/v0d1cUvD2Eesywj0ofY=" crossorigin="anonymous" media="screen" />
-    
 
-    
+<link rel="preload" href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as="font" type="font/woff2" crossorigin>
 
-    
-
-    
-
-    
-
-    <link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
-    <link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
-
-    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-
-    <meta name="generator" content="Hugo 0.99.1" />
-  </head>
 
   
   
-  <body class="preload-transitions colorscheme-light">
-    
+  <link rel="stylesheet" href="/css/coder.min.e1bdf152d93b060b06ba5d496486ed9c201a8b95d335e035beb5faebe3b61cad.css" integrity="sha256-4b3xUtk7BgsGul1JZIbtnCAai5XTNeA1vrX66&#43;O2HK0=" crossorigin="anonymous" media="screen" />
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+<link rel="icon" type="image/svg+xml" href="/images/favicon.svg" sizes="any">
+<link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
+<link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
+
+<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="manifest" href="/site.webmanifest">
+<link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+
+
+
+
+
+
+</head>
+
+
+
+
+<body class="preload-transitions colorscheme-light">
+  
 <div class="float-container">
     <a id="dark-mode-toggle" class="colorscheme-toggle">
         <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
@@ -72,8 +87,8 @@ The architecture of the program is straightforward: a single &ldquo;index server
 </div>
 
 
-    <main class="wrapper">
-      <nav class="navigation">
+  <main class="wrapper">
+    <nav class="navigation">
   <section class="container">
     <a class="navigation-title" href="/">
       Shallow Brook Software
@@ -102,8 +117,8 @@ The architecture of the program is straightforward: a single &ldquo;index server
 </nav>
 
 
-      <div class="content">
-        
+    <div class="content">
+      
   <section class="container post">
     <article>
       <header>
@@ -146,46 +161,48 @@ The architecture of the program is straightforward: a single &ldquo;index server
         </div>
       </header>
 
-      <div>
+      <div class="post-content">
         
-        <p>I first became aware of <a href="https://github.com/geohot/minikeyvalue">minikeyvalue</a> while watching a <a href="https://www.youtube.com/watch?v=cAFjZ1gXBxc">recording</a> of George&rsquo;s programming livestream.
-This project was written in <a href="https://www.python.org/">Python</a> and the design was simple: an HTTP-based interface for storing, getting, and deleting arbitrary content.
+        <p>I first became aware of <a href="https://github.com/geohot/minikeyvalue"  class="external-link" target="_blank" rel="noopener">minikeyvalue</a> while watching a <a href="https://www.youtube.com/watch?v=cAFjZ1gXBxc"  class="external-link" target="_blank" rel="noopener">recording</a> of George&rsquo;s programming livestream.
+This project was written in <a href="https://www.python.org/"  class="external-link" target="_blank" rel="noopener">Python</a> and the design was simple: an HTTP-based interface for storing, getting, and deleting arbitrary content.
 Many folks call this type of thing a &ldquo;distributed key-value store&rdquo;.
-The project was originally inspired by <a href="https://github.com/chrislusf/seaweedfs">SeaweedFS</a> but had the goal of being much, much simpler (ideally less than 1000 lines of code).</p>
+The project was originally inspired by <a href="https://github.com/chrislusf/seaweedfs"  class="external-link" target="_blank" rel="noopener">SeaweedFS</a> but had the goal of being much, much simpler (ideally less than 1000 lines of code).</p>
 <p>The architecture of the program is straightforward: a single &ldquo;index server&rdquo; distributes and organizes data between any number of &ldquo;volume servers&rdquo;.
-The actual data could be anything: text, images, <a href="https://www.sqlite.org/index.html">SQLite</a> databases.
+The actual data could be anything: text, images, <a href="https://www.sqlite.org/index.html"  class="external-link" target="_blank" rel="noopener">SQLite</a> databases.
 It doesn&rsquo;t matter!
 Everything is just bytes at the end of the day.</p>
 <h1 id="discoveries">
   Discoveries
   <a class="heading-link" href="#discoveries">
-    <i class="fa fa-link" aria-hidden="true"></i>
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
   </a>
 </h1>
 <p>The trick that first caught my eye was how the project implemented volume servers.
-I cracked open the solitary <a href="https://github.com/geohot/minikeyvalue/blob/master/volume">volume</a> executable and saw that it was nothing more than a Bash script that started an <a href="http://nginx.org/en/">NGINX</a> in the foreground.
+I cracked open the solitary <a href="https://github.com/geohot/minikeyvalue/blob/master/volume"  class="external-link" target="_blank" rel="noopener">volume</a> executable and saw that it was nothing more than a Bash script that started an <a href="http://nginx.org/en/"  class="external-link" target="_blank" rel="noopener">NGINX</a> in the foreground.
 Even more interesting was how the NGINX config file was handled.
-Instead of requiring any prerequisite setup, he just templated some env vars into a string and threw it out to a temporary file via <a href="https://man7.org/linux/man-pages/man3/mktemp.3.html">mktemp</a>.</p>
+Instead of requiring any prerequisite setup, he just templated some env vars into a string and threw it out to a temporary file via <a href="https://man7.org/linux/man-pages/man3/mktemp.3.html"  class="external-link" target="_blank" rel="noopener">mktemp</a>.</p>
 <p>This blew my mind!
-I&rsquo;ve spent many hours in the past trying to effectively coordinate Python-based web applications and NGINX reverse proxies via <a href="https://docs.ansible.com/ansible/latest/index.html">Ansible</a>.
-I always believed that NGINX had to be configured separately due to having a mandatory <a href="https://www.nginx.com/resources/wiki/start/topics/examples/full/">config file</a>.
-I would write a role to run the <a href="https://gunicorn.org/">WSGI server</a> on some locally-visible port and then the proxy would listen globally on 80/443.
-Each component would also have its own <a href="https://www.freedesktop.org/wiki/Software/systemd/">systemd</a> unit file.</p>
+I&rsquo;ve spent many hours in the past trying to effectively coordinate Python-based web applications and NGINX reverse proxies via <a href="https://docs.ansible.com/ansible/latest/index.html"  class="external-link" target="_blank" rel="noopener">Ansible</a>.
+I always believed that NGINX had to be configured separately due to having a mandatory <a href="https://www.nginx.com/resources/wiki/start/topics/examples/full/"  class="external-link" target="_blank" rel="noopener">config file</a>.
+I would write a role to run the <a href="https://gunicorn.org/"  class="external-link" target="_blank" rel="noopener">WSGI server</a> on some locally-visible port and then the proxy would listen globally on 80/443.
+Each component would also have its own <a href="https://www.freedesktop.org/wiki/Software/systemd/"  class="external-link" target="_blank" rel="noopener">systemd</a> unit file.</p>
 <p>George&rsquo;s approach slashes this complexity by allowing NGINX to be something that the application manages itself.
 As well as using NGINX for the volume servers, my Python version also starts its own reverse proxy (as a child process) for the index server.
 I get all the benefits of NGINX (great performance, high extensibility, multiple workers) without the fuss of managing a persistent config file.</p>
 <h1 id="the-volume-servers">
   The Volume Servers
   <a class="heading-link" href="#the-volume-servers">
-    <i class="fa fa-link" aria-hidden="true"></i>
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
   </a>
 </h1>
 <p>A volume stores the data associated with a given key.
-NGINX&rsquo;s <a href="http://nginx.org/en/docs/http/ngx_http_dav_module.html">WebDAV module</a> is used to obtain the desired behavior out of the box: GET reads data, PUT stores data, and DELETE removes data.
+NGINX&rsquo;s <a href="http://nginx.org/en/docs/http/ngx_http_dav_module.html"  class="external-link" target="_blank" rel="noopener">WebDAV module</a> is used to obtain the desired behavior out of the box: GET reads data, PUT stores data, and DELETE removes data.
 George used Bash NGINX but I wanted to explore this idea using Python as the host language in order to be consistent with the index server.
-Plus, I knew that Python ships with two modules that are perfect for the job: <a href="https://docs.python.org/3/library/tempfile.html">tempfile</a> and <a href="https://docs.python.org/3/library/subprocess.html">subprocess</a>.</p>
+Plus, I knew that Python ships with two modules that are perfect for the job: <a href="https://docs.python.org/3/library/tempfile.html"  class="external-link" target="_blank" rel="noopener">tempfile</a> and <a href="https://docs.python.org/3/library/subprocess.html"  class="external-link" target="_blank" rel="noopener">subprocess</a>.</p>
 <p>The first step was to generate the NGINX config as a string.
-Python has two main methods of <a href="https://www.python.org/dev/peps/pep-3101/">string interpolation</a>.
+Python has two main methods of <a href="https://www.python.org/dev/peps/pep-3101/"  class="external-link" target="_blank" rel="noopener">string interpolation</a>.
 The first uses percent placeholders while the second uses curly braces.
 I decided to go with the first method in order to avoid having to escape all of the curlies that accompany an NGINX config.
 Once I&rsquo;ve got the config as string, I need a place to write it.
@@ -198,11 +215,11 @@ This is where the tempfile module comes in:</p>
 </span></span><span style="display:flex;"><span>    os<span style="color:#f92672">.</span>write(fd, conf<span style="color:#f92672">.</span>encode())  <span style="color:#75715e"># write the NGINX config to it</span>
 </span></span><span style="display:flex;"><span>    os<span style="color:#f92672">.</span>close(fd)  <span style="color:#75715e"># close it</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> path  <span style="color:#75715e"># return its path</span>
-</span></span></code></pre></div><p>I could have also used one of the higher-level, context-managed classes like <a href="https://docs.python.org/3/library/tempfile.html#tempfile.NamedTemporaryFile">NamedTemporaryFile</a> but that would&rsquo;ve added an extra layer of <code>with</code> nesting and an explicit call to <a href="https://docs.python.org/3/library/io.html#io.IOBase.flush">flush</a>.
+</span></span></code></pre></div><p>I could have also used one of the higher-level, context-managed classes like <a href="https://docs.python.org/3/library/tempfile.html#tempfile.NamedTemporaryFile"  class="external-link" target="_blank" rel="noopener">NamedTemporaryFile</a> but that would&rsquo;ve added an extra layer of <code>with</code> nesting and an explicit call to <a href="https://docs.python.org/3/library/io.html#io.IOBase.flush"  class="external-link" target="_blank" rel="noopener">flush</a>.
 Without the flush, there is a race condition between writing the file&rsquo;s contents and NGINX reading it on startup.</p>
 <p>With the config safely written to a temp file, NGINX can now be started.
 The only extra flags needed are <code>-c</code> to specify where the config is and <code>-p</code> to control the runtime prefix dir (where the pidfile goes and things like that).
-These args can be assembled into a list, passed to <a href="https://docs.python.org/3/library/subprocess.html#subprocess.run">subprocess.run</a>, and ran until interrupted:</p>
+These args can be assembled into a list, passed to <a href="https://docs.python.org/3/library/subprocess.html#subprocess.run"  class="external-link" target="_blank" rel="noopener">subprocess.run</a>, and ran until interrupted:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> subprocess
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>cmd <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;nginx&#39;</span>, <span style="color:#e6db74">&#39;-c&#39;</span>, conf_path, <span style="color:#e6db74">&#39;-p&#39;</span>, prefix_path]
@@ -210,7 +227,7 @@ These args can be assembled into a list, passed to <a href="https://docs.python.
 </span></span><span style="display:flex;"><span>    subprocess<span style="color:#f92672">.</span>run(cmd)
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">except</span> <span style="color:#a6e22e">KeyboardInterrupt</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pass</span>
-</span></span></code></pre></div><p>The full code for starting these volume servers can be found <a href="https://github.com/theandrew168/pymkv/blob/main/volume.py">here</a>.
+</span></span></code></pre></div><p>The full code for starting these volume servers can be found <a href="https://github.com/theandrew168/pymkv/blob/main/volume.py"  class="external-link" target="_blank" rel="noopener">here</a>.
 As far as performance goes, there is no meaningful difference between George&rsquo;s Bash script and my Python script.
 They both run NGINX as a child process and wait for interruption.
 The &ldquo;kickoff&rdquo; language doesn&rsquo;t really matter here.
@@ -218,28 +235,29 @@ Could be Bash, Go, Python, C, or anything else: the result is the same.</p>
 <h1 id="the-index-server">
   The Index Server
   <a class="heading-link" href="#the-index-server">
-    <i class="fa fa-link" aria-hidden="true"></i>
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
   </a>
 </h1>
 <p>The index server is the brain of the application.
 It keeps track of what keys are currently in the system and where they are located (on which volume server and at what path).
-George&rsquo;s current version of this component contains more features than I wanted to implement so I instead based my design on an <a href="https://github.com/geohot/minikeyvalue/blob/a60f742e59b8c11dccaf0f1bef97b605c027a220/server.go">earlier version</a>.</p>
+George&rsquo;s current version of this component contains more features than I wanted to implement so I instead based my design on an <a href="https://github.com/geohot/minikeyvalue/blob/a60f742e59b8c11dccaf0f1bef97b605c027a220/server.go"  class="external-link" target="_blank" rel="noopener">earlier version</a>.</p>
 <p>The core of the index server is a persistent lookup table for keys and the location of their values.
-To accomplish this, George used <a href="https://github.com/syndtr/goleveldb">goleveldb</a> which is a pure-Go implementation of the <a href="https://github.com/google/leveldb">LevelDB</a> database.
-While Python does have its own LevelDB wrapper called <a href="https://plyvel.readthedocs.io/en/latest/">plyvel</a>, I wanted to use something simpler: another standard library gem known as <a href="https://docs.python.org/3/library/dbm.html">dbm</a>.
-On most Unix-like systems, the dbm module is implemented as a slim wrapper around the <a href="https://www.gnu.org.ua/software/gdbm/">GNU dbm</a> key/value database.
+To accomplish this, George used <a href="https://github.com/syndtr/goleveldb"  class="external-link" target="_blank" rel="noopener">goleveldb</a> which is a pure-Go implementation of the <a href="https://github.com/google/leveldb"  class="external-link" target="_blank" rel="noopener">LevelDB</a> database.
+While Python does have its own LevelDB wrapper called <a href="https://plyvel.readthedocs.io/en/latest/"  class="external-link" target="_blank" rel="noopener">plyvel</a>, I wanted to use something simpler: another standard library gem known as <a href="https://docs.python.org/3/library/dbm.html"  class="external-link" target="_blank" rel="noopener">dbm</a>.
+On most Unix-like systems, the dbm module is implemented as a slim wrapper around the <a href="https://www.gnu.org.ua/software/gdbm/"  class="external-link" target="_blank" rel="noopener">GNU dbm</a> key/value database.
 The problem that dbm solves is similar to LevelDB but the fact that it ships with Python eases project setup and distribution.</p>
 <p>Concurrency is a bit fussy with both options, to be honest.
 Neither of them support simultaneous reads/writes from multiple processes.
-However, since my <a href="https://www.python.org/dev/peps/pep-3333/">WSGI</a> server of choice (more on that coming up) uses threads for workers instead of processes, everyone is happy.
-As far as I know, CPython&rsquo;s <a href="https://realpython.com/python-gil/">GIL</a> is &ldquo;saving&rdquo; me from multiple-writer corruption in this situation.</p>
-<p>The source for the index server can be found <a href="https://github.com/theandrew168/pymkv/blob/main/index.py">here</a>.
+However, since my <a href="https://www.python.org/dev/peps/pep-3333/"  class="external-link" target="_blank" rel="noopener">WSGI</a> server of choice (more on that coming up) uses threads for workers instead of processes, everyone is happy.
+As far as I know, CPython&rsquo;s <a href="https://realpython.com/python-gil/"  class="external-link" target="_blank" rel="noopener">GIL</a> is &ldquo;saving&rdquo; me from multiple-writer corruption in this situation.</p>
+<p>The source for the index server can be found <a href="https://github.com/theandrew168/pymkv/blob/main/index.py"  class="external-link" target="_blank" rel="noopener">here</a>.
 One thing I found out from early performance tests was that while some WSGI servers could handle the load, others couldn&rsquo;t.
-<a href="https://github.com/jonashaag/bjoern">Bjoern</a>, for example, held its own but <a href="https://docs.pylonsproject.org/projects/waitress/en/stable/">Waitress</a> returned errors under the pressure.
-I&rsquo;ve been in this situation before and knew that the smart traffic handling and request buffering that NGINX offers as a <a href="https://en.wikipedia.org/wiki/Reverse_proxy">reverse proxy</a> can make almost any WSGI server sing.
+<a href="https://github.com/jonashaag/bjoern"  class="external-link" target="_blank" rel="noopener">Bjoern</a>, for example, held its own but <a href="https://docs.pylonsproject.org/projects/waitress/en/stable/"  class="external-link" target="_blank" rel="noopener">Waitress</a> returned errors under the pressure.
+I&rsquo;ve been in this situation before and knew that the smart traffic handling and request buffering that NGINX offers as a <a href="https://en.wikipedia.org/wiki/Reverse_proxy"  class="external-link" target="_blank" rel="noopener">reverse proxy</a> can make almost any WSGI server sing.
 Plus, since I already had code to run arbitrary NGINX servers, this was a simple inclusion!</p>
 <p>When ran, the index server starts up its own NGINX background process to act as an external reverse proxy to its internal Waitress WSGI server.
-With a little help from <a href="https://docs.python.org/3/library/contextlib.html">contextlib</a> I was able to construct a very simple context manager to start NGINX in the background while the index server continues forward.
+With a little help from <a href="https://docs.python.org/3/library/contextlib.html"  class="external-link" target="_blank" rel="noopener">contextlib</a> I was able to construct a very simple context manager to start NGINX in the background while the index server continues forward.
 Once the server is told to stop, the context manager exits and the reverse proxy shuts down with it.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> contextlib <span style="color:#f92672">import</span> contextmanager
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> subprocess
@@ -261,11 +279,12 @@ Once the server is told to stop, the context manager exits and the reverse proxy
 </span></span></code></pre></div><h1 id="performance">
   Performance
   <a class="heading-link" href="#performance">
-    <i class="fa fa-link" aria-hidden="true"></i>
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
   </a>
 </h1>
 <p>I wanted to see how the two versions of this project performed in a small set of benchmarks.
-I&rsquo;m not a fan of testing locally so I spun up a small cluster of $5 <a href="https://www.digitalocean.com/">Digital Ocean</a> droplets in order to introduce proper network latency.
+I&rsquo;m not a fan of testing locally so I spun up a small cluster of $5 <a href="https://www.digitalocean.com/"  class="external-link" target="_blank" rel="noopener">Digital Ocean</a> droplets in order to introduce proper network latency.
 I used one index server and three volume servers for all of the benchmarks and ensured that each version was tested under the same circumstances.</p>
 <table>
 <thead>
@@ -324,12 +343,13 @@ I&rsquo;m assuming that the time spent waiting on network communication between 
 <h1 id="takeaways">
   Takeaways
   <a class="heading-link" href="#takeaways">
-    <i class="fa fa-link" aria-hidden="true"></i>
+    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
+    <span class="sr-only">Link to heading</span>
   </a>
 </h1>
-<p>The full project with source code and documentation can be found <a href="https://github.com/theandrew168/pymkv">here</a>.
+<p>The full project with source code and documentation can be found <a href="https://github.com/theandrew168/pymkv"  class="external-link" target="_blank" rel="noopener">here</a>.
 Overall, this was really fun!
-After finishing things up, I decided to write my own <a href="https://github.com/theandrew168/pymkv/blob/main/index.go">Go version</a> of the index server just to see how the language feels.
+After finishing things up, I decided to write my own <a href="https://github.com/theandrew168/pymkv/blob/main/index.go"  class="external-link" target="_blank" rel="noopener">Go version</a> of the index server just to see how the language feels.
 To be honest, I think that Go is the better language choice for this type of problem.
 Sure, I was able to match the performance but it took an extra NGINX reverse proxy to save my straightforward Python.</p>
 <p>I really do love this method of dealing with NGINX, though.
@@ -347,49 +367,72 @@ Amazing!</p>
         
         
         
+        
+        
       </footer>
     </article>
 
     
   </section>
 
-      </div>
+    </div>
 
-      <footer class="footer">
+    <footer class="footer">
   <section class="container">
     ©
     
-    2022
+    2024
      Andrew Dailey 
     ·
     
-    Powered by <a href="https://gohugo.io/">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/">Coder</a>.
+    Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/" target="_blank" rel="noopener">Coder</a>.
     
   </section>
 </footer>
 
-    </main>
+  </main>
 
-    
-      
-      <script src="/js/coder.min.8fb86376a16e684af472a329aef502dbebcfab65ce264e9750d144912947c602.js" integrity="sha256-j7hjdqFuaEr0cqMprvUC2&#43;vPq2XOJk6XUNFEkSlHxgI="></script>
-    
+  
 
-    
+  
+  
+  <script src="/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js" integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script>
+  
 
-    
+  
 
-    
+  
 
-    
 
-    
+  
 
-    
+  
 
-    
+  
 
-    
-  </body>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+</body>
 
 </html>
