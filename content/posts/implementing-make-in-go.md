@@ -2,15 +2,9 @@
 date: 2024-01-14
 title: "Implementing Make in Go"
 slug: "implementing-make-in-go"
-draft: true
 tags: ["make", "go"]
+draft: true
 ---
-
-https://github.com/theandrew168/make
-
-https://en.wikipedia.org/wiki/Make_(software)
-
-https://pubs.opengroup.org/onlinepubs/9699919799/utilities/make.html
 
 A while back, my buddy [Wes](https://brue.land/) and I took a weekend trip to a remote cabin in eastern Iowa.
 We try to do this once a year with plans of fishing, hiking, and simply enjoying the quietness of nature.
@@ -41,7 +35,7 @@ run: build
 
 This file defines two targets: `build` and `run`.
 The `build` target has no dependencies while the `run` targets depends on `build`.
-Make can be invoked on the CLI by typing `make` followed by the target you wish to execute.
+The commands for a given target must be indented with a hard tab character (this a requirement of Make's syntax).
 
 If you want to run the `build` target, then Make will run the command provided to build the Go program:
 
@@ -65,35 +59,34 @@ Combine that value with the speed of executing non-dependent targets in parallel
 
 # The Code
 
-All of the code is written in a [single file](https://github.com/theandrew168/make/blob/main/make.go).
-It really wasn't complex enough to warrant more than that (though I didn't know that at the start).
-I simply started writing and got it working before things got out of hand.
+The source code for this project can be found on [GitHub](https://github.com/theandrew168/make).
 
 ### Parsing
 
-The code starts by reading the specified file (defaults to `Makefile`) line by line.
-I used Go's [bufio.Scanner](https://pkg.go.dev/bufio#Scanner) for this.
-Comments, dot-directives, and empty lines are ignored.
-Then, anything line that _doesn't_ start with a TAB is assumed to be the start of a new target definition.
-Subsequent lines that start with a TAB are added to the actions of the current target.
+While not a full-blown lexer/parser, the subset of Make's syntax that I chose to support can be handled with line-based processing.
+The code starts by reading the user-supplied Make file line by line (using Go's [bufio.Scanner](https://pkg.go.dev/bufio#Scanner)).
+Any non-empty line that is a comment (starts with `#`) or a dot-directive (starts with `.`) is ignored.
+Then, anything line that _doesn't_ start with a tab is assumed to be the start of a new target definition.
+Subsequent lines that start with a tab are added to the list of commands for the current target.
 
 ### Data Structures
 
-The first important piece of data is a `Target`.
-This is a task defined with a Makefile that has dependencies (other targets ref's by name) and commands (things to execute on the command line).
-Since I'm writing in Go, I defined `Target` as a struct:
+What is a "target", though?
+A target is an entry within a Makefile that has commands (things to execute on the command line) and dependencies (other targets referenced by name).
+Remember that the example used earlier had two targets: `build` (no dependencies) and `run` (depends on `build`).
+
+Since I'm using Go, I represented a target as a struct:
 
 ```go
 type Target struct {
-	// more about this later...
-	sync.Once
-
-	Prerequisites []string
-	Commands      []string
+	Dependencies []string
+	Commands     []string
 }
 ```
 
-The second is the `Graph` which isn't really as much of a graph as it is a mapping of names to targets:
+The second data type worthy of explanation is the `Graph`.
+In practice, though, this isn't really much of a graph but instead a mapping of names to targets.
+Dependency info is stored within each target but we still need a way to lookup targets by name.
 
 ```go
 type Graph map[string]*Target
@@ -113,7 +106,7 @@ Since one of the deps hit an error, it'd be invalid to execute the current targe
 
 # Missing Features
 
-Talk about POSIX make vs GNU make.
+Talk about [POSIX make](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/make.html) vs GNU make.
 When comparing this small program to the full featureset of POSIX make, I'd say _most_ features are missing.
 Many examples come to mind: variables, non-phony targets, default rules.
 And that is only for POSIX make.
