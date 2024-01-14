@@ -1,53 +1,62 @@
 ---
-date: 2024-01-11
+date: 2024-01-14
 title: "Implementing Make in Go"
 slug: "implementing-make-in-go"
 draft: true
+tags: ["make", "go"]
 ---
 
 https://github.com/theandrew168/make
 
-A while back, my buddy and I went on a weekend trip to a remote cabin in eastern Iowa.
-We've done this before: with plans to fish, hike, and just enjoy the quietness of nature and the bliss of having no responsibilities for a few days.
-Despite being an outdoorsy trip, I still brought my laptop because I love to program!
-Internet is usually spotty / non-existent in the areas we stay so I still consider it to be a nice disconnect.
+https://en.wikipedia.org/wiki/Make_(software)
 
-Part of my prep for this trip was coming up with a narrowly-scoped, interesting project that I could complete (or nearly complete) within its bounds.
-As a long time fan of [Make](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/make.html), I thought it'd be interesting to implement some useful subset of its behavior.
+https://pubs.opengroup.org/onlinepubs/9699919799/utilities/make.html
+
+A while back, my buddy [Wes](https://brue.land/) and I took a weekend trip to a remote cabin in eastern Iowa.
+We try to do this once a year with plans of fishing, hiking, and simply enjoying the quietness of nature.
+Not to mention the bliss of having no responsibilities for a few days!
+Despite being an outdoorsy trip, I still brought my laptop because programming is my favorite hobby.
+The internet in such remote locations is typically unreliable so I still consider it to be a nice disconnect.
+
+Part of my prep for this trip was coming up with a narrowly-scoped, interesting project that I could complete (in some minimally-viable form) within its duration.
+As a longtime fan of [Make](<https://en.wikipedia.org/wiki/Make_(software)>), I thought it'd be interesting to implement some useful subset of its behavior.
 Additionally, there isn't much Make support on Windows so writing it in an easily cross-platform language would be a boon.
-So, I decided to write Make in [Go](https://go.dev/)!
+So, I decided to implement Make in [Go](https://go.dev/)!
 
 # What is Make?
 
-What is (POSIX) Make?
-Why do I like Make so much?
-Some only use it for C/C++ but I think it works great for any software project with tasks and deps.
+[Make](<https://en.wikipedia.org/wiki/Make_(software)>) is a simple build automation tool for expressing arbitrary command-line actions and their dependencies on other commands.
+While Make has historically had a close relationship with C/C++ development, I have found that it adds value to any software project that has various build steps and tasks (running tests, formatting code, etc).
+In practice, this ends up being most projects!
+I've personally used Make to manage Go-based tools, Python projects, and polyglot web applications.
 
-Here is a small example Makefile:
+Here is a small example of using Make to manage building and running a Go program:
 
 ```make
-hello:
-	echo 'hello'
-
-world: hello
-	echo 'world'
+build:
+	go build -o main main.go
+run: build
+	./main
 ```
 
-This file defines two targets: `hello` and `world`.
-The `hello` target has no dependencies while the `world` targets depends on `hello`.
-If you just want to run the `hello` target, nothing extra is printed:
+This file defines two targets: `build` and `run`.
+The `build` target has no dependencies while the `run` targets depends on `build`.
+Make can be invoked on the CLI by typing `make` followed by the target you wish to execute.
 
-```
-$ make -s hello
-hello
+If you want to run the `build` target, then Make will run the command provided to build the Go program:
+
+```sh
+$ make build
+go build -o main main.go
 ```
 
-However, if you run the `world` target, Make will run `hello` first because it is a dependency:
+However, if you choose the `run` target, Make will execute `build` first (because it is declared as a dependency) and _then_ run the program:
 
-```
-$ make -s world
-hello
-world
+```sh
+$ make run
+go build -o main main.go
+./main
+Hello World!
 ```
 
 From this simple foundation, an incredibly useful toolbox of targets can be built.
@@ -59,6 +68,14 @@ Combine that value with the speed of executing non-dependent targets in parallel
 All of the code is written in a [single file](https://github.com/theandrew168/make/blob/main/make.go).
 It really wasn't complex enough to warrant more than that (though I didn't know that at the start).
 I simply started writing and got it working before things got out of hand.
+
+### Parsing
+
+The code starts by reading the specified file (defaults to `Makefile`) line by line.
+I used Go's [bufio.Scanner](https://pkg.go.dev/bufio#Scanner) for this.
+Comments, dot-directives, and empty lines are ignored.
+Then, anything line that _doesn't_ start with a TAB is assumed to be the start of a new target definition.
+Subsequent lines that start with a TAB are added to the actions of the current target.
 
 ### Data Structures
 
@@ -82,14 +99,6 @@ The second is the `Graph` which isn't really as much of a graph as it is a mappi
 type Graph map[string]*Target
 ```
 
-### Lexing / Parsing
-
-The code starts by reading the specified file (defaults to `Makefile`) line by line.
-I used Go's [bufio.Scanner](https://pkg.go.dev/bufio#Scanner) for this.
-Comments, dot-directives, and empty lines are ignored.
-Then, anything line that _doesn't_ start with a TAB is assumed to be the start of a new target definition.
-Subsequent lines that start with a TAB are added to the actions of the current target.
-
 ### Execution
 
 I originally thought I'd need to topologically sort the targets in order to determine a correct ordering.
@@ -104,6 +113,7 @@ Since one of the deps hit an error, it'd be invalid to execute the current targe
 
 # Missing Features
 
+Talk about POSIX make vs GNU make.
 When comparing this small program to the full featureset of POSIX make, I'd say _most_ features are missing.
 Many examples come to mind: variables, non-phony targets, default rules.
 And that is only for POSIX make.

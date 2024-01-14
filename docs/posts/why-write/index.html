@@ -141,7 +141,12 @@
           </div>
           
           
-          
+          <div class="tags">
+  <i class="fa fa-tag" aria-hidden="true"></i>
+    <span class="tag">
+      <a href="/tags/webgl/">webgl</a>
+    </span></div>
+
         </div>
       </header>
 
@@ -167,13 +172,13 @@ I&rsquo;ll start with something short and sweet.</p>
 </h1>
 <p>I have always had a lingering interest in graphics programming.
 Back in the day, researching how to write graphics code led me to <a href="https://www.opengl.org/"  class="external-link" target="_blank" rel="noopener">OpenGL</a>.
-This is a native graphics API that is written in C (with bindings for many other languages).
+This is a native graphics API that is written in C (with bindings written for many other languages).
 Despite enjoying C programming and wanting to embrace OpenGL&rsquo;s native tooling, my small applications / games had a big program: distribution.</p>
 <p>Trying to share a native program with friends is difficult.
 You have two options: send them the compiled binary (for their specific operating system and architecture) or show them how to install a compiler and build it themselves.
-The second is a poor choice due to labor and complexity and the first is made difficult due to operating system security measures.
+The second is a poor choice due to complexity and the first is made difficult due to operating system security measures.
 It turns out that Windows and macOS really dislike running executables that they don&rsquo;t trust&hellip; and rightfully so.
-If only there was a way to share my demos with folks without them needing to download, install, or build anything.</p>
+If <em>only</em> there was a way to share my demos with folks without them needing to build, download, or install anything.</p>
 <p>Enter <a href="https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API"  class="external-link" target="_blank" rel="noopener">WebGL</a>.
 MDN describes it as &ldquo;a JavaScript API for rendering high-performance interactive 3D and 2D graphics within any compatible web browser without the use of plug-ins&rdquo;.
 This seems great!

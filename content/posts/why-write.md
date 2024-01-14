@@ -2,6 +2,7 @@
 date: 2024-01-07
 title: "Why Write?"
 slug: "why-write"
+tags: ["webgl"]
 ---
 
 How long has it been since my last post?
@@ -21,14 +22,14 @@ I'll start with something short and sweet.
 
 I have always had a lingering interest in graphics programming.
 Back in the day, researching how to write graphics code led me to [OpenGL](https://www.opengl.org/).
-This is a native graphics API that is written in C (with bindings for many other languages).
+This is a native graphics API that is written in C (with bindings written for many other languages).
 Despite enjoying C programming and wanting to embrace OpenGL's native tooling, my small applications / games had a big program: distribution.
 
 Trying to share a native program with friends is difficult.
 You have two options: send them the compiled binary (for their specific operating system and architecture) or show them how to install a compiler and build it themselves.
-The second is a poor choice due to labor and complexity and the first is made difficult due to operating system security measures.
+The second is a poor choice due to complexity and the first is made difficult due to operating system security measures.
 It turns out that Windows and macOS really dislike running executables that they don't trust... and rightfully so.
-If only there was a way to share my demos with folks without them needing to download, install, or build anything.
+If _only_ there was a way to share my demos with folks without them needing to build, download, or install anything.
 
 Enter [WebGL](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API).
 MDN describes it as "a JavaScript API for rendering high-performance interactive 3D and 2D graphics within any compatible web browser without the use of plug-ins".

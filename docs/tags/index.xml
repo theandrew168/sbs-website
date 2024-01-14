@@ -6,8 +6,15 @@
     <description>Recent content in Tags on Shallow Brook Software</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 14 Jan 2021 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 07 Jan 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://shallowbrooksoftware.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>webgl</title>
+      <link>https://shallowbrooksoftware.com/tags/webgl/</link>
+      <pubDate>Sun, 07 Jan 2024 00:00:00 +0000</pubDate>
+      <guid>https://shallowbrooksoftware.com/tags/webgl/</guid>
+      <description></description>
+    </item>
     <item>
       <title>database</title>
       <link>https://shallowbrooksoftware.com/tags/database/</link>
