@@ -3,7 +3,6 @@ date: 2024-01-14
 title: "Implementing Make in Go"
 slug: "implementing-make-in-go"
 tags: ["make", "go"]
-draft: true
 ---
 
 A while back, my buddy [Wes](https://brue.land/) and I took a weekend trip to a remote cabin in eastern Iowa.
@@ -94,35 +93,140 @@ type Graph map[string]*Target
 
 ### Execution
 
-I originally thought I'd need to topologically sort the targets in order to determine a correct ordering.
-In practice, however, a simple recursion that enforces each target's deps run before itself accomplishes the same thing.
-Once all of a Target's deps have ran successfully, its own actions will run.
+Before writing the code, I presumed that I'd need to [topologically sort](https://en.wikipedia.org/wiki/Topological_sorting) the targets in order to determine a correct execution order.
+In practice, however, **a simple recursion that enforces that the current target's dependencies run before itself did the trick**.
+Once all of a target's dependencies have been executed successfully, its own commands will run.
+
+In simplified pseudocode, this is the execution logic:
+
+```python
+def execute(graph, name):
+	# lookup the current target by name
+	target = graph[name]
+
+	# recursively execute the current target's dependencies
+	for dependency in target.dependencies:
+		execute(graph, dependency)
+
+	# run the current target's commands
+	for command in target.commands:
+		run_in_cli(command)
+```
+
+In reality, the execution code is a bit more complex than that due to a couple nuances: error handling and concurrency.
+
+### Error Handling
+
+There are only a couple ways that the execution of a given target can go wrong but it is important to acknowledge them.
+Failing to detect or handle the errors correctly could lead to an invalid execution of the graph and break the crucial invariant: a target's dependencies must **all execute successfully** before its own commands can run.
+
+The first possible error arises if a dependency doesn't exist: its name isn't present in the graph.
+This error can occur in malformed Makefiles.
+Although the existence of each dependency _could_ be validated prior to execution, I chose perform this check during execution.
+
+A second error scenarios is if a command runs but causes an error.
+A command in a Makefile can be any arbitrary string provided by the user.
+This opens the door to many possible issues: typos, missing programs, invalid args, etc.
+I'm using Go's [os/exec](https://pkg.go.dev/os/exec) package to run the external commands, check for errors, and capture any output.
+Since I execute each dependency concurrently, I need a way to track errors from asynchronous execution and prevent further execution if any arise.
 
 ### Concurrency
 
-The execution of each target uses a `sync.WaitGroup` to ensure all dependencies have ran before moving onto its own actions.
-If any of the dependencies return an error, then execution stops and the error is propagated without running this target's actions.
-Since one of the deps hit an error, it'd be invalid to execute the current target.
+The execution of each target uses a [sync.WaitGroup](https://pkg.go.dev/sync#WaitGroup) to ensure all dependencies have ran before moving onto its own commands.
+Additionally, Go's [sync.Once](https://pkg.go.dev/sync#Once) utility is used to ensure that a target's commands only run once regardless of how many goroutines are competing.
+A simple modification gives the `Target` struct this new superpower:
 
-# Missing Features
+```go
+type Target struct {
+	// embed sync.Once to enable "execute once" behavior
+	sync.Once
 
-Talk about [POSIX make](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/make.html) vs GNU make.
-When comparing this small program to the full featureset of POSIX make, I'd say _most_ features are missing.
-Many examples come to mind: variables, non-phony targets, default rules.
-And that is only for POSIX make.
-Other Make imples (like GNU-Make) greatly example the available features to include additional variable-related features, conditional logic, and more.
+	Dependencies []string
+	Commands     []string
+}
+```
+
+Executing a target's commands now requires calling `.Do` but gives us safety against race conditions:
+
+```go
+func executeCommands(target *Target) error {
+	var commandErr error
+	target.Do(func() {
+		// execute commands via os/exec
+	})
+	return commandErr
+}
+```
+
+Any errors returned from the execution of a dependency are delivered to the current execute's context via a channel.
+If any dependencies return an error, then execution stops and the error is propagated without running the current target's commands.
+
+Once all deps are kicked off, a `select` is used to wait for either: the success of **all** deps or the failure of **any** deps.
+This is the full, unsimplifed execution logic in Go:
+
+```go
+func execute(graph Graph, name string) error {
+	// lookup current target by name
+	target, ok := graph[name]
+	if !ok {
+		return fmt.Errorf("target does not exist: %s", name)
+	}
+
+	// create a channel for receiving errors from dependencies
+	errors := make(chan error)
+
+	// recursively execute all dependencies
+	var wg sync.WaitGroup
+	for _, dependency := range target.Dependencies {
+		dependency := dependency
+
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+
+			// submit any dependency errors to the errors channel
+			err := execute(graph, dependency)
+			if err != nil {
+				errors <- err
+			}
+		}()
+	}
+
+	// turn wg.Wait() into a select-able channel
+	done := make(chan struct{})
+	go func() {
+		wg.Wait()
+		close(done)
+	}()
+
+	// wait for dependencies to finish / check for errors
+	select {
+	case <-done:
+	case err := <-errors:
+		return err
+	}
+
+	// execute the current target's commands
+	return executeCommands(target)
+}
+```
 
 # Lessons Learned
 
-This was one of those rare occurrences where a project ends up being _less_ work than you expect.
-Granted, I only implemented a minimal subset of Make and achieving full POSIX compat would take much longer.
-As mentioned earlier, I really did expect to need to build and topo sort the DAG.
-I learned that a simple depth-first recursion plus ensuring each target only runs once does the trick.
+In many aspects, this project was a success: I was able implement a useful Make clone in a short cabin trip!
+It was one of those rare occurrences where a project ended up being _less_ work than expected.
+As mentioned earlier, I thought that I would have to fully build and topologically sort the graph before execution.
+I learned that using a depth-first recursion and enforcing that each target's dependencies run first does the trick.
 
-Go is awesome, especially when it comes to concurrency and cross-platform support.
+Despite implementing a personally-useful subset of Make behavior, there are many features that this project is missing.
+The [Make specification](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/make.html) outlines a number of useful things that my version lacks: variables, non-phony targets, default rules, etc.
+I'd like to continue iterating on this project eventually.
+Achieving full compatibility would be a solid milestone to work toward.
+
+Another lesson: Go is awesome, especially when it comes to concurrency!
 I guess this isn't a "lesson learned" as much as it is a "lesson reinforced".
-Overall, this was a great mini-project and I enjoyed building it.
-I'd like to continue interating on it sometime (maybe I need to take more cabin trips).
-Achieving full POSIX-compat would be a solid milestone to work toward.
+The tools that Go provides in its standard library are comprehensive and well-designed.
+A vast scope of projects can be built that depend only on Go's builtin packages.
 
+Overall, this was a great mini-project and I enjoyed building it.
 Thanks for reading!
