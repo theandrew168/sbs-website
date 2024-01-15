@@ -13,6 +13,7 @@ info = ["Software Engineer"]
 avatarurl = "images/avatar2.jpg"
 dateFormat = "January 2, 2006"
 footercontent = "simple software that babbles loudly"
+colorScheme = "auto"
 
 [[params.social]]
 name = "GitHub"
