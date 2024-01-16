@@ -221,7 +221,7 @@ Combine that value with the speed of executing non-dependent targets in parallel
 <p>While not a full-blown lexer/parser, the subset of Make&rsquo;s syntax that I chose to support can be handled with line-based processing.
 The code starts by reading the user-supplied Make file line by line (using Go&rsquo;s <a href="https://pkg.go.dev/bufio#Scanner"  class="external-link" target="_blank" rel="noopener">bufio.Scanner</a>).
 Any non-empty line that is a comment (starts with <code>#</code>) or a dot-directive (starts with <code>.</code>) is ignored.
-Then, anything line that <em>doesn&rsquo;t</em> start with a tab is assumed to be the start of a new target definition.
+Then, any line that <em>doesn&rsquo;t</em> start with a tab is assumed to be the start of a new target definition.
 Subsequent lines that start with a tab are added to the list of commands for the current target.</p>
 <h3 id="data-structures">
   Data Structures
