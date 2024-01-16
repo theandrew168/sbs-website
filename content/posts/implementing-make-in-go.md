@@ -65,7 +65,7 @@ The source code for this project can be found on [GitHub](https://github.com/the
 While not a full-blown lexer/parser, the subset of Make's syntax that I chose to support can be handled with line-based processing.
 The code starts by reading the user-supplied Make file line by line (using Go's [bufio.Scanner](https://pkg.go.dev/bufio#Scanner)).
 Any non-empty line that is a comment (starts with `#`) or a dot-directive (starts with `.`) is ignored.
-Then, anything line that _doesn't_ start with a tab is assumed to be the start of a new target definition.
+Then, any line that _doesn't_ start with a tab is assumed to be the start of a new target definition.
 Subsequent lines that start with a tab are added to the list of commands for the current target.
 
 ### Data Structures
