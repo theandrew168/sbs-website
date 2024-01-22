@@ -1,7 +1,7 @@
 ---
 date: 2024-01-21
-title: "Quick Tip: Using Make to Run Concurrent Services"
-slug: "quick-tip-using-make-to-run-concurrent-services"
+title: "Using Make to Run Concurrent Dev Services"
+slug: "using-make-to-run-concurrent-dev-services"
 tags: ["make"]
 ---
 
