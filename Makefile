@@ -5,7 +5,7 @@ default: build
 
 .PHONY: build
 build:
-	hugo -d docs/
+	hugo -d docs/ --gc --minify
 
 .PHONY: run
 run:

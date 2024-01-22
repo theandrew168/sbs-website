@@ -1,458 +1,159 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <title>
-  Implementing Make in Go · Shallow Brook Software
-</title>
-  <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="color-scheme" content="light dark">
-
-
-
-
-<meta name="author" content="Andrew Dailey">
-<meta name="description" content="A while back, my buddy Wes and I took a weekend trip to a remote cabin in eastern Iowa. We try to do this once a year with plans of fishing, hiking, and simply enjoying the quietness of nature. Not to mention the bliss of having no responsibilities for a few days! Despite being an outdoorsy trip, I still brought my laptop because programming is my favorite hobby. The internet in such remote locations is typically unreliable so I still consider it to be a nice disconnect.">
-<meta name="keywords" content="blog,developer,personal">
-
-<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Implementing Make in Go"/>
-<meta name="twitter:description" content="A while back, my buddy Wes and I took a weekend trip to a remote cabin in eastern Iowa. We try to do this once a year with plans of fishing, hiking, and simply enjoying the quietness of nature. Not to mention the bliss of having no responsibilities for a few days! Despite being an outdoorsy trip, I still brought my laptop because programming is my favorite hobby. The internet in such remote locations is typically unreliable so I still consider it to be a nice disconnect."/>
-
-<meta property="og:title" content="Implementing Make in Go" />
-<meta property="og:description" content="A while back, my buddy Wes and I took a weekend trip to a remote cabin in eastern Iowa. We try to do this once a year with plans of fishing, hiking, and simply enjoying the quietness of nature. Not to mention the bliss of having no responsibilities for a few days! Despite being an outdoorsy trip, I still brought my laptop because programming is my favorite hobby. The internet in such remote locations is typically unreliable so I still consider it to be a nice disconnect." />
-<meta property="og:type" content="article" />
-<meta property="og:url" content="https://shallowbrooksoftware.com/posts/implementing-make-in-go/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2024-01-14T00:00:00+00:00" />
-<meta property="article:modified_time" content="2024-01-14T00:00:00+00:00" />
-
-
-
-
-
-<link rel="canonical" href="https://shallowbrooksoftware.com/posts/implementing-make-in-go/">
-
-
-<link rel="preload" href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as="font" type="font/woff2" crossorigin>
-
-
-  
-  
-  <link rel="stylesheet" href="/css/coder.min.e1bdf152d93b060b06ba5d496486ed9c201a8b95d335e035beb5faebe3b61cad.css" integrity="sha256-4b3xUtk7BgsGul1JZIbtnCAai5XTNeA1vrX66&#43;O2HK0=" crossorigin="anonymous" media="screen" />
-
-
-
-
-
-
-  
-    
-    
-    <link rel="stylesheet" href="/css/coder-dark.min.a00e6364bacbc8266ad1cc81230774a1397198f8cfb7bcba29b7d6fcb54ce57f.css" integrity="sha256-oA5jZLrLyCZq0cyBIwd0oTlxmPjPt7y6KbfW/LVM5X8=" crossorigin="anonymous" media="screen" />
-  
-
-
-
- 
-
-
-
-
-<link rel="icon" type="image/svg+xml" href="/images/favicon.svg" sizes="any">
-<link rel="icon" type="image/png" href="/images/favicon-32x32.png" sizes="32x32">
-<link rel="icon" type="image/png" href="/images/favicon-16x16.png" sizes="16x16">
-
-<link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
-
-<link rel="manifest" href="/site.webmanifest">
-<link rel="mask-icon" href="/images/safari-pinned-tab.svg" color="#5bbad5">
-
-
-
-
-
-
-
-
-
-</head>
-
-
-
-
-
-
-<body class="preload-transitions colorscheme-auto">
-  
-<div class="float-container">
-    <a id="dark-mode-toggle" class="colorscheme-toggle">
-        <i class="fa fa-adjust fa-fw" aria-hidden="true"></i>
-    </a>
-</div>
-
-
-  <main class="wrapper">
-    <nav class="navigation">
-  <section class="container">
-    <a class="navigation-title" href="/">
-      Shallow Brook Software
-    </a>
-    
-      <input type="checkbox" id="menu-toggle" />
-      <label class="menu-button float-right" for="menu-toggle">
-        <i class="fa fa-bars fa-fw" aria-hidden="true"></i>
-      </label>
-      <ul class="navigation-list">
-        
-          
-            <li class="navigation-item">
-              <a class="navigation-link" href="/about/">About</a>
-            </li>
-          
-            <li class="navigation-item">
-              <a class="navigation-link" href="/posts/">Blog</a>
-            </li>
-          
-        
-        
-      </ul>
-    
-  </section>
-</nav>
-
-
-    <div class="content">
-      
-  <section class="container post">
-    <article>
-      <header>
-        <div class="post-title">
-          <h1 class="title">
-            <a class="title-link" href="https://shallowbrooksoftware.com/posts/implementing-make-in-go/">
-              Implementing Make in Go
-            </a>
-          </h1>
-        </div>
-        <div class="post-meta">
-          <div class="date">
-            <span class="posted-on">
-              <i class="fa fa-calendar" aria-hidden="true"></i>
-              <time datetime="2024-01-14T00:00:00Z">
-                January 14, 2024
-              </time>
-            </span>
-            <span class="reading-time">
-              <i class="fa fa-clock-o" aria-hidden="true"></i>
-              7-minute read
-            </span>
-          </div>
-          
-          
-          <div class="tags">
-  <i class="fa fa-tag" aria-hidden="true"></i>
-    <span class="tag">
-      <a href="/tags/make/">make</a>
-    </span>
-      <span class="separator">•</span>
-    <span class="tag">
-      <a href="/tags/go/">go</a>
-    </span></div>
-
-        </div>
-      </header>
-
-      <div class="post-content">
-        
-        <p>A while back, my buddy <a href="https://brue.land/"  class="external-link" target="_blank" rel="noopener">Wes</a> and I took a weekend trip to a remote cabin in eastern Iowa.
+<!doctype html><html lang=en><head><title>Implementing Make in Go · Shallow Brook Software
+</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="A while back, my buddy Wes and I took a weekend trip to a remote cabin in eastern Iowa. We try to do this once a year with plans of fishing, hiking, and simply enjoying the quietness of nature. Not to mention the bliss of having no responsibilities for a few days! Despite being an outdoorsy trip, I still brought my laptop because programming is my favorite hobby. The internet in such remote locations is typically unreliable so I still consider it to be a nice disconnect."><meta name=keywords content="blog,developer,personal"><meta name=twitter:card content="summary"><meta name=twitter:title content="Implementing Make in Go"><meta name=twitter:description content="A while back, my buddy Wes and I took a weekend trip to a remote cabin in eastern Iowa. We try to do this once a year with plans of fishing, hiking, and simply enjoying the quietness of nature. Not to mention the bliss of having no responsibilities for a few days! Despite being an outdoorsy trip, I still brought my laptop because programming is my favorite hobby. The internet in such remote locations is typically unreliable so I still consider it to be a nice disconnect."><meta property="og:title" content="Implementing Make in Go"><meta property="og:description" content="A while back, my buddy Wes and I took a weekend trip to a remote cabin in eastern Iowa. We try to do this once a year with plans of fishing, hiking, and simply enjoying the quietness of nature. Not to mention the bliss of having no responsibilities for a few days! Despite being an outdoorsy trip, I still brought my laptop because programming is my favorite hobby. The internet in such remote locations is typically unreliable so I still consider it to be a nice disconnect."><meta property="og:type" content="article"><meta property="og:url" content="https://shallowbrooksoftware.com/posts/implementing-make-in-go/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2024-01-14T00:00:00+00:00"><meta property="article:modified_time" content="2024-01-14T00:00:00+00:00"><link rel=canonical href=https://shallowbrooksoftware.com/posts/implementing-make-in-go/><link rel=preload href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.e1bdf152d93b060b06ba5d496486ed9c201a8b95d335e035beb5faebe3b61cad.css integrity="sha256-4b3xUtk7BgsGul1JZIbtnCAai5XTNeA1vrX66+O2HK0=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.a00e6364bacbc8266ad1cc81230774a1397198f8cfb7bcba29b7d6fcb54ce57f.css integrity="sha256-oA5jZLrLyCZq0cyBIwd0oTlxmPjPt7y6KbfW/LVM5X8=" crossorigin=anonymous media=screen><link rel=icon type=image/svg+xml href=/images/favicon.svg sizes=any><link rel=icon type=image/png href=/images/favicon-32x32.png sizes=32x32><link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16><link rel=apple-touch-icon href=/images/apple-touch-icon.png><link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><a class=navigation-title href=/>Shallow Brook Software
+</a><input type=checkbox id=menu-toggle>
+<label class="menu-button float-right" for=menu-toggle><i class="fa fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/about/>About</a></li><li class=navigation-item><a class=navigation-link href=/posts/>Blog</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://shallowbrooksoftware.com/posts/implementing-make-in-go/>Implementing Make in Go</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa fa-calendar" aria-hidden=true></i>
+<time datetime=2024-01-14T00:00:00Z>January 14, 2024
+</time></span><span class=reading-time><i class="fa fa-clock-o" aria-hidden=true></i>
+7-minute read</span></div><div class=tags><i class="fa fa-tag" aria-hidden=true></i>
+<span class=tag><a href=/tags/make/>make</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/go/>go</a></span></div></div></header><div class=post-content><p>A while back, my buddy <a href=https://brue.land/ class=external-link target=_blank rel=noopener>Wes</a> and I took a weekend trip to a remote cabin in eastern Iowa.
 We try to do this once a year with plans of fishing, hiking, and simply enjoying the quietness of nature.
 Not to mention the bliss of having no responsibilities for a few days!
 Despite being an outdoorsy trip, I still brought my laptop because programming is my favorite hobby.
-The internet in such remote locations is typically unreliable so I still consider it to be a nice disconnect.</p>
-<p>Part of my prep for this trip was coming up with a narrowly-scoped, interesting project that I could complete (in some minimally-viable form) within its duration.
-As a longtime fan of <a href="https://en.wikipedia.org/wiki/Make_%28software%29"  class="external-link" target="_blank" rel="noopener">Make</a>, I thought it&rsquo;d be interesting to implement some useful subset of its behavior.
+The internet in such remote locations is typically unreliable so I still consider it to be a nice disconnect.</p><p>Part of my prep for this trip was coming up with a narrowly-scoped, interesting project that I could complete (in some minimally-viable form) within its duration.
+As a longtime fan of <a href=https://en.wikipedia.org/wiki/Make_%28software%29 class=external-link target=_blank rel=noopener>Make</a>, I thought it&rsquo;d be interesting to implement some useful subset of its behavior.
 Additionally, there isn&rsquo;t much Make support on Windows so writing it in an easily cross-platform language would be a boon.
-So, I decided to implement Make in <a href="https://go.dev/"  class="external-link" target="_blank" rel="noopener">Go</a>!</p>
-<h1 id="what-is-make">
-  What is Make?
-  <a class="heading-link" href="#what-is-make">
-    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
-    <span class="sr-only">Link to heading</span>
-  </a>
-</h1>
-<p><a href="https://en.wikipedia.org/wiki/Make_%28software%29"  class="external-link" target="_blank" rel="noopener">Make</a> is a simple build automation tool for expressing arbitrary command-line actions and their dependencies on other commands.
+So, I decided to implement Make in <a href=https://go.dev/ class=external-link target=_blank rel=noopener>Go</a>!</p><h1 id=what-is-make>What is Make?
+<a class=heading-link href=#what-is-make><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p><a href=https://en.wikipedia.org/wiki/Make_%28software%29 class=external-link target=_blank rel=noopener>Make</a> is a simple build automation tool for expressing arbitrary command-line actions and their dependencies on other commands.
 While Make has historically had a close relationship with C/C++ development, I have found that it adds value to any software project that has various build steps and tasks (running tests, formatting code, etc).
 In practice, this ends up being most projects!
-I&rsquo;ve personally used Make to manage Go-based tools, Python projects, and polyglot web applications.</p>
-<p>Here is a small example of using Make to manage building and running a Go program:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-make" data-lang="make"><span style="display:flex;"><span><span style="color:#a6e22e">build</span><span style="color:#f92672">:</span>
-</span></span><span style="display:flex;"><span>	go build -o main main.go
-</span></span><span style="display:flex;"><span><span style="color:#a6e22e">run</span><span style="color:#f92672">:</span> build
-</span></span><span style="display:flex;"><span>	./main
+I&rsquo;ve personally used Make to manage Go-based tools, Python projects, and polyglot web applications.</p><p>Here is a small example of using Make to manage building and running a Go program:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-make data-lang=make><span style=display:flex><span><span style=color:#a6e22e>build</span><span style=color:#f92672>:</span>
+</span></span><span style=display:flex><span>	go build -o main main.go
+</span></span><span style=display:flex><span><span style=color:#a6e22e>run</span><span style=color:#f92672>:</span> build
+</span></span><span style=display:flex><span>	./main
 </span></span></code></pre></div><p>This file defines two targets: <code>build</code> and <code>run</code>.
 The <code>build</code> target has no dependencies while the <code>run</code> targets depends on <code>build</code>.
-The commands for a given target must be indented with a hard tab character (this a requirement of Make&rsquo;s syntax).</p>
-<p>If you want to run the <code>build</code> target, then Make will run the command provided to build the Go program:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ make build
-</span></span><span style="display:flex;"><span>go build -o main main.go
-</span></span></code></pre></div><p>However, if you choose the <code>run</code> target, Make will execute <code>build</code> first (because it is declared as a dependency) and <em>then</em> run the program:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ make run
-</span></span><span style="display:flex;"><span>go build -o main main.go
-</span></span><span style="display:flex;"><span>./main
-</span></span><span style="display:flex;"><span>Hello World!
+The commands for a given target must be indented with a hard tab character (this a requirement of Make&rsquo;s syntax).</p><p>If you want to run the <code>build</code> target, then Make will run the command provided to build the Go program:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>$ make build
+</span></span><span style=display:flex><span>go build -o main main.go
+</span></span></code></pre></div><p>However, if you choose the <code>run</code> target, Make will execute <code>build</code> first (because it is declared as a dependency) and <em>then</em> run the program:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sh data-lang=sh><span style=display:flex><span>$ make run
+</span></span><span style=display:flex><span>go build -o main main.go
+</span></span><span style=display:flex><span>./main
+</span></span><span style=display:flex><span>Hello World!
 </span></span></code></pre></div><p>From this simple foundation, an incredibly useful toolbox of targets can be built.
 When expressed with proper dependencies, you never have to worry about running commands in the wrong order.
-Combine that value with the speed of executing non-dependent targets in parallel and you&rsquo;ve got a perfect project assistant.</p>
-<h1 id="the-code">
-  The Code
-  <a class="heading-link" href="#the-code">
-    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
-    <span class="sr-only">Link to heading</span>
-  </a>
-</h1>
-<p>The source code for this project can be found on <a href="https://github.com/theandrew168/make"  class="external-link" target="_blank" rel="noopener">GitHub</a>.</p>
-<h3 id="parsing">
-  Parsing
-  <a class="heading-link" href="#parsing">
-    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
-    <span class="sr-only">Link to heading</span>
-  </a>
-</h3>
-<p>While not a full-blown lexer/parser, the subset of Make&rsquo;s syntax that I chose to support can be handled with line-based processing.
-The code starts by reading the user-supplied Make file line by line (using Go&rsquo;s <a href="https://pkg.go.dev/bufio#Scanner"  class="external-link" target="_blank" rel="noopener">bufio.Scanner</a>).
+Combine that value with the speed of executing non-dependent targets in parallel and you&rsquo;ve got a perfect project assistant.</p><h1 id=the-code>The Code
+<a class=heading-link href=#the-code><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>The source code for this project can be found on <a href=https://github.com/theandrew168/make class=external-link target=_blank rel=noopener>GitHub</a>.</p><h3 id=parsing>Parsing
+<a class=heading-link href=#parsing><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>While not a full-blown lexer/parser, the subset of Make&rsquo;s syntax that I chose to support can be handled with line-based processing.
+The code starts by reading the user-supplied Make file line by line (using Go&rsquo;s <a href=https://pkg.go.dev/bufio#Scanner class=external-link target=_blank rel=noopener>bufio.Scanner</a>).
 Any non-empty line that is a comment (starts with <code>#</code>) or a dot-directive (starts with <code>.</code>) is ignored.
 Then, any line that <em>doesn&rsquo;t</em> start with a tab is assumed to be the start of a new target definition.
-Subsequent lines that start with a tab are added to the list of commands for the current target.</p>
-<h3 id="data-structures">
-  Data Structures
-  <a class="heading-link" href="#data-structures">
-    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
-    <span class="sr-only">Link to heading</span>
-  </a>
-</h3>
-<p>What is a &ldquo;target&rdquo;, though?
+Subsequent lines that start with a tab are added to the list of commands for the current target.</p><h3 id=data-structures>Data Structures
+<a class=heading-link href=#data-structures><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>What is a &ldquo;target&rdquo;, though?
 A target is an entry within a Makefile that has commands (things to execute on the command line) and dependencies (other targets referenced by name).
-Remember that the example used earlier had two targets: <code>build</code> (no dependencies) and <code>run</code> (depends on <code>build</code>).</p>
-<p>Since I&rsquo;m using Go, I represented a target as a struct:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Target</span> <span style="color:#66d9ef">struct</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Dependencies</span> []<span style="color:#66d9ef">string</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Commands</span>     []<span style="color:#66d9ef">string</span>
-</span></span><span style="display:flex;"><span>}
+Remember that the example used earlier had two targets: <code>build</code> (no dependencies) and <code>run</code> (depends on <code>build</code>).</p><p>Since I&rsquo;m using Go, I represented a target as a struct:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Target</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>Dependencies</span> []<span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>Commands</span>     []<span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>}
 </span></span></code></pre></div><p>The second data type worthy of explanation is the <code>Graph</code>.
 In practice, though, this isn&rsquo;t really much of a graph but instead a mapping of names to targets.
-Dependency info is stored within each target but we still need a way to lookup targets by name.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Graph</span> <span style="color:#66d9ef">map</span>[<span style="color:#66d9ef">string</span>]<span style="color:#f92672">*</span><span style="color:#a6e22e">Target</span>
-</span></span></code></pre></div><h3 id="execution">
-  Execution
-  <a class="heading-link" href="#execution">
-    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
-    <span class="sr-only">Link to heading</span>
-  </a>
-</h3>
-<p>Before writing the code, I presumed that I&rsquo;d need to <a href="https://en.wikipedia.org/wiki/Topological_sorting"  class="external-link" target="_blank" rel="noopener">topologically sort</a> the targets in order to determine a correct execution order.
+Dependency info is stored within each target but we still need a way to lookup targets by name.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Graph</span> <span style=color:#66d9ef>map</span>[<span style=color:#66d9ef>string</span>]<span style=color:#f92672>*</span><span style=color:#a6e22e>Target</span>
+</span></span></code></pre></div><h3 id=execution>Execution
+<a class=heading-link href=#execution><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>Before writing the code, I presumed that I&rsquo;d need to <a href=https://en.wikipedia.org/wiki/Topological_sorting class=external-link target=_blank rel=noopener>topologically sort</a> the targets in order to determine a correct execution order.
 In practice, however, <strong>a simple recursion that enforces that the current target&rsquo;s dependencies run before itself did the trick</strong>.
-Once all of a target&rsquo;s dependencies have been executed successfully, its own commands will run.</p>
-<p>In simplified pseudocode, this is the execution logic:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">execute</span>(graph, name):
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e"># lookup the current target by name</span>
-</span></span><span style="display:flex;"><span>	target <span style="color:#f92672">=</span> graph[name]
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e"># recursively execute the current target&#39;s dependencies</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> dependency <span style="color:#f92672">in</span> target<span style="color:#f92672">.</span>dependencies:
-</span></span><span style="display:flex;"><span>		execute(graph, dependency)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e"># run the current target&#39;s commands</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> command <span style="color:#f92672">in</span> target<span style="color:#f92672">.</span>commands:
-</span></span><span style="display:flex;"><span>		run_in_cli(command)
-</span></span></code></pre></div><p>In reality, the execution code is a bit more complex than that due to a couple nuances: error handling and concurrency.</p>
-<h3 id="error-handling">
-  Error Handling
-  <a class="heading-link" href="#error-handling">
-    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
-    <span class="sr-only">Link to heading</span>
-  </a>
-</h3>
-<p>There are only a couple ways that the execution of a given target can go wrong but it is important to acknowledge them.
-Failing to detect or handle the errors correctly could lead to an invalid execution of the graph and break the crucial invariant: a target&rsquo;s dependencies must <strong>all execute successfully</strong> before its own commands can run.</p>
-<p>The first possible error arises if a dependency doesn&rsquo;t exist: its name isn&rsquo;t present in the graph.
+Once all of a target&rsquo;s dependencies have been executed successfully, its own commands will run.</p><p>In simplified pseudocode, this is the execution logic:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>def</span> <span style=color:#a6e22e>execute</span>(graph, name):
+</span></span><span style=display:flex><span>	<span style=color:#75715e># lookup the current target by name</span>
+</span></span><span style=display:flex><span>	target <span style=color:#f92672>=</span> graph[name]
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e># recursively execute the current target&#39;s dependencies</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>for</span> dependency <span style=color:#f92672>in</span> target<span style=color:#f92672>.</span>dependencies:
+</span></span><span style=display:flex><span>		execute(graph, dependency)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e># run the current target&#39;s commands</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>for</span> command <span style=color:#f92672>in</span> target<span style=color:#f92672>.</span>commands:
+</span></span><span style=display:flex><span>		run_in_cli(command)
+</span></span></code></pre></div><p>In reality, the execution code is a bit more complex than that due to a couple nuances: error handling and concurrency.</p><h3 id=error-handling>Error Handling
+<a class=heading-link href=#error-handling><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>There are only a couple ways that the execution of a given target can go wrong but it is important to acknowledge them.
+Failing to detect or handle the errors correctly could lead to an invalid execution of the graph and break the crucial invariant: a target&rsquo;s dependencies must <strong>all execute successfully</strong> before its own commands can run.</p><p>The first possible error arises if a dependency doesn&rsquo;t exist: its name isn&rsquo;t present in the graph.
 This error can occur in malformed Makefiles.
-Although the existence of each dependency <em>could</em> be validated prior to execution, I chose perform this check during execution.</p>
-<p>A second error scenarios is if a command runs but causes an error.
+Although the existence of each dependency <em>could</em> be validated prior to execution, I chose perform this check during execution.</p><p>A second error scenarios is if a command runs but causes an error.
 A command in a Makefile can be any arbitrary string provided by the user.
 This opens the door to many possible issues: typos, missing programs, invalid args, etc.
-I&rsquo;m using Go&rsquo;s <a href="https://pkg.go.dev/os/exec"  class="external-link" target="_blank" rel="noopener">os/exec</a> package to run the external commands, check for errors, and capture any output.
-Since I execute each dependency concurrently, I need a way to track errors from asynchronous execution and prevent further execution if any arise.</p>
-<h3 id="concurrency">
-  Concurrency
-  <a class="heading-link" href="#concurrency">
-    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
-    <span class="sr-only">Link to heading</span>
-  </a>
-</h3>
-<p>The execution of each target uses a <a href="https://pkg.go.dev/sync#WaitGroup"  class="external-link" target="_blank" rel="noopener">sync.WaitGroup</a> to ensure all dependencies have ran before moving onto its own commands.
-Additionally, Go&rsquo;s <a href="https://pkg.go.dev/sync#Once"  class="external-link" target="_blank" rel="noopener">sync.Once</a> utility is used to ensure that a target&rsquo;s commands only run once regardless of how many goroutines are competing.
-A simple modification gives the <code>Target</code> struct this new superpower:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">type</span> <span style="color:#a6e22e">Target</span> <span style="color:#66d9ef">struct</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// embed sync.Once to enable &#34;execute once&#34; behavior
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">Once</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Dependencies</span> []<span style="color:#66d9ef">string</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">Commands</span>     []<span style="color:#66d9ef">string</span>
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><p>Executing a target&rsquo;s commands now requires calling <code>.Do</code> but gives us safety against race conditions:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">executeCommands</span>(<span style="color:#a6e22e">target</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">Target</span>) <span style="color:#66d9ef">error</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">commandErr</span> <span style="color:#66d9ef">error</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">Do</span>(<span style="color:#66d9ef">func</span>() {
-</span></span><span style="display:flex;"><span>		<span style="color:#75715e">// execute commands via os/exec
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	})
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">commandErr</span>
-</span></span><span style="display:flex;"><span>}
+I&rsquo;m using Go&rsquo;s <a href=https://pkg.go.dev/os/exec class=external-link target=_blank rel=noopener>os/exec</a> package to run the external commands, check for errors, and capture any output.
+Since I execute each dependency concurrently, I need a way to track errors from asynchronous execution and prevent further execution if any arise.</p><h3 id=concurrency>Concurrency
+<a class=heading-link href=#concurrency><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>The execution of each target uses a <a href=https://pkg.go.dev/sync#WaitGroup class=external-link target=_blank rel=noopener>sync.WaitGroup</a> to ensure all dependencies have ran before moving onto its own commands.
+Additionally, Go&rsquo;s <a href=https://pkg.go.dev/sync#Once class=external-link target=_blank rel=noopener>sync.Once</a> utility is used to ensure that a target&rsquo;s commands only run once regardless of how many goroutines are competing.
+A simple modification gives the <code>Target</code> struct this new superpower:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Target</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// embed sync.Once to enable &#34;execute once&#34; behavior
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>sync</span>.<span style=color:#a6e22e>Once</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>Dependencies</span> []<span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>Commands</span>     []<span style=color:#66d9ef>string</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Executing a target&rsquo;s commands now requires calling <code>.Do</code> but gives us safety against race conditions:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>executeCommands</span>(<span style=color:#a6e22e>target</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Target</span>) <span style=color:#66d9ef>error</span> {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>commandErr</span> <span style=color:#66d9ef>error</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>target</span>.<span style=color:#a6e22e>Do</span>(<span style=color:#66d9ef>func</span>() {
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// execute commands via os/exec
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	})
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>commandErr</span>
+</span></span><span style=display:flex><span>}
 </span></span></code></pre></div><p>Any errors returned from the execution of a dependency are delivered to the current execute&rsquo;s context via a channel.
-If any dependencies return an error, then execution stops and the error is propagated without running the current target&rsquo;s commands.</p>
-<p>Once all deps are kicked off, a <code>select</code> is used to wait for either: the success of <strong>all</strong> deps or the failure of <strong>any</strong> deps.
-This is the full, unsimplifed execution logic in Go:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-go" data-lang="go"><span style="display:flex;"><span><span style="color:#66d9ef">func</span> <span style="color:#a6e22e">execute</span>(<span style="color:#a6e22e">graph</span> <span style="color:#a6e22e">Graph</span>, <span style="color:#a6e22e">name</span> <span style="color:#66d9ef">string</span>) <span style="color:#66d9ef">error</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// lookup current target by name
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">target</span>, <span style="color:#a6e22e">ok</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">graph</span>[<span style="color:#a6e22e">name</span>]
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> !<span style="color:#a6e22e">ok</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">fmt</span>.<span style="color:#a6e22e">Errorf</span>(<span style="color:#e6db74">&#34;target does not exist: %s&#34;</span>, <span style="color:#a6e22e">name</span>)
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// create a channel for receiving errors from dependencies
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">errors</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">error</span>)
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// recursively execute all dependencies
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">wg</span> <span style="color:#a6e22e">sync</span>.<span style="color:#a6e22e">WaitGroup</span>
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span> <span style="color:#a6e22e">_</span>, <span style="color:#a6e22e">dependency</span> <span style="color:#f92672">:=</span> <span style="color:#66d9ef">range</span> <span style="color:#a6e22e">target</span>.<span style="color:#a6e22e">Dependencies</span> {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">dependency</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">dependency</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Add</span>(<span style="color:#ae81ff">1</span>)
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">defer</span> <span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Done</span>()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>			<span style="color:#75715e">// submit any dependency errors to the errors channel
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>			<span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#a6e22e">execute</span>(<span style="color:#a6e22e">graph</span>, <span style="color:#a6e22e">dependency</span>)
-</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">if</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nil</span> {
-</span></span><span style="display:flex;"><span>				<span style="color:#a6e22e">errors</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">err</span>
-</span></span><span style="display:flex;"><span>			}
-</span></span><span style="display:flex;"><span>		}()
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// turn wg.Wait() into a select-able channel
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#a6e22e">done</span> <span style="color:#f92672">:=</span> make(<span style="color:#66d9ef">chan</span> <span style="color:#66d9ef">struct</span>{})
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">go</span> <span style="color:#66d9ef">func</span>() {
-</span></span><span style="display:flex;"><span>		<span style="color:#a6e22e">wg</span>.<span style="color:#a6e22e">Wait</span>()
-</span></span><span style="display:flex;"><span>		close(<span style="color:#a6e22e">done</span>)
-</span></span><span style="display:flex;"><span>	}()
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// wait for dependencies to finish / check for errors
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">select</span> {
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">case</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">done</span>:
-</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">case</span> <span style="color:#a6e22e">err</span> <span style="color:#f92672">:=</span> <span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">errors</span>:
-</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">err</span>
-</span></span><span style="display:flex;"><span>	}
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// execute the current target&#39;s commands
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">return</span> <span style="color:#a6e22e">executeCommands</span>(<span style="color:#a6e22e">target</span>)
-</span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h1 id="lessons-learned">
-  Lessons Learned
-  <a class="heading-link" href="#lessons-learned">
-    <i class="fa fa-link" aria-hidden="true" title="Link to heading"></i>
-    <span class="sr-only">Link to heading</span>
-  </a>
-</h1>
-<p>In many aspects, this project was a success: I was able implement a useful Make clone in a short cabin trip!
+If any dependencies return an error, then execution stops and the error is propagated without running the current target&rsquo;s commands.</p><p>Once all deps are kicked off, a <code>select</code> is used to wait for either: the success of <strong>all</strong> deps or the failure of <strong>any</strong> deps.
+This is the full, unsimplifed execution logic in Go:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>execute</span>(<span style=color:#a6e22e>graph</span> <span style=color:#a6e22e>Graph</span>, <span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>) <span style=color:#66d9ef>error</span> {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// lookup current target by name
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>target</span>, <span style=color:#a6e22e>ok</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>graph</span>[<span style=color:#a6e22e>name</span>]
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> !<span style=color:#a6e22e>ok</span> {
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;target does not exist: %s&#34;</span>, <span style=color:#a6e22e>name</span>)
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// create a channel for receiving errors from dependencies
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>errors</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>error</span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// recursively execute all dependencies
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>wg</span> <span style=color:#a6e22e>sync</span>.<span style=color:#a6e22e>WaitGroup</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>dependency</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>target</span>.<span style=color:#a6e22e>Dependencies</span> {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>dependency</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>dependency</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>wg</span>.<span style=color:#a6e22e>Add</span>(<span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>go</span> <span style=color:#66d9ef>func</span>() {
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>wg</span>.<span style=color:#a6e22e>Done</span>()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>			<span style=color:#75715e>// submit any dependency errors to the errors channel
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>			<span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>execute</span>(<span style=color:#a6e22e>graph</span>, <span style=color:#a6e22e>dependency</span>)
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>				<span style=color:#a6e22e>errors</span> <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>err</span>
+</span></span><span style=display:flex><span>			}
+</span></span><span style=display:flex><span>		}()
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// turn wg.Wait() into a select-able channel
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>done</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>struct</span>{})
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>go</span> <span style=color:#66d9ef>func</span>() {
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>wg</span>.<span style=color:#a6e22e>Wait</span>()
+</span></span><span style=display:flex><span>		close(<span style=color:#a6e22e>done</span>)
+</span></span><span style=display:flex><span>	}()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// wait for dependencies to finish / check for errors
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>select</span> {
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>case</span> <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>done</span>:
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>case</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>errors</span>:
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
+</span></span><span style=display:flex><span>	}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// execute the current target&#39;s commands
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>executeCommands</span>(<span style=color:#a6e22e>target</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h1 id=lessons-learned>Lessons Learned
+<a class=heading-link href=#lessons-learned><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>In many aspects, this project was a success: I was able implement a useful Make clone in a short cabin trip!
 It was one of those rare occurrences where a project ended up being <em>less</em> work than expected.
 As mentioned earlier, I thought that I would have to fully build and topologically sort the graph before execution.
-I learned that using a depth-first recursion and enforcing that each target&rsquo;s dependencies run first does the trick.</p>
-<p>Despite implementing a personally-useful subset of Make behavior, there are many features that this project is missing.
-The <a href="https://pubs.opengroup.org/onlinepubs/9699919799/utilities/make.html"  class="external-link" target="_blank" rel="noopener">Make specification</a> outlines a number of useful things that my version lacks: variables, non-phony targets, default rules, etc.
+I learned that using a depth-first recursion and enforcing that each target&rsquo;s dependencies run first does the trick.</p><p>Despite implementing a personally-useful subset of Make behavior, there are many features that this project is missing.
+The <a href=https://pubs.opengroup.org/onlinepubs/9699919799/utilities/make.html class=external-link target=_blank rel=noopener>Make specification</a> outlines a number of useful things that my version lacks: variables, non-phony targets, default rules, etc.
 I&rsquo;d like to continue iterating on this project eventually.
-Achieving full compatibility would be a solid milestone to work toward.</p>
-<p>Another lesson: Go is awesome, especially when it comes to concurrency!
+Achieving full compatibility would be a solid milestone to work toward.</p><p>Another lesson: Go is awesome, especially when it comes to concurrency!
 I guess this isn&rsquo;t a &ldquo;lesson learned&rdquo; as much as it is a &ldquo;lesson reinforced&rdquo;.
 The tools that Go provides in its standard library are comprehensive and well-designed.
-A vast scope of projects can be built that depend only on Go&rsquo;s builtin packages.</p>
-<p>Overall, this was a great mini-project and I enjoyed building it.
-Thanks for reading!</p>
-
-      </div>
-
-
-      <footer>
-        
-
-
-        
-        
-        
-        
-        
-      </footer>
-    </article>
-
-    
-  </section>
-
-    </div>
-
-    <footer class="footer">
-  <section class="container">
-    ©
-    
-    2024
-     Andrew Dailey 
-    ·
-    
-    Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a> & <a href="https://github.com/luizdepra/hugo-coder/" target="_blank" rel="noopener">Coder</a>.
-    
-  </section>
-</footer>
-
-  </main>
-
-  
-
-  
-  
-  <script src="/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js" integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script>
-  
-
-  
-
-  
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-</body>
-
-</html>
+A vast scope of projects can be built that depend only on Go&rsquo;s builtin packages.</p><p>Overall, this was a great mini-project and I enjoyed building it.
+Thanks for reading!</p></div><footer></footer></article></section></div><footer class=footer><section class=container>©
+2024
+Andrew Dailey
+·
+Powered by <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> & <a href=https://github.com/luizdepra/hugo-coder/ target=_blank rel=noopener>Coder</a>.</section></footer></main><script src=/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script></body></html>

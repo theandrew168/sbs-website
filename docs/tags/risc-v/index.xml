@@ -1,26 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>risc-v on Shallow Brook Software</title>
-    <link>https://shallowbrooksoftware.com/tags/risc-v/</link>
-    <description>Recent content in risc-v on Shallow Brook Software</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>en</language>
-    <lastBuildDate>Wed, 11 Nov 2020 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://shallowbrooksoftware.com/tags/risc-v/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Ideas for Maximizing RISC-V&#39;s Potential</title>
-      <link>https://shallowbrooksoftware.com/posts/ideas-for-maximizing-riscvs-potential/</link>
-      <pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate>
-      <guid>https://shallowbrooksoftware.com/posts/ideas-for-maximizing-riscvs-potential/</guid>
-      <description>There has been a lot of buzz surrounding the slowness, instability, and complexity of modern software systems. It seems as though more and more people are feeling and observing bloat and bugginess in their day-to-day usage of computers. In many situations, the mediocrity of today&amp;rsquo;s technology has become so common that it isn&amp;rsquo;t even seen as an issue.&#xA;During my few years spent in industry, these sort of quotes were heard almost daily:</description>
-    </item>
-    <item>
-      <title>Bare-Metal Assembly on the Longan Nano</title>
-      <link>https://shallowbrooksoftware.com/posts/bare-metal-assembly-on-the-longan-nano/</link>
-      <pubDate>Fri, 24 Apr 2020 00:00:00 +0000</pubDate>
-      <guid>https://shallowbrooksoftware.com/posts/bare-metal-assembly-on-the-longan-nano/</guid>
-      <description>The Sipeed Longan Nano is a small, affordable, 32-bit RISC-V chip. Despite its minimalism, the Longan Nano provides enough power and peripherals to learn RISC-V assembly and build exciting programs along the way.&#xA;The Longan Nano comes with the following components:&#xA;GigaDevice GD32VF103[CBT6] 32-bit CPU 8 MHz default clock speed (IRC8M) 108 MHz maximum clock speed 128 KB flash storage 32 KB sram memory 3 LEDs (red, green, and blue) 1 USB Type-C port 1 microSD card slot 160x80 pixel LCD (0.</description>
-    </item>
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>risc-v on Shallow Brook Software</title><link>https://shallowbrooksoftware.com/tags/risc-v/</link><description>Recent content in risc-v on Shallow Brook Software</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Wed, 11 Nov 2020 00:00:00 +0000</lastBuildDate><atom:link href="https://shallowbrooksoftware.com/tags/risc-v/index.xml" rel="self" type="application/rss+xml"/><item><title>Ideas for Maximizing RISC-V's Potential</title><link>https://shallowbrooksoftware.com/posts/ideas-for-maximizing-riscvs-potential/</link><pubDate>Wed, 11 Nov 2020 00:00:00 +0000</pubDate><guid>https://shallowbrooksoftware.com/posts/ideas-for-maximizing-riscvs-potential/</guid><description>There has been a lot of buzz surrounding the slowness, instability, and complexity of modern software systems. It seems as though more and more people are feeling and observing bloat and bugginess in their day-to-day usage of computers. In many situations, the mediocrity of today&amp;rsquo;s technology has become so common that it isn&amp;rsquo;t even seen as an issue.
+During my few years spent in industry, these sort of quotes were heard almost daily:</description></item><item><title>Bare-Metal Assembly on the Longan Nano</title><link>https://shallowbrooksoftware.com/posts/bare-metal-assembly-on-the-longan-nano/</link><pubDate>Fri, 24 Apr 2020 00:00:00 +0000</pubDate><guid>https://shallowbrooksoftware.com/posts/bare-metal-assembly-on-the-longan-nano/</guid><description>The Sipeed Longan Nano is a small, affordable, 32-bit RISC-V chip. Despite its minimalism, the Longan Nano provides enough power and peripherals to learn RISC-V assembly and build exciting programs along the way.
+The Longan Nano comes with the following components:
+GigaDevice GD32VF103[CBT6] 32-bit CPU 8 MHz default clock speed (IRC8M) 108 MHz maximum clock speed 128 KB flash storage 32 KB sram memory 3 LEDs (red, green, and blue) 1 USB Type-C port 1 microSD card slot 160x80 pixel LCD (0.</description></item></channel></rss>
