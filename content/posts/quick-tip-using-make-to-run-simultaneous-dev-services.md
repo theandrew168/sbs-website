@@ -1,9 +1,8 @@
 ---
-date: 2024-01-18
+date: 2024-01-21
 title: "Quick Tip: Using Make to Run Concurrent Services"
 slug: "quick-tip-using-make-to-run-concurrent-services"
 tags: ["make"]
-draft: true
 ---
 
 This short post explains a useful trick for using [Make](<https://en.wikipedia.org/wiki/Make_(software)>) to run multiple development services at the same time.
