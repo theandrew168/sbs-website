@@ -11,10 +11,10 @@ That being said, NodeJS is still highly concurrent: it uses [modern event loop t
 NodeJS might not be truly parallel, but it is certainly concurrent.
 Knowing this, how is it that NodeJS performs reasonably well in server-side environments?
 Is it only ever using a fraction of its available multi-core CPU power?
-In some ways, yes, but in practice it isn't usually a bottleneck.
+In some ways, yes, but in practice this isn't usually a bottleneck.
 
 Even a single-threaded instance of NodeJS performs well in IO-bound environments.
-In general, web servers spend more time waiting on the internet (connections from users, talking to databases, etc) than they do waiting on the CPU to burn through intense computations.
+In general, web servers spend more time waiting on the internet (connections from users, talking to databases, etc) than they do waiting for the CPU to burn through intense computations.
 This means that a single NodeJS thread can keep up with typical web traffic without breaking a sweat.
 If your web application was CPU intensive, however, then perhaps you'd start experiencing the downsides of this design.
 In such cases, running your application to explicitly utilize all cores could come in handy.
@@ -26,9 +26,9 @@ It simluates a workload by calculating the square root of ten million numbers be
 How does NodeJS handle this scenario vs a more "multi-core aware" web server such as Go's builtin [net/http](https://pkg.go.dev/net/http#hdr-Servers) package?
 
 I performed a load test to examine how these two servers behave with regards to CPU usage.
-On a 2-core Digital Ocean droplet, I ran each server and bombarded it with web traffic.
+On a 2-core [Digital Ocean](https://www.digitalocean.com/) droplet, I ran each server and bombarded it with web traffic.
 I'm using [hey](https://github.com/rakyll/hey) to send heavy traffic to the the server for 10 seconds: `hey -z 10s <server>`.
-While the test is running, I watched the CPU usage behavior (via [htop](https://htop.dev/)).
+While the test is running, I watched the CPU usage characteristics (via [htop](https://htop.dev/)).
 
 ### NodeJS Server
 
@@ -66,28 +66,28 @@ import (
 )
 
 func main() {
-	println("Listening on port 3000...")
-	http.ListenAndServe(":3000", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+  println("Listening on port 3000...")
+  http.ListenAndServe(":3000", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
     n := 0.0
-		for i := 0; i < 10000000; i++ {
-			n += math.Sqrt(float64(i))
-		}
+    for i := 0; i < 10000000; i++ {
+      n += math.Sqrt(float64(i))
+    }
 
-		w.Write([]byte("Hello World!"))
-	}))
+    w.Write([]byte("Hello World!"))
+  }))
 }
 ```
 
 ![Go multi-threaded performance](/images/go-multi.png)
 
-The Go version, on the other hand, uses all the cores and squeezes the maximum performance out of the server.
-This is because Go's runtime load balances program tasks across all cores (via goroutines).
-Since the builtin web server handles each incoming request in a separate goroutine, the web traffic is naturally spread between all cores.
+The Go version, on the other hand, uses both cores and squeezes the maximum performance out of the server.
+This is because Go's runtime load balances work across all cores (via goroutines).
+Since the builtin web server handles each incoming request in a separate goroutine, the web traffic is naturally spread across all cores.
 
 # Optimizing NodeJS
 
 What can we do about the NodeJS version?
-Enter the [cluster](https://nodejs.org/api/cluster.html) library which is built into NodeJS.
+Enter the [cluster](https://nodejs.org/api/cluster.html) module which is built into NodeJS.
 This package allows you to start your web server multiple times: one for each core.
 
 ```js
@@ -124,9 +124,9 @@ Well, it turns out that NodeJS's http server sets the `SO_REUSEPORT` flag by def
 _This_ is the secret sauce that allows multiple processes to listen on the same port at the same time.
 Additionally, since [Linux 3.9](https://man7.org/linux/man-pages/man7/socket.7.html), this socket option causes incoming TCP connections to be evenly distributed across all listening processes.
 This is effectively operating system based load balancing.
-I thought that was fascinating!
+Fascinating!
 
-Enough jabbering about sockets, let's see the results!
+Enough jabbering about sockets, let's see the results.
 
 ![NodeJS multi-threaded performance](/images/node-multi.png)
 
@@ -139,6 +139,7 @@ For example, consider how this would affect database connection pools.
 If your application was configured to support up to 50 database connections and you employed this strategy to run multiple instances of it, then each instance will respect this limit independently.
 This means that on a four core server, your application could open up to 200 database connections!
 Your database could get overwhelmed by receiving more incoming connections that it expects or is configured to handle.
+In this scenario, you should think about the multiplicative total across all program instances when setting a connection limit.
 
 # Conclusion
 
