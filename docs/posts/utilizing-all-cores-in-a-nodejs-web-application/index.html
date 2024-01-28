@@ -1,0 +1,117 @@
+<!doctype html><html lang=en><head><title>Utilizing All Cores in a NodeJS Web Application · Shallow Brook Software
+</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="Coming from Go-based web development to NodeJS, one big thing surpised me: my web server only ever uses one core. This is because NodeJS is a single-threaded runtime environment. That being said, NodeJS is still highly concurrent: it uses modern event loop technology to implement non-blocking, IO-based concurrency. NodeJS might not be truly parallel, but it is certainly concurrent. Knowing this, how is it that NodeJS performs reasonably well in server-side environments?"><meta name=keywords content="blog,developer,personal"><meta name=twitter:card content="summary"><meta name=twitter:title content="Utilizing All Cores in a NodeJS Web Application"><meta name=twitter:description content="Coming from Go-based web development to NodeJS, one big thing surpised me: my web server only ever uses one core. This is because NodeJS is a single-threaded runtime environment. That being said, NodeJS is still highly concurrent: it uses modern event loop technology to implement non-blocking, IO-based concurrency. NodeJS might not be truly parallel, but it is certainly concurrent. Knowing this, how is it that NodeJS performs reasonably well in server-side environments?"><meta property="og:title" content="Utilizing All Cores in a NodeJS Web Application"><meta property="og:description" content="Coming from Go-based web development to NodeJS, one big thing surpised me: my web server only ever uses one core. This is because NodeJS is a single-threaded runtime environment. That being said, NodeJS is still highly concurrent: it uses modern event loop technology to implement non-blocking, IO-based concurrency. NodeJS might not be truly parallel, but it is certainly concurrent. Knowing this, how is it that NodeJS performs reasonably well in server-side environments?"><meta property="og:type" content="article"><meta property="og:url" content="https://shallowbrooksoftware.com/posts/utilizing-all-cores-in-a-nodejs-web-application/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2024-01-28T00:00:00+00:00"><meta property="article:modified_time" content="2024-01-28T00:00:00+00:00"><link rel=canonical href=https://shallowbrooksoftware.com/posts/utilizing-all-cores-in-a-nodejs-web-application/><link rel=preload href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.e1bdf152d93b060b06ba5d496486ed9c201a8b95d335e035beb5faebe3b61cad.css integrity="sha256-4b3xUtk7BgsGul1JZIbtnCAai5XTNeA1vrX66+O2HK0=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.a00e6364bacbc8266ad1cc81230774a1397198f8cfb7bcba29b7d6fcb54ce57f.css integrity="sha256-oA5jZLrLyCZq0cyBIwd0oTlxmPjPt7y6KbfW/LVM5X8=" crossorigin=anonymous media=screen><link rel=icon type=image/svg+xml href=/images/favicon.svg sizes=any><link rel=icon type=image/png href=/images/favicon-32x32.png sizes=32x32><link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16><link rel=apple-touch-icon href=/images/apple-touch-icon.png><link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><a class=navigation-title href=/>Shallow Brook Software
+</a><input type=checkbox id=menu-toggle>
+<label class="menu-button float-right" for=menu-toggle><i class="fa fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/about/>About</a></li><li class=navigation-item><a class=navigation-link href=/posts/>Blog</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://shallowbrooksoftware.com/posts/utilizing-all-cores-in-a-nodejs-web-application/>Utilizing All Cores in a NodeJS Web Application</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa fa-calendar" aria-hidden=true></i>
+<time datetime=2024-01-28T00:00:00Z>January 28, 2024
+</time></span><span class=reading-time><i class="fa fa-clock-o" aria-hidden=true></i>
+5-minute read</span></div><div class=tags><i class="fa fa-tag" aria-hidden=true></i>
+<span class=tag><a href=/tags/node/>node</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/go/>go</a></span></div></div></header><div class=post-content><p>Coming from Go-based web development to NodeJS, one big thing surpised me: my web server only ever uses one core.
+This is because NodeJS is a single-threaded runtime environment.
+That being said, NodeJS is still highly concurrent: it uses <a href=https://libuv.org/ class=external-link target=_blank rel=noopener>modern event loop technology</a> to implement non-blocking, IO-based concurrency.
+NodeJS might not be truly parallel, but it is certainly concurrent.
+Knowing this, how is it that NodeJS performs reasonably well in server-side environments?
+Is it only ever using a fraction of its available multi-core CPU power?
+In some ways, yes, but in practice it isn&rsquo;t usually a bottleneck.</p><p>Even a single-threaded instance of NodeJS performs well in IO-bound environments.
+In general, web servers spend more time waiting on the internet (connections from users, talking to databases, etc) than they do waiting on the CPU to burn through intense computations.
+This means that a single NodeJS thread can keep up with typical web traffic without breaking a sweat.
+If your web application was CPU intensive, however, then perhaps you&rsquo;d start experiencing the downsides of this design.
+In such cases, running your application to explicitly utilize all cores could come in handy.</p><h1 id=the-experiment>The Experiment
+<a class=heading-link href=#the-experiment><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>Consider a minimal, CPU-bound web server program.
+It simluates a workload by calculating the square root of ten million numbers before returning &ldquo;Hello World!&rdquo;.
+How does NodeJS handle this scenario vs a more &ldquo;multi-core aware&rdquo; web server such as Go&rsquo;s builtin <a href=https://pkg.go.dev/net/http#hdr-Servers class=external-link target=_blank rel=noopener>net/http</a> package?</p><p>I performed a load test to examine how these two servers behave with regards to CPU usage.
+On a 2-core Digital Ocean droplet, I ran each server and bombarded it with web traffic.
+I&rsquo;m using <a href=https://github.com/rakyll/hey class=external-link target=_blank rel=noopener>hey</a> to send heavy traffic to the the server for 10 seconds: <code>hey -z 10s &lt;server></code>.
+While the test is running, I watched the CPU usage behavior (via <a href=https://htop.dev/ class=external-link target=_blank rel=noopener>htop</a>).</p><h3 id=nodejs-server>NodeJS Server
+<a class=heading-link href=#nodejs-server><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=display:flex><span><span style=color:#66d9ef>import</span> <span style=color:#a6e22e>http</span> <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#34;node:http&#34;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#34;Listening on port 3000...&#34;</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#a6e22e>http</span>
+</span></span><span style=display:flex><span>  .<span style=color:#a6e22e>createServer</span>((<span style=color:#a6e22e>req</span>, <span style=color:#a6e22e>res</span>) =&gt; {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>n</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>let</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>10000000</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span>) {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>n</span> <span style=color:#f92672>+=</span> Math.<span style=color:#a6e22e>sqrt</span>(<span style=color:#a6e22e>i</span>);
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>writeHead</span>(<span style=color:#ae81ff>200</span>);
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>end</span>(<span style=color:#e6db74>&#34;Hello World!&#34;</span>);
+</span></span><span style=display:flex><span>  })
+</span></span><span style=display:flex><span>  .<span style=color:#a6e22e>listen</span>(<span style=color:#ae81ff>3000</span>);
+</span></span></code></pre></div><p><img src=/images/node-single.png alt="NodeJS single-threaded performance"></p><p>As you can see, the simple NodeJS server only utilizes a single CPU core.
+The 2.7% on the other core comes from other, unrelated operating system tasks.</p><h3 id=go-server>Go Server
+<a class=heading-link href=#go-server><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;math&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;net/http&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>	println(<span style=color:#e6db74>&#34;Listening on port 3000...&#34;</span>)
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>ListenAndServe</span>(<span style=color:#e6db74>&#34;:3000&#34;</span>, <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>HandlerFunc</span>(<span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>w</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>ResponseWriter</span>, <span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Request</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>n</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0.0</span>
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#ae81ff>10000000</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>n</span> <span style=color:#f92672>+=</span> <span style=color:#a6e22e>math</span>.<span style=color:#a6e22e>Sqrt</span>(float64(<span style=color:#a6e22e>i</span>))
+</span></span><span style=display:flex><span>		}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>w</span>.<span style=color:#a6e22e>Write</span>([]byte(<span style=color:#e6db74>&#34;Hello World!&#34;</span>))
+</span></span><span style=display:flex><span>	}))
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p><img src=/images/go-multi.png alt="Go multi-threaded performance"></p><p>The Go version, on the other hand, uses all the cores and squeezes the maximum performance out of the server.
+This is because Go&rsquo;s runtime load balances program tasks across all cores (via goroutines).
+Since the builtin web server handles each incoming request in a separate goroutine, the web traffic is naturally spread between all cores.</p><h1 id=optimizing-nodejs>Optimizing NodeJS
+<a class=heading-link href=#optimizing-nodejs><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>What can we do about the NodeJS version?
+Enter the <a href=https://nodejs.org/api/cluster.html class=external-link target=_blank rel=noopener>cluster</a> library which is built into NodeJS.
+This package allows you to start your web server multiple times: one for each core.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=display:flex><span><span style=color:#66d9ef>import</span> <span style=color:#a6e22e>cluster</span> <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#34;node:cluster&#34;</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>import</span> <span style=color:#a6e22e>http</span> <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#34;node:http&#34;</span>;
+</span></span><span style=display:flex><span><span style=color:#66d9ef>import</span> { <span style=color:#a6e22e>availableParallelism</span> } <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#34;node:os&#34;</span>;
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>cluster</span>.<span style=color:#a6e22e>isPrimary</span>) {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// if this is the primary process, start one worker process per core
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>numCPUs</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>availableParallelism</span>();
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>let</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> <span style=color:#f92672>&lt;</span> <span style=color:#a6e22e>numCPUs</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span>) {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>cluster</span>.<span style=color:#a6e22e>fork</span>();
+</span></span><span style=display:flex><span>  }
+</span></span><span style=display:flex><span>} <span style=color:#66d9ef>else</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>console</span>.<span style=color:#a6e22e>log</span>(<span style=color:#e6db74>&#34;Listening on port 3000...&#34;</span>);
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>http</span>
+</span></span><span style=display:flex><span>    .<span style=color:#a6e22e>createServer</span>((<span style=color:#a6e22e>req</span>, <span style=color:#a6e22e>res</span>) =&gt; {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>n</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>;
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>for</span> (<span style=color:#66d9ef>let</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> <span style=color:#f92672>&lt;</span> <span style=color:#ae81ff>10000000</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span>) {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>n</span> <span style=color:#f92672>+=</span> Math.<span style=color:#a6e22e>sqrt</span>(<span style=color:#a6e22e>i</span>);
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>writeHead</span>(<span style=color:#ae81ff>200</span>);
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>res</span>.<span style=color:#a6e22e>end</span>(<span style=color:#e6db74>&#34;Hello World!&#34;</span>);
+</span></span><span style=display:flex><span>    })
+</span></span><span style=display:flex><span>    .<span style=color:#a6e22e>listen</span>(<span style=color:#ae81ff>3000</span>);
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>When I first read this example in the <a href=https://nodejs.org/api/cluster.html#cluster class=external-link target=_blank rel=noopener>cluster documentation</a>, I was confused.
+How can multiple processes listen on the same port at the same time?
+Based on past experience, attempting to do that results in an error: <code>EADDRINUSE</code>.
+Well, it turns out that NodeJS&rsquo;s http server sets the <code>SO_REUSEPORT</code> flag by default on the socket(s) it opens.
+<em>This</em> is the secret sauce that allows multiple processes to listen on the same port at the same time.
+Additionally, since <a href=https://man7.org/linux/man-pages/man7/socket.7.html class=external-link target=_blank rel=noopener>Linux 3.9</a>, this socket option causes incoming TCP connections to be evenly distributed across all listening processes.
+This is effectively operating system based load balancing.
+I thought that was fascinating!</p><p>Enough jabbering about sockets, let&rsquo;s see the results!</p><p><img src=/images/node-multi.png alt="NodeJS multi-threaded performance"></p><p>How about that: our CPU-bound NodeJS web server is now making use of all available cores!
+With just a few lines of code, we can get around one of NodeJS&rsquo;s largest limitations.
+That being said, there are a few things to consider when using this trick.</p><p>Since you are running multiple instances of your application, you need to think about how this affects connections to external systems (such as databases).
+For example, consider how this would affect database connection pools.
+If your application was configured to support up to 50 database connections and you employed this strategy to run multiple instances of it, then each instance will respect this limit independently.
+This means that on a four core server, your application could open up to 200 database connections!
+Your database could get overwhelmed by receiving more incoming connections that it expects or is configured to handle.</p><h1 id=conclusion>Conclusion
+<a class=heading-link href=#conclusion><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>For most NodeJS web applications, the single-threaded limitation will not be an issue.
+Between waiting for packets from clients and waiting for rows from a database, your code will be seldom bound by the CPU.
+If, by chance, your application <em>does</em> require a heavy amount of CPU usage, the <code>cluster</code> module can help out.
+By running a separate instance of your program per core and allowing Linux to load balance incoming connections, the full potential of your CPU can be realized.</p><p>Thanks for reading!</p></div><footer></footer></article></section></div><footer class=footer><section class=container>©
+2024
+Andrew Dailey
+·
+Powered by <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> & <a href=https://github.com/luizdepra/hugo-coder/ target=_blank rel=noopener>Coder</a>.</section></footer></main><script src=/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script></body></html>
