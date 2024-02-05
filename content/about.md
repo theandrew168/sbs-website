@@ -1,14 +1,15 @@
 ---
 title: "About Me"
 ---
+
 Welcome to **Shallow Brook Software**!
 
-My name is Andrew Dailey and I'm an independent programmer from Des Moines, Iowa.
-I have a Bachelor of Science degree in Software Engineering from Iowa State University.
-I have multiple years of industry experience working a variety of positions including Linux system administration, Python-based ETL, and large-scale cluster automation.
+My name is Andrew Dailey and I'm a software developer located in Des Moines, Iowa.
+I have a Bachelor of Science degree in Software Engineering from Iowa State University (graduated in 2017).
+I have multiple years of industry experience working a variety of positions including Linux system administration, Python-based ETL, large-scale cluster automation, and full-stack web development.
 Software development is one of my primary hobbies and I tend to specialize in backend / systems programming.
 
-I am proficient in the Python, C, and Go programming languages.
+I am proficient in the Python, Go, and TypeScript programming languages.
 I've created and deployed multiple full-stack web applications ([Bloggulus](https://bloggulus.com) is a recent example).
 Simplicity and maintainability are my highest priorities when designing any piece of software.
 My goal is to deliver solutions that perfectly fit the size and scope of the problems they solve: nothing more and nothing less!
@@ -23,6 +24,7 @@ I believe that the structure of an Ansible project is the most important factor 
 As a result, I've developed useful strategies for defining relationships between playbooks and roles, delegating variables, and using custom filters to implement dynamic decision-making.
 
 # Shallow Brook Software
+
 The name of this site is an homage to the old phrase _"A shallow brook babbles the loudest"_.
 I've tried to find a good way to bridge a metaphor between the phrase and my development beliefs but nothing ever really comes out of it.
 You could maybe try and link loudness to software complexity, I guess.

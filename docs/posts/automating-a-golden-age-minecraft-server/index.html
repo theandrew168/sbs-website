@@ -1,0 +1,137 @@
+<!doctype html><html lang=en><head><title>Automating a Golden Age Minecraft Server · Shallow Brook Software
+</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="Lately, I&rsquo;ve noticed a growing interest in what people like to call &ldquo;Golden Age Minecraft&rdquo; (reddit). This term typically refers to versions of Minecraft prior to Beta 1.8 / Release 1.0.0: The Adventure Update. This update added a bunch of new features and, for better or for worse, introduced a true &ldquo;goal&rdquo; into the game: build up supplies, reach The End, and defeat the Ender Dragon. Prior to this update, Minecraft had no explicit goals and was truly a sandbox."><meta name=keywords content="blog,developer,personal"><meta name=twitter:card content="summary"><meta name=twitter:title content="Automating a Golden Age Minecraft Server"><meta name=twitter:description content="Lately, I&rsquo;ve noticed a growing interest in what people like to call &ldquo;Golden Age Minecraft&rdquo; (reddit). This term typically refers to versions of Minecraft prior to Beta 1.8 / Release 1.0.0: The Adventure Update. This update added a bunch of new features and, for better or for worse, introduced a true &ldquo;goal&rdquo; into the game: build up supplies, reach The End, and defeat the Ender Dragon. Prior to this update, Minecraft had no explicit goals and was truly a sandbox."><meta property="og:title" content="Automating a Golden Age Minecraft Server"><meta property="og:description" content="Lately, I&rsquo;ve noticed a growing interest in what people like to call &ldquo;Golden Age Minecraft&rdquo; (reddit). This term typically refers to versions of Minecraft prior to Beta 1.8 / Release 1.0.0: The Adventure Update. This update added a bunch of new features and, for better or for worse, introduced a true &ldquo;goal&rdquo; into the game: build up supplies, reach The End, and defeat the Ender Dragon. Prior to this update, Minecraft had no explicit goals and was truly a sandbox."><meta property="og:type" content="article"><meta property="og:url" content="https://shallowbrooksoftware.com/posts/automating-a-golden-age-minecraft-server/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2024-02-04T00:00:00+00:00"><meta property="article:modified_time" content="2024-02-04T00:00:00+00:00"><link rel=canonical href=https://shallowbrooksoftware.com/posts/automating-a-golden-age-minecraft-server/><link rel=preload href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.e1bdf152d93b060b06ba5d496486ed9c201a8b95d335e035beb5faebe3b61cad.css integrity="sha256-4b3xUtk7BgsGul1JZIbtnCAai5XTNeA1vrX66+O2HK0=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.a00e6364bacbc8266ad1cc81230774a1397198f8cfb7bcba29b7d6fcb54ce57f.css integrity="sha256-oA5jZLrLyCZq0cyBIwd0oTlxmPjPt7y6KbfW/LVM5X8=" crossorigin=anonymous media=screen><link rel=icon type=image/svg+xml href=/images/favicon.svg sizes=any><link rel=icon type=image/png href=/images/favicon-32x32.png sizes=32x32><link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16><link rel=apple-touch-icon href=/images/apple-touch-icon.png><link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><a class=navigation-title href=/>Shallow Brook Software
+</a><input type=checkbox id=menu-toggle>
+<label class="menu-button float-right" for=menu-toggle><i class="fa fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/about/>About</a></li><li class=navigation-item><a class=navigation-link href=/posts/>Blog</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://shallowbrooksoftware.com/posts/automating-a-golden-age-minecraft-server/>Automating a Golden Age Minecraft Server</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa fa-calendar" aria-hidden=true></i>
+<time datetime=2024-02-04T00:00:00Z>February 4, 2024
+</time></span><span class=reading-time><i class="fa fa-clock-o" aria-hidden=true></i>
+10-minute read</span></div><div class=tags><i class="fa fa-tag" aria-hidden=true></i>
+<span class=tag><a href=/tags/minecraft/>minecraft</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/terraform/>terraform</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/ansible/>ansible</a></span></div></div></header><div class=post-content><p>Lately, I&rsquo;ve noticed a growing interest in what people like to call &ldquo;Golden Age Minecraft&rdquo; (<a href=https://reddit.com/r/GoldenAgeMinecraft/ class=external-link target=_blank rel=noopener>reddit</a>).
+This term typically refers to versions of Minecraft prior to Beta 1.8 / Release 1.0.0: <a href=https://minecraft.wiki/w/Adventure_Update class=external-link target=_blank rel=noopener>The Adventure Update</a>.
+This update added a bunch of new features and, for better or for worse, introduced a true &ldquo;goal&rdquo; into the game: build up supplies, reach <a href=https://minecraft.wiki/w/The_End class=external-link target=_blank rel=noopener>The End</a>, and defeat the <a href=https://minecraft.wiki/w/Ender_Dragon class=external-link target=_blank rel=noopener>Ender Dragon</a>.
+Prior to this update, Minecraft had no explicit goals and was truly a sandbox.
+The only things to do were explore, build stuff, and find diamonds.
+It was a simple loop that generated hundreds of hours of fun for my friends and I back in high school.</p><h1 id=simpler-times>Simpler Times
+<a class=heading-link href=#simpler-times><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>Back in the day, I ran a Minecraft server from the utility room in my parent&rsquo;s basement.
+The server itself was a wimpy <a href=https://en.wikipedia.org/wiki/Acer_Aspire_One class=external-link target=_blank rel=noopener>Acer Aspire One</a> with 512MB of RAM and an <a href=https://en.wikipedia.org/wiki/Intel_Atom class=external-link target=_blank rel=noopener>Intel Atom</a> processor.
+Since I knew next to nothing about server administration at the time, I struggled to get everything working.
+The networking aspects were especially difficult to understand: I had no idea what a port even was or how to &ldquo;forward&rdquo; it.
+I also remember telling my friends (who were trying to connect remotely):</p><blockquote><p>I&rsquo;ve got everything working! Try connecting to&mldr; 192.168.1.10</p></blockquote><p>In hindsight, this gives me a laugh (as I&rsquo;m sure it does for any other tech professional).
+The joke here is that the <code>192.168.0.0/16</code> address space is reserved for private networks and are not publicly routable on the global internet (<a href=https://www.arin.net/reference/research/statistics/address_filters/ class=external-link target=_blank rel=noopener>reference</a>).
+Connecting via this IP address worked for me at home but it would never work for anyone connecting remotely.
+After a bit more reading, I finally grokked the difference between <a href=https://www.whatismyip.com/lan-vs-wan/ class=external-link target=_blank rel=noopener>LAN and WAN</a> (local area network vs wide area network) and found the <em>actual</em> IP address that my friends needed to connect to.</p><p>Despite all of the fuss, I eventually got the server up and running and we had a blast.
+We used the <code>gargamel</code> seed (of course) and spent months transforming that beautiful valley into an epic home base.
+We had a storage house, a monster arena, and various redstone contraptions (I had to learn what logic gates were).
+We made a giant lighthouse, multiple outposts, and an underground rail system to connect the landmarks together.
+Everything we did was motivated by one thing: FUN.
+There was no Ender Dragon to kill and no End to explore; there was no <em>end</em> at all.
+Simply mine, craft, and have a good time!</p><h3 id=screenshots>Screenshots
+<a class=heading-link href=#screenshots><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>I dug up a few screenshots of the old server.
+Please excuse the fuzzy resolution and &ldquo;sign of the times&rdquo; wood + cobblestone aesthetic.</p><p><img src=/images/minecraft/valley1.webp alt="Old server valley 1">
+<img src=/images/minecraft/valley2.webp alt="Old server valley 2">
+<img src=/images/minecraft/lighthouse.webp alt="Old server lighthouse"></p><h1 id=terraform--ansible>Terraform + Ansible
+<a class=heading-link href=#terraform--ansible><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>Since then, I&rsquo;ve studied Software Engineering and worked as a professional developer for almost seven years.
+I now have a much better perspective on system administration, networking, and security.
+My first internship was centered around system automation.
+Specifically, how can we easily spin up and configure of a large fleet of Linux servers?
+We found a solution to our problems at the intersection of two incredible tools: <a href=https://www.terraform.io/ class=external-link target=_blank rel=noopener>Terraform</a> and <a href=https://www.ansible.com/ class=external-link target=_blank rel=noopener>Ansible</a>.</p><p><a href=https://www.terraform.io/ class=external-link target=_blank rel=noopener>Terraform</a> is an open-source tool for building, changing, and versioning infrastructure safely and efficiently.
+It allows users to define cloud and on-prem resources using human-readable configuration files that can be version controlled.
+Terraform uses &ldquo;providers&rdquo; to provision and manage these resources through their respective APIs.
+It follows a three step process of writing configurations, planning changes, and applying changes to infrastructure.</p><p><a href=https://www.ansible.com/ class=external-link target=_blank rel=noopener>Ansible</a> is an open-source automation engine that makes it simple to automate repetitive tasks across servers like configuration management, application deployments, and orchestration.
+It uses YAML scripts called &ldquo;playbooks&rdquo; to declare the desired state of systems.
+Playbooks ensure that systems remain in that state even if run multiple times (the key idea here is <a href=https://en.wikipedia.org/wiki/Idempotence class=external-link target=_blank rel=noopener>idempotency</a>) using an agentless, SSH-based architecture.</p><p>With that background out of the way, let&rsquo;s manage a Minecraft server like a professional!</p><h3 id=the-server>The Server
+<a class=heading-link href=#the-server><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>I use <a href=https://www.digitalocean.com/ class=external-link target=_blank rel=noopener>Digital Ocean</a> as my primary hosting provider.
+For me, it providers a perfect balance of simplicity, reliability, and cost.
+For a small Minecraft server with an estimated capacity of five users, I knew I didn&rsquo;t need anything huge.
+I selected a <code>s-2vcpu-2gb</code> droplet (2 vCPUs with 2GB of RAM) for $18/month and attached a 50GB storage volume for an additional $5/month.
+Add in the $1/month for domain registration and the total comes out to $24/month.
+This might not be the cheapest or most powerful Minecraft server, but I&rsquo;m happy with the performance and stability it has yielded thus far.</p><p>With Terraform, <a href=https://github.com/theandrew168/devops/blob/master/infra/minecraft/main.tf class=external-link target=_blank rel=noopener>this configuration</a> can be declared in just three blocks:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-tf data-lang=tf><span style=display:flex><span><span style=color:#75715e># create a 50GB storage volume
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;digitalocean_volume&#34;</span> <span style=color:#e6db74>&#34;minecraft_data&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>name</span>   = <span style=color:#e6db74>&#34;minecraft-data&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>region</span> = <span style=color:#e6db74>&#34;nyc1&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>size</span>   = <span style=color:#ae81ff>50</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>initial_filesystem_type</span> = <span style=color:#e6db74>&#34;ext4&#34;</span>
+</span></span><span style=display:flex><span>}<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e># create the server with my SSH key installed and storage volume attached
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;digitalocean_droplet&#34;</span> <span style=color:#e6db74>&#34;minecraft&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>image</span>    = <span style=color:#e6db74>&#34;ubuntu-22-04-x64&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>name</span>     = <span style=color:#e6db74>&#34;minecraft&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>region</span>   = <span style=color:#e6db74>&#34;nyc1&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>size</span>     = <span style=color:#e6db74>&#34;s-2vcpu-2gb&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>ssh_keys</span> = [
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;9c:f4:8b:a5:4f:97:99:60:79:50:63:61:61:18:bc:d4&#34;</span>,
+</span></span><span style=display:flex><span>  ]
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>volume_ids</span> = [
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>digitalocean_volume</span>.<span style=color:#a6e22e>minecraft_data</span>.<span style=color:#a6e22e>id</span>,
+</span></span><span style=display:flex><span>  ]
+</span></span><span style=display:flex><span>}<span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e>
+</span></span></span><span style=display:flex><span><span style=color:#75715e># create an A record for proper DNS linking
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;digitalocean_record&#34;</span> <span style=color:#e6db74>&#34;minecraft_a&#34;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>domain</span> = <span style=color:#e6db74>&#34;sbsbx.com&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>type</span>   = <span style=color:#e6db74>&#34;A&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>name</span>   = <span style=color:#e6db74>&#34;mc&#34;</span>
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>value</span>  = <span style=color:#a6e22e>digitalocean_droplet</span>.<span style=color:#a6e22e>minecraft</span>.<span style=color:#a6e22e>ipv4_address</span>
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h3 id=baseline-setup>Baseline Setup
+<a class=heading-link href=#baseline-setup><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>Before installing and configuring the Minecraft server, the physical server itself needs some love.
+Out of the box, Digital Ocean droplets are perfectly usable but I like to prescribe my own set of defaults.
+I created a <a href=https://github.com/theandrew168/devops/tree/master/roles/server class=external-link target=_blank rel=noopener>dedicated Ansible role</a> for these tweaks many years ago and have continued to iterate on it as I learn more about system administration and best practices.</p><p>I won&rsquo;t go into the details here but these are the high-level tasks performed by the role:</p><ul><li>Locking down SSH (requiring pubkey auth and limiting login attempts)</li><li>Disabling root login</li><li>Creating admin users</li><li>Setting the hostname, locale, and timezone</li><li>Limiting journald log sizes</li><li>Setting permissions on mounted volumes</li><li>Installing common packages (utilities like <code>vim</code>, <code>tree</code>, and <code>htop</code>)</li><li>Configuring automatic updates (and when the server should restart)</li></ul><h3 id=installing-minecraft>Installing Minecraft
+<a class=heading-link href=#installing-minecraft><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>Now that the physical server is setup and secure, I can focus on installing and configuring Minecraft.
+My usual approach to writing new Ansible roles is three-fold: walk through the process manually while taking notes and stubbing out tasks, fill in the details for each task, and then tweak until everything works as expected.
+At the very end I&rsquo;ll do a full teardown, rebuild, and rerun to verify that the role works for completely fresh systems and idempotently skips completed steps on subsequent runs.</p><p>After a few rounds of iteration I arrived at a <a href=https://github.com/theandrew168/devops/blob/master/roles/minecraft/tasks/main.yml class=external-link target=_blank rel=noopener>completed role</a>.
+There are nine tasks in total:</p><ol><li>Install a Java runtime<ul><li>I chose <code>default-jre-headless</code></li></ul></li><li>Create the <code>minecraft</code> user<ul><li>This user will run the server and own all relevant files</li></ul></li><li>Ensure the data directory is owned by <code>minecraft</code></li><li>Download the server JAR<ul><li>Shoutout to <a href=https://betacraft.uk/ class=external-link target=_blank rel=noopener>BetaCraft</a> for hosting <a href=https://betacraft.uk/server-archive/ class=external-link target=_blank rel=noopener>old server versions</a></li></ul></li><li>Setup the server config file<ul><li>I found a config file reference <a href=https://www.reddit.com/r/GoldenAgeMinecraft/comments/14itvbx/how_to_correctly_set_up_a_minecraft_alphabeta/ class=external-link target=_blank rel=noopener>on reddit</a></li></ul></li><li>Setup the allowed users file<ul><li>Only the usernames found in this file will be able to connect</li></ul></li><li>Expose port 25565 and limit connection attempts<ul><li>This is done with <a href=https://help.ubuntu.com/community/UFW class=external-link target=_blank rel=noopener>ufw</a> and locks users out after 6 attempts</li></ul></li><li>Setup the server&rsquo;s <a href=https://github.com/theandrew168/devops/blob/master/roles/minecraft/templates/minecraft.service.j2 class=external-link target=_blank rel=noopener>systemd service file</a></li><li>Start the server and enable running on boot</li></ol><p>That&rsquo;s it!
+Fortunately, most of these tasks are things I&rsquo;ve written before so a lot of the &ldquo;work&rdquo; here was simply copying, pasting, finding, and replacing.
+There weren&rsquo;t as many roadblocks as I expected except for in one major area: security.</p><h1 id=security>Security
+<a class=heading-link href=#security><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>Since the official login infrastructure for old school Minecraft servers isn&rsquo;t online anymore, the server can&rsquo;t actually verify that connecting players have legitimate, authenticated accounts.
+This means that, by default, no one will be able to login (unless you want to utilize and trust a third-party proxy).
+However, there is an easy way to get around this limitation but it comes with a significant security penalty.
+By setting <code>online-mode=false</code> in the config file, the Minecraft server will no longer validate that connecting accounts are genuine and therefore allow anyone and everyone to login.</p><h3 id=allow-list>Allow List
+<a class=heading-link href=#allow-list><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>That being said, we do still have a bit of control via the &ldquo;allow list&rdquo; feature (enabled by setting <code>white-list=true</code>).
+You can provide the server with a list of users that should be allowed to connect.
+By keeping this list a secret, you gain a small amount of <a href=https://en.wikipedia.org/wiki/Security_through_obscurity class=external-link target=_blank rel=noopener>security by obscurity</a>.
+This is why I keep the actual list of allowed users encrypted in my Ansible <a href=https://github.com/theandrew168/devops/blob/master/group_vars/minecraft.yml class=external-link target=_blank rel=noopener>group_vars file</a>.
+If this list was public then a malicious actor could use a hacked Minecraft client to spoof their username and access the server as though they were a trusted user.</p><p>Despite keeping the list encrypted in my automation, usernames themselves are inherently insecure.
+They are usually short, widely used (even outside of Minecraft), and visible to everyone else on the server.
+Names could be accidentally &ldquo;leaked&rdquo; by something as simple as sharing a screenshot from the game (usernames can be seen above other characters and in the chat window).
+Clearly, taking this bare-bones approach to securing the server is unlikely to withstand the test of time and the relentless assault of malicious internet bots.</p><p>What other options do we have at our disposal?
+I <em>do</em> already limit the number of connection attempts (via the firewall) to protect against brute force attacks.
+If I started to see legitmate security incidents (such as unknown entities successfully logging into the server), then I&rsquo;d have to find ways to restrict access even further.</p><h3 id=denying-malicious-ip-addresses>Denying Malicious IP Addresses
+<a class=heading-link href=#denying-malicious-ip-addresses><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>I could try to block the offending IP addresses (the Minecraft server itself supports this) but that probably won&rsquo;t make much of a difference.
+IP addresses change and attackers often have many of them available at their fingertips (you saw how easy Terraform was to use).
+Trying to keep up with blocking bad actors is surely a fool&rsquo;s errand.
+It is unlikely to deter even a mildly competent attacker and they have to successfully login to the server in order to be identified as a threat.
+This solution <strong>depends on getting owned</strong> and will struggle to ever result in a server that is actually secure.</p><h3 id=allowing-known-ip-addresses>Allowing Known IP Addresses
+<a class=heading-link href=#allowing-known-ip-addresses><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>I think it&rsquo;d be smarter to approach this from the opposite direction: take a &ldquo;default deny&rdquo; approach and only allow certain IP addresses to connect.
+The Minecraft server doesn&rsquo;t support this feature directly so I&rsquo;d have to implement the restrictions at the firewall layer.
+I&rsquo;d also have to know where my friends are playing from and hope that they have static IP addresses (I&rsquo;m not sure how common these are across the range of small town and large city ISPs).
+If their IP addresses were to change, I&rsquo;d have to update firewall rules.
+Thanks to our existing automation, this can be added as a configuration task and deployed in a consistent and repeatable way.</p><h1 id=conclusion>Conclusion
+<a class=heading-link href=#conclusion><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>Setting up this server wasn&rsquo;t too much work thanks to my existing Terraform and Ansible <a href=https://github.com/theandrew168/devops/tree/master class=external-link target=_blank rel=noopener>experience</a>.
+It was a breeze to spin up a new server, attach a domain, and configure it to my standards.
+It had been a while since I dusted off these classic <a href=https://en.wikipedia.org/wiki/DevOps class=external-link target=_blank rel=noopener>DevOps</a> tools but I had fun using them again.
+I&rsquo;m often surprised by how everything continues to work without modification despite many months passing between runs.
+I feel like my prior investment into these automation tools played a major role (pun intended) in making this project a quick success.</p><p>If I ever get the desire to play other versions of classic Minecraft, the code I wrote will be waiting to stand up and configure a new server in just a few minutes.
+Until then, here&rsquo;s to playing some Beta 1.7.3 and having a good time!</p></div><footer></footer></article></section></div><footer class=footer><section class=container>©
+2024
+Andrew Dailey
+·
+Powered by <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> & <a href=https://github.com/luizdepra/hugo-coder/ target=_blank rel=noopener>Coder</a>.</section></footer></main><script src=/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script></body></html>
