@@ -4,21 +4,22 @@ title: "Bare-Metal Assembly on the Longan Nano"
 slug: "bare-metal-assembly-on-the-longan-nano"
 tags: ["risc-v", "assembly"]
 ---
+
 The [Sipeed Longan Nano](https://www.seeedstudio.com/Sipeed-Longan-Nano-RISC-V-GD32VF103CBT6-Development-Board-p-4205.html) is a small, affordable, 32-bit [RISC-V](https://en.wikipedia.org/wiki/RISC-V) chip.
 Despite its minimalism, the Longan Nano provides enough power and peripherals to learn RISC-V assembly and build exciting programs along the way.
 
 The Longan Nano comes with the following components:
 
-* GigaDevice GD32VF103[CBT6] 32-bit CPU
-* 8 MHz default clock speed (IRC8M)
-* 108 MHz maximum clock speed
-* 128 KB flash storage
-* 32 KB sram memory
-* 3 LEDs (red, green, and blue)
-* 1 USB Type-C port
-* 1 microSD card slot
-* 160x80 pixel LCD (0.96 inches)
-* 2 Buttons (RESET and BOOT)
+- GigaDevice GD32VF103[CBT6] 32-bit CPU
+- 8 MHz default clock speed (IRC8M)
+- 108 MHz maximum clock speed
+- 128 KB flash storage
+- 32 KB sram memory
+- 3 LEDs (red, green, and blue)
+- 1 USB Type-C port
+- 1 microSD card slot
+- 160x80 pixel LCD (0.96 inches)
+- 2 Buttons (RESET and BOOT)
 
 With the specs out of the way, we can begin the journey of figuring out how to go from a blank text file to controlling all aspects of our hardware.
 Get ready to discuss registers, design clean programs, and dive into some datasheets.
@@ -26,10 +27,13 @@ Get ready to discuss registers, design clean programs, and dive into some datash
 **The rest of the Longan Nano series requires that the device be connected to your host system via a USB-C cable! Go ahead get things wired up!**
 
 # The world's smallest RISC-V program
+
 Seen below is a valid RISC-V program that does absolutely nothing!
+
 ```
 addi zero, zero, 0
 ```
+
 This particular combination of words and numbers tells the computer to add 0 to a special register named `zero`.
 More specifically, `addi` (shorthand for "add immediate") is an instruction that tells the CPU to add the literal number 0 to the value currently stored in register `zero` and then store the resulting sum back into register `zero`.
 
@@ -52,11 +56,14 @@ If any other value attempts to get placed there, it effectively disappears.
 This register is useful for discarding unwanted values and for when 0 is used in computation.
 
 Knowing what we now know, we can look at our simple program in a bit more detail.
+
 ```
 addi zero, zero, 0
 ```
+
 The `addi` instruction takes three parameters: the destination register, the source register, and an immediate integer value.
 These parameters are arranged as follows:
+
 ```
 addi rd, rs1, imm
 ```
@@ -70,27 +77,33 @@ Even if the result of the sum had been non-zero, the instruction would not have 
 Now that our simple program is written and understood, how do we convert it to something that CPUs understand?
 
 # Ready, set, assemble!
+
 This section details the steps necessary to "assemble" our simple program.
 Assembling is the process of converting human-readable assembly language text to a specific binary representation that a CPU can understand.
 
 Since the [assembler](https://en.wikipedia.org/wiki/Assembly_language#Assembler) we are going to use is written in [Python](https://www.python.org), we will install all of the system packages necessary to install additional Python modules.
+
 ```
 sudo apt install python3-pip python3-venv
 ```
 
 To keep things organized, we will use a [virtual environment](https://docs.python.org/3/library/venv.html) to isolate our project-specific Python modules from the rest of our system.
+
 ```
 python3 -m venv venv/
 . ./venv/bin/activate
 ```
+
 **Note that this last command above will be required any time you come back to work on the project!**
 
 With a virtual environment in place, we can install the simple RISC-V assembler built for this project: [bronzebeard](https://pypi.org/project/bronzebeard/).
+
 ```
 pip install bronzebeard
 ```
 
-Last but not least, we can write our simple program to a file and assemble it. 
+Last but not least, we can write our simple program to a file and assemble it.
+
 ```
 echo "addi zero, zero, 0" > smallest.asm
 bronzebeard smallest.asm
@@ -100,6 +113,7 @@ Congratulations!
 You just wrote and assembled the world's smallest RISC-V program!
 
 # Preparing for DFU
+
 Without our assembled `bb.out` file in hand, the next step is to hook up our Longan Nano and upload the program to the chip's flash storage.
 To accomplish this task, we must use the [Device Firmware Upgrade](https://en.wikipedia.org/wiki/USB#Device_Firmware_Upgrade) protocol.
 This protocol enables a very simple method for upgrading the firmware of devices connected to your system over USB.
@@ -122,11 +136,13 @@ In short: press BOOT, press RESET, release RESET, release BOOT.
 **Take note of this BOOT / RESET process! It will be used everytime we to download a new program to the device!**
 
 # Programming the device
+
 We now have all the information we need to upload our `bb.out` program to the device.
 One thing that the DFU uploader needs is the USB identifier for the device.
 If you are on a Linux or macOS system, the command `lsusb` can be helpful for finding this info.
 
 In our case, we are programming the Longan Nano so the device ID is already known:
+
 ```
 bronzebeard-dfu 28e9:0189 bb.out
 ```
@@ -139,6 +155,7 @@ Nothing will light up, nothing will flash, nothing will beep.
 Do not discredit this achievement, though!
 
 # All that work for nothing?
+
 Who knew that doing absolutely nothing could be so much work?
 Most of what we covered wasn't even related to RISC-V or the code: it was just setup work and preparation.
 Don't let that worry you, though.

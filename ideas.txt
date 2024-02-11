@@ -1,1 +1,0 @@
-Using Ansible to setup a golden age MC server

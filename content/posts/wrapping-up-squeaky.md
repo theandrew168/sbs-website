@@ -4,6 +4,7 @@ title: "Wrapping Up Squeaky"
 slug: "wrapping-up-squeaky"
 tags: ["c", "sdl2", "scheme"]
 ---
+
 My primary project for the last month or so has a been a proof of concept programming language called [Squeaky](https://github.com/theandrew168/squeaky).
 I've had this idea in my head for a few years: build a functional language in C with a focus on game development.
 I wanted window creation, OpenGL graphics, and input events to all be first class citizens of the language and not optional libraries to be pulled in later.
@@ -17,6 +18,7 @@ Given these facts, I am able to call the project a success even though it didn't
 There are some more advanced topics that I want to explore in smaller subprojects before returning to Squeaky.
 
 # Bumps in the Road
+
 One of my biggest gripes with the language is that you need the interpreter to be present to run any code.
 This is also how [Python](https://www.python.org/) works but Python's popularity and ecosystem offset that cost.
 What I'd really like is a language implementation that generates static binaries like [Go](https://golang.org/) does.
@@ -32,6 +34,7 @@ A separate library for each platform can be held to enable cross-platform code g
 If the program source wants to create a window, the compiler will reach into the target platform's `libSDL2.a` static library, find the `SDL_CreateWindow` symbol, and inline its code into the target binary.
 
 # Future Plans
+
 I don't actually know if this is feasible or not but I'm excited to find out!
 If it does work, you can expect a more detailed write-up on the nuances and trade-offs for this approach to compiling foreign functions.
 In the meantime, I have about 50 years of assembly basics to catch up on.
