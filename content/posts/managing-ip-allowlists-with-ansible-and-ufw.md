@@ -3,55 +3,58 @@ date: 2024-02-11
 title: "Managing IP Allowlists With Ansible and UFW"
 slug: "managing-ip-allowlists-with-ansible-and-ufw"
 tags: ["minecraft", "ansible"]
-draft: true
 ---
 
-I recently stood up a "Golden Age" minecraft server for my friends and myself.
-We've been having a great time so far: building houses, cave bases, and clifftop observation decks (I'm pretty proud of that one).
-Since I wrote my last post, though, I knew that the server's security posture was a bit unstable.
-As detailed in my [previous post](/posts/automating-a-golden-age-minecraft-server/), I was able to configure the server to only respect a specific set of usernames.
+I recently stood up a "Golden Age" minecraft server for my friends and me.
+We've been having a great time so far building houses, cave bases, and clifftop observation decks.
+Despite the initial fun, I've known that the server's security posture was a bit... shaky.
+The server only allows a specific set of usernames to login, but, since the old authentication servers aren't online anymore, the server has no choice but to trust the client.
 
-However, since the authetication servers for old versions of minecraft aren't online anymore, the server has to be run in "offline mode" which means it won't verify who is connecting: just their usernames.
-This means that a malicious / hacked client could spoof the username of a known player and connect to the server.
-I've been doing my best to keep the usernames secret but that is nothing more than a "security by obscurity" measure.
-I outlines some options to increase the servers security in my last post and one stood out as a clear winner: only allowing known IP addresses to connect.
+This means that a malicious / hacked client could spoof the username of a known player and immediately connect to the server.
+I've been doing my best to keep the players' usernames secret but that is just "security by obscurity".
+I outlined some options to increase the server's security in my [previous post](/posts/automating-a-golden-age-minecraft-server/) and one stood out as a clear winner: only allowing known IP addresses to connect.
+Since the Minecraft server itself doesn't support this, I decided to move up a level and utilize the operating system's firewall: UFW.
 
 # UFW
 
-[UFW](https://help.ubuntu.com/community/UFW) is the default firewall on Ubuntu servers since 8.04 LTS.
-It provides a user-friendly experience above [iptables](https://linux.die.net/man/8/iptables).
-I know that some people prefer to use iptables directly but I really like the balance that UFW offers.
-It allows you to restrict access based on protocol, port, and source IP address.
+[UFW](https://help.ubuntu.com/community/UFW) has been the default firewall on Ubuntu servers since version 8.04 LTS.
+It provides a user-friendly interface for managing open ports and is built on top of the classic [iptables](https://linux.die.net/man/8/iptables) tool.
+I've read that some advanced users prefer to use iptables directly but I really like the balance that UFW offers.
+It provides a simple syntax for restricting network access based protocol (TCP vs UDP), port, and source IP address.
 
-Simple example of using UFW to restrict by proto, port, and IP:
+Here is basic example that allows all incoming TCP connections on port 22 (SSH):
 
 ```
-ufw allow from 1.2.3.4 proto tcp to any port 22
+ufw allow 22/tcp
 ```
 
-In addition to "allowing" connection, you can also "limit" them which applies rate-limiting with a simple strategy: block clients (by IP address) after 6 connection attempts within 30 seconds.
-All of my servers already use this for limiting SSH access (I already enforce pub-key only auth so the rate-limiting is mainly there to save the server's CPU usage).
+Here is an iteration on the previous example that restricts SSH connections to _only_ those coming from address `1.2.3.4`:
+
+```
+ufw allow from 1.2.3.4 to any port 22 proto tcp
+```
+
+In addition to `allow`ing connections, you can also `limit` them which applies rate limiting with a simple strategy: block clients (by IP address) after 6 connection attempts within 30 seconds.
+All of my servers already use this for limiting SSH access (pub-key auth is enforced so the rate limiting is mainly there to protect the server's CPU from all of the noise).
+
+One last thing about UFW: even though it ships with Ubuntu, it is disabled by default.
+Enabling it is as easy as running `ufw enable` but be careful!
+If you don't have any rules in place when the firewall comes up, you could lock yourself out of the system.
+Unless you are using a hosting provider that supports native consoles, you'll be unable to connect.
+I learned this lesson the hard way: be sure to allow SSH connections _before_ enabling UFW.
+These days, I use automation ([Terraform](https://www.terraform.io/) and [Ansible](https://www.ansible.com/)) to ensure that these operations always occur in the correct order.
 
 # Ansible
 
 Ansible has a [builtin module](https://docs.ansible.com/ansible/latest/collections/community/general/ufw_module.html) for idempotently configuring UFW.
-The examples in the documentation are very thorough and even describe setting up rules for multiple source IPs.
-My existing [Minecraft role](https://github.com/theandrew168/devops/tree/master/roles/minecraft) already uses UFW for allowing all incoming connections on port 25565.
-This has been working for now and should still be the default if no specific IPs are listed in the playbook's vars.
-For my Minecraft server, I'm using a variable called `minecraft_allowed_ips` which is a simple list of IP addresses (or ranges).
+The examples in the documentation are very thorough and even describe setting up rules for multiple source IPs!
+To my [Minecraft role](https://github.com/theandrew168/devops/tree/master/roles/minecraft) I added a variable named `minecraft_allowed_ips` which is a simple list of IP addresses (or ranges) that are allowed to access the server.
+When this list is present and non-empty, a UFW rule should be created **per address** that allows it to connect to port 25565.
+When the list is empty, all connections should be allowed regardless of where they are coming from.
 
-With a small bit of Ansible logic, we can split the task into two cases: one for permitting all IPs and one for permitting only specific IPs:
+With a small bit of Ansible logic we can split the task into these two cases: one for permitting _specific_ IPs and one for permitting _all_ IPs:
 
 ```yaml
-- name: Limit login attempts (all IP addresses)
-  ufw:
-    rule: limit
-    port: "25565"
-    proto: tcp
-  when: not minecraft_allowed_ips
-  become: yes
-  become_user: root
-
 - name: Limit login attempts (allowed IP addresses)
   ufw:
     rule: limit
@@ -62,22 +65,34 @@ With a small bit of Ansible logic, we can split the task into two cases: one for
   no_log: yes
   become: yes
   become_user: root
+
+- name: Limit login attempts (all IP addresses)
+  ufw:
+    rule: limit
+    port: "25565"
+    proto: tcp
+  when: not minecraft_allowed_ips
+  become: yes
+  become_user: root
 ```
 
-The combination of `when` and `with_items` effectively partitions the control flow: only one of these tasks will ever run during the playbook's execution.
+The combination of `when` and `with_items` partitions the control flow such that only one of these tasks will run.
+In tandem, these tasks cleanly handle configuring servers that are either "open to just me and my friends" or "open to anyone".
 
 # Conclusion
 
-Overall, this change was [fairly easy to implement](https://github.com/theandrew168/devops/commit/9aa74693962d3e2b3a655ddde68eeb59bfcc4e12) and increased my confidence that our server won't get compromised.
-It isn't a perfect fix, though, and the server still has _some_ risk with respects to unauthorized players connecting.
-A bad actor could still compromise the server if they both: had a hacked client and knew a valid username AND was accessing the server from an allowed IP ([CGNAT](https://www.rapidseedbox.com/blog/cgnat) or something).
-
-At this point, my server has three "layers" of security:
+Overall, these changes were [fairly straightforward to implement](https://github.com/theandrew168/devops/commit/9aa74693962d3e2b3a655ddde68eeb59bfcc4e12) and increased my confidence that my golden age Minecraft server won't get compromised.
+In total, it now has three layers of security:
 
 1. Only specific usernames can connect (via the server's config)
 2. Only specific IP addresses can connect (via UFW)
 3. Connection attempts are rate limited (via UFW)
 
+Even still, though, this isn't a bulletproof solution.
+A bad actor could gain access to the server if they: had a hacked client, knew a valid username, and were connecting to server from an allowed IP address / range (perhaps this could happen if both the attacker and an allowed player were behind the same [CGNAT](https://www.rapidseedbox.com/blog/cgnat)).
+I don't think is very likely but it _could_ happen.
+
 That being said, this is just a Minecraft server.
-I would be upset if anything happened to it but it isn't a critical system.
-The security layers in place might not be perfect but they do allow me to sleep without worrying too much about it.
+Between the low stakes of the system itself, periodic backups of the data volume, and ease of deployment, I'm not super worried.
+The security layers in place might not be perfect but they do save me from losing sleep about it.
+I can rest easy knowing that my precious blocks are (probably) safe and sound.
