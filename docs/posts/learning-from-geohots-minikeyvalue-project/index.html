@@ -8,11 +8,11 @@ The architecture of the program is straightforward: a single &ldquo;index server
 <time datetime=2021-01-14T00:00:00Z>January 14, 2021
 </time></span><span class=reading-time><i class="fa fa-clock-o" aria-hidden=true></i>
 7-minute read</span></div><div class=tags><i class="fa fa-tag" aria-hidden=true></i>
-<span class=tag><a href=/tags/python/>python</a>
+<span class=tag><a href=/tags/python/>Python</a>
 </span><span class=separator>•</span>
-<span class=tag><a href=/tags/go/>go</a>
+<span class=tag><a href=/tags/go/>Go</a>
 </span><span class=separator>•</span>
-<span class=tag><a href=/tags/database/>database</a></span></div></div></header><div class=post-content><p>I first became aware of <a href=https://github.com/geohot/minikeyvalue class=external-link target=_blank rel=noopener>minikeyvalue</a> while watching a <a href="https://www.youtube.com/watch?v=cAFjZ1gXBxc" class=external-link target=_blank rel=noopener>recording</a> of George&rsquo;s programming livestream.
+<span class=tag><a href=/tags/database/>Database</a></span></div></div></header><div class=post-content><p>I first became aware of <a href=https://github.com/geohot/minikeyvalue class=external-link target=_blank rel=noopener>minikeyvalue</a> while watching a <a href="https://www.youtube.com/watch?v=cAFjZ1gXBxc" class=external-link target=_blank rel=noopener>recording</a> of George&rsquo;s programming livestream.
 This project was written in <a href=https://www.python.org/ class=external-link target=_blank rel=noopener>Python</a> and the design was simple: an HTTP-based interface for storing, getting, and deleting arbitrary content.
 Many folks call this type of thing a &ldquo;distributed key-value store&rdquo;.
 The project was originally inspired by <a href=https://github.com/chrislusf/seaweedfs class=external-link target=_blank rel=noopener>SeaweedFS</a> but had the goal of being much, much simpler (ideally less than 1000 lines of code).</p><p>The architecture of the program is straightforward: a single &ldquo;index server&rdquo; distributes and organizes data between any number of &ldquo;volume servers&rdquo;.
