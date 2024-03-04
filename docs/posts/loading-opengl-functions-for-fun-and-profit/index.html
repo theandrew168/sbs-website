@@ -2,12 +2,12 @@
 </title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="While writing my previous blog post, I realized that there is a general information gap around dynamically loading OpenGL functions. When developers encounter this task on new OpenGL-related projects, they tend to reach for a premade loader such as glew, gl3w, glLoadGen, or GLAD. A more detailed list along with an overview of what all these libraries do can be found here.
 &ldquo;An OpenGL Loading Library is a library that loads pointers to OpenGL functions at runtime, core as well as extensions."><meta name=keywords content="blog,developer,personal"><meta name=twitter:card content="summary"><meta name=twitter:title content="Loading OpenGL Functions for Fun and Profit"><meta name=twitter:description content="While writing my previous blog post, I realized that there is a general information gap around dynamically loading OpenGL functions. When developers encounter this task on new OpenGL-related projects, they tend to reach for a premade loader such as glew, gl3w, glLoadGen, or GLAD. A more detailed list along with an overview of what all these libraries do can be found here.
 &ldquo;An OpenGL Loading Library is a library that loads pointers to OpenGL functions at runtime, core as well as extensions."><meta property="og:title" content="Loading OpenGL Functions for Fun and Profit"><meta property="og:description" content="While writing my previous blog post, I realized that there is a general information gap around dynamically loading OpenGL functions. When developers encounter this task on new OpenGL-related projects, they tend to reach for a premade loader such as glew, gl3w, glLoadGen, or GLAD. A more detailed list along with an overview of what all these libraries do can be found here.
-&ldquo;An OpenGL Loading Library is a library that loads pointers to OpenGL functions at runtime, core as well as extensions."><meta property="og:type" content="article"><meta property="og:url" content="https://shallowbrooksoftware.com/posts/loading-opengl-functions-for-fun-and-profit/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-06-17T00:00:00+00:00"><meta property="article:modified_time" content="2020-06-17T00:00:00+00:00"><link rel=canonical href=https://shallowbrooksoftware.com/posts/loading-opengl-functions-for-fun-and-profit/><link rel=preload href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.e1bdf152d93b060b06ba5d496486ed9c201a8b95d335e035beb5faebe3b61cad.css integrity="sha256-4b3xUtk7BgsGul1JZIbtnCAai5XTNeA1vrX66+O2HK0=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.a00e6364bacbc8266ad1cc81230774a1397198f8cfb7bcba29b7d6fcb54ce57f.css integrity="sha256-oA5jZLrLyCZq0cyBIwd0oTlxmPjPt7y6KbfW/LVM5X8=" crossorigin=anonymous media=screen><link rel=icon type=image/svg+xml href=/images/favicon.svg sizes=any><link rel=icon type=image/png href=/images/favicon-32x32.png sizes=32x32><link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16><link rel=apple-touch-icon href=/images/apple-touch-icon.png><link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><a class=navigation-title href=/>Shallow Brook Software
+&ldquo;An OpenGL Loading Library is a library that loads pointers to OpenGL functions at runtime, core as well as extensions."><meta property="og:type" content="article"><meta property="og:url" content="https://shallowbrooksoftware.com/posts/loading-opengl-functions-for-fun-and-profit/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-06-17T00:00:00+00:00"><meta property="article:modified_time" content="2020-06-17T00:00:00+00:00"><link rel=canonical href=https://shallowbrooksoftware.com/posts/loading-opengl-functions-for-fun-and-profit/><link rel=preload href=/fonts/fa-brands-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-regular-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-solid-900.woff2 as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.577e3c5ead537873430da16f0964b754a120fd87c4e2203a00686e7c75b51378.css integrity="sha256-V348Xq1TeHNDDaFvCWS3VKEg/YfE4iA6AGhufHW1E3g=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.a00e6364bacbc8266ad1cc81230774a1397198f8cfb7bcba29b7d6fcb54ce57f.css integrity="sha256-oA5jZLrLyCZq0cyBIwd0oTlxmPjPt7y6KbfW/LVM5X8=" crossorigin=anonymous media=screen><link rel=icon type=image/svg+xml href=/images/favicon.svg sizes=any><link rel=icon type=image/png href=/images/favicon-32x32.png sizes=32x32><link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16><link rel=apple-touch-icon href=/images/apple-touch-icon.png><link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><a class=navigation-title href=https://shallowbrooksoftware.com/>Shallow Brook Software
 </a><input type=checkbox id=menu-toggle>
-<label class="menu-button float-right" for=menu-toggle><i class="fa fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/about/>About</a></li><li class=navigation-item><a class=navigation-link href=/posts/>Blog</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://shallowbrooksoftware.com/posts/loading-opengl-functions-for-fun-and-profit/>Loading OpenGL Functions for Fun and Profit</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa fa-calendar" aria-hidden=true></i>
+<label class="menu-button float-right" for=menu-toggle><i class="fa-solid fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/about/>About</a></li><li class=navigation-item><a class=navigation-link href=/posts/>Blog</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://shallowbrooksoftware.com/posts/loading-opengl-functions-for-fun-and-profit/>Loading OpenGL Functions for Fun and Profit</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa-solid fa-calendar" aria-hidden=true></i>
 <time datetime=2020-06-17T00:00:00Z>June 17, 2020
-</time></span><span class=reading-time><i class="fa fa-clock-o" aria-hidden=true></i>
-14-minute read</span></div><div class=tags><i class="fa fa-tag" aria-hidden=true></i>
+</time></span><span class=reading-time><i class="fa-solid fa-clock" aria-hidden=true></i>
+14-minute read</span></div><div class=tags><i class="fa-solid fa-tag" aria-hidden=true></i>
 <span class=tag><a href=/tags/c/>C</a>
 </span><span class=separator>•</span>
 <span class=tag><a href=/tags/graphics/>Graphics</a>
@@ -24,7 +24,7 @@ Plus, if some aspect of the library starts working unexpectedly, having the abil
 The process can be fussy because there are a number of different OpenGL-isms and C-isms that must come together in order to keep the compiler happy.
 However, with some careful reading and planning, a minimal loader can be written in a clean, simple, and data-driven fashion.
 When all is said and done, adding / removing specific OpenGL functions will only require changing a single line of code!</p><h1 id=functions-vs-function-pointers>Functions vs Function Pointers
-<a class=heading-link href=#functions-vs-function-pointers><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#functions-vs-function-pointers><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>An important distinction to understand when tackling this topic is the difference between C functions and C function pointers.
 From a caller&rsquo;s perspective they behave exactly the same: pass the args in parentheses and get a return value back.
 Both representations of a function delineate the same thing: an address in memory containing instructions that implement a procedure.
@@ -53,7 +53,7 @@ If called in this state, the program would quickly hit a <a href=https://en.wiki
 However, the function <code>setup_add_pointer</code> can be called to point <code>add_pointer</code> to something valid.
 In this case, we point it to the same function body as <code>add_normal</code>.
 This mechanism of changing a function pointer&rsquo;s target at runtime is known as <a href=https://en.wikipedia.org/wiki/Dynamic_loading class=external-link target=_blank rel=noopener>dynamic loading</a>.</p><h1 id=dynamic-loading>Dynamic Loading
-<a class=heading-link href=#dynamic-loading><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#dynamic-loading><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>Dynamic loading is an important facet of using OpenGL because the locations of most of the library&rsquo;s functions aren&rsquo;t known at compile time.
 They also aren&rsquo;t necessarily known even at <a href=https://en.wikipedia.org/wiki/Dynamic_linker class=external-link target=_blank rel=noopener>dynamic link time</a>!
 Due to how OpenGL has evolved over the years (and to support more flexibility in handling different platforms and implementations), its modern functions often require dynamical loading before they can be used.</p><p>Okay, so now we know that the OpenGL functions that we want to use are going to have to be loaded sometime after the program is running.
@@ -61,12 +61,12 @@ How can we build an application around these functions if they aren&rsquo;t loca
 If you refer to the previous code snippet, we can initially define a function pointer to be <code>NULL</code> and then simply change what it points to at a later time.
 That way, the rest of our application can use these initial definitions when being built.
 We just have to be absolutely sure to point these definitions at something valid <em>before</em> calling them.</p><h1 id=the-gameplan>The Gameplan
-<a class=heading-link href=#the-gameplan><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#the-gameplan><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>With all of that background context out of the way, we can start to bring everything together.
 I&rsquo;ll be using <a href=https://www.libsdl.org/ class=external-link target=_blank rel=noopener>SDL2</a> for this demo in order to keep the code consistent and portable.
 Additionally, most the details on how to write something like this comes from <a href=https://apoorvaj.io/ class=external-link target=_blank rel=noopener>Apoorva Joshi&rsquo;s</a> excellent blog post: <a href=https://apoorvaj.io/loading-opengl-without-glew/ class=external-link target=_blank rel=noopener>Loading OpenGL without GLEW</a>.
 The official <a href=https://www.khronos.org/opengl/wiki/Load_OpenGL_Functions class=external-link target=_blank rel=noopener>Khronos Documentation</a> goes into great detail on the mechanics, as well.</p><table><thead><tr><th>What do we need?</th><th>Where will we get it?</th></tr></thead><tbody><tr><td>OpenGL function type signatures</td><td>The SDL2 header: <a href=https://github.com/spurious/SDL-mirror/blob/master/include/SDL_opengl.h class=external-link target=_blank rel=noopener>SDL2/SDL_opengl.h</a></td></tr><tr><td>OpenGL function declarations</td><td>We will write these ourselves!</td></tr><tr><td>OpenGL function definitions</td><td>We will write these ourselves!</td></tr><tr><td>OpenGL function address getter</td><td>The SDL2 function: <a href=https://wiki.libsdl.org/SDL_GL_GetProcAddress class=external-link target=_blank rel=noopener>SDL_GL_GetProcAddress</a></td></tr><tr><td>OpenGL function loader</td><td>We will write this ourselves!</td></tr></tbody></table><h3 id=opengl-function-type-signatures>OpenGL function type signatures
-<a class=heading-link href=#opengl-function-type-signatures><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#opengl-function-type-signatures><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h3><p>The <a href=https://github.com/spurious/SDL-mirror/blob/master/include/SDL_opengl.h class=external-link target=_blank rel=noopener>SDL2/SDL_opengl.h</a> header (and the other version-specific headers that it pulls in) includes type signatures for all modern OpenGL functions.
 In this scenario, a function&rsquo;s type signature refers to its name, return type, and argument types.
 This information is enough to uniquely identify a given OpenGL function (or any C function, for that matter).
@@ -74,7 +74,7 @@ Since we plan to load these function implementations dynamically, we aren&rsquo;
 typedef GLuint (*PFNGLCREATESHADERPROC)(GLenum type);
 </code></pre><p>About the odd typedef name <code>PFNGLCREATESHADERPROC</code>: it represents a <strong>P</strong>ointer to the <strong>F</strong>unctio<strong>N</strong> <strong>glCreateShader</strong>, which is a <strong>PROC</strong>edure.
 This explanation cames from the <a href=https://www.khronos.org/opengl/wiki/Load_OpenGL_Functions#Function_Prototypes class=external-link target=_blank rel=noopener>Khronos Docs</a>.</p><h3 id=opengl-function-declarations>OpenGL function declarations
-<a class=heading-link href=#opengl-function-declarations><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#opengl-function-declarations><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h3><p>While the prototype is valuable for more clearly showcasing how <a href=http://docs.gl/gl3/glCreateShader class=external-link target=_blank rel=noopener>glCreateShader</a> should be called, we don&rsquo;t actually want that prototype present in our codebase.
 This is because of a nuance we covered earlier: a normal function&rsquo;s definition <em>must</em> be present at compile/link time.
 Since we won&rsquo;t have &ldquo;real&rdquo; definitions at compile/link time, we need to use the more flexible option: a function pointer.</p><p>The typedef seen above serves as a convenience.
@@ -86,7 +86,7 @@ For the sake of brevity, I&rsquo;ll just be using two modern OpenGL functions in
 extern PFNGLCREATESHADERPROC glCreateShader;
 extern PFNGLDELETESHADERPROC glDeleteShader;
 </code></pre><h3 id=opengl-function-definitions>OpenGL function definitions
-<a class=heading-link href=#opengl-function-definitions><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#opengl-function-definitions><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h3><p>Similar to original example, the default definition for our function pointers will simply be <code>NULL</code>.
 Once again, these functions <strong>MUST NOT</strong> be called until after the real locations have been loaded and validated.</p><pre tabindex=0><code>// opengl.c
 #include &lt;SDL2/SDL_opengl.h&gt;
@@ -95,12 +95,12 @@ Once again, these functions <strong>MUST NOT</strong> be called until after the 
 PFNGLCREATESHADERPROC glCreateShader = NULL;
 PFNGLDELETESHADERPROC glDeleteShader = NULL;
 </code></pre><h3 id=opengl-function-address-getter>OpenGL function address getter
-<a class=heading-link href=#opengl-function-address-getter><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#opengl-function-address-getter><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h3><p>In order to get our hands on the actual address of these functions, a special function is needed to look the OpenGL functions by name.
 Since our demo uses <a href=https://www.libsdl.org/ class=external-link target=_blank rel=noopener>SDL2</a>, we will be using the platform-agnostic helper that it provides: <a href=https://wiki.libsdl.org/SDL_GL_GetProcAddress class=external-link target=_blank rel=noopener>SDL_GL_GetProcAddress</a>.</p><pre tabindex=0><code>// &#34;proc&#34; is the name of an OpenGL function; returns NULL upon error
 void* SDL_GL_GetProcAddress(const char* proc)
 </code></pre><p>Each OpenGL implementation platform has its own, specific flavor of this function:</p><ul><li><strong>Windows</strong> has <a href=https://docs.microsoft.com/en-us/windows/win32/api/wingdi/nf-wingdi-wglgetprocaddress class=external-link target=_blank rel=noopener>wglGetProcAddress</a></li><li><strong>Linux/X11</strong> has <a href=https://www.khronos.org/registry/OpenGL/extensions/ARB/GLX_ARB_get_proc_address.txt class=external-link target=_blank rel=noopener>glXGetProcAddressARB</a></li><li><strong>macOS</strong> has <a href=https://developer.apple.com/library/archive/documentation/GraphicsImaging/Conceptual/OpenGL-MacProgGuide/opengl_entrypts/opengl_entrypts.html class=external-link target=_blank rel=noopener>NSLookupAndBindSymbol</a><ul><li>Note that OpenGL was deprecated in macOS 10.14 in favor of <a href=https://developer.apple.com/metal/ class=external-link target=_blank rel=noopener>Metal</a></li></ul></li></ul><h3 id=opengl-function-loader>OpenGL function loader
-<a class=heading-link href=#opengl-function-loader><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#opengl-function-loader><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h3><p>The last step now is to call our address getter for each OpenGL function and update its initial definition with the real location.
 We can wrap this process in a single helper function along with some simple error checking.</p><pre tabindex=0><code>
 // opengl.h
@@ -120,7 +120,7 @@ Even though we&rsquo;ve only loaded two functions, the process is exactly the sa
 Even though this is exactly what most OpenGL function loader libraries do, there is still a warning message lingering around in the compilation output.
 It even only shows up when building with <code>-Wpedantic</code> enabled&mldr;</p><pre tabindex=0><code>ISO C forbids conversion of object pointer to function pointer type
 </code></pre><h1 id=the-problem>The Problem
-<a class=heading-link href=#the-problem><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#the-problem><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>What we have encountered is a historic nuance in the C standard: objects pointers and function pointers are not convertible.
 Also, it&rsquo;s not that the standard mandates that the two types <em>not</em> be compatible, it just doesn&rsquo;t explicitly say that they are.
 On some older platforms (and maybe modern ones, too), function and object pointers were indeed sized differently.</p><p>For us, this means that it is not technically legal to cast the <code>void*</code> pointer we get from <a href=https://wiki.libsdl.org/SDL_GL_GetProcAddress class=external-link target=_blank rel=noopener>SDL_GL_GetProcAddress</a> to a function pointer.
@@ -131,7 +131,7 @@ Some OpenGL loader libraries ignore this warning altogether and that is perfectl
 Here are a couple of StackOverflow questions discussing <a href=https://stackoverflow.com/questions/13696918/c-cast-void-pointer-to-function-pointer class=external-link target=_blank rel=noopener>casting void pointers to function pointers</a> and <a href=https://stackoverflow.com/questions/3941793/what-is-guaranteed-about-the-size-of-a-function-pointer class=external-link target=_blank rel=noopener>what is guaranteed about function pointer sizes</a>.
 There have even been <a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=83584" class=external-link target=_blank rel=noopener>bugs reported to GCC</a> that seek clarification on this warning and how seriously it should be taken.</p><p>The POSIX <a href=https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/dlfcn.h.html class=external-link target=_blank rel=noopener>dynamic linking API</a> includes a more generic function address getter.
 The docs for <a href=https://pubs.opengroup.org/onlinepubs/9699919799/functions/dlsym.html class=external-link target=_blank rel=noopener>dlsym</a> make special note of this function-casting behavior:</p><p><strong>&ldquo;Note that conversion from a void * pointer to a function pointer [&mldr;] is not defined by the ISO C standard. This standard requires this conversion to work correctly on conforming implementations.&rdquo;</strong></p><p>Lastly, the <a href=http://port70.net/~nsz/c/c11/n1570.html class=external-link target=_blank rel=noopener>C11 standard</a> actually contains a <a href=http://port70.net/~nsz/c/c11/n1570.html#J.5.7 class=external-link target=_blank rel=noopener>common extension</a> that permits this behavior and makes it valid:</p><p><strong>&ldquo;A pointer to an object or to void may be cast to a pointer to a function, allowing data to be invoked as a function&rdquo;</strong></p><h1 id=appeasing-the-compiler>Appeasing the Compiler
-<a class=heading-link href=#appeasing-the-compiler><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#appeasing-the-compiler><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>Even though this warning isn&rsquo;t something that we need to be very worried about, it&rsquo;s still there: cluttering up our compilation output.
 How can we make the compiler happy and still compile with pedantic warnings enabled?
 The issue essentially boils down to a potential difference in sizes: an object pointer <em>might</em> be smaller or larger than a function pointer.
@@ -149,7 +149,7 @@ Using a <a href=https://en.cppreference.com/w/c/language/struct_initialization c
 It doesn&rsquo;t matter that <code>function_ptr</code> is a different function pointer type than any OpenGL function: it just needs to be a function pointer so that its size is accounted for.</p><p>With this code now in place, the compiler is quiet again!
 We can compile with all warnings enabled (all, extra, pedantic) and no fuss is raised.
 The only thing left to do is to find a way to wrap all of these fiddly concepts together in a concise collection of macros.</p><h1 id=macros-to-the-rescue>Macros to the Rescue
-<a class=heading-link href=#macros-to-the-rescue><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#macros-to-the-rescue><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>In order to keep things simple and extensible, our custom OpenGL function loader two goals:</p><ol><li>It should work on most modern platforms without fuss</li><li>It should be possible to add and remove functions from the project by changing a single line of code</li></ol><p>The good news is that this is possible!
 The bad news is that it involves a small amount of <a href=https://en.cppreference.com/w/c/preprocessor class=external-link target=_blank rel=noopener>C preprocessor</a> complexity.
 The core strategy is to develop a set of macros that all accept the same two parameters: the OpenGL function name and its corresponding function pointer name.
@@ -158,7 +158,7 @@ Then, we will be able to define a list of all the functions we need and swap out
     OPENGL_FUNCTION(glDeleteShader, PFNGLDELETESHADERPROC)  \
     ...
 </code></pre><p>Keep this list in mind as we explore each of the four helper macros.</p><h3 id=opengl_declare>OPENGL_DECLARE
-<a class=heading-link href=#opengl_declare><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#opengl_declare><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h3><p>This macro declares an OpenGL function pointer.</p><pre tabindex=0><code>#define OPENGL_DECLARE(func_name, func_type)  \
     extern func_type func_name;
 </code></pre><p>It is used in our project&rsquo;s OpenGL-specific header file to expose the symbols that other parts of our application will link to.</p><pre tabindex=0><code>// opengl.h
@@ -169,7 +169,7 @@ OPENGL_FUNCTIONS
 This way, as the preprocessor handles all of the listed functions from earlier, they will each expand into a function pointer declaration.
 The <code>OPENGL_FUNCTION</code> macro is then reset back to being undefined just for peace of mind.
 This is pattern is how <em>all</em> of these macros interact with that simple, data-driven list of functions!</p><h3 id=opengl_define>OPENGL_DEFINE
-<a class=heading-link href=#opengl_define><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#opengl_define><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h3><p>This macro defines the initial function pointer implementations (which is <code>NULL</code>).</p><pre tabindex=0><code>#define OPENGL_DEFINE(func_name, func_type)  \
     func_type func_name = NULL;
 </code></pre><p>It is used in our project&rsquo;s OpenGL-specific implementation file.</p><pre tabindex=0><code>// opengl.c
@@ -177,7 +177,7 @@ This is pattern is how <em>all</em> of these macros interact with that simple, d
 OPENGL_FUNCTIONS
 #undef OPENGL_FUNCTION
 </code></pre><h3 id=opengl_load-and-opengl_validate>OPENGL_LOAD and OPENGL_VALIDATE
-<a class=heading-link href=#opengl_load-and-opengl_validate><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#opengl_load-and-opengl_validate><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h3><p>This first macro encompasses the union pass-through and cast decribed earlier.</p><pre tabindex=0><code>#define OPENGL_LOAD(func_name, func_type)                \
     func_name = (func_type)(union bridge){               \
         .object_ptr = SDL_GL_GetProcAddress(#func_name)  \
@@ -200,7 +200,7 @@ It validates that an OpenGL function was successfully loaded and prints an error
     return true;
 }
 </code></pre><p>Not <em>too</em> complicated once all is said and done!</p><h1 id=conclusion>Conclusion
-<a class=heading-link href=#conclusion><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>This post has discussed quite a few code snippets in isolation.
 To bring it all together, <a href=https://gist.github.com/theandrew168/2eec79a145396c5d08b774096f91c922 class=external-link target=_blank rel=noopener>here is a gist</a> containing a complete header and implementation for the loader we’ve built.
 You can also see a full version with extra comments in my <a href=https://github.com/theandrew168/sdl2-opengl-demo class=external-link target=_blank rel=noopener>sdl2-opengl-demo</a> project.</p><p>Despite knowing more about how this process works, should you still do it yourself?

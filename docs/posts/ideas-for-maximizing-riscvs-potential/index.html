@@ -2,12 +2,12 @@
 </title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="There has been a lot of buzz surrounding the slowness, instability, and complexity of modern software systems. It seems as though more and more people are feeling and observing bloat and bugginess in their day-to-day usage of computers. In many situations, the mediocrity of today&rsquo;s technology has become so common that it isn&rsquo;t even seen as an issue.
 During my few years spent in industry, these sort of quotes were heard almost daily:"><meta name=keywords content="blog,developer,personal"><meta name=twitter:card content="summary"><meta name=twitter:title content="Ideas for Maximizing RISC-V's Potential"><meta name=twitter:description content="There has been a lot of buzz surrounding the slowness, instability, and complexity of modern software systems. It seems as though more and more people are feeling and observing bloat and bugginess in their day-to-day usage of computers. In many situations, the mediocrity of today&rsquo;s technology has become so common that it isn&rsquo;t even seen as an issue.
 During my few years spent in industry, these sort of quotes were heard almost daily:"><meta property="og:title" content="Ideas for Maximizing RISC-V's Potential"><meta property="og:description" content="There has been a lot of buzz surrounding the slowness, instability, and complexity of modern software systems. It seems as though more and more people are feeling and observing bloat and bugginess in their day-to-day usage of computers. In many situations, the mediocrity of today&rsquo;s technology has become so common that it isn&rsquo;t even seen as an issue.
-During my few years spent in industry, these sort of quotes were heard almost daily:"><meta property="og:type" content="article"><meta property="og:url" content="https://shallowbrooksoftware.com/posts/ideas-for-maximizing-riscvs-potential/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-11-11T00:00:00+00:00"><meta property="article:modified_time" content="2020-11-11T00:00:00+00:00"><link rel=canonical href=https://shallowbrooksoftware.com/posts/ideas-for-maximizing-riscvs-potential/><link rel=preload href="/fonts/forkawesome-webfont.woff2?v=1.2.0" as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.e1bdf152d93b060b06ba5d496486ed9c201a8b95d335e035beb5faebe3b61cad.css integrity="sha256-4b3xUtk7BgsGul1JZIbtnCAai5XTNeA1vrX66+O2HK0=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.a00e6364bacbc8266ad1cc81230774a1397198f8cfb7bcba29b7d6fcb54ce57f.css integrity="sha256-oA5jZLrLyCZq0cyBIwd0oTlxmPjPt7y6KbfW/LVM5X8=" crossorigin=anonymous media=screen><link rel=icon type=image/svg+xml href=/images/favicon.svg sizes=any><link rel=icon type=image/png href=/images/favicon-32x32.png sizes=32x32><link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16><link rel=apple-touch-icon href=/images/apple-touch-icon.png><link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><a class=navigation-title href=/>Shallow Brook Software
+During my few years spent in industry, these sort of quotes were heard almost daily:"><meta property="og:type" content="article"><meta property="og:url" content="https://shallowbrooksoftware.com/posts/ideas-for-maximizing-riscvs-potential/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2020-11-11T00:00:00+00:00"><meta property="article:modified_time" content="2020-11-11T00:00:00+00:00"><link rel=canonical href=https://shallowbrooksoftware.com/posts/ideas-for-maximizing-riscvs-potential/><link rel=preload href=/fonts/fa-brands-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-regular-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-solid-900.woff2 as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.577e3c5ead537873430da16f0964b754a120fd87c4e2203a00686e7c75b51378.css integrity="sha256-V348Xq1TeHNDDaFvCWS3VKEg/YfE4iA6AGhufHW1E3g=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.a00e6364bacbc8266ad1cc81230774a1397198f8cfb7bcba29b7d6fcb54ce57f.css integrity="sha256-oA5jZLrLyCZq0cyBIwd0oTlxmPjPt7y6KbfW/LVM5X8=" crossorigin=anonymous media=screen><link rel=icon type=image/svg+xml href=/images/favicon.svg sizes=any><link rel=icon type=image/png href=/images/favicon-32x32.png sizes=32x32><link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16><link rel=apple-touch-icon href=/images/apple-touch-icon.png><link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><a class=navigation-title href=https://shallowbrooksoftware.com/>Shallow Brook Software
 </a><input type=checkbox id=menu-toggle>
-<label class="menu-button float-right" for=menu-toggle><i class="fa fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/about/>About</a></li><li class=navigation-item><a class=navigation-link href=/posts/>Blog</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://shallowbrooksoftware.com/posts/ideas-for-maximizing-riscvs-potential/>Ideas for Maximizing RISC-V's Potential</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa fa-calendar" aria-hidden=true></i>
+<label class="menu-button float-right" for=menu-toggle><i class="fa-solid fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/about/>About</a></li><li class=navigation-item><a class=navigation-link href=/posts/>Blog</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://shallowbrooksoftware.com/posts/ideas-for-maximizing-riscvs-potential/>Ideas for Maximizing RISC-V's Potential</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa-solid fa-calendar" aria-hidden=true></i>
 <time datetime=2020-11-11T00:00:00Z>November 11, 2020
-</time></span><span class=reading-time><i class="fa fa-clock-o" aria-hidden=true></i>
-9-minute read</span></div><div class=tags><i class="fa fa-tag" aria-hidden=true></i>
+</time></span><span class=reading-time><i class="fa-solid fa-clock" aria-hidden=true></i>
+9-minute read</span></div><div class=tags><i class="fa-solid fa-tag" aria-hidden=true></i>
 <span class=tag><a href=/tags/risc-v/>Risc-V</a>
 </span><span class=separator>•</span>
 <span class=tag><a href=/tags/assembly/>Assembly</a>
@@ -18,7 +18,7 @@ In many situations, the mediocrity of today&rsquo;s technology has become so com
 The stability of Windows is the source of many jokes.
 Backup plans are necessary for inconsistent meeting room reservations.
 Are these situations an inevitability of computer interactions or has something gone wrong?</p><h1 id=existing-opinions>Existing Opinions
-<a class=heading-link href=#existing-opinions><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#existing-opinions><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>In his blog post <a href=https://tonsky.me/blog/disenchantment/ class=external-link target=_blank rel=noopener>Software Disenchantment</a>, Nikita Prokopov (tonsky) presents evidence for &ldquo;industry&rsquo;s lack of care for efficiency, simplicity, and excellence&rdquo;.
 In his presentation <a href=https://caseymuratori.com/blog_0031 class=external-link target=_blank rel=noopener>The 30 Million Line Problem</a>, Casey Muratori argues that the interaction between software and hardware has the potential to be simplified.
 In his article <a href=https://idlewords.com/talks/website_obesity.htm class=external-link target=_blank rel=noopener>The Website Obesity Crisis</a>, Maciej Ceglowski describes how websites have gotten progressively larger and slower.
@@ -26,7 +26,7 @@ In his talk <a href="https://www.youtube.com/watch?v=pW-SOdj4Kkk" class=external
 Lastly, in his 1995 essay <a href=https://cr.yp.to/bib/1995/wirth.pdf class=external-link target=_blank rel=noopener>A Plea for Lean Software</a>, Niklaus Wirth describes causes for what he calls &ldquo;fat software&rdquo;.
 1995!
 This problem has a history.</p><h1 id=my-opinion>My Opinion
-<a class=heading-link href=#my-opinion><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#my-opinion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>I agree with the sentiments expressed in each of these posts.
 In some sense, it leaves me with a feeling of helplessness: what can we do about this?
 Is the ship of modern software development too large to turn?
@@ -36,7 +36,7 @@ I don&rsquo;t want to accept that the tools we use everyday are incapable of bei
 Not only what the root cause may be, but also what can be done to mitigate it.
 The videos and articles mentioned prior have all helped guide me toward the following ideas.
 In short:</p><ol><li>Operating systems provide great value, but often at a cost</li><li>Modern software exhibits an abundance of code and complexity</li><li>Usefulness can present itself in different, non-traditional ways</li><li>There are other routes to actualizing useful behavior from computers</li><li>The Bronzebeard project is my attempt to enable one alternate route</li></ol><h1 id=idea-1-where-things-went-wrong>Idea 1: Where Things Went Wrong
-<a class=heading-link href=#idea-1-where-things-went-wrong><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#idea-1-where-things-went-wrong><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>Are modern operating systems the epitome of software efficiency?
 By this, I mean to ask if they bring enough value to the table to justify their costs.
 But Linux is free!
@@ -46,7 +46,7 @@ However, there do exist veteran programmers who take issue with the state of mod
 <a href=https://rene.rebe.de/ class=external-link target=_blank rel=noopener>René Rebe</a> supports an ongoing conversation about this exact topic.
 Through his <a href=https://www.youtube.com/user/renerebe class=external-link target=_blank rel=noopener>YouTube channel</a>, René presents frequent ideas and criticisms relating to operating system design and implementation.
 He explains how better languages and better designs (such as <a href=https://en.wikipedia.org/wiki/Microkernel class=external-link target=_blank rel=noopener>microkernel</a>) could be an important step in future OS innovation.</p><h1 id=idea-2-too-much-code-too-much-complexity>Idea 2: Too Much Code, Too Much Complexity
-<a class=heading-link href=#idea-2-too-much-code-too-much-complexity><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#idea-2-too-much-code-too-much-complexity><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>Most of the time, code quantity is really a poor measure of anything.
 Talking about a project&rsquo;s &ldquo;lines of code&rdquo; doesn&rsquo;t usually amount to much.
 However, as a project&rsquo;s size increases, so does it&rsquo;s learning curve.
@@ -58,7 +58,7 @@ Thirty million line of code in <em>any</em> language is going to result in subtl
 As soon as a project grows to the point where no single developer can understand the whole picture, I think it&rsquo;s game over.
 At such a scale, achieving optimal performance and reliability becomes nearly impossible because human intercommunication is lossy and inefficient.
 I think that innovation will come not from writing <em>safer</em> code, but from writing <em>less</em> code.</p><h1 id=idea-3-what-makes-something-useful>Idea 3: What Makes Something Useful?
-<a class=heading-link href=#idea-3-what-makes-something-useful><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#idea-3-what-makes-something-useful><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>Is a fully-featured, multi-user OS necessary for a computer to be useful?
 Do specific, targeted applications such as a webserver need that?
 I propose that, in fact, something like a webserver is made <em>less</em> secure due to the multi-user model and features running behind it.
@@ -68,7 +68,7 @@ The second and less common angle is the value added <em>implicity</em> by exposi
 If a program can do the same thing with half the code, that&rsquo;s value added.
 If it can do the same task in half the time, that&rsquo;s also value added.
 If you could accomplish 90% of the existing features with only 10% of the code, that may be a big win!</p><h1 id=idea-4-other-paths-to-success>Idea 4: Other Paths to Success
-<a class=heading-link href=#idea-4-other-paths-to-success><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#idea-4-other-paths-to-success><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>What about writing your program or application directly in <a href=https://en.wikipedia.org/wiki/Assembly_language class=external-link target=_blank rel=noopener>assembly</a>?
 Oof, that&rsquo;d hurt portability&mldr; right?
 I&rsquo;d say &ldquo;yes&rdquo; if the goal was to support multiple architectures.
@@ -85,7 +85,7 @@ I think that <a href=https://en.wikipedia.org/wiki/Forth_%28programming_language
 A minimal Forth implementation can be built in a few hundred instructions and then a useful, interactive system can built in a few hundred Forth words.
 That sounds pretty efficient!
 Perhaps it would even be fairly secure.</p><p><strong>&ldquo;There are two ways of constructing a software design: One way is to make it so simple that there are obviously no deficiencies, and the other way is to make it so complicated that there are no obvious deficiencies. The first method is far more difficult.&rdquo;</strong> - C. A. R. Hoare</p><h1 id=idea-5-the-bronzebeard-project>Idea 5: The Bronzebeard Project
-<a class=heading-link href=#idea-5-the-bronzebeard-project><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#idea-5-the-bronzebeard-project><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p><a href=https://github.com/theandrew168/bronzebeard class=external-link target=_blank rel=noopener>Bronzebeard</a> is a minimal ecosystem for bare-metal RISC-V development.
 I&rsquo;ve written a basic, standalone <a href=https://github.com/theandrew168/bronzebeard/blob/master/bronzebeard/asm.py class=external-link target=_blank rel=noopener>assembler</a> with no dependency on existing toolchains.
 I also wrote a useful subset of <a href=https://en.wikipedia.org/wiki/USB#Device_Firmware_Upgrade class=external-link target=_blank rel=noopener>DFU</a> in order to support running programs on a few existing RISC-V boards.
@@ -96,7 +96,7 @@ Forth is the most minimal approach I&rsquo;ve seen.
 Furthermore, I think that Forth&rsquo;s design is rooted so literally upon these three elements that it almost <em>encourages</em> productive abstrations.
 It limits you to the &ldquo;good&rdquo; kind of abstraction: combining smaller units of low-level functionality into larger and larger high-level procedures.
 I consider a &ldquo;bad&rdquo; abstraction to be when extra code is added in preemptive concern for future changes that rarely occur.</p><h1 id=conclusion>Conclusion
-<a class=heading-link href=#conclusion><i class="fa fa-link" aria-hidden=true title="Link to heading"></i>
+<a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>In short, there is simply too much code and complexity underlying most modern systems.
 The rise of RISC-V will enable programmers to embrace and control hardware at its lowest and most powerful level.
 Programming languages such as C are valuable for their ability to paint over the machine that they target.
