@@ -2,7 +2,7 @@
 date: 2020-09-02
 title: "Designing Python Web Servers"
 slug: "designing-python-web-servers"
-tags: ["python"]
+tags: ["Python"]
 ---
 
 I've spent the last few days designing and benchmarking extremely minimal pure-Python web servers.

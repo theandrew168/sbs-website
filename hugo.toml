@@ -5,6 +5,9 @@ languagecode = "en"
 defaultcontentlaguage = "en"
 paginate = 20
 
+pluralizeListTitles = false
+capitalizeListTitles = false
+
 [params]
 author = "Andrew Dailey"
 description = "Simple software that babbles loudly"

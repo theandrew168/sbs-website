@@ -2,6 +2,7 @@
 date: 2024-03-03
 title: "Behavioral Abstractions in TypeScript"
 slug: "behavioral-abstractions-in-typescript"
+tags: ["TypeScript"]
 ---
 
 Almost every application needs to communicate with the outside world in one form or another.

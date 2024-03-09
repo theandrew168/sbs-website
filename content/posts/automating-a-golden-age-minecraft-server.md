@@ -2,7 +2,7 @@
 date: 2024-02-04
 title: "Automating a Golden Age Minecraft Server"
 slug: "automating-a-golden-age-minecraft-server"
-tags: ["minecraft", "terraform", "ansible"]
+tags: ["Minecraft", "Terraform", "Ansible"]
 ---
 
 Lately, I've noticed a growing interest in what people like to call "Golden Age Minecraft" ([reddit](https://reddit.com/r/GoldenAgeMinecraft/)).

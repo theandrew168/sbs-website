@@ -2,7 +2,7 @@
 date: 2020-11-11
 title: "Ideas for Maximizing RISC-V's Potential"
 slug: "ideas-for-maximizing-riscvs-potential"
-tags: ["risc-v", "assembly", "forth"]
+tags: ["RISC-V", "Assembly", "Forth"]
 ---
 
 There has been a lot of buzz surrounding the slowness, instability, and complexity of modern software systems.

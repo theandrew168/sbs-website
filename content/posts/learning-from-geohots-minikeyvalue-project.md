@@ -2,7 +2,7 @@
 date: 2021-01-14
 title: "Learning From geohot's minikeyvalue Project"
 slug: "learning-from-geohots-minikeyvalue-project"
-tags: ["python", "go", "database"]
+tags: ["Python", "Go"]
 ---
 
 I first became aware of [minikeyvalue](https://github.com/geohot/minikeyvalue) while watching a [recording](https://www.youtube.com/watch?v=cAFjZ1gXBxc) of George's programming livestream.

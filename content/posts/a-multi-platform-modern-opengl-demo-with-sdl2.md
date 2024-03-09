@@ -2,7 +2,7 @@
 date: 2020-06-07
 title: "A Multi-Platform Modern OpenGL Demo With SDL2"
 slug: "a-multi-platform-modern-opengl-demo-with-sdl2"
-tags: ["c", "graphics", "opengl", "sdl2"]
+tags: ["C", "Graphics", "OpenGL", "SDL2", "GLFW3"]
 ---
 
 This post is largely inspired by [Chris Wellons'](https://nullprogram.com/) 2015 blog post about writing a [modern OpenGL demo](https://nullprogram.com/blog/2015/06/06/) that works on all three major desktop platforms (Windows, macOS, and Linux).

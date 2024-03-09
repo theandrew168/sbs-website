@@ -12,9 +12,11 @@ In Chris&rsquo; version of this demo he makes use of GLFW3 for the window and in
 </span><span class=separator>•</span>
 <span class=tag><a href=/tags/graphics/>Graphics</a>
 </span><span class=separator>•</span>
-<span class=tag><a href=/tags/opengl/>Opengl</a>
+<span class=tag><a href=/tags/opengl/>OpenGL</a>
 </span><span class=separator>•</span>
-<span class=tag><a href=/tags/sdl2/>Sdl2</a></span></div></div></header><div class=post-content><p>This post is largely inspired by <a href=https://nullprogram.com/ class=external-link target=_blank rel=noopener>Chris Wellons&rsquo;</a> 2015 blog post about writing a <a href=https://nullprogram.com/blog/2015/06/06/ class=external-link target=_blank rel=noopener>modern OpenGL demo</a> that works on all three major desktop platforms (Windows, macOS, and Linux).
+<span class=tag><a href=/tags/sdl2/>SDL2</a>
+</span><span class=separator>•</span>
+<span class=tag><a href=/tags/glfw3/>GLFW3</a></span></div></div></header><div class=post-content><p>This post is largely inspired by <a href=https://nullprogram.com/ class=external-link target=_blank rel=noopener>Chris Wellons&rsquo;</a> 2015 blog post about writing a <a href=https://nullprogram.com/blog/2015/06/06/ class=external-link target=_blank rel=noopener>modern OpenGL demo</a> that works on all three major desktop platforms (Windows, macOS, and Linux).
 I have come back to his post countless times over the years when looking for guidance on how to build any cross-platform C program.</p><p>In Chris&rsquo; version of this demo he makes use of <a href=https://www.glfw.org/ class=external-link target=_blank rel=noopener>GLFW3</a> for the window and input handling and uses <a href=https://github.com/skaslev/gl3w class=external-link target=_blank rel=noopener>gl3w</a> for loading <a href=https://www.opengl.org/ class=external-link target=_blank rel=noopener>OpenGL</a> functions.
 I have used GLFW3 in the past, but tend to prefer <a href=https://www.libsdl.org/ class=external-link target=_blank rel=noopener>SDL2</a> for its <a href=https://wiki.libsdl.org/Introduction class=external-link target=_blank rel=noopener>wealth of features</a> and <a href=https://wiki.libsdl.org/SDL_PollEvent class=external-link target=_blank rel=noopener>polling-based event model</a>.
 Therefore, in my version, I wanted to use SDL2 for the window and input handling and load the OpenGL functions myself.

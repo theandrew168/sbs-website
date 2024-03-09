@@ -2,7 +2,7 @@
 date: 2024-01-28
 title: "Utilizing All Cores in a NodeJS Web Application"
 slug: "utilizing-all-cores-in-a-nodejs-web-application"
-tags: ["node", "go"]
+tags: ["NodeJS", "Go"]
 ---
 
 Coming from Go-based web development to NodeJS, one big thing surpised me: my web server only ever uses one core.

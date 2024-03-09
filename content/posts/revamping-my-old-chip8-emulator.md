@@ -2,7 +2,7 @@
 date: 2020-07-09
 title: "Revamping My Old CHIP-8 Emulator"
 slug: "revamping-my-old-chip8-emulator"
-tags: ["c", "sdl2", "emulator"]
+tags: ["C", "SDL2", "Emulator"]
 ---
 
 Back in 2017 I was really interested in emulator development.

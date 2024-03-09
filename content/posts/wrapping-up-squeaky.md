@@ -2,7 +2,7 @@
 date: 2020-08-25
 title: "Wrapping Up Squeaky"
 slug: "wrapping-up-squeaky"
-tags: ["c", "sdl2", "scheme"]
+tags: ["C", "SDL2", "Scheme"]
 ---
 
 My primary project for the last month or so has a been a proof of concept programming language called [Squeaky](https://github.com/theandrew168/squeaky).

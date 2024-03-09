@@ -2,7 +2,7 @@
 date: 2024-01-14
 title: "Implementing Make in Go"
 slug: "implementing-make-in-go"
-tags: ["make", "go"]
+tags: ["Make", "Go"]
 ---
 
 A while back, my buddy [Wes](https://brue.land/) and I took a weekend trip to a remote cabin in eastern Iowa.

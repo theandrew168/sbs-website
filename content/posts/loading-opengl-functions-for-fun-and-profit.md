@@ -2,7 +2,7 @@
 date: 2020-06-17
 title: "Loading OpenGL Functions for Fun and Profit"
 slug: "loading-opengl-functions-for-fun-and-profit"
-tags: ["c", "graphics", "opengl", "sdl2"]
+tags: ["C", "Graphics", "OpenGL", "SDL2"]
 ---
 
 While writing my [previous blog post](/posts/a-multi-platform-modern-opengl-demo-with-sdl2/), I realized that there is a general information gap around dynamically loading OpenGL functions.

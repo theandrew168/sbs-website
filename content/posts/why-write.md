@@ -2,7 +2,7 @@
 date: 2024-01-07
 title: "Why Write?"
 slug: "why-write"
-tags: ["webgl"]
+tags: ["WebGL"]
 ---
 
 How long has it been since my last post?

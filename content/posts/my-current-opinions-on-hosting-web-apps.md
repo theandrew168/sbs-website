@@ -2,7 +2,7 @@
 date: 2024-02-18
 title: "My Current Opinions on Hosting Web Apps"
 slug: "my-current-opinions-on-hosting-web-apps"
-tags: ["go"]
+tags: ["Go", "Hosting"]
 ---
 
 A little while back, I was chatting with some tech friends about my experience using [Fly](https://fly.io/) and [Neon](https://neon.tech/) for hosting web apps that are under active development.

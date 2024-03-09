@@ -12,9 +12,9 @@
 </span><span class=separator>•</span>
 <span class=tag><a href=/tags/graphics/>Graphics</a>
 </span><span class=separator>•</span>
-<span class=tag><a href=/tags/opengl/>Opengl</a>
+<span class=tag><a href=/tags/opengl/>OpenGL</a>
 </span><span class=separator>•</span>
-<span class=tag><a href=/tags/sdl2/>Sdl2</a></span></div></div></header><div class=post-content><p>While writing my <a href=/posts/a-multi-platform-modern-opengl-demo-with-sdl2/>previous blog post</a>, I realized that there is a general information gap around dynamically loading OpenGL functions.
+<span class=tag><a href=/tags/sdl2/>SDL2</a></span></div></div></header><div class=post-content><p>While writing my <a href=/posts/a-multi-platform-modern-opengl-demo-with-sdl2/>previous blog post</a>, I realized that there is a general information gap around dynamically loading OpenGL functions.
 When developers encounter this task on new OpenGL-related projects, they tend to reach for a premade loader such as <a href=http://glew.sourceforge.net/ class=external-link target=_blank rel=noopener>glew</a>, <a href=https://github.com/skaslev/gl3w class=external-link target=_blank rel=noopener>gl3w</a>, <a href=https://bitbucket.org/alfonse/glloadgen/wiki/Home class=external-link target=_blank rel=noopener>glLoadGen</a>, or <a href=https://github.com/Dav1dde/glad class=external-link target=_blank rel=noopener>GLAD</a>.
 A more detailed list along with an overview of what all these libraries do can be found <a href=https://www.khronos.org/opengl/wiki/OpenGL_Loading_Library class=external-link target=_blank rel=noopener>here</a>.</p><p><strong>&ldquo;An OpenGL Loading Library is a library that loads pointers to OpenGL functions at runtime, core as well as extensions. This is required to access functions from OpenGL versions above 1.1 on most platforms. Extension loading libraries also abstracts away the difference between the loading mechanisms on different platforms.&rdquo;</strong> - <a href=https://www.khronos.org/opengl/wiki/OpenGL_Loading_Library class=external-link target=_blank rel=noopener>Khronos Docs</a></p><p>These libraries all do a great job of solving this problem and I&rsquo;ve used them many times!
 If the goal is to simply get OpenGL working successfully and move on, then definitely go with a pre-built loader.

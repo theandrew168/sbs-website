@@ -2,7 +2,7 @@
 date: 2024-01-21
 title: "Using Make to Run Concurrent Dev Services"
 slug: "using-make-to-run-concurrent-dev-services"
-tags: ["make"]
+tags: ["Make"]
 ---
 
 This short post explains a useful trick for using [Make](<https://en.wikipedia.org/wiki/Make_(software)>) to run multiple development services at the same time.
