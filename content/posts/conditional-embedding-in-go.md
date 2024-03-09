@@ -6,8 +6,8 @@ tags: ["Go"]
 draft: true
 ---
 
-I was recently working on a project where the frontend is a [Svelte]() SPA and the backend is a [Go]() REST API.
-Since Go is awesome, I've been using its [embed]() feature to bake all of the pre-built frontend files into the single output binary.
+I was recently working on [a project](https://github.com/theandrew168/bloggulus) where the frontend is a [Svelte](https://svelte.dev/) SPA and the backend is a [Go](https://go.dev/) REST API.
+Since Go is awesome, I've been using its [embed](https://pkg.go.dev/embed) feature to bake all of the pre-built frontend files into the single output binary.
 This works fine when building for production: build the frontend, build the backend, done!
 This snapshots the frontend and backend code into a single, static binary.
 
@@ -177,5 +177,6 @@ I went into this idea with some hesitance: I really didn't think I'd be able to 
 Thankfully, I'm not the first person to consider "conditional embedding" so there was already some prior discussion and a workaround.
 I took this workaround and iterated on it.
 I transformed a "mehhh" interface for handling "which files do I need" into a clean, single-var import.
+
 Will this solution tested and verified, I now get to have the best of both worlds: static binaries with embedded frontend files and a productive local development setup where frontend changes are immediately available.
 I'm very happy with it!
