@@ -1,0 +1,137 @@
+<!doctype html><html lang=en><head><title>Conditional Embedding in Go · Shallow Brook Software
+</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="I was recently working on a project where the frontend is a Svelte SPA and the backend is a Go REST API. At a high level, this is how my project is structured:
+main.go backend/ # source files for Go REST API frontend/ package.json src/ # source files for Svelte SPA Since Go is awesome, I&rsquo;ve been using its embed feature to bake all of the compiled frontend files into the single output binary."><meta name=keywords content="blog,developer,personal"><meta name=twitter:card content="summary"><meta name=twitter:title content="Conditional Embedding in Go"><meta name=twitter:description content="I was recently working on a project where the frontend is a Svelte SPA and the backend is a Go REST API. At a high level, this is how my project is structured:
+main.go backend/ # source files for Go REST API frontend/ package.json src/ # source files for Svelte SPA Since Go is awesome, I&rsquo;ve been using its embed feature to bake all of the compiled frontend files into the single output binary."><meta property="og:title" content="Conditional Embedding in Go"><meta property="og:description" content="I was recently working on a project where the frontend is a Svelte SPA and the backend is a Go REST API. At a high level, this is how my project is structured:
+main.go backend/ # source files for Go REST API frontend/ package.json src/ # source files for Svelte SPA Since Go is awesome, I&rsquo;ve been using its embed feature to bake all of the compiled frontend files into the single output binary."><meta property="og:type" content="article"><meta property="og:url" content="https://shallowbrooksoftware.com/posts/conditional-embedding-in-go/"><meta property="article:section" content="posts"><meta property="article:published_time" content="2024-03-10T00:00:00+00:00"><meta property="article:modified_time" content="2024-03-10T00:00:00+00:00"><link rel=canonical href=https://shallowbrooksoftware.com/posts/conditional-embedding-in-go/><link rel=preload href=/fonts/fa-brands-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-regular-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-solid-900.woff2 as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.577e3c5ead537873430da16f0964b754a120fd87c4e2203a00686e7c75b51378.css integrity="sha256-V348Xq1TeHNDDaFvCWS3VKEg/YfE4iA6AGhufHW1E3g=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.a00e6364bacbc8266ad1cc81230774a1397198f8cfb7bcba29b7d6fcb54ce57f.css integrity="sha256-oA5jZLrLyCZq0cyBIwd0oTlxmPjPt7y6KbfW/LVM5X8=" crossorigin=anonymous media=screen><link rel=icon type=image/svg+xml href=/images/favicon.svg sizes=any><link rel=icon type=image/png href=/images/favicon-32x32.png sizes=32x32><link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16><link rel=apple-touch-icon href=/images/apple-touch-icon.png><link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><a class=navigation-title href=https://shallowbrooksoftware.com/>Shallow Brook Software
+</a><input type=checkbox id=menu-toggle>
+<label class="menu-button float-right" for=menu-toggle><i class="fa-solid fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/about/>About</a></li><li class=navigation-item><a class=navigation-link href=/posts/>Blog</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://shallowbrooksoftware.com/posts/conditional-embedding-in-go/>Conditional Embedding in Go</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa-solid fa-calendar" aria-hidden=true></i>
+<time datetime=2024-03-10T00:00:00Z>March 10, 2024
+</time></span><span class=reading-time><i class="fa-solid fa-clock" aria-hidden=true></i>
+5-minute read</span></div><div class=tags><i class="fa-solid fa-tag" aria-hidden=true></i>
+<span class=tag><a href=/tags/go/>Go</a></span></div></div></header><div class=post-content><p>I was recently working on <a href=https://github.com/theandrew168/bloggulus class=external-link target=_blank rel=noopener>a project</a> where the frontend is a <a href=https://kit.svelte.dev/ class=external-link target=_blank rel=noopener>Svelte</a> SPA and the backend is a <a href=https://go.dev/ class=external-link target=_blank rel=noopener>Go</a> REST API.
+At a high level, this is how my project is structured:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span>main<span style=color:#f92672>.</span>go
+</span></span><span style=display:flex><span>backend<span style=color:#f92672>/</span>
+</span></span><span style=display:flex><span>  <span style=color:#75715e># source files for Go REST API</span>
+</span></span><span style=display:flex><span>frontend<span style=color:#f92672>/</span>
+</span></span><span style=display:flex><span>  package<span style=color:#f92672>.</span>json
+</span></span><span style=display:flex><span>  src<span style=color:#f92672>/</span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e># source files for Svelte SPA</span>
+</span></span></code></pre></div><p>Since Go is awesome, I&rsquo;ve been using its <a href=https://pkg.go.dev/embed class=external-link target=_blank rel=noopener>embed</a> feature to bake all of the compiled frontend files into the single output binary.
+This works great when building for production: compile the frontend, build the backend, done!
+This snapshots the frontend and backend code into a single, static binary.
+For iterative local development, however, I <em>don&rsquo;t</em> want this behavior.
+I instead want the frontend changes to be reflected without needing to rebuild and restart the backend.
+In short, I want to say:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>if</span> building_for_production:
+</span></span><span style=display:flex><span>    <span style=color:#75715e># embed frontend output directory (lock it in)</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>else</span>:
+</span></span><span style=display:flex><span>    <span style=color:#75715e># view frontend output directory (keep it open)</span>
+</span></span></code></pre></div><p>However, since embedding files into Go binary is a compile-time feature, you can&rsquo;t really say things like &ldquo;embed these files <em>if</em> some condition is true&rdquo;.</p><h1 id=research>Research
+<a class=heading-link href=#research><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>So, I started doing some research.
+Googling for &ldquo;go conditional embedding&rdquo; led me to this relevant <a href=https://github.com/golang/go/issues/44484 class=external-link target=_blank rel=noopener>GitHub issue</a> (a proposal for direct support for conditional embedding).
+The proposal was rejected for a couple reasons:</p><ol><li>Embedded files are decided at build time. To quote <a href=https://github.com/golang/go/issues/44484#issuecomment-948977876 class=external-link target=_blank rel=noopener>Ian Lance Taylor</a>:</li></ol><blockquote><p>When we build the binary, we have to decide whether to embed the file or not. We can&rsquo;t postpone that decision until the binary is run.</p></blockquote><ol start=2><li>There exists a workaround: <a href=https://github.com/golang/go/issues/44484#issuecomment-948137497 class=external-link target=_blank rel=noopener>use build tags</a>! With some clever file structure and a build tag, the answer to &ldquo;should these files be embedded&rdquo; can essentially be pulled up into the build process.</li></ol><h1 id=the-workaround>The Workaround
+<a class=heading-link href=#the-workaround><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>The workaround described in the proposal involves adding a few Go files to your frontend directory.
+These files turn your frontend directory into a Go package that exposes two vars: one for the <code>embed.FS</code> itself and an <code>IsEmbedded</code> boolean indicating whether or not the data has been embedded.
+This basic interface is implemented across three files:</p><ol><li><code>frontend/frontend.go</code> - Defines the exported vars</li><li><code>frontend/frontend_embed.go</code> - Embeds the target directory and sets <code>IsEmbedded</code> to true<ol><li>Starts with the comment: <code>//go:build embed</code></li><li>Only included when the <code>embed</code> tag is provided at build time</li><li>Build tags can be provided as command line flags: <code>go build -tags embed main.go</code></li></ol></li><li><code>frontend/frontend_noembed.go</code> - Does NOT embed anything and sets <code>IsEmbedded</code> to false<ol><li>Starts with the comment: <code>//go:build !embed</code></li><li>Only included when the <code>embed</code> tag is NOT provided at build time</li></ol></li></ol><p>It is then up to the importer of this frontend package to decide what to do with the exported information (some nuances are omitted from this example):</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;io/fs&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;os&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;myproject/frontend&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;myproject/backend/web&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>frontendFS</span> <span style=color:#a6e22e>fs</span>.<span style=color:#a6e22e>FS</span>
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>frontend</span>.<span style=color:#a6e22e>IsEmbedded</span> {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// use the embedded frontend output files if they are there
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>        <span style=color:#a6e22e>frontendFS</span> = <span style=color:#a6e22e>frontend</span>.<span style=color:#a6e22e>Frontend</span>
+</span></span><span style=display:flex><span>    } <span style=color:#66d9ef>else</span> {
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// otherwise just open the frontend output dir directly
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>        <span style=color:#a6e22e>frontendFS</span> = <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>DirFS</span>(<span style=color:#e6db74>&#34;./frontend/output&#34;</span>)
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>app</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>web</span>.<span style=color:#a6e22e>NewApplication</span>(<span style=color:#a6e22e>logger</span>, <span style=color:#a6e22e>store</span>, <span style=color:#a6e22e>frontendFS</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Despite working as described and solving my problem, I felt myself wanting something a bit cleaner.
+What I really wanted was a package that encapsulated the decision of &ldquo;should this directory be embedded or opened&rdquo; and exposed only a single <a href=https://pkg.go.dev/io/fs#FS class=external-link target=_blank rel=noopener>fs.FS</a> to the importer.</p><h1 id=enhancements>Enhancements
+<a class=heading-link href=#enhancements><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>So, I set about making these enhancements.
+To be honest, it was easier than I expected.
+It ended up being both a nicer interface <em>and</em> less code!
+Let&rsquo;s dive in, starting with the one-var interface that this package exposes:</p><h3 id=frontendfrontendgo>frontend/frontend.go
+<a class=heading-link href=#frontendfrontendgo><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>frontend</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> <span style=color:#e6db74>&#34;io/fs&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>Frontend</span> <span style=color:#a6e22e>fs</span>.<span style=color:#a6e22e>FS</span>
+</span></span></code></pre></div><p>As simple as it gets!
+Just export an <code>fs.FS</code> that will be initialized when the package is imported.</p><h3 id=frontendfrontend_embedgo>frontend/frontend_embed.go
+<a class=heading-link href=#frontendfrontend_embedgo><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>//go:build embed
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>frontend</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;embed&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;io/fs&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//go:embed all:build
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>frontend</span> <span style=color:#a6e22e>embed</span>.<span style=color:#a6e22e>FS</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>init</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>err</span> <span style=color:#66d9ef>error</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Frontend</span>, <span style=color:#a6e22e>err</span> = <span style=color:#a6e22e>fs</span>.<span style=color:#a6e22e>Sub</span>(<span style=color:#a6e22e>frontend</span>, <span style=color:#e6db74>&#34;build&#34;</span>)
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
+</span></span><span style=display:flex><span>        panic(<span style=color:#a6e22e>err</span>)
+</span></span><span style=display:flex><span>    }
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>This file only gets imported when the <code>embed</code> build tag is present thanks to the <code>//go:build embed</code> comment at the top.
+It embeds the <code>./frontend/build</code> directory which holds all of the frontend&rsquo;s compiled output files.</p><p>The call to <a href=https://pkg.go.dev/io/fs#Sub class=external-link target=_blank rel=noopener>fs.Sub</a> is in here because <code>embed.FS</code> includes the embedded directory&rsquo;s top-level folder by default.
+Calling <code>fs.Sub</code> lets us drill down one level so that the exported <code>fs.FS</code> includes just the internal files and not the top-level folder.</p><h3 id=frontendfrontend_noembedgo>frontend/frontend_noembed.go
+<a class=heading-link href=#frontendfrontend_noembedgo><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>//go:build !embed
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>frontend</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;os&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>init</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>Frontend</span> = <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>DirFS</span>(<span style=color:#e6db74>&#34;./frontend/build&#34;</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Another easy one!
+This file only gets imported when the <code>embed</code> build tag is <em>not</em> present thanks to the <code>//go:build !embed</code> comment at the top.
+Upon import, the <code>./frontend/build</code> directory will be opened and ready for reading.
+Any changes to the frontend will be immediately visible to readers of the exported <code>fs.FS</code> (assuming the frontend is running in some sort of &ldquo;watch&rdquo; mode that recompiles the code if anything changes).</p><p>Note that we had to specify the full path to the <code>./frontend/build</code> directory because <a href=https://pkg.go.dev/os#DirFS class=external-link target=_blank rel=noopener>os.DirFS</a> is rooted in the program&rsquo;s runtime directory (where the program was executed) versus the source file&rsquo;s directory (which is how the <code>embed</code> package works).</p><h3 id=maingo>main.go
+<a class=heading-link href=#maingo><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;myproject/frontend&#34;</span>
+</span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;myproject/backend/web&#34;</span>
+</span></span><span style=display:flex><span>)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#a6e22e>app</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>web</span>.<span style=color:#a6e22e>NewApplication</span>(<span style=color:#a6e22e>logger</span>, <span style=color:#a6e22e>store</span>, <span style=color:#a6e22e>frontend</span>.<span style=color:#a6e22e>Frontend</span>)
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>As you can see, the caller&rsquo;s code is now much cleaner: it doesn&rsquo;t have to know anything about <em>how</em> the <code>frontend.Frontend</code> FS is populated.
+It just imports the frontend package and passes the exposed <code>fs.FS</code> down to whatever part of the code plans to serve it.</p><h1 id=conclusion>Conclusion
+<a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>I went into this problem with some pessimism: I really didn&rsquo;t think I&rsquo;d be able to find a clean solution to the problem.
+Thankfully, I&rsquo;m not the first person to consider &ldquo;conditional embedding&rdquo; so there was already some prior discussion and a workaround to build upon.
+I started with this workaround and iterated on idea.
+I transformed a &ldquo;good but not great&rdquo; interface for handling conditional embedding into a clean, single-variable export.</p><p>Will this solution tested and verified, I now get to enjoy the best of both worlds: static binaries with embedded frontend files and a productive local development setup where frontend changes are reflected immediately.
+I&rsquo;m very happy with it!</p></div><footer></footer></article></section></div><footer class=footer><section class=container>©
+2024
+Andrew Dailey
+·
+Powered by <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> & <a href=https://github.com/luizdepra/hugo-coder/ target=_blank rel=noopener>Coder</a>.</section></footer></main><script src=/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script></body></html>
