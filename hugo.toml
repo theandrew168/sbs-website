@@ -17,19 +17,16 @@ avatarurl = "images/avatar2.jpg"
 dateFormat = "January 2, 2006"
 footercontent = "simple software that babbles loudly"
 colorScheme = "auto"
-
 [[params.social]]
 name = "GitHub"
 icon = "fa fa-2x fa-github"
 url = "https://github.com/theandrew168/"
 weight = 1
-
 [[params.social]]
 name = "Email"
 icon = "fa fa-2x fa-envelope"
 url = "mailto:andrew@shallowbrooksoftware.com"
 weight = 2
-
 [[params.social]]
 name = "RSS"
 icon = "fa fa-2x fa-rss"
