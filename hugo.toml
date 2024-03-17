@@ -30,6 +30,12 @@ icon = "fa fa-2x fa-envelope"
 url = "mailto:andrew@shallowbrooksoftware.com"
 weight = 2
 
+[[params.social]]
+name = "RSS"
+icon = "fa fa-2x fa-rss"
+url = "/posts/index.xml"
+weight = 3
+
 [menu]
 [[menu.main]]
 name = "About"
