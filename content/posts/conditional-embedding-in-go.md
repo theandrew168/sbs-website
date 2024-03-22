@@ -189,7 +189,7 @@ It just imports the frontend package and passes the exposed `fs.FS` down to what
 
 I went into this problem with some pessimism: I really didn't think I'd be able to find a clean solution to the problem.
 Thankfully, I'm not the first person to consider "conditional embedding" so there was already some prior discussion and a workaround to build upon.
-I started with this workaround and iterated on idea.
+I started with this workaround and iterated on the idea.
 I transformed a "good but not great" interface for handling conditional embedding into a clean, single-variable export.
 
 Will this solution tested and verified, I now get to enjoy the best of both worlds: static binaries with embedded frontend files and a productive local development setup where frontend changes are reflected immediately.
