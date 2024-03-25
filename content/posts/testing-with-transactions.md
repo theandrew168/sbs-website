@@ -1,73 +1,101 @@
 ---
-date: 2024-03-22
-# date: 2024-03-24
+date: 2024-03-24
 title: "Testing with Transactions"
 slug: "testing-with-transactions"
-draft: true
+tags: ["Go", "TypeScript", "Databases"]
 ---
 
 Most web applications eventually end up with tests that need to interact with a database.
-Sometimes your logic is tightly integrated to your database or maybe you are wanting to test your repository / storage layer.
-Either way, a common problem arises: how do you clean up the data used to test the database?
+Perhaps your business logic is tightly coupled to the database or maybe you are wanting to test a clearly-defined storage layer.
+Either way, a common problem arises: how do you clean up the data used during testing? What should you do with all those scattered rows?
 
-Most of the team, developers will resort to a few common strategies:
+Most of the time, developers will resort to a few common strategies:
 
-1. Same database
-   1. No cleanup done
-   2. Cleanup after all tests (ensure no conflicts)
-   3. Cleanup after each test
-2. Separate database (usually on a different port)
-   1. No cleanup done
-   2. Cleanup after all tests (ensure no conflicts)
-   3. Cleanup after each test
-3. Ephemeral database (container)
-   1. No cleanup necessary
+1. Cleanup the database after (or before) each integration test runs
+   1. Can become very slow depending on the size of your database
+   2. Can be optimized (somewhat) by only deleting tables that changed
+   3. Could indicate that your tests must be ran serially (concurrency could cause conflicts)
+2. Cleanup the database after (or before) _all_ integration tests have been ran
+   1. Much quicker than wiping everything for each test
+   2. This requires that all tests "play nice" and don't cause any data conflicts
+3. Use an ephemeral database for each test
+   1. Newer libraries such as [testcontainers](https://golang.testcontainers.org/) have made this much easier
+   2. Not a bad idea, but I want a solution with more speed and less complexity
 
-I want to present a better solution to _all_ of these strategies that depends only on the ability to run all storage operations within a controlled transactions.
-Furthermore, I'll showcase how this affects architecture / tests in both TypeScript and Go projects.
+I want to present a better solution to _all_ of these strategies that depends only on a feature that is aleady at our fingertips: the humble **transaction**.
 
-# Rollback
+# Commits and Rollbacks
 
-The core idea is this: run your tests inside of a transaction and then simply roll it back when you are done.
+At a high level, database transactions are a feature that let you group a set of changes into an atomic operation that either _all_ succeed (and get committed to the database) or _all_ fail (and get rolled back as though they never happened).
+The core idea is this: run your tests inside of a transaction and then roll it back (intentionally) when you are done.
+
 That's it!
-Such a simple idea that adds a ton of value.
-You get to verify that your storage layer is working as intended (can CRUD stuff like you should) and not worry about the cleanup at all.
-Additionally, you can run your database tests concurrently without having to worry about conflicts because the data in each test / transaction will never "see" each other.
+With this simple idea, you can verify that your storage layer is working as intended and not have to worry about the cleanup.
+Additionally, you can run your database-related tests concurrently without having to worry about conflicts because the changes inside of each test (and therefore each transaction) will never "see" each other.
 
-# Examples
+# In Practice
 
-I usually structure my repo / storage layer as a struct with a public member for each table / model.
-These members are abstract storage interfaces for each type.
+In order to support arbitrary transactions within the confines of the [repository pattern](https://medium.com/@pererikbergman/repository-design-pattern-e28c0f3e4a30), I like to attach an extra method to my storage class / struct / interface called something like `Transaction`, `WithTransaction` or `Atomically` (I'm still undecided on which name I like best).
+This method accepts a function accepts a single argument: an instance of the storage "object".
+The function is also expected to either _return_ an error (in languages like Go) or _throw_ an error (in languages like TypeScript) if something goes wrong.
+A transaction is started before calling the given function and is automatically rolled back if an error occurs.
+Otherwise, it commits the transaction like normal and permanently saves our changes to the database.
 
-In pseudocode:
+In my projects, I like to add a special sentinel error (usually called `ErrRollback` or `RollbackError`) that indicates to the reader that the error is being used _specifically_ to prevent the transaction from committing.
+In TypeScript projects, I also check for this error and prevent it from propagating any higher.
+As long as the [postgres library](https://github.com/porsager/postgres) sees the error first and rolls back the commit, it has served its purpose.
+
+### TypeScript
+
+This [example](https://github.com/theandrew168/bloggulus-svelte/blob/3c0572d736c2e3d97fa36a56bcbe6b9ec951f254/src/lib/server/storage/storage.ts#L27) is using the [postgres](https://github.com/porsager/postgres) library.
+It exposes a [begin](https://github.com/porsager/postgres?tab=readme-ov-file#transactions) utility which automatically rolls back the transaction if any errors are thrown from the lambda it was given.
+
+```ts
+export class Storage = {
+	// ...
+
+	async transaction(operation: Operation) {
+		try {
+			// Calling begin() will start a new database transaction and automatically
+			// roll it back if any errors are thrown from the given lambda.
+			await this.sql.begin(async (tx) => {
+				// Create a new instance of the Storage class using this transaction.
+				const storage = new Storage(tx);
+
+				// Use the transaction-based Storage class for this atomic operation.
+				// If an error occurs within this operation, the transaction will
+				// be rolled back.
+				await operation(storage);
+			});
+		} catch (e) {
+			// Check for our special sentinel error and prevent it from propagating
+			// if found. All other errors should continue to bubble up.
+			const isRollbackError = e instanceof RollbackError;
+			if (!isRollbackError) {
+				throw e;
+			}
+		}
+	}
+}
+```
+
+This allows me to write code like:
+
+```ts
+// create a Foo within a transaction and then roll it back
+store.transaction(async (store: Storage) => {
+	await store.foo.Create(...)
+	throw new RollbackError();
+})
+```
+
+### Go
+
+This is [example](https://github.com/theandrew168/bloggulus/blob/eba4fee0f7083fe75b56e86bfb9033fe42c11e10/backend/storage/storage.go#L30) is using the [pgx](https://github.com/jackc/pgx) library which requires a slightly more "hands-on" approach to [managing the transaction](https://pkg.go.dev/github.com/jackc/pgx/v5#hdr-Transactions).
 
 ```go
-type Foo struct {
-	id UUID
+type Storage struct = {
 	// ...
-}
-
-type FooStorage interface {
-	Create(foo Foo) error
-	Read(id UUID) (Foo, error)
-	List(limit, offset int) ([]Foo, error)
-	Update(foo Foo) error
-}
-
-type Storage struct {
-	conn database.Conn
-
-	Foo FooStorage
-}
-
-func New(conn database.Conn) *Storage {
-	s := Storage{
-		conn: conn,
-
-		// implements FooStorage by means of a Postgres database
-		Foo: NewPostgresFooStorage(conn),
-	}
-	return &s
 }
 
 func (s *Storage) WithTransaction(operation func(store *Storage) error) error {
@@ -89,7 +117,7 @@ func (s *Storage) WithTransaction(operation func(store *Storage) error) error {
 	store := New(tx)
 
 	// Use the pgx.Tx-based Storage struct for this atomic operation.
-	// If an error occurs within this operation, the transction will
+	// If an error occurs within this operation, the transaction will
 	// be rolled back.
 	err = operation(store)
 	if err != nil {
@@ -110,22 +138,16 @@ func (s *Storage) WithTransaction(operation func(store *Storage) error) error {
 This allows me write code like:
 
 ```go
-store := storage.New(conn)
-
-// create a Foo for real
-store.Foo.Create(...)
-
-// create a Foo in a transaction and then roll it back
+// create a Foo within a transaction and then roll it back
 store.WithTransaction(func(store *storage.Storage) error {
 	store.Foo.Create(...)
-	return errors.New("skip commit")
+	return ErrRollback;
 })
 ```
 
-### TypeScript
+# Conclusion
 
-https://github.com/theandrew168/bloggulus-svelte/blob/main/src/lib/server/storage/storage.ts
-
-### Go
-
-https://github.com/theandrew168/bloggulus/blob/main/backend/storage/storage.go
+There you have it!
+This is one of my favorite programming patterns that I've discovered so far in 2024.
+If your code is structured such that all database interactions can be managed within explicit transactions, then this trick can be introduced and adapted to fit your needs.
+Gone are the days of wiping the database before / after tests run: you can simply rollback and forget!
