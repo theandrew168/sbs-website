@@ -135,7 +135,7 @@ func (s *Storage) WithTransaction(operation func(store *Storage) error) error {
 }
 ```
 
-This allows me write code like:
+This allows me to write code like:
 
 ```go
 // create a Foo within a transaction and then roll it back
