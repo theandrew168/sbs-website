@@ -54,7 +54,7 @@ It exposes a [begin](https://github.com/porsager/postgres?tab=readme-ov-file#tra
 export class Storage = {
 	// ...
 
-	async transaction(operation: Operation) {
+	async transaction(operation: (storage: Storage) => Promise<void>) {
 		try {
 			// Calling begin() will start a new database transaction and automatically
 			// roll it back if any errors are thrown from the given lambda.
