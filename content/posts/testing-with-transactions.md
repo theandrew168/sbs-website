@@ -36,7 +36,7 @@ Additionally, you can run your database-related tests concurrently without havin
 # In Practice
 
 In order to support arbitrary transactions within the confines of the [repository pattern](https://medium.com/@pererikbergman/repository-design-pattern-e28c0f3e4a30), I like to attach an extra method to my storage class / struct / interface called something like `Transaction`, `WithTransaction` or `Atomically` (I'm still undecided on which name I like best).
-This method accepts a function accepts a single argument: an instance of the storage "object".
+This method accepts a function that requires a single argument: an instance of the storage "object".
 The function is also expected to either _return_ an error (in languages like Go) or _throw_ an error (in languages like TypeScript) if something goes wrong.
 A transaction is started before calling the given function and is automatically rolled back if an error occurs.
 Otherwise, it commits the transaction like normal and permanently saves our changes to the database.
