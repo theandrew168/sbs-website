@@ -3,10 +3,13 @@ title = "Shallow Brook Software"
 theme = "hugo-coder"
 languagecode = "en"
 defaultcontentlaguage = "en"
-paginate = 20
+paginate = 50
 
 pluralizeListTitles = false
 capitalizeListTitles = false
+
+[markup.goldmark.renderer]
+unsafe = true
 
 [params]
 author = "Andrew Dailey"
