@@ -7,9 +7,9 @@ tags: ["TypeScript", "WebGL", "Graphics"]
 
 Nearly four years ago I wrote a [blog post](/posts/a-multi-platform-modern-opengl-demo-with-sdl2/) about a native, cross-platform OpenGL demo that I'd written.
 That post (which was only my second ever) was actually a response to _another_ [blog post](https://nullprogram.com/blog/2015/06/06/) written by Chris Wellons (aka [null program](https://nullprogram.com/)) on the same topic.
-Chris' post use [GLFW3](https://www.glfw.org/) for platform compatibility while mine used [SDL2](https://www.libsdl.org/).
 Back then, I spent **hours and hours** just trying to figure out how I could write (and compile) a single C program that would run on all three major platforms: Windows, macOS, and Linux.
-Here is a screenshot of it for reference:
+Chris used [GLFW3](https://www.glfw.org/) to solve this problem while mine used [SDL2](https://www.libsdl.org/) (both are valid options).
+Here is a screenshot of the demo for reference:
 
 <div style="display:flex;justify-content:center">
 	<img src="/images/sdl2-opengl-demo.webp" alt="SDL2 OpenGL Demo">
@@ -22,20 +22,20 @@ I read through it the other day and wondered if I could **rebuild the same appli
 
 Lately, I've been quite interested in [WebGL](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API) and how it trades top-end performance for the complete elimination of _all_ distribution woes.
 I even touched on this topic in a [previous post](/posts/why-write/#webgl-rocks).
-In summary: WebGL allows you to build graphical applications (such as games) that are written in JavaScript and get executed directly in the users' browser.
-They don't need to install anything, download any files, or tell their computer to trust a suspicious executable (everyone gets suspicous when they hear: "Oh yeah, just ignore the virus warnings!").
+In summary: WebGL allows you to build graphical applications (such as games) that are written in JavaScript and are executed directly in the user's browser.
+They don't need to download any files, install anything, or tell their computer to trust an untrusted executable (everyone gets suspicous when they hear: "Oh yeah, just ignore the virus warnings!").
 
 These days, simple graphics programs are incredibly easy to create and distribute via the modern browser.
-You can write your awesome demo / website / game, host it on a web server, and have it be instantly accessible by anyone with an internet connection.
+You can throw some JS+WebGL onto an HTML page, host it on a web server, and have it be instantly accessible by anyone with an internet connection.
 People from anywhere in the world (and on any operating system) can **simply click on a link and experience the content!**
-In fact, just by visiting this page, the new demo has been delivered to your machine!
+In fact, just by visiting this page, the new version of the demo has already been delivered to your machine!
 Look forward to seeing that at the end of this post.
 
 # Code Structure
 
 This is a pretty bare-bones WebGL demo without too many abstractions in place.
-I did write a few helpers for things like resizing the canvas, and building shader programs.
-The demo uses a single shader to rotate and draw a single red square.
+I did write a few helpers for things like resizing the canvas and building shader programs, however.
+The demo uses a single shader to draw and rotate a red square.
 A single buffer is used to hold all four of the square's vertices (2D points, one for each corner).
 The program starts by querying for an [HTML canvas element](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) that is included just before the script.
 Then, it asks the canvas (and the browser) for a WebGL context and gets to work!
