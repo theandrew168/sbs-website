@@ -87,10 +87,7 @@ In short:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background
 			    vColor = vec4(1, 0.15, 0.15, 1);
 			}
 		`,t=compileAndLinkShader(e,i.trim(),a.trim()),r=e.getUniformLocation(t,"uAngle"),c=[-1,1,-1,-1,1,1,1,-1],n=e.createVertexArray();e.bindVertexArray(n);const l=e.createBuffer();e.bindBuffer(e.ARRAY_BUFFER,l),e.bufferData(e.ARRAY_BUFFER,new Float32Array(c),e.STATIC_DRAW),e.enableVertexAttribArray(0),e.vertexAttribPointer(0,2,e.FLOAT,!1,8,0),e.bindVertexArray(null);function s(o){resizeGL(e),e.clearColor(.15,.15,.15,1),e.clear(e.COLOR_BUFFER_BIT);const i=o/1e3;e.useProgram(t),e.uniform1f(r,i),e.bindVertexArray(n),e.drawArrays(e.TRIANGLE_STRIP,0,4),requestAnimationFrame(s)}requestAnimationFrame(s)}main()</script><p>Isn&rsquo;t it beautiful?
-A simple graphics demo was distributed to your machine with the same ease and convenience as reading this blog post.</p><p>Here&rsquo;s another cool thing: the program&rsquo;s source code was delivered, too!
-If you want to see it, just view this page&rsquo;s source.
-The JavaScript code will be there in its text-based, non-compiled form.
-It was written by me, deployed to a web server, and downloaded seamlessly by your browser.
+A simple graphics demo was distributed to your machine with the same ease and convenience as reading this blog post.
 To reiterate the sentiment from my previous post about WebGL:</p><blockquote><p>While the upper bounds of performance are certainly lower when using a browser-based, JavaScript-based graphics programming environment, I don&rsquo;t think that it impacts me very much.
 I don&rsquo;t plan on creating anything incredibly large or high fidelity: just basic games and examples.
 If completely solving the problem of distribution means sacrificing a bit of performance, then I&rsquo;m satisfied.</p></blockquote><p>Thanks for reading!</p></div><footer></footer></article></section></div><footer class=footer><section class=container>©

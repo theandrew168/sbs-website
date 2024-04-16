@@ -223,11 +223,6 @@ Enough talk, let's see this thing!
 
 Isn't it beautiful?
 A simple graphics demo was distributed to your machine with the same ease and convenience as reading this blog post.
-
-Here's another cool thing: the program's source code was delivered, too!
-If you want to see it, just view this page's source.
-The JavaScript code will be there in its text-based, non-compiled form.
-It was written by me, deployed to a web server, and downloaded seamlessly by your browser.
 To reiterate the sentiment from my previous post about WebGL:
 
 > While the upper bounds of performance are certainly lower when using a browser-based, JavaScript-based graphics programming environment, I don't think that it impacts me very much.
