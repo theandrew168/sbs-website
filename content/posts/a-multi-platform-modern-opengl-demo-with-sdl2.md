@@ -1,6 +1,6 @@
 ---
 date: 2020-06-07
-title: "A Multi-Platform Modern OpenGL Demo With SDL2"
+title: "A Multi-Platform Modern OpenGL Demo with SDL2"
 slug: "a-multi-platform-modern-opengl-demo-with-sdl2"
 tags: ["C", "Graphics", "OpenGL", "SDL2", "GLFW3"]
 ---
