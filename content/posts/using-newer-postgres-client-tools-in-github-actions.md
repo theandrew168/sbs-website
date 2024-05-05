@@ -5,8 +5,8 @@ slug: "using-newer-postgres-client-tools-in-github-actions"
 draft: true
 ---
 
-Recently, while updating my [pg2s3 utility](https://github.com/theandrew168/pg2s3), I noticed that the `docker-compose.yml` file was pinning PostgreSQL to version 14.
-I couldn't remember why I did that, so I went ahead and removed it (what could go wrong).
+Recently, while updating my [pg2s3 utility](https://github.com/theandrew168/pg2s3), I noticed that the project's `docker-compose.yml` file was pinning PostgreSQL to version 14.
+I couldn't remember why I did that, so I went ahead and removed it (what could go wrong?).
 Unfortunately, this led to some automated tests failing in GitHub Actions!
 
 # The Problem
@@ -18,15 +18,17 @@ pg_dump: error: server version: 16.2 (Debian 16.2-1.pgdg120+2); pg_dump version:
 pg_dump: error: aborting because of server version mismatch
 ```
 
+Classic version mismatch.
 The PostgreSQL 16 server (running in a container) was not compatible with the PostgreSQL 14 client tools (installed on the GitHub Actions runner).
 For some context, pg2s3 uses `pg_dump` and `pg_restore` to quickly export and import data.
+
 I had two options: keep the server container pinned to version 14 or figure out how to install and use newer client tools on the Actions runner.
 I opted for the latter since it is the more correct and future-proof solution.
 
 # The Solution
 
 As it turns out, the [PostgreSQL docs](https://www.postgresql.org/download/linux/ubuntu/) include a section about installing newer versions on stable releases of Ubuntu.
-The docs explain how and why Ubuntu's latest PostgreSQL version can fall behind:
+The docs explain how and why stable Linux releases can fall behind:
 
 > PostgreSQL is available in all Ubuntu versions by default. However, Ubuntu "snapshots" a specific version of PostgreSQL that is then supported throughout the lifetime of that Ubuntu version.
 > The PostgreSQL project maintains an Apt repository with all supported of PostgreSQL available.
@@ -36,7 +38,7 @@ The instructions were pretty straightforward: install `postgresql-common` and th
 
 ```
 sudo apt install -y postgresql-common
-sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
 ```
 
 Once that configuration is complete, all modern versions of PostgreSQL will be available for install.
