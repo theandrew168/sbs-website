@@ -2,6 +2,7 @@
 date: 2024-05-05
 title: "Using Newer PostgreSQL Client Tools in GitHub Actions"
 slug: "using-newer-postgres-client-tools-in-github-actions"
+tags: ["Databases"]
 ---
 
 Recently, while updating my [pg2s3 utility](https://github.com/theandrew168/pg2s3), I noticed that the project's `docker-compose.yml` file was pinning PostgreSQL to version 14.
