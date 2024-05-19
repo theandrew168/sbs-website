@@ -2,6 +2,7 @@
 date: 2024-05-12
 title: "Revamping My PostgreSQL to S3 Backup Tool"
 slug: "revamping-my-postgresql-to-s3-backup-tool"
+tags: ["Databases", "Go"]
 draft: true
 ---
 
