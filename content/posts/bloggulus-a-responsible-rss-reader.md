@@ -7,6 +7,7 @@ slug: "bloggulus-a-responsible-rss-reader"
 Recently, Rachel by the Bay [wrote about an idea](https://rachelbythebay.com/w/2024/05/29/score/) for "scoring" RSS feed readers.
 Criteria would be things like: how often do they check, do they respect [caching headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/If-None-Match), etc.
 Since I maintain my own RSS reader / aggregator called [Bloggulus](https://bloggulus.com), I was curious to see how "responsible" my own program was.
+Her previous posts have directly influenced my ability to make Bloggulus more efficient and more correct.
 I messaged Rachel with interest in participating and she promptly replied with instructions on how to set things up.
 
 Fast-forward a few days and Bloggulus is scoring quite well!
