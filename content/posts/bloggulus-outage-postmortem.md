@@ -5,29 +5,26 @@ slug: "bloggulus-outage-postmortem"
 draft: true
 ---
 
-Bloggulus was down for ~7 hours.
-What happened?
-How did I fix it?
-Why did it take me so long to notice?
-How long was the locale corrupted before I noticed (til PG or the server rebooted).
-Which upgrade was most likely to break it?
-What does `locale-gen` really do?
-Calls `localedef` and gens `/usr/lib/locale/locale-archive` binary file (database of locale data).
+On June 4, 2024, [Bloggulus](https://bloggulus.com) was down for just under 7 hours.
+Despite being offline for so long, the immediate fix only took me ~30 minutes to find and apply once I became aware of the issue.
+This post details how I went about fixing the problem and then digs deeper into what actually happened.
+I also discuss a few gaps in server monitoring and notification delivery.
 
-Tried to do my own `localedef`... OOM-Killed!
-Saw some other oom kills for PG and Redis...
-Theory: an upgrade came in (something `l10n`) that required locales to be regenerated.
-However, they failed to due to being OOM killed, which left the locale DB in a bad / empty state.
-
-Found the smoking gun!
-Apt logs from 5/31/2024 show the `locale-gen` OOM kill after upgrading `locales` package.
-Server was now in a bad state and would break upon the next reboot (didn't happen until 6/4/2024).
+![Downtime of roughly seven hours](/images/20240609/downtime.webp)
 
 ## Bloggulus is Down
 
+I didn't actually become aware of Bloggulus being down until I visited the site myself and received a `502 Bad Gateway`.
+This response is sent from [Caddy](https://caddyserver.com/) when it cannot communicate with the service it is proxying (the Bloggulus web server).
+Despite my [UptimeRobot](https://uptimerobot.com/) monitor going red within 5 minutes of the outage, I have the notifications configured to be sent to my primary [shallowbrooksoftware.com](https://shallowbrooksoftware.com/) email address (managed via [Zoho](https://www.zoho.com/mail/)).
+However, since I don't have this inbox configured on my phone, I had no way to know about it until checking my email on my personal laptop.
+
+Anyhow, back to the action!
+The first I did was SSH into the server and check the `systemd` logs:
+
 ```
 Jun 04 14:51:39 bloggulus systemd[1]: Starting bloggulus...
-Jun 04 14:51:39 bloggulus bloggulus[37755]: 2024/06/04 14:51:39 ERROR failed to connect to `host=localhost user=bloggulus database=bloggulus`: dial error (dial tcp 127.0.0.1:543>
+Jun 04 14:51:39 bloggulus bloggulus[37755]: 2024/06/04 14:51:39 ERROR failed to connect to `host=localhost user=bloggulus database=bloggulus`: dial error (dial tcp 127.0.0.1:5432)
 Jun 04 14:51:39 bloggulus systemd[1]: bloggulus.service: Main process exited, code=exited, status=1/FAILURE
 Jun 04 14:51:39 bloggulus systemd[1]: bloggulus.service: Failed with result 'exit-code'.
 Jun 04 14:51:39 bloggulus systemd[1]: Failed to start bloggulus.
@@ -35,7 +32,15 @@ Jun 04 14:51:45 bloggulus systemd[1]: bloggulus.service: Scheduled restart job, 
 Jun 04 14:51:45 bloggulus systemd[1]: Stopped bloggulus.
 ```
 
+The error here is pretty clear: Bloggulus is unable to connect to the database running on the same machine.
+Let's see what's going on with the database.
+
 ## PostgreSQL is Down
+
+It is important to understand the architecture of Bloggulus: the Caddy reverse proxy, the Go-based web app, and the PostgreSQL database all run on a single [DigitalOcean](https://www.digitalocean.com/) droplet.
+Caddy proxies traffic between the internet and Bloggulus while PostgreSQL stores all of the web app's persistent data (blogs, posts, etc).
+
+Checking the database logs reveal that it is indeed dead as well:
 
 ```
 Jun 04 14:51:36 bloggulus systemd[1]: Starting PostgreSQL Cluster 14-main...
@@ -59,10 +64,14 @@ Jun 04 14:51:36 bloggulus systemd[1]: postgresql@14-main.service: Failed with re
 Jun 04 14:51:36 bloggulus systemd[1]: Failed to start PostgreSQL Cluster 14-main.
 ```
 
-Take note of those `locale` warnings...
-I first tried restarting the server (couldn't hurt, right) but that didn't make a difference: PostgreSQL was still failing to start.
+What's up with those `locale` warnings?
+I don't recall ever seeing them before but my [Ansible automation](https://github.com/theandrew168/devops/blob/ae25c0a6333e8cfb3b6dd091b329342da7e545ba/roles/server/tasks/main.yml#L169-L187) generates and configures the `en_US.UTF-8` locale for all of my servers.
+Thinking that this might be weird fluke or something, I rebooted the server.
+Unfortunately, that didn't make a difference: PostgreSQL was still failing to start.
+
 Maybe the server's baseline configuration got messed up somehow?
-Since I use Ansible to manage my servers, I'll re-run the playbook that handles the Bloggulus server.
+I decided re-run the [playbook](https://github.com/theandrew168/devops/blob/main/bloggulus.yml) that manages the Bloggulus server and all of its components.
+Since all of my Ansible roles are idempotent, anything out of alignment should get straightened out.
 
 ## Running Ansible
 
@@ -136,5 +145,3 @@ Stretch: re-add prom metrics and setup alerts for CPU/RAM/Storage and PG being d
 Revisit systemd / journald log sizes (50M might not be quite right).
 
 https://gist.github.com/JPvRiel/b7c185833da32631fa6ce65b40836887
-
-![Downtime of roughly seven hours](/images/20240609/downtime.webp)
