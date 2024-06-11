@@ -1,0 +1,114 @@
+<!doctype html><html lang=en><head><title>Bloggulus Outage Postmortem · Shallow Brook Software
+</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="On June 4, 2024, Bloggulus was down for just under 7 hours. Despite being offline for so long, the immediate fix only took only ~30 minutes to find and apply once I became aware of the issue. This post details how I went about fixing the problem and then digs deeper into what actually happened. I also discuss a few gaps in server monitoring and notification delivery.
+Bloggulus is Down Link to heading I didn&rsquo;t actually become aware of the site being down until I visited it myself and received a 502 Bad Gateway."><meta name=keywords content="blog,developer,personal"><meta name=twitter:card content="summary"><meta name=twitter:title content="Bloggulus Outage Postmortem"><meta name=twitter:description content="On June 4, 2024, Bloggulus was down for just under 7 hours. Despite being offline for so long, the immediate fix only took only ~30 minutes to find and apply once I became aware of the issue. This post details how I went about fixing the problem and then digs deeper into what actually happened. I also discuss a few gaps in server monitoring and notification delivery.
+Bloggulus is Down Link to heading I didn’t actually become aware of the site being down until I visited it myself and received a 502 Bad Gateway."><meta property="og:url" content="https://shallowbrooksoftware.com/posts/bloggulus-outage-postmortem/"><meta property="og:site_name" content="Shallow Brook Software"><meta property="og:title" content="Bloggulus Outage Postmortem"><meta property="og:description" content="On June 4, 2024, Bloggulus was down for just under 7 hours. Despite being offline for so long, the immediate fix only took only ~30 minutes to find and apply once I became aware of the issue. This post details how I went about fixing the problem and then digs deeper into what actually happened. I also discuss a few gaps in server monitoring and notification delivery.
+Bloggulus is Down Link to heading I didn’t actually become aware of the site being down until I visited it myself and received a 502 Bad Gateway."><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2024-06-09T00:00:00+00:00"><meta property="article:modified_time" content="2024-06-09T00:00:00+00:00"><link rel=canonical href=https://shallowbrooksoftware.com/posts/bloggulus-outage-postmortem/><link rel=preload href=/fonts/fa-brands-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-regular-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-solid-900.woff2 as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.577e3c5ead537873430da16f0964b754a120fd87c4e2203a00686e7c75b51378.css integrity="sha256-V348Xq1TeHNDDaFvCWS3VKEg/YfE4iA6AGhufHW1E3g=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.a00e6364bacbc8266ad1cc81230774a1397198f8cfb7bcba29b7d6fcb54ce57f.css integrity="sha256-oA5jZLrLyCZq0cyBIwd0oTlxmPjPt7y6KbfW/LVM5X8=" crossorigin=anonymous media=screen><link rel=icon type=image/svg+xml href=/images/favicon.svg sizes=any><link rel=icon type=image/png href=/images/favicon-32x32.png sizes=32x32><link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16><link rel=apple-touch-icon href=/images/apple-touch-icon.png><link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><a class=navigation-title href=https://shallowbrooksoftware.com/>Shallow Brook Software
+</a><input type=checkbox id=menu-toggle>
+<label class="menu-button float-right" for=menu-toggle><i class="fa-solid fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/about/>About</a></li><li class=navigation-item><a class=navigation-link href=/posts/>Blog</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://shallowbrooksoftware.com/posts/bloggulus-outage-postmortem/>Bloggulus Outage Postmortem</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa-solid fa-calendar" aria-hidden=true></i>
+<time datetime=2024-06-09T00:00:00Z>June 9, 2024
+</time></span><span class=reading-time><i class="fa-solid fa-clock" aria-hidden=true></i>
+6-minute read</span></div></div></header><div class=post-content><p>On June 4, 2024, <a href=https://bloggulus.com class=external-link target=_blank rel=noopener>Bloggulus</a> was down for just under 7 hours.
+Despite being offline for so long, the immediate fix only took only ~30 minutes to find and apply once I became aware of the issue.
+This post details how I went about fixing the problem and then digs deeper into what actually happened.
+I also discuss a few gaps in server monitoring and notification delivery.</p><p><img src=/images/20240609/downtime.webp alt="Downtime of roughly seven hours"></p><h2 id=bloggulus-is-down>Bloggulus is Down
+<a class=heading-link href=#bloggulus-is-down><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>I didn&rsquo;t actually become aware of the site being down until I visited it myself and received a <code>502 Bad Gateway</code>.
+This response is sent from <a href=https://caddyserver.com/ class=external-link target=_blank rel=noopener>Caddy</a> when it cannot communicate with the service it is proxying (the Bloggulus web server).
+Why didn&rsquo;t I know about this sooner?</p><p>Despite my <a href=https://uptimerobot.com/ class=external-link target=_blank rel=noopener>UptimeRobot</a> monitor going red within 5 minutes of the outage, I have the notifications configured to be sent to my primary <a href=https://shallowbrooksoftware.com/ class=external-link target=_blank rel=noopener>shallowbrooksoftware.com</a> email address.
+However, since I don&rsquo;t have this inbox configured on my phone (since it isn&rsquo;t managed via Google), I had no way to know about it unless I checked for emails on my personal laptop.</p><p>Anyhow, back to the action!
+The first I did was SSH into the server and check the <code>systemd</code> logs:</p><pre tabindex=0><code>Jun 04 14:51:39 bloggulus systemd[1]: Starting bloggulus...
+Jun 04 14:51:39 bloggulus bloggulus[37755]: 2024/06/04 14:51:39 ERROR failed to connect to `host=localhost user=bloggulus database=bloggulus`: dial error (dial tcp 127.0.0.1:5432)
+Jun 04 14:51:39 bloggulus systemd[1]: bloggulus.service: Main process exited, code=exited, status=1/FAILURE
+Jun 04 14:51:39 bloggulus systemd[1]: bloggulus.service: Failed with result &#39;exit-code&#39;.
+Jun 04 14:51:39 bloggulus systemd[1]: Failed to start bloggulus.
+Jun 04 14:51:45 bloggulus systemd[1]: bloggulus.service: Scheduled restart job, restart counter is at 4702.
+Jun 04 14:51:45 bloggulus systemd[1]: Stopped bloggulus.
+</code></pre><p>The error here is pretty clear: Bloggulus is unable to connect to the database (which runs on the same machine).
+Let&rsquo;s see what&rsquo;s going on with <a href=https://www.postgresql.org/ class=external-link target=_blank rel=noopener>PostgreSQL</a>.</p><h2 id=postgresql-is-down>PostgreSQL is Down
+<a class=heading-link href=#postgresql-is-down><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>It is important to understand the architecture of Bloggulus: the Caddy reverse proxy, the Go-based web app, and the PostgreSQL database all run on a single <a href=https://www.digitalocean.com/ class=external-link target=_blank rel=noopener>DigitalOcean</a> droplet.
+Caddy proxies traffic between the internet and Bloggulus while PostgreSQL stores all of the application&rsquo;s persistent data (blogs, posts, etc).</p><p>Checking the database logs confirm that it is also dead:</p><pre tabindex=0><code>Jun 04 14:51:36 bloggulus systemd[1]: Starting PostgreSQL Cluster 14-main...
+Jun 04 14:51:36 bloggulus postgresql@14-main[37742]: perl: warning: Setting locale failed.
+Jun 04 14:51:36 bloggulus postgresql@14-main[37742]: perl: warning: Please check that your locale settings:
+Jun 04 14:51:36 bloggulus postgresql@14-main[37742]:         LANGUAGE = (unset),
+Jun 04 14:51:36 bloggulus postgresql@14-main[37742]:         LC_ALL = (unset),
+Jun 04 14:51:36 bloggulus postgresql@14-main[37742]:         LANG = &#34;en_US.UTF-8&#34;
+Jun 04 14:51:36 bloggulus postgresql@14-main[37742]:     are supported and installed on your system.
+Jun 04 14:51:36 bloggulus postgresql@14-main[37742]: perl: warning: Falling back to the standard locale (&#34;C&#34;).
+Jun 04 14:51:36 bloggulus postgresql@14-main[37742]: Error: /usr/lib/postgresql/14/bin/pg_ctl /usr/lib/postgresql/14/bin/pg_ctl start -D /mnt/bloggulus_db/data -l /var/log/postg&gt;
+Jun 04 14:51:36 bloggulus postgresql@14-main[37742]: 2024-06-04 14:51:36.657 UTC [37747] LOG:  invalid value for parameter &#34;lc_messages&#34;: &#34;en_US.UTF-8&#34;
+Jun 04 14:51:36 bloggulus postgresql@14-main[37742]: 2024-06-04 14:51:36.657 UTC [37747] LOG:  invalid value for parameter &#34;lc_monetary&#34;: &#34;en_US.UTF-8&#34;
+Jun 04 14:51:36 bloggulus postgresql@14-main[37742]: 2024-06-04 14:51:36.657 UTC [37747] LOG:  invalid value for parameter &#34;lc_numeric&#34;: &#34;en_US.UTF-8&#34;
+Jun 04 14:51:36 bloggulus postgresql@14-main[37742]: 2024-06-04 14:51:36.657 UTC [37747] LOG:  invalid value for parameter &#34;lc_time&#34;: &#34;en_US.UTF-8&#34;
+Jun 04 14:51:36 bloggulus postgresql@14-main[37742]: 2024-06-04 14:51:36.657 UTC [37747] FATAL:  configuration file &#34;/etc/postgresql/14/main/postgresql.conf&#34; contains errors
+Jun 04 14:51:36 bloggulus postgresql@14-main[37742]: pg_ctl: could not start server
+Jun 04 14:51:36 bloggulus postgresql@14-main[37742]: Examine the log output.
+Jun 04 14:51:36 bloggulus systemd[1]: postgresql@14-main.service: Can&#39;t open PID file /run/postgresql/14-main.pid (yet?) after start: Operation not permitted
+Jun 04 14:51:36 bloggulus systemd[1]: postgresql@14-main.service: Failed with result &#39;protocol&#39;.
+Jun 04 14:51:36 bloggulus systemd[1]: Failed to start PostgreSQL Cluster 14-main.
+</code></pre><p>What&rsquo;s up with those <code>locale</code> warnings?
+I don&rsquo;t recall ever seeing them before but my <a href=https://github.com/theandrew168/devops/blob/ae25c0a6333e8cfb3b6dd091b329342da7e545ba/roles/server/tasks/main.yml#L169-L187 class=external-link target=_blank rel=noopener>Ansible automation</a> generates and sets <code>en_US.UTF-8</code> as the default locale for all new servers.
+Thinking that this might be weird fluke or something, I rebooted the server.
+Unfortunately, that didn&rsquo;t make a difference: PostgreSQL was still failing to start.</p><p>Maybe the server&rsquo;s baseline configuration got messed up somehow?
+I decided re-run the <a href=https://github.com/theandrew168/devops/blob/main/bloggulus.yml class=external-link target=_blank rel=noopener>playbook</a> that manages the Bloggulus server and all of its components.
+Since my Ansible roles are idempotent, anything out of alignment should get straightened out and reset to the desired state.</p><h2 id=running-ansible>Running Ansible
+<a class=heading-link href=#running-ansible><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>Everything was green (unchanged) except for one task:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span>- <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Ensure en_US.UTF-8 locale is available</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>locale_gen</span>:
+</span></span><span style=display:flex><span>    <span style=color:#f92672>name</span>: <span style=color:#ae81ff>en_US.UTF-8</span>
+</span></span><span style=display:flex><span>    <span style=color:#f92672>state</span>: <span style=color:#ae81ff>present</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>become</span>: <span style=color:#66d9ef>yes</span>
+</span></span><span style=display:flex><span>  <span style=color:#f92672>become_user</span>: <span style=color:#ae81ff>root</span>
+</span></span></code></pre></div><p>That&rsquo;s pretty peculiar.
+This task invokes <code>locale-gen</code> to generate the data for the <code>en_US.UTF-8</code> locale and ultimately store it in <code>/usr/lib/locale/locale-archive</code>.
+That being said, the server&rsquo;s default locale <em>config</em> didn&rsquo;t change: just the underlying binary data did.
+Very odd.
+What happens if I try to perform the <code>locale-gen</code> manually?</p><h2 id=manual-locale-generation>Manual Locale Generation
+<a class=heading-link href=#manual-locale-generation><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>Let&rsquo;s give it a shot:</p><pre tabindex=0><code>root@bloggulus:~# locale-gen &#34;en_US.UTF-8&#34;
+Generating locales (this might take a while)...
+  en_US.UTF-8.../usr/sbin/locale-gen: line 177: 15179 Killed                  localedef $no_archive -i $input -c -f $charset $locale_alias $locale
+ done
+Generation complete.
+</code></pre><p>Whoa, what happened there?
+The <code>locale-gen</code> command got killed.
+Was it from the <a href=https://www.kernel.org/doc/gorman/html/understand/understand016.html class=external-link target=_blank rel=noopener>OOM killer</a>?
+Let&rsquo;s check <a href=https://man7.org/linux/man-pages/man1/dmesg.1.html class=external-link target=_blank rel=noopener>dmesg</a>:</p><pre tabindex=0><code>root@bloggulus:~# dmesg | grep -i kill
+[115633.247115] Out of memory: Killed process 15179 (localedef) total-vm:146420kB, anon-rss:134440kB, file-rss:1756kB, shmem-rss:0kB, UID:0 pgtables:328kB oom_score_adj:0
+</code></pre><p>Yep, it sure was!
+Does this always happen, though?
+Or does this program only get OOM killed <em>sometimes</em>?</p><pre tabindex=0><code>root@bloggulus:~# locale-gen &#34;en_US.UTF-8&#34;
+Generating locales (this might take a while)...
+en_US.UTF-8... done
+Generation complete.
+</code></pre><p>Interesting.
+Everything worked fine the second time which indicates that <code>locale-gen</code> can be non-deterministically killed due to the server being out of memory.
+This led me to my next question: are there ever package updates (via unattended upgrades) that require locales to be regenerated?
+Perhaps locale data changes every once in a while similar to time zone data.</p><h2 id=the-smoking-gun>The Smoking Gun
+<a class=heading-link href=#the-smoking-gun><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>Let&rsquo;s check the <a href=https://ubuntu.com/server/docs/package-management class=external-link target=_blank rel=noopener>apt</a> logs:</p><pre tabindex=0><code>Log started: 2024-05-31 07:00:43
+(Reading database ... 102795 files and directories currently installed.)
+Preparing to unpack .../locales_2.35-0ubuntu3.8_all.deb ...
+Unpacking locales (2.35-0ubuntu3.8) over (2.35-0ubuntu3.7) ...
+Setting up locales (2.35-0ubuntu3.8) ...
+Generating locales (this might take a while)...
+en_US.UTF-8.../usr/sbin/locale-gen: line 177: 183068 Killed localedef $no_archive -i $input -c -f $charset $locale_alias $locale
+done
+Generation complete.
+Processing triggers for man-db (2.10.2-1) ...
+Log ended: 2024-05-31 07:00:48
+</code></pre><p>There it is!
+On May 31, 2024, after updating the <code>locales</code> package, the <code>locale-gen</code> process was killed (most likely by the OOM killer).
+This means that the server was in an unstable state since May 31 but didn&rsquo;t &ldquo;fail&rdquo; until June 4 when the server (and therefore PostgreSQL) restarted.
+This leads me to the root cause of this problem: the server needs more RAM!</p><h2 id=moving-foward>Moving Foward
+<a class=heading-link href=#moving-foward><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>At the bottom of everything, the server ran out of memory.
+On the surface, however, the problem presented itself more like a small <a href=https://en.wikipedia.org/wiki/Rube_Goldberg_machine class=external-link target=_blank rel=noopener>Rube Goldberg machine</a>:</p><ol><li>The OOM killer caused <code>locale-gen</code> to fail after upgrading the <code>locales</code> package.</li><li>The lack of a valid <code>en_US.UTF-8</code> locale caused PostgreSQL to fail to start.</li><li>The lack of a running database caused Bloggulus to fail to start.</li></ol><p>Regardless of <em>how</em> it happened, the outcome is clear: the server needs more memory.
+As a direct result of this incident, I&rsquo;ve bumped the droplet&rsquo;s RAM from 512MB ($4/month) to 1GB ($6/month).
+I also installed the <a href="https://play.google.com/store/apps/details?id=com.uptimerobot&amp;hl=en_US" class=external-link target=_blank rel=noopener>UptimeRobot app</a> and enabled push notifications.
+In the future, I might redeploy <a href=https://prometheus.io/ class=external-link target=_blank rel=noopener>Prometheus</a> and start collecting core server metrics again (CPU, RAM, and storage).
+That way, I can capacity plan proactively and fix these critical problems <em>before</em> they cause 7 hours of downtime.</p><p>Thanks for reading!</p></div><footer></footer></article></section></div><footer class=footer><section class=container>©
+2024
+Andrew Dailey
+·
+Powered by <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> & <a href=https://github.com/luizdepra/hugo-coder/ target=_blank rel=noopener>Coder</a>.</section></footer></main><script src=/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script></body></html>
