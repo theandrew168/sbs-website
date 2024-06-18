@@ -7,7 +7,7 @@ tags: ["Databases"]
 
 Recently, I ran into an issue where a very large PostgreSQL query (involving roughly 30 tables) was taking much longer to plan than to execute.
 At its worst, it was taking multiple _seconds_ to plan and a few hundred milliseconds to execute.
-My problem wasn't really one of query optimization: I was already past that.
+My problem wasn't really about standard query optimization: I was already past that.
 This was a problem of query complexity and trying to get the PostgreSQL [planner/optimizer](https://www.postgresql.org/docs/current/planner-optimizer.html) to more quickly arrive at an ideal query.
 
 # Research
