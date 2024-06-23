@@ -1,0 +1,52 @@
+<!doctype html><html lang=en><head><title>Digimon Cards and Database Indexes · Shallow Brook Software
+</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="I&rsquo;m a big fan of the Digimon Card Game (the one released in 2020). The games are quick, the mechanics are engaging, and the community is friendly. Plus, I was a big fan of the Digimon anime as a kid so I have a lot of nostalgia for the characters. When I first got into the game, I realized that only a few sets had been released so far. I set my eyes on building and maintaining a complete collection: four copies of each card."><meta name=keywords content="blog,developer,personal"><meta name=twitter:card content="summary"><meta name=twitter:title content="Digimon Cards and Database Indexes"><meta name=twitter:description content="I’m a big fan of the Digimon Card Game (the one released in 2020). The games are quick, the mechanics are engaging, and the community is friendly. Plus, I was a big fan of the Digimon anime as a kid so I have a lot of nostalgia for the characters. When I first got into the game, I realized that only a few sets had been released so far. I set my eyes on building and maintaining a complete collection: four copies of each card."><meta property="og:url" content="https://shallowbrooksoftware.com/posts/digimon-cards-and-database-indexes/"><meta property="og:site_name" content="Shallow Brook Software"><meta property="og:title" content="Digimon Cards and Database Indexes"><meta property="og:description" content="I’m a big fan of the Digimon Card Game (the one released in 2020). The games are quick, the mechanics are engaging, and the community is friendly. Plus, I was a big fan of the Digimon anime as a kid so I have a lot of nostalgia for the characters. When I first got into the game, I realized that only a few sets had been released so far. I set my eyes on building and maintaining a complete collection: four copies of each card."><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2024-06-23T00:00:00+00:00"><meta property="article:modified_time" content="2024-06-23T00:00:00+00:00"><meta property="article:tag" content="Databases"><link rel=canonical href=https://shallowbrooksoftware.com/posts/digimon-cards-and-database-indexes/><link rel=preload href=/fonts/fa-brands-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-regular-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-solid-900.woff2 as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.577e3c5ead537873430da16f0964b754a120fd87c4e2203a00686e7c75b51378.css integrity="sha256-V348Xq1TeHNDDaFvCWS3VKEg/YfE4iA6AGhufHW1E3g=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.a00e6364bacbc8266ad1cc81230774a1397198f8cfb7bcba29b7d6fcb54ce57f.css integrity="sha256-oA5jZLrLyCZq0cyBIwd0oTlxmPjPt7y6KbfW/LVM5X8=" crossorigin=anonymous media=screen><link rel=icon type=image/svg+xml href=/images/favicon.svg sizes=any><link rel=icon type=image/png href=/images/favicon-32x32.png sizes=32x32><link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16><link rel=apple-touch-icon href=/images/apple-touch-icon.png><link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><a class=navigation-title href=https://shallowbrooksoftware.com/>Shallow Brook Software
+</a><input type=checkbox id=menu-toggle>
+<label class="menu-button float-right" for=menu-toggle><i class="fa-solid fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/about/>About</a></li><li class=navigation-item><a class=navigation-link href=/posts/>Blog</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://shallowbrooksoftware.com/posts/digimon-cards-and-database-indexes/>Digimon Cards and Database Indexes</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa-solid fa-calendar" aria-hidden=true></i>
+<time datetime=2024-06-23T00:00:00Z>June 23, 2024
+</time></span><span class=reading-time><i class="fa-solid fa-clock" aria-hidden=true></i>
+4-minute read</span></div><div class=tags><i class="fa-solid fa-tag" aria-hidden=true></i>
+<span class=tag><a href=/tags/databases/>Databases</a></span></div></div></header><div class=post-content><p>I&rsquo;m a big fan of the <a href=https://world.digimoncard.com/ class=external-link target=_blank rel=noopener>Digimon Card Game</a> (the one released in 2020).
+The games are quick, the mechanics are engaging, and the community is friendly.
+Plus, I was a big fan of the Digimon anime as a kid so I have a lot of nostalgia for the characters.
+When I first got into the game, I realized that only a few sets had been released so far.
+I set my eyes on building and maintaining a complete collection: four copies of each card.
+With enough spreadsheets and time, this would allow me build any deck that I wanted.
+This was honestly a breath of fresh air coming from <a href=https://magic.wizards.com/en class=external-link target=_blank rel=noopener>Magic: The Gathering</a>.</p><h1 id=digimon-cards>Digimon Cards
+<a class=heading-link href=#digimon-cards><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>That being said, I&rsquo;ve collected quite a few cards.
+In addition to the minimum four copies of each card, I also have extra copies of most common and uncommon cards (and even some rares).
+Historically, I stored these extra cards unsorted in a series of tall, unstable stacks.
+&ldquo;Managing&rdquo; these stacks was simple: whenever a new set releases and I acquire more overflow, just throw &rsquo;em on the stack!
+Recently, however, a couple things happened that motivated me to sort and organize my collection.</p><p>First, a friend of mine told me that they were building a binder with all Digimon cards illustrated by a particular artist: <a href=https://wikimon.net/Koki class=external-link target=_blank rel=noopener>koki</a>.
+Since I have so many extra cards, I told them that I&rsquo;d be willing to go through my collection and see if I could fill in any missing pieces.
+However, since my cards were unsorted, this would mean looking through every single card in my collection.
+That seemed pretty tedious and I figured that if I was going to touch every card, I might as well sort them.</p><p>Second, I was about to move to a new house and moving those loose stacks of cards didn&rsquo;t seem very fun.
+I&rsquo;d rather buy a large, multi-row trading card box to contain them.
+If I was going to buy a nice box, I might as well use the individual rows to hold cards of a particular color.
+This way, to find a card of a specific color, I&rsquo;d only have to look through a subset (roughly 1/6th of all cards).
+I ultimately decided to sort my collection by even more than just color: I further sorted them by card type and level.
+Now, to find any specific card, I&rsquo;d have to search through <em>even fewer</em> cards (around 1/36th or so).</p><h1 id=database-indexes>Database Indexes
+<a class=heading-link href=#database-indexes><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>While sorting my cards and thinking about software (a classic combination), I realized a connection to database indexes.
+By sorting my collection, I was effectively transforming it into an <a href=https://www.postgresql.org/docs/current/indexes-intro.html class=external-link target=_blank rel=noopener>index</a>.
+If I had chosen to only sort by color, then it’d mirror a regular, single-column index.
+Instead, sorting by color, type, and level maps more closely to a <a href=https://www.postgresql.org/docs/current/indexes-multicolumn.html class=external-link target=_blank rel=noopener>multi-column index</a>.</p><p>If this configuration was represented in PostgreSQL, the schema and index would look something like:</p><pre tabindex=0><code>CREATE TABLE card (
+  id TEXT PRIMARY KEY,
+  name TEXT,
+  color TEXT,
+  type TEXT,
+  level TEXT
+);
+
+CREATE INDEX card_idx ON card (color, type, level);
+</code></pre><p>Instead of having to sequentially scan through all of my cards to find a specific one, I could instead jump to the specific color + type + level and only have to search through a handful.
+By indexing my cards, lookups are elevated from a <code>Seq Scan</code> to an <code>Index Only Scan</code>.
+However, my collection is now also susceptible to one of the downsides of indexes: increased insertion time.</p><p>Before, adding new cards was instant: just add them to the stack.
+Now the process is more involved.
+I need to first use the index to lookup where a specific card should go and <em>then</em> insert it.
+This adds a mild amount of overhead to every single card that gets added to the box.
+It takes work to maintain an index but if you have a read-heavy workload, it is probably worth it.</p></div><footer></footer></article></section></div><footer class=footer><section class=container>©
+2024
+Andrew Dailey
+·
+Powered by <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> & <a href=https://github.com/luizdepra/hugo-coder/ target=_blank rel=noopener>Coder</a>.</section></footer></main><script src=/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script></body></html>
