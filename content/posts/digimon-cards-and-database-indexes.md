@@ -55,7 +55,7 @@ CREATE INDEX card_idx ON card (color, type, level);
 ```
 
 Instead of having to sequentially scan through all of my cards to find a specific one, I could instead jump to the specific color + type + level and only have to search through a handful.
-By indexing my cards, lookups are elevated from a `Seq Scan` to an `Index Only Scan`.
+By indexing my cards, lookups are elevated from a `Seq Scan` to an `Index Scan`.
 However, my collection is now also susceptible to one of the downsides of indexes: increased insertion time.
 
 Before, adding new cards was instant: just add them to the stack.
