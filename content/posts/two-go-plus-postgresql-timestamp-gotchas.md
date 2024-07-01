@@ -3,12 +3,12 @@ date: 2024-06-30
 title: "Two Go + PostgreSQL Timestamp Gotchas"
 slug: "two-go-plus-postgresql-timestamp-gotchas"
 tags: ["Databases", "Go"]
-draft: true
 ---
 
 This week I added some additional tests to my [Bloggulus](https://github.com/theandrew168/bloggulus) project.
-In the process of doing so, I discovered a couple places where timestamp values weren't matching the value I expect.
+In the process of doing so, I discovered a couple places where timestamp values weren't matching what was expected.
 For some background, I generate, process, and store all timestamps in the [UTC time standard](https://en.wikipedia.org/wiki/Coordinated_Universal_Time).
+
 The two gotchas were:
 
 1. Unexpected conversion of UTC timestamps to local time
@@ -23,7 +23,7 @@ Why are these UTC timestamps being converted to Central Standard Time when selec
 
 All of my Go projects use the amazing [pgx](https://pkg.go.dev/github.com/jackc/pgx/v5) driver for communicating with PostgreSQL databases.
 After quite a bit of researching, I realized that I was not alone in experiencing this inconsistency.
-Someone else noticed this same thing an opened a [GitHub issue](https://github.com/jackc/pgx/issues/1195) for `pgx/v4` back in 2022.
+Someone else noticed and opened a [GitHub issue](https://github.com/jackc/pgx/issues/1195) for `pgx/v4` back in 2022.
 The intially-proposed solutions were a bit fussy (in my opinion) and involved creating a custom codec type for the `timestamptz` type.
 
 Thankfully, enough time has passed that the package's author was able to include a more [convenient fix](https://github.com/jackc/pgx/pull/1948) in `pgx/v5`!
@@ -78,42 +78,44 @@ if err != nil {
 ## Digging Deeper
 
 Why did this happen in the first place?
-Why is even any ambiguity to what time zone should be used when reading the timestamp from the database?
+Why is there even any ambiguity with respect to what time zone should be used when reading the timestamp from the database?
+Isn't the time zone included with the timestamp since I'm using `timestamptz`?
+
 PostgreSQL offers two [timestamp types](https://www.postgresql.org/docs/current/datatype-datetime.html):
 
 1. `timestamp without time zone` (aka `timestamp`)
 2. `timestamp with time zone` (aka `timestamptz`)
 
-When I starting building the app, I figured that `timestamptz` was what I wanted since my timestamps include a specific time zone: UTC (I've since learned that UTC isn't even a time zone: it is a time standard).
+When I starting building the app, I figured that `timestamptz` was what I wanted since my timestamps include a specific time zone: UTC (I've since learned that UTC isn't really a time zone: it is a time standard).
 I thought that the main difference between `timestamp` and `timestamptz` was that `timestamptz` stored a few extra bits of data to represent the timestamp's time zone.
 However, that is _not_ the case.
 
-I did a deeper dive into the [documentation](https://www.postgresql.org/docs/current/datatype-datetime.html#DATATYPE-DATETIME-INPUT-TIME-STAMPS) and found some important notes:
+I dug deeper into the [documentation](https://www.postgresql.org/docs/current/datatype-datetime.html#DATATYPE-DATETIME-INPUT-TIME-STAMPS) and found some important notes:
 
 > For `timestamp with time zone`, the internally stored value is always in UTC (Universal Coordinated Time, traditionally known as Greenwich Mean Time, GMT).  
 > ...  
 > When a timestamp with time zone value is output, it is always converted from UTC to the current timezone zone, and displayed as local time in that zone.
 
-It turns out that the `timestamptz` type does not behave as I expected.
-Timestamps are checked for a time zone upon insertion but then stored as UTC.
-The original time zone of the timestamp is lost after being inserted and normalized.
-When read, PostgreSQL converts `timestamptz` values to the database's configured timezone (which is correctly set to UTC in my case).
+It turns out that the `timestamptz` type does not work how I'd originally assumed.
+Instead, timestamps are checked for a time zone upon insertion but then converted to and stored as UTC.
+The original time zone of the timestamp is lost after being normalized and inserted.
+When selected, PostgreSQL converts `timestamptz` values to the database's configured timezone (which is correctly set to UTC in my case).
 
 When pgx reads a `timestamptz` value from the database and converts it into Go's `time.Time` type, it has to make a decision about what to do with the stamp's time zone.
 Should it be left as UTC or converted to the program's local time zone?
-Historically, pgx chose the latter.
-But as of `v5`, the package now allows us to influence this decision.
+Historically, pgx unconditionally chose the latter.
+But as of `v5`, the package now allows us to influence the decision.
 Neat!
 
 # Mismatched Precision
 
 This one is quite a bit simpler!
 In short, Go’s timestamps are represented with nanosecond precision but PostgreSQL's only handle microseconds.
-Therefore, you lose precision when inserting and any logic that "round-trips" a Go timestamp to and from the database would yield a different, less precise value at the end.
+Therefore, you lose precision upon insertion and any logic that "round-trips" a Go timestamp to and from the database yields a different, less precise value at the end.
 This hiccup has been [discovered and discussed](https://stackoverflow.com/questions/60433870/saving-time-time-in-golang-to-postgres-timestamp-with-time-zone-field) before, too.
-The suggestion in that thread that made the most sense to me was to immediately round any timestamps generated by Go down to microseconds.
+The suggestion from that question that made the most sense to me was to immediately round any timestamps generated by Go down to microsecond precision.
 
-This, combined with defaulting all newly-created timestamps to UTC, led me to write a simple `timeutil` package to encapsulate the growing "incantation" necessary to generate a valid timestamp:
+This, combined with defaulting all newly-created timestamps to UTC, led me to write a simple `timeutil` package to encapsulate the growing "incantation" required to generate a valid timestamp:
 
 ```go
 package timeutil
@@ -129,7 +131,7 @@ func Now() time.Time {
 # Conclusion
 
 That's all for today.
-I figured these "gotchas" could easily happen to someone else and were worth sharing.
-At the end of the day, I learned something new and documenting the journey helps _me_ remember the details.
+I figure that these "gotchas" could easily happen to someone else and were worth sharing.
+At the end of the day, I learned something new and documenting the journey will help _me_ remember the details someday.
 
 Thanks for reading!
