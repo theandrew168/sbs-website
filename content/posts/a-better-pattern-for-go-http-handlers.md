@@ -3,26 +3,27 @@ date: 2024-07-07
 title: "A Better Pattern for Go HTTP Handlers"
 slug: "a-better-pattern-for-go-http-handlers"
 tags: ["Go"]
-draft: true
 ---
 
 In most web applications, handlers have dependencies.
-These could be things like database connection pools, queues, or loggers.
-For most of my Go-based web development history, I've embraced the "application struct" pattern as described by Alex Edwards in his "Let's Go" [book series](https://lets-go.alexedwards.net/) to manage these dependencies.
+These could be things like database connection pools, queue clients, or loggers.
+For most of my Go-based web development projects, I've embraced the "application struct" pattern as described by Alex Edwards in his "Let's Go" [book series](https://lets-go.alexedwards.net/) (and a [blog post](https://www.alexedwards.net/blog/organising-database-access)) to manage these dependencies.
 Despite serving my quite well over the past few years, I recently found myself wanting something a bit more flexible.
 This post describes the original pattern, its limitations, and how I iterated on it to arrive at something even better (in my opinion, of course).
 
 # Application Struct
 
 This code snippet showcases the original pattern.
-Essentially, we gather the union of all of our handler's dependencies together in a centralized, shared "Application" struct.
-Then, we attach all handlers to this struct so that they can access the
+Essentially, we gather the union of all of our handlers' dependencies together in a centralized "application struct".
+Then, we attach all handlers to this struct so that they can access the shared resources.
 
 ```go
+// Keep all handler dependencies in a centralized struct.
 type Application struct {
     store *storage.Storage
 }
 
+// Constructor for the application struct.
 func NewApplication(store *storage.Storage) *Application {
     app := Application{
         store: store,
@@ -30,15 +31,24 @@ func NewApplication(store *storage.Storage) *Application {
     return &app
 }
 
-// Construct the program's routing handler.
+// The program's routing handler.
 func (app *Application) Handler() http.Handler {
     mux := http.NewServeMux()
-    mux.Handle("GET /foo", app.handleFoo())
+    mux.Handle("GET /foo", app.HandleFoo())
+    mux.Handle("GET /bar", app.HandleBar())
     return mux
 }
 
-// Handler for an individual route.
-func (app *Application) handleFoo() http.Handler {
+
+// Handler for a simple route without any dependencies.
+func (app *Application) HandleFoo() http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        w.Write([]byte("Hello, World!"))
+    })
+}
+
+// Handler for an average route with dependencies.
+func (app *Application) HandleBar() http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         foo, err := app.store.Foo().Read()
         if err != nil {
@@ -51,27 +61,44 @@ func (app *Application) handleFoo() http.Handler {
 			util.ServerErrorResponse(w, r, err)
 			return
 		}
-    }
+    })
 }
 ```
 
+This strategy works quite well.
+However, it has a few downsides:
+
+1. All handlers must live in the same package as the application struct.
+2. All dependencies must be setup to test each handler: even those that don't need them.
+
+For me, personally, that second detail started to become a nuisance.
+Even for a handler that returns static HTML, I have to instantiate a database connection?
+I wanted to find a better way.
+
 # Dependency Closures
 
-Instead of throwing all handler deps into an Application struct and attaching handlers to it, just closure the deps into each route.
-This way, the routes only need what they NEED in order to be tested.
-Also simplifies construction of individual routes and results in less test code (only need to setup the deps for the current route, not ALL routes).
-Matches what I do for middleware, too.
+The solution is quite simple: just pass each handler's dependencies into its creation function.
+This creates a closure around the dependency such that the handler can still see and use it even after being returned.
+Let's take a look.
 
 ```go
-// Construct the program's routing handler.
+// The program's routing handler.
 func Handler(store *storage.Storage) http.Handler {
     mux := http.NewServeMux()
-    mux.Handle("GET /foo", HandleFoo(store *storage.Storage))
+    mux.Handle("GET /foo", HandleFoo())
+    mux.Handle("GET /bar", HandleBar(store))
     return mux
 }
 
-// Handler for an individual route.
-func HandleFoo(store *storage.Storage) http.Handler {
+// Handler for a simple route without any dependencies.
+func HandleFoo() http.Handler {
+    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        w.Write([]byte("Hello, World!"))
+    })
+}
+
+// Handler for an average route with dependencies.
+func HandleBar(store *storage.Storage) http.Handler {
     return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
         foo, err := store.Foo().Read()
         if err != nil {
@@ -84,19 +111,21 @@ func HandleFoo(store *storage.Storage) http.Handler {
 			util.ServerErrorResponse(w, r, err)
 			return
 		}
-    }
+    })
 }
 ```
 
-# Pros and Cons
+This is pretty nice!
+Gone is that fussy, shared "application struct".
+Additionally, each handler's dependencies are now explicitly clear.
+If a handler doesn't need any extra resources, then it simply doesn't get any.
+This makes testing much simpler and removes all of that "gotta spin up every dependency for every handler" boilerplate.
+Plus, if I wanted to, I could now split my handlers up between different packages because they are no longer coupled to a shared struct.
 
-## Pros
+There is at least one downside, though: repetition.
+If many handlers have the same dependencies, then you have to pass them into every route.
+However, I consider this to be more indicative of reality and is better off being written transparently.
+The truth is the same either way: these handlers all need these dependencies.
+Shifting them into a central struct and coupling things together just to save a few lines of code doesn’t seem worth it to me.
 
-1. Locality / clarity of deps: everything a route needs is right next to it. It is very clear where routes need storage, for example.
-2. No more need for the intermediate application struct, now all handlers are independent and de-coupled. Less state to worry about. Getting the handlers is one call now vs two. This could also enable handler to be split into separate packages.
-3. Easier to test handler logic independently of router-level controls (auth, RBAC, etc) and things that are handled by middleware.
-4. Simplified testing: each route only needs to setup the deps it needs now. Before, I had to setup everything the application struct needed just to a test a route that might not need ANY of the deps.
-
-## Cons
-
-1. Mild repetition. If many routes have the same deps, you have to pass em into every route. However, I consider this to be more of a facet of reality and is better left obvious. The truth is the same: these routes all need these deps. But shifting them into a central struct and coupling things together just to “save some lines” doesn’t seem worth it to me. I’d rather have a bit of repeated code than the wrong abstraction.
+You know me, I’d rather have a bit of duplication than the wrong abstraction.
