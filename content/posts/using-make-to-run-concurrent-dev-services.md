@@ -9,7 +9,7 @@ This short post explains a useful trick for using [Make](<https://en.wikipedia.o
 For example, one of my recent web projects required three active services in order to develop locally:
 
 1. Running the [Go](https://go.dev/) backend
-2. Running [esbuild](https://esbuild.github.io/) to (re)build the React+TypeScript frontend
+2. Running [esbuild](https://esbuild.github.io/) to (re)build the React + TypeScript frontend
 3. Running the [Tailwind CSS CLI](https://tailwindcss.com/blog/standalone-cli) to re(build) the Tailwind CSS styles
 
 Historically, I'd run each of these programs in a separate terminal window (or use something fancy like [tmux](https://github.com/tmux/tmux/wiki)).
