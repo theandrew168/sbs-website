@@ -30,14 +30,13 @@ It's sort of hard to explain, but using SvelteKit this way feels like trying to 
 Trying to figure out how to utilize basic features while in SPA mode is difficult: **handling errors and implementing client-side auth** are just a few examples.
 It makes me feel like my use case is orthogonal to the project's goals and ambitions: like my needs were going "against the grain" of the framework.
 It wasn't _impossible_ to do the things I needed to do, but it also wasn't the use case that the library was optimized / built for.
-Honestly, maybe I'd have a better time if instead of using SvelteKit, I just used vanilla [Svelte](https://svelte.dev/) with a third-party router.
 
 > Using SvelteKit for building SPAs is technically supported but feels like an afterthought.
 
 Being more specific, though, I found that common SPA tasks are not discussed in the official documentation so you end up having to look elsewhere for solutions.
 I often had to rely on [Reddit posts](https://www.reddit.com/r/sveltejs/comments/z6x5uj/sveltekit_spa_with_client_side_jwt_auth/) from others who found themselves struggling with the same things.
 If fact, there is only [one page](https://kit.svelte.dev/docs/single-page-apps) in the docs on how to use SvelteKit as an SPA.
-Despite being documented, the approach isn't even recommended by the framework itself.
+Perhaps I'd have a better time if, instead of using SvelteKit, I just used vanilla [Svelte](https://svelte.dev/) with a third-party router.
 
 # Moving Forward
 
