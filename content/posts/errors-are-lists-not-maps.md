@@ -1,22 +1,24 @@
 ---
-date: 2024-07-27
+date: 2024-07-28
 title: "Errors Are Lists, Not Maps"
 slug: "errors-are-lists-not-maps"
-draft: true
 ---
 
 All REST APIs must decide how to handle and represent errors.
-There are many ways to represent errors and they all come with varying pros and cons.
+There are many ways to accomplish this task and they all come with varying pros and cons.
+This post starts by describing the strategy I've historically used when dealing with errors.
+After examining some limitations with that pattern, I present a better and more flexible alternative.
 
 # Errors as Maps
 
-Historically, I've represented these errors as a map: the key is the problematic field and the value is the error message for that field.
+Errors come in many shapes and sizes.
+Since errors often arise in response to input validation, it can be useful to include what specific "field" caused the problem.
+Until recently, I've represented these errors as a map: the key is the problematic field and the value is the error message for that field.
 This enables the frontend to display the errors right next to the invalid input which is great for user experience.
 
 In TypeScript, this error response would look something like:
 
 ```js
-// This could be extended to support multiple errors per field, if necessary.
 type ErrorResponse = {
   errors: Record<string, string>,
 };
@@ -32,14 +34,14 @@ const example: ErrorResponse = {
 
 However, I've often felt that this approach was lacking in one specific area: general errors.
 By "general error", I'm referring to those that aren't tied to a specific field.
-Continuing with the example of a login page, the error for a failed login is often combined into an intentionally-ambiguous "invalid username or password".
+Continuing with the example of a login page, the error for a failed login is often combined into an intentionally-ambiguous "invalid username or password" message.
 Which field should this error be attached to? Both? Neither?
-In my opinion, the answer is "neither": this is a general error.
+In my opinion, the answer is "neither" because this is a general error.
 
-How can we represent this general error if our format requires a key-value relationship?
-Our best best is probably to add another field called "general" to the map and hope that the name never collides with an actual input value:
+How can we represent this field-less error if our format enforces a key-value relationship?
+Our best bet is probably to add another field called "general" (or something similar) to the map and hope that the name never collides with an actual input value:
 
-```js
+```ts
 const example: ErrorResponse = {
   // We _have_ to choose a field even for general errors. :(
   errors: {
@@ -49,7 +51,7 @@ const example: ErrorResponse = {
 ```
 
 While this would probably work, it feels a bit like we are fighting against the design.
-If "fields" are optional, how can we represent multiple errors without requiring specific keys?
+If "fields" are an optional facet of our errors, how else can we represent them?
 
 # Errors as Lists
 
@@ -57,26 +59,28 @@ Let's rewind a bit and start with what we _know_ about errors:
 
 1. A single request may yield **multiple** errors
 2. They **always** have a message of some sort
-3. They are **sometimes** tied to a specific fields (for input validation)
+3. They are **sometimes** tied to specific fields
 
-So, errors always have a "message", optionally have a "field", and can come in groups.
-Thinking about these requirements in isolation point me toward a slightly different design.
+So, errors always have a "message", optionally have a "field", and can come in multiples.
+Thinking about these requirements in isolation points me toward a slightly different design.
 Instead of representing errors as a map, let's represent them as a list:
 
-```js
+```ts
+// An individual error has a message and an optional field.
 type Error = {
-  message: string,
-  field?: string,
+  message: string;
+  field?: string;
 };
 
+// An error response contains a list of individual errors.
 type ErrorResponse = {
-  errors: Error[],
+  errors: Error[];
 };
 ```
 
-Now, we much more easily represent basic, general errors:
+With this structure, we can much more easily represent general errors:
 
-```js
+```ts
 const example: ErrorResponse = {
   // No field? No problem!
   errors: [
@@ -87,9 +91,9 @@ const example: ErrorResponse = {
 };
 ```
 
-And our login validation example from before still works despite looking a bit different:
+And our login input validation example from before still works despite looking a bit different:
 
-```js
+```ts
 const example: ErrorResponse = {
   // If necessary, fields can be included.
   errors: [
@@ -107,30 +111,30 @@ const example: ErrorResponse = {
 
 # Benefits
 
-Now each category of error (general vs specific) can be easily represented without fighting against the design of our error response.
+Now each category of error ("general" and "specific") can be easily represented without fighting against the design of our error response.
 Furthermore, this format support multiple general errors AND multiple specific errors (per field) out of the box.
 If your frontend is equipped to handle multiple errors per category, go for it!
-Otherwise, you can always just find the first error per category in the list and call it a day.
-I even wrote up a couple helpers for that:
+Otherwise, you can always just find the first error per category and call it a day.
+I even wrote up a couple helpers to make this "pick the first out of multiple errors" logic reusable:
 
 ```js
 // Find the first general error.
 export function findGeneralError(errors: Error[]): string | undefined {
-	return errors.find((e) => !e.field)?.message;
+  return errors.find((e) => !e.field)?.message;
 }
 
 // Find the first specific error for each field.
 export function findSpecificErrors(errors: Error[]): Record<string, string> {
-	const errorsByField = errors.reduce(
-		(acc, err) => {
-			if (err.field && !acc[err.field]) {
-				acc[err.field] = err.message;
-			}
-			return acc;
-		},
-		{} as Record<string, string>,
-	);
-	return errorsByField;
+  const errorsByField = errors.reduce(
+    (acc, err) => {
+      if (err.field && !acc[err.field]) {
+        acc[err.field] = err.message;
+      }
+      return acc;
+    },
+    {} as Record<string, string>,
+  );
+  return errorsByField;
 }
 ```
 
@@ -139,7 +143,7 @@ export function findSpecificErrors(errors: Error[]): Record<string, string> {
 Errors are a big topic with countless approaches and opinions.
 The internet is full of awesome discussions about [strategies](https://stackoverflow.com/questions/39759906/validation-responses-in-rest-api) and [examples](https://www.baeldung.com/rest-api-error-handling-best-practices) of how big companies do it.
 Overall, both of the approaches outlined in this post are capable of getting the job done.
-At the end of the day, it mostly comes down to personal preferences and the requirements of the project at hand.
+At the end of the day, it mostly comes down to personal preference and the requirements of the project at hand.
 For [Bloggulus](https://github.com/theandrew168/bloggulus), I'll be sticking with "errors as lists".
 
 Thanks for reading!

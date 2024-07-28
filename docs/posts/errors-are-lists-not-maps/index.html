@@ -1,0 +1,110 @@
+<!doctype html><html lang=en><head><title>Errors Are Lists, Not Maps · Shallow Brook Software
+</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="All REST APIs must decide how to handle and represent errors. There are many ways to accomplish this task and they all come with varying pros and cons. This post starts by describing the strategy I&rsquo;ve historically used when dealing with errors. After examining some limitations with that pattern, I present a better and more flexible alternative.
+Errors as Maps Link to heading Errors come in many shapes and sizes. Since errors often arise in response to input validation, it can be useful to include what specific &ldquo;field&rdquo; caused the problem."><meta name=keywords content="blog,developer,personal"><meta name=twitter:card content="summary"><meta name=twitter:title content="Errors Are Lists, Not Maps"><meta name=twitter:description content="All REST APIs must decide how to handle and represent errors. There are many ways to accomplish this task and they all come with varying pros and cons. This post starts by describing the strategy I’ve historically used when dealing with errors. After examining some limitations with that pattern, I present a better and more flexible alternative.
+Errors as Maps Link to heading Errors come in many shapes and sizes. Since errors often arise in response to input validation, it can be useful to include what specific “field” caused the problem."><meta property="og:url" content="https://shallowbrooksoftware.com/posts/errors-are-lists-not-maps/"><meta property="og:site_name" content="Shallow Brook Software"><meta property="og:title" content="Errors Are Lists, Not Maps"><meta property="og:description" content="All REST APIs must decide how to handle and represent errors. There are many ways to accomplish this task and they all come with varying pros and cons. This post starts by describing the strategy I’ve historically used when dealing with errors. After examining some limitations with that pattern, I present a better and more flexible alternative.
+Errors as Maps Link to heading Errors come in many shapes and sizes. Since errors often arise in response to input validation, it can be useful to include what specific “field” caused the problem."><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2024-07-28T00:00:00+00:00"><meta property="article:modified_time" content="2024-07-28T00:00:00+00:00"><link rel=canonical href=https://shallowbrooksoftware.com/posts/errors-are-lists-not-maps/><link rel=preload href=/fonts/fa-brands-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-regular-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-solid-900.woff2 as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.577e3c5ead537873430da16f0964b754a120fd87c4e2203a00686e7c75b51378.css integrity="sha256-V348Xq1TeHNDDaFvCWS3VKEg/YfE4iA6AGhufHW1E3g=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.a00e6364bacbc8266ad1cc81230774a1397198f8cfb7bcba29b7d6fcb54ce57f.css integrity="sha256-oA5jZLrLyCZq0cyBIwd0oTlxmPjPt7y6KbfW/LVM5X8=" crossorigin=anonymous media=screen><link rel=icon type=image/svg+xml href=/images/favicon.svg sizes=any><link rel=icon type=image/png href=/images/favicon-32x32.png sizes=32x32><link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16><link rel=apple-touch-icon href=/images/apple-touch-icon.png><link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><a class=navigation-title href=https://shallowbrooksoftware.com/>Shallow Brook Software
+</a><input type=checkbox id=menu-toggle>
+<label class="menu-button float-right" for=menu-toggle><i class="fa-solid fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/about/>About</a></li><li class=navigation-item><a class=navigation-link href=/posts/>Blog</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://shallowbrooksoftware.com/posts/errors-are-lists-not-maps/>Errors Are Lists, Not Maps</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa-solid fa-calendar" aria-hidden=true></i>
+<time datetime=2024-07-28T00:00:00Z>July 28, 2024
+</time></span><span class=reading-time><i class="fa-solid fa-clock" aria-hidden=true></i>
+4-minute read</span></div></div></header><div class=post-content><p>All REST APIs must decide how to handle and represent errors.
+There are many ways to accomplish this task and they all come with varying pros and cons.
+This post starts by describing the strategy I&rsquo;ve historically used when dealing with errors.
+After examining some limitations with that pattern, I present a better and more flexible alternative.</p><h1 id=errors-as-maps>Errors as Maps
+<a class=heading-link href=#errors-as-maps><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>Errors come in many shapes and sizes.
+Since errors often arise in response to input validation, it can be useful to include what specific &ldquo;field&rdquo; caused the problem.
+Until recently, I&rsquo;ve represented these errors as a map: the key is the problematic field and the value is the error message for that field.
+This enables the frontend to display the errors right next to the invalid input which is great for user experience.</p><p>In TypeScript, this error response would look something like:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=display:flex><span><span style=color:#a6e22e>type</span> <span style=color:#a6e22e>ErrorResponse</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>errors</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>Record</span><span style=color:#f92672>&lt;</span><span style=color:#a6e22e>string</span>, <span style=color:#a6e22e>string</span><span style=color:#f92672>&gt;</span>,
+</span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// Example error response from a login page.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>example</span><span style=color:#f92672>:</span> <span style=color:#a6e22e>ErrorResponse</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>errors</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>username</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#34;must not be empty&#34;</span>,
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>password</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#34;must be at least 8 characters&#34;</span>,
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>};
+</span></span></code></pre></div><p>However, I&rsquo;ve often felt that this approach was lacking in one specific area: general errors.
+By &ldquo;general error&rdquo;, I&rsquo;m referring to those that aren&rsquo;t tied to a specific field.
+Continuing with the example of a login page, the error for a failed login is often combined into an intentionally-ambiguous &ldquo;invalid username or password&rdquo; message.
+Which field should this error be attached to? Both? Neither?
+In my opinion, the answer is &ldquo;neither&rdquo; because this is a general error.</p><p>How can we represent this field-less error if our format enforces a key-value relationship?
+Our best bet is probably to add another field called &ldquo;general&rdquo; (or something similar) to the map and hope that the name never collides with an actual input value:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ts data-lang=ts><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>example</span>: <span style=color:#66d9ef>ErrorResponse</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// We _have_ to choose a field even for general errors. :(
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#a6e22e>errors</span><span style=color:#f92672>:</span> {
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>general</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#34;invalid username or password&#34;</span>,
+</span></span><span style=display:flex><span>  },
+</span></span><span style=display:flex><span>};
+</span></span></code></pre></div><p>While this would probably work, it feels a bit like we are fighting against the design.
+If &ldquo;fields&rdquo; are an optional facet of our errors, how else can we represent them?</p><h1 id=errors-as-lists>Errors as Lists
+<a class=heading-link href=#errors-as-lists><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>Let&rsquo;s rewind a bit and start with what we <em>know</em> about errors:</p><ol><li>A single request may yield <strong>multiple</strong> errors</li><li>They <strong>always</strong> have a message of some sort</li><li>They are <strong>sometimes</strong> tied to specific fields</li></ol><p>So, errors always have a &ldquo;message&rdquo;, optionally have a &ldquo;field&rdquo;, and can come in multiples.
+Thinking about these requirements in isolation points me toward a slightly different design.
+Instead of representing errors as a map, let&rsquo;s represent them as a list:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ts data-lang=ts><span style=display:flex><span><span style=color:#75715e>// An individual error has a message and an optional field.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> Error <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>message</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>field?</span>: <span style=color:#66d9ef>string</span>;
+</span></span><span style=display:flex><span>};
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// An error response contains a list of individual errors.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>ErrorResponse</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>errors</span>: <span style=color:#66d9ef>Error</span>[];
+</span></span><span style=display:flex><span>};
+</span></span></code></pre></div><p>With this structure, we can much more easily represent general errors:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ts data-lang=ts><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>example</span>: <span style=color:#66d9ef>ErrorResponse</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// No field? No problem!
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#a6e22e>errors</span><span style=color:#f92672>:</span> [
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>message</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#34;invalid username or password&#34;</span>,
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>  ],
+</span></span><span style=display:flex><span>};
+</span></span></code></pre></div><p>And our login input validation example from before still works despite looking a bit different:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ts data-lang=ts><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>example</span>: <span style=color:#66d9ef>ErrorResponse</span> <span style=color:#f92672>=</span> {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// If necessary, fields can be included.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#a6e22e>errors</span><span style=color:#f92672>:</span> [
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>message</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#34;must not be empty&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>field</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#34;username&#34;</span>,
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    {
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>message</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#34;must be at least 8 characters&#34;</span>,
+</span></span><span style=display:flex><span>      <span style=color:#a6e22e>field</span><span style=color:#f92672>:</span> <span style=color:#e6db74>&#34;password&#34;</span>,
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>  ],
+</span></span><span style=display:flex><span>};
+</span></span></code></pre></div><h1 id=benefits>Benefits
+<a class=heading-link href=#benefits><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>Now each category of error (&ldquo;general&rdquo; and &ldquo;specific&rdquo;) can be easily represented without fighting against the design of our error response.
+Furthermore, this format support multiple general errors AND multiple specific errors (per field) out of the box.
+If your frontend is equipped to handle multiple errors per category, go for it!
+Otherwise, you can always just find the first error per category and call it a day.
+I even wrote up a couple helpers to make this &ldquo;pick the first out of multiple errors&rdquo; logic reusable:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=display:flex><span><span style=color:#75715e>// Find the first general error.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>export</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>findGeneralError</span>(<span style=color:#a6e22e>errors</span><span style=color:#f92672>:</span> Error[])<span style=color:#f92672>:</span> <span style=color:#a6e22e>string</span> <span style=color:#f92672>|</span> <span style=color:#66d9ef>undefined</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>errors</span>.<span style=color:#a6e22e>find</span>((<span style=color:#a6e22e>e</span>) =&gt; <span style=color:#f92672>!</span><span style=color:#a6e22e>e</span>.<span style=color:#a6e22e>field</span>)<span style=color:#f92672>?</span>.<span style=color:#a6e22e>message</span>;
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// Find the first specific error for each field.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>export</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>findSpecificErrors</span>(<span style=color:#a6e22e>errors</span><span style=color:#f92672>:</span> Error[])<span style=color:#f92672>:</span> <span style=color:#a6e22e>Record</span><span style=color:#f92672>&lt;</span><span style=color:#a6e22e>string</span>, <span style=color:#a6e22e>string</span><span style=color:#f92672>&gt;</span> {
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>errorsByField</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>errors</span>.<span style=color:#a6e22e>reduce</span>(
+</span></span><span style=display:flex><span>    (<span style=color:#a6e22e>acc</span>, <span style=color:#a6e22e>err</span>) =&gt; {
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>if</span> (<span style=color:#a6e22e>err</span>.<span style=color:#a6e22e>field</span> <span style=color:#f92672>&amp;&amp;</span> <span style=color:#f92672>!</span><span style=color:#a6e22e>acc</span>[<span style=color:#a6e22e>err</span>.<span style=color:#a6e22e>field</span>]) {
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>acc</span>[<span style=color:#a6e22e>err</span>.<span style=color:#a6e22e>field</span>] <span style=color:#f92672>=</span> <span style=color:#a6e22e>err</span>.<span style=color:#a6e22e>message</span>;
+</span></span><span style=display:flex><span>      }
+</span></span><span style=display:flex><span>      <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>acc</span>;
+</span></span><span style=display:flex><span>    },
+</span></span><span style=display:flex><span>    {} <span style=color:#a6e22e>as</span> <span style=color:#a6e22e>Record</span><span style=color:#f92672>&lt;</span><span style=color:#a6e22e>string</span>, <span style=color:#a6e22e>string</span><span style=color:#f92672>&gt;</span>,
+</span></span><span style=display:flex><span>  );
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>errorsByField</span>;
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><h1 id=conclusion>Conclusion
+<a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>Errors are a big topic with countless approaches and opinions.
+The internet is full of awesome discussions about <a href=https://stackoverflow.com/questions/39759906/validation-responses-in-rest-api class=external-link target=_blank rel=noopener>strategies</a> and <a href=https://www.baeldung.com/rest-api-error-handling-best-practices class=external-link target=_blank rel=noopener>examples</a> of how big companies do it.
+Overall, both of the approaches outlined in this post are capable of getting the job done.
+At the end of the day, it mostly comes down to personal preference and the requirements of the project at hand.
+For <a href=https://github.com/theandrew168/bloggulus class=external-link target=_blank rel=noopener>Bloggulus</a>, I&rsquo;ll be sticking with &ldquo;errors as lists&rdquo;.</p><p>Thanks for reading!</p></div><footer></footer></article></section></div><footer class=footer><section class=container>©
+2024
+Andrew Dailey
+·
+Powered by <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> & <a href=https://github.com/luizdepra/hugo-coder/ target=_blank rel=noopener>Coder</a>.</section></footer></main><script src=/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script></body></html>
