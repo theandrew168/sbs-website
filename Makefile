@@ -11,6 +11,10 @@ build:
 run:
 	hugo server -D
 
+.PHONY: update
+update:
+	git submodule foreach git pull origin main
+
 .PHONY: clean
 clean:
 	rm -fr resources/
