@@ -31,23 +31,50 @@ Pardon the ugliness...
 
 ### N+1 API Calls
 
-[InfoQ - N+1 Problem](https://www.infoq.com/articles/N-Plus-1/)
+If the goal is to maintain "REST API purity", then the frontend has no choice but to make multiple calls.
+Since the underlying resources are separate and normalized, the frontend needs to fetch and aggregate the disparate pieces that comprise a single page (or element).
+For a list of blogs and whether or not the user follows them, this means making 1 call for the blogs and then N more calls for each one: checking if it is already followed.
+This pattern is known as the "N+1 Problem" and is [well documented](https://www.infoq.com/articles/N-Plus-1/).
 
-N+1 on the frontend: get 1 blog, call /following N times (current).
-This feels the most "pure" but has perf implications.
-It suffers from the N+1 API call pattern and causes 21 reqs every page load.
-Seems wasteful and the page has a noticeable pause.
-This is how GH structures their API (stars) but they also use a BFF to render (SSR) lists of repos.
+Note that this doesn't necessarily imply N+1 round-trips to the backend.
+With proper concurrency (like [Promise.all](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all)), the problem reduces to only two round-trips: one for the blogs and another for their followed status (all at the same time).
+In pseudocode, this looks something like:
 
-[React Router - Deferred](https://reactrouter.com/en/main/guides/deferred)
+```ts
+// Make 1 round-trip fetch the blogs.
+const blogs = await fetch("/api/v1/blogs");
 
-Use RR's defer feature to render blogs after one round-trip.
-Then the subsequent "is followed" data will load in shortly after.
-This means that the user doesn't have to wait for 21 requests to finish before seeing anything... they only have to wait for one.
-This also means I get to keep the backend API "pure". User experience is greatly improved with this approach.
+// Make N round-trips simultaneously for their followed status.
+const following = await Promise.all(
+  blogs.map((blog) => fetch(`/api/v1/blogs/${blog.id}/following`))
+);
+```
 
-Write a batch /blogs/following endpoint that supports ID filtering.
-This means the FE needs to make 2 calls (one for the blogs, one for the following status) and merge the data before rendering.
+So, the browser makes N+1 API calls to render this page but it only feels like two to the user.
+Two is definitely better than twenty, but it still isn't great user experience.
+Also, the backend API must be able to handle high volumes of requests at the same time without much throttling / queueing.
+Otherwise, the user will end up waiting much longer than expected.
+That beign said, can we do better?
+Can we find a way to make user only have to wait for one round-trip instead of two (or more)?
+
+What if we render the list of blogs immediately after the first round-trip and then display the follow button as that second round of requests returns to the browser?
+While waiting for that second batch, we could show some sort of loading indicator (like a spinner).
+Thanks for the awesome features provided by [React Router](https://reactrouter.com/en/main), this is easily doable!
+The project refers to this behavior as [deferred data](https://reactrouter.com/en/main/guides/deferred).
+By taking the pseudocode above, wrapping it with [defer](https://reactrouter.com/en/main/utils/defer), and rendering the follow/unfollow button inside of an [Await](https://reactrouter.com/en/main/components/await) block, we can achieve this desired behavior.
+
+Now, the user experience is even better.
+Instead of having to wait for two round-trips before seeing any content, the user only has to wait for one.
+Sure, they can't follow any new blogs until all requests have finished, but I think the quicker, intermediate rendering is worth it.
+At least they can see _something_ and verify that the app is working in the meantime.
+
+To summarize, it _is_ possible to structure the frontend data loading such that the user-facing performance converges on a single round-trip.
+It also means that the backend REST API can stay "pure", normalized, and designed around individual resources.
+This approach does have risks, though.
+Despite the appearance of quick rendering, we _are_ making a bunch of API requests to the backend.
+Any one of those requests being slow could impact the responsiveness of the page.
+Do we really to shift all of this data loading and aggregation responsibility to the client?
+What other options are there?
 
 ### BFF Endpoints
 
@@ -64,6 +91,21 @@ I don't love this because blogs are their own thing.
 Whether or not they are being followed by the auth'd account is separate (from a data model POV).
 But from a user point of view, blogs _do_ always have this field.
 I feel like this sacrifices API / data model purity a bit.
+
+As it turns out, I've already solved a similar problem via the "BFF Endpoint" approach (I just didn't know it had a name).
+Blogs can have multiple posts (one-to-many), and posts can have multiple tags (many-to-many).
+In the API (and database), these are represented as separate resources that can be CRUD'd individually.
+However, on the frontend, we frequently need to bundle these disparate models together into something useful for the user.
+Here is a screenshot from the application:
+
+![Bloggulus home page with three posts](/images/20240818/bloggulus.webp)
+
+Let's take the first "article" as an example.
+You can see how data from all three underlying models are aggregated into a single unit.
+The published date, post title, and post URL all come from the underlying **post** model.
+The blog title and URL come from the **blog** model.
+Lastly, the tag names come from the **tag** model.
+Knowing all of this, the question becomes: how do we efficently fetch and render this data?
 
 # Other Thoughts
 
@@ -88,20 +130,3 @@ Maybe the FE / react-router can help here by rendering something as soon as the 
 Then, the following status will pop in when ready.
 Can RR do that sort of thing?
 Show individual loaders within a list?
-
-# An Existing BFF Example
-
-As it turns out, I've already solved a similar problem via the "BFF Endpoint" approach (I just didn't know it had a name).
-Blogs can have multiple posts (one-to-many), and posts can have multiple tags (many-to-many).
-In the API (and database), these are represented as separate resources that can be CRUD'd individually.
-However, on the frontend, we frequently need to bundle these disparate models together into something useful for the user.
-Here is a screenshot from the application:
-
-![Bloggulus home page with three posts](/images/20240818/bloggulus.webp)
-
-Let's take the first "article" as an example.
-You can see how data from all three underlying models are aggregated into a single unit.
-The published date, post title, and post URL all come from the underlying **post** model.
-The blog title and URL come from the **blog** model.
-Lastly, the tag names come from the **tag** model.
-Knowing all of this, the question becomes: how do we efficently fetch and render this data?
