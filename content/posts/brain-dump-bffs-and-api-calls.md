@@ -90,23 +90,15 @@ This backend could return JSON or even pre-rendered HTML.
 
 This concept already exists and is known as the "Backend for Frontend Pattern" (often shortened to "BFF").
 Similar to the "N+1 Problem", this pattern is [well documented](https://samnewman.io/patterns/architectural/bff/).
-
-Build a BFF-ish endpoint that includes isFollowing per blog.
-Would this mean introducing a new blog type like BlogWithAccount?
-
-1. Always return isFollowing on blogs
-   1. Account is required
-   2. Account is optional, default to false if nil
-
-I don't love this because blogs are their own thing.
-Whether or not they are being followed by the auth'd account is separate (from a data model POV).
-But from a user point of view, blogs _do_ always have this field.
-I feel like this sacrifices API / data model purity a bit.
+For my specific problem, a more BFF-ish solution would be to include some sort of `isFollowed` field alongside any blog objects.
+On the backend, I could join through the `account_blog` table and include this data in a single query.
+Then, this page could be powered by one API call and one SQL query.
+Now that I mention it... I think I've already done this elsewhere in the app.
 
 ### Articles
 
 As it turns out, I've already solved a similar problem via the "BFF Endpoint" approach (I just didn't know it had a name).
-Blogs can have multiple posts (one-to-many), and posts can have multiple tags (many-to-many).
+Quick refresher: blogs can have multiple posts (one-to-many), and posts can have multiple tags (many-to-many).
 In the API (and database), these are represented as separate resources that can be CRUD'd individually.
 However, on the frontend, we frequently need to bundle these disparate models together into something useful for the user.
 Here is a screenshot from the application:
@@ -118,4 +110,19 @@ You can see how data from all three underlying models are aggregated into a sing
 The published date, post title, and post URL all come from the underlying **post** model.
 The blog title and URL come from the **blog** model.
 Lastly, the tag names come from the **tag** model.
-Knowing all of this, the question becomes: how do we efficently fetch and render this data?
+
+When I first wrote this page, I faced the same problem: how do I efficently fetch and render this data?
+I ended up writing new endpoint and model to support it.
+Initially, I wondered if this had some similarities to DDD and different domains / bounded contexts.
+Does Bloggulus have two contexts for blogs: one for the BE / API and one for the FE / users?
+
+# Conclusion
+
+Well, that was my brain dump.
+If you made it all the way to the end, I appreciate you!
+Is there a one-size-fits-all solution?
+No, there rarely is.
+Software is about all balance and tradeoffs.
+The best you can do is gather experience and knowledge so that your toolbox of options is large enough to handle most scenarios.
+
+Thanks for reading!
