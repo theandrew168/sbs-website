@@ -1,5 +1,5 @@
 ---
-date: 2024-08-17
+date: 2024-08-18
 title: "Brain Dump: BFFs and N+1 API Calls"
 slug: "brain-dump-bffs-and-api-calls"
 draft: true
@@ -8,18 +8,21 @@ draft: true
 Writing software is hard.
 Sometimes, I'll find myself stuck on a problem for multiple days or even weeks.
 When that happens, I find it useful to simply write out everything I know about the problem: the nuances, possible solutions, external references, etc.
-My most recent head-scratcher has been about balancing REST API design with the needs of a frontend.
+My most recent head-scratcher has been about balancing "purist" REST API design with the needs of a web frontend.
+I'm beginning to realize a truth: they are different.
 As always, I'm talking about [Bloggulus](https://bloggulus.com).
 
 # The Problem
 
 I've recently been working on adding support for individualized feeds.
-This means that users can create an account and follow their specific, favorite blogs.
+This means that users can create an account and follow their own favorite blogs.
 Under the hood, this involves adding a new many-to-many relationship between accounts and blogs (easy enough).
 The problem comes when creating a UI for users to follow and unfollow blogs.
 See, from a data model point of view, following blogs is a separate concept (separate table).
 The `GET /api/v1/blogs` endpoint does NOT include an `isFollowing` field.
-Given this limitation, how do we build this UI?
+Instead, the `GET /api/v1/blogs/{blogID}/following` endpoint can be used to check if a specific blog is being followed by the authenticated user.
+
+Given this limitation, how do we build this page?
 Pardon the ugliness...
 
 ![Bloggulus blogs page with follow and unfollow buttons](/images/20240818/blogs.webp)
@@ -28,23 +31,30 @@ Pardon the ugliness...
 
 ### N+1 API Calls
 
+[InfoQ - N+1 Problem](https://www.infoq.com/articles/N-Plus-1/)
+
 N+1 on the frontend: get 1 blog, call /following N times (current).
 This feels the most "pure" but has perf implications.
 It suffers from the N+1 API call pattern and causes 21 reqs every page load.
 Seems wasteful and the page has a noticeable pause.
 This is how GH structures their API (stars) but they also use a BFF to render (SSR) lists of repos.
 
-### Batch Endpoints
+[React Router - Deferred](https://reactrouter.com/en/main/guides/deferred)
+
+Use RR's defer feature to render blogs after one round-trip.
+Then the subsequent "is followed" data will load in shortly after.
+This means that the user doesn't have to wait for 21 requests to finish before seeing anything... they only have to wait for one.
+This also means I get to keep the backend API "pure". User experience is greatly improved with this approach.
 
 Write a batch /blogs/following endpoint that supports ID filtering.
 This means the FE needs to make 2 calls (one for the blogs, one for the following status) and merge the data before rendering.
 
 ### BFF Endpoints
 
+[Sam Newman - BFF Pattern](https://samnewman.io/patterns/architectural/bff/)
+
 Build a BFF-ish endpoint that includes isFollowing per blog.
 Would this mean introducing a new blog type like BlogWithAccount?
-
-### Heavy Models
 
 1. Always return isFollowing on blogs
    1. Account is required
@@ -54,13 +64,6 @@ I don't love this because blogs are their own thing.
 Whether or not they are being followed by the auth'd account is separate (from a data model POV).
 But from a user point of view, blogs _do_ always have this field.
 I feel like this sacrifices API / data model purity a bit.
-
-### Frontend Features
-
-Use RR's defer feature to render blogs after one round-trip.
-Then the subsequent "is followed" data will load in shortly after.
-This means that the user doesn't have to wait for 21 requests to finish before seeing anything... they only have to wait for one.
-This also means I get to keep the backend API "pure". User experience is greatly improved with this approach.
 
 # Other Thoughts
 
@@ -88,7 +91,7 @@ Show individual loaders within a list?
 
 # An Existing BFF Example
 
-The Bloggulus data model is fairly basic.
+As it turns out, I've already solved a similar problem via the "BFF Endpoint" approach (I just didn't know it had a name).
 Blogs can have multiple posts (one-to-many), and posts can have multiple tags (many-to-many).
 In the API (and database), these are represented as separate resources that can be CRUD'd individually.
 However, on the frontend, we frequently need to bundle these disparate models together into something useful for the user.
@@ -102,15 +105,3 @@ The published date, post title, and post URL all come from the underlying **post
 The blog title and URL come from the **blog** model.
 Lastly, the tag names come from the **tag** model.
 Knowing all of this, the question becomes: how do we efficently fetch and render this data?
-
-# References
-
-[InfoQ - N+1 Problem](https://www.infoq.com/articles/N-Plus-1/)
-
-[StackExchange - BFF and REST API](https://softwareengineering.stackexchange.com/questions/448013/is-it-okay-to-combine-bff-and-rest-api)
-
-[Sam Newman - BFF Pattern](https://samnewman.io/patterns/architectural/bff/)
-
-[GitHub API - Starring](https://docs.github.com/en/rest/activity/starring?apiVersion=2022-11-28#check-if-a-repository-is-starred-by-the-authenticated-user)
-
-[React Router - Deferred](https://reactrouter.com/en/main/guides/deferred)
