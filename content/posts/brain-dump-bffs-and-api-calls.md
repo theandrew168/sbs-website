@@ -9,7 +9,7 @@ Writing software is hard.
 Sometimes, I'll find myself stuck on a problem for multiple days or even weeks.
 When that happens, I find it useful to simply write out everything I know about the problem: the nuances, possible solutions, external references, etc.
 My most recent head-scratcher has been about balancing "purist" REST API design with the needs of a web frontend.
-I'm beginning to realize a truth: they are different.
+I'm beginning to realize a truth: **they are different**.
 As always, I'm talking about [Bloggulus](https://bloggulus.com).
 
 # The Problem
@@ -27,14 +27,14 @@ Pardon the ugliness...
 
 ![Bloggulus blogs page with follow and unfollow buttons](/images/20240818/blogs.webp)
 
-# Possible Solutions
-
-### N+1 API Calls
+# N+1 API Calls
 
 If the goal is to maintain "REST API purity", then the frontend has no choice but to make multiple calls.
 Since the underlying resources are separate and normalized, the frontend needs to fetch and aggregate the disparate pieces that comprise a single page (or element).
 For a list of blogs and whether or not the user follows them, this means making 1 call for the blogs and then N more calls for each one: checking if it is already followed.
 This pattern is known as the "N+1 Problem" and is [well documented](https://www.infoq.com/articles/N-Plus-1/).
+
+### Optimization: Two Trips
 
 Note that this doesn't necessarily imply N+1 round-trips to the backend.
 With proper concurrency (like [Promise.all](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all)), the problem reduces to only two round-trips: one for the blogs and another for their followed status (all at the same time).
@@ -57,6 +57,8 @@ Otherwise, the user will end up waiting much longer than expected.
 That beign said, can we do better?
 Can we find a way to make user only have to wait for one round-trip instead of two (or more)?
 
+### Optimization: One Trip
+
 What if we render the list of blogs immediately after the first round-trip and then display the follow button as that second round of requests returns to the browser?
 While waiting for that second batch, we could show some sort of loading indicator (like a spinner).
 Thanks for the awesome features provided by [React Router](https://reactrouter.com/en/main), this is easily doable!
@@ -68,6 +70,8 @@ Instead of having to wait for two round-trips before seeing any content, the use
 Sure, they can't follow any new blogs until all requests have finished, but I think the quicker, intermediate rendering is worth it.
 At least they can see _something_ and verify that the app is working in the meantime.
 
+### Recap
+
 To summarize, it _is_ possible to structure the frontend data loading such that the user-facing performance converges on a single round-trip.
 It also means that the backend REST API can stay "pure", normalized, and designed around individual resources.
 This approach does have risks, though.
@@ -76,9 +80,16 @@ Any one of those requests being slow could impact the responsiveness of the page
 Do we really to shift all of this data loading and aggregation responsibility to the client?
 What other options are there?
 
-### BFF Endpoints
+# BFF Endpoints
 
-[Sam Newman - BFF Pattern](https://samnewman.io/patterns/architectural/bff/)
+What if we took the individualized needs of a specific frontend (web, mobile, etc) and built a backend that was tailored to those needs?
+Instead of only exposing the normalized, underlying data models of the application, what we exposed the shapes of data required to power each page?
+This way, the task of collecting and aggregating data gets shifted to the backend (instead of making the frontend worry about it).
+In a single API calls, the frontend could get everything needed to render a page (or at least a section of a page).
+This backend could return JSON or even pre-rendered HTML.
+
+This concept already exists and is known as the "Backend for Frontend Pattern" (often shortened to "BFF").
+Similar to the "N+1 Problem", this pattern is [well documented](https://samnewman.io/patterns/architectural/bff/).
 
 Build a BFF-ish endpoint that includes isFollowing per blog.
 Would this mean introducing a new blog type like BlogWithAccount?
@@ -91,6 +102,8 @@ I don't love this because blogs are their own thing.
 Whether or not they are being followed by the auth'd account is separate (from a data model POV).
 But from a user point of view, blogs _do_ always have this field.
 I feel like this sacrifices API / data model purity a bit.
+
+### Articles
 
 As it turns out, I've already solved a similar problem via the "BFF Endpoint" approach (I just didn't know it had a name).
 Blogs can have multiple posts (one-to-many), and posts can have multiple tags (many-to-many).
@@ -106,27 +119,3 @@ The published date, post title, and post URL all come from the underlying **post
 The blog title and URL come from the **blog** model.
 Lastly, the tag names come from the **tag** model.
 Knowing all of this, the question becomes: how do we efficently fetch and render this data?
-
-# Other Thoughts
-
-The whole concept of "articles" is basically BFF.
-The frontend _could_ just query for recent posts and then make subsequent reqs for blog metadata
-(title, url) and tags.
-But that'd be kinda complex on the FE and probably slow.
-Lots of waterfall there.
-The BFF shifts that complexity to SQL and the rest of the app (BE and FE) are faster and simpler (one API call, one
-query).
-Do I really wanna get into the habit of finding synonyms for stuff just to support the frontend?
-Articles and Posts are the same thing but in different contexts.
-
-Should every page load only require one API call?
-That points me toward option 3 or 4.
-How many is too many?
-Maybe the bigger issue is round-trips.
-Like two round-trips before showing anything is poor UX.
-But I could probably get away with one (like doing multiple initial loads at the same time).
-The waterfall is what hurts.
-Maybe the FE / react-router can help here by rendering something as soon as the blogs come in.
-Then, the following status will pop in when ready.
-Can RR do that sort of thing?
-Show individual loaders within a list?
