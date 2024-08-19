@@ -1,0 +1,141 @@
+<!doctype html><html lang=en><head><title>Brain Dump: BFFs and N+1 API Calls · Shallow Brook Software
+</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="Writing software is hard. Sometimes, I&rsquo;ll find myself stuck on a problem for days or even weeks. When that happens, I find it useful to write out everything I know about the problem: the nuances, possible solutions, external references, etc. My most recent head-scratcher has been about balancing &ldquo;purist&rdquo; REST API design with the needs of a web frontend. I&rsquo;m beginning to realize a truth: they are different. As always, I&rsquo;m talking about Bloggulus."><meta name=keywords content="blog,developer,personal"><meta name=fediverse:creator content><meta name=twitter:card content="summary"><meta name=twitter:title content="Brain Dump: BFFs and N+1 API Calls"><meta name=twitter:description content="Writing software is hard. Sometimes, I’ll find myself stuck on a problem for days or even weeks. When that happens, I find it useful to write out everything I know about the problem: the nuances, possible solutions, external references, etc. My most recent head-scratcher has been about balancing “purist” REST API design with the needs of a web frontend. I’m beginning to realize a truth: they are different. As always, I’m talking about Bloggulus."><meta property="og:url" content="https://shallowbrooksoftware.com/posts/brain-dump-bffs-and-api-calls/"><meta property="og:site_name" content="Shallow Brook Software"><meta property="og:title" content="Brain Dump: BFFs and N+1 API Calls"><meta property="og:description" content="Writing software is hard. Sometimes, I’ll find myself stuck on a problem for days or even weeks. When that happens, I find it useful to write out everything I know about the problem: the nuances, possible solutions, external references, etc. My most recent head-scratcher has been about balancing “purist” REST API design with the needs of a web frontend. I’m beginning to realize a truth: they are different. As always, I’m talking about Bloggulus."><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2024-08-18T00:00:00+00:00"><meta property="article:modified_time" content="2024-08-18T00:00:00+00:00"><link rel=canonical href=https://shallowbrooksoftware.com/posts/brain-dump-bffs-and-api-calls/><link rel=preload href=/fonts/fa-brands-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-regular-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-solid-900.woff2 as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.e927f7340e309d76dcb8fda85f1531ae7341aa9cd0b7f3ab77885dae77b1a0a2.css integrity="sha256-6Sf3NA4wnXbcuP2oXxUxrnNBqpzQt/Ord4hdrnexoKI=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.a00e6364bacbc8266ad1cc81230774a1397198f8cfb7bcba29b7d6fcb54ce57f.css integrity="sha256-oA5jZLrLyCZq0cyBIwd0oTlxmPjPt7y6KbfW/LVM5X8=" crossorigin=anonymous media=screen><link rel=icon type=image/svg+xml href=/images/favicon.svg sizes=any><link rel=icon type=image/png href=/images/favicon-32x32.png sizes=32x32><link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16><link rel=apple-touch-icon href=/images/apple-touch-icon.png><link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><a class=navigation-title href=https://shallowbrooksoftware.com/>Shallow Brook Software
+</a><input type=checkbox id=menu-toggle>
+<label class="menu-button float-right" for=menu-toggle><i class="fa-solid fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/about/>About</a></li><li class=navigation-item><a class=navigation-link href=/posts/>Blog</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://shallowbrooksoftware.com/posts/brain-dump-bffs-and-api-calls/>Brain Dump: BFFs and N+1 API Calls</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa-solid fa-calendar" aria-hidden=true></i>
+<time datetime=2024-08-18T00:00:00Z>August 18, 2024
+</time></span><span class=reading-time><i class="fa-solid fa-clock" aria-hidden=true></i>
+8-minute read</span></div></div></header><div class=post-content><p>Writing software is hard.
+Sometimes, I&rsquo;ll find myself stuck on a problem for days or even weeks.
+When that happens, I find it useful to write out everything I know about the problem: the nuances, possible solutions, external references, etc.
+My most recent head-scratcher has been about balancing &ldquo;purist&rdquo; REST API design with the needs of a web frontend.
+I&rsquo;m beginning to realize a truth: <strong>they are different</strong>.
+As always, I&rsquo;m talking about <a href=https://bloggulus.com class=external-link target=_blank rel=noopener>Bloggulus</a>.</p><h1 id=the-problem>The Problem
+<a class=heading-link href=#the-problem><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>I&rsquo;ve recently been working on adding support for individualized feeds.
+This means that users can create an account and follow their own favorite blogs.
+Under the hood, this involves adding a new many-to-many relationship between accounts and blogs (easy enough).
+The problem comes when creating a UI for users to follow and unfollow blogs.
+See, from a data model point of view, the state that tracks if a user follows a blog is NOT attached to the blogs table.
+To put it another way, the <code>GET /api/v1/blogs</code> endpoint does NOT include an <code>isFollowing</code> field.
+Instead, the <code>GET /api/v1/blogs/{blogID}/following</code> endpoint exists to check if a specific blog is being followed by the authenticated user.</p><p>Given this limitation, how can we build a page like this?
+Pardon the ugliness&mldr;</p><p><img src=/images/20240818/blogs.webp alt="Bloggulus blogs page with follow and unfollow buttons"></p><h1 id=n1-api-calls>N+1 API Calls
+<a class=heading-link href=#n1-api-calls><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>If the goal is to maintain &ldquo;REST API purity&rdquo;, then the frontend has no choice but to make multiple calls.
+Since the underlying resources are <strong>granular and normalized</strong>, the frontend needs to <strong>collect and aggregate</strong> the disparate pieces that compose a single page (or element).
+For a list of blogs and whether or not the user follows them, this means making one call for the blogs and then N more calls for each one: checking if it is already followed.
+This pattern is known as the &ldquo;N+1 Problem&rdquo; and is <a href=https://www.infoq.com/articles/N-Plus-1/ class=external-link target=_blank rel=noopener>well documented</a>.</p><h3 id=optimization-two-trips>Optimization: Two Trips
+<a class=heading-link href=#optimization-two-trips><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>Note that this doesn&rsquo;t necessarily imply N+1 round-trips to the backend.
+With proper concurrency (like <a href=https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/all class=external-link target=_blank rel=noopener>Promise.all</a>), the problem reduces to only two round-trips: one for the blogs and another for their followed status (all at the same time).
+In pseudocode, this looks something like:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ts data-lang=ts><span style=display:flex><span><span style=color:#75715e>// Make one round-trip to fetch the blogs.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>blogs</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>fetch</span>(<span style=color:#e6db74>&#34;/api/v1/blogs&#34;</span>);
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// Make N round-trips simultaneously for their followed status.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>following</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>Promise</span>.<span style=color:#a6e22e>all</span>(
+</span></span><span style=display:flex><span>  <span style=color:#a6e22e>blogs</span>.<span style=color:#a6e22e>map</span>((<span style=color:#a6e22e>blog</span>) <span style=color:#f92672>=&gt;</span> <span style=color:#a6e22e>fetch</span>(<span style=color:#e6db74>`/api/v1/blogs/</span><span style=color:#e6db74>${</span><span style=color:#a6e22e>blog</span>.<span style=color:#a6e22e>id</span><span style=color:#e6db74>}</span><span style=color:#e6db74>/following`</span>))
+</span></span><span style=display:flex><span>);
+</span></span></code></pre></div><p>So, the browser makes N+1 API calls to render this page but it only feels like two to the user.
+Two is definitely better than N, but it still isn&rsquo;t great user experience.
+Also, the backend API must be able to handle a high volume of concurrent requests without too much throttling / queueing (or being limited by a DB connection pool size, for example).
+Otherwise, the user will end up waiting much longer than expected.
+That being said, can we do better?
+Can we find a way to make user only have to wait for one round-trip instead of two (or more)?</p><h3 id=optimization-one-trip>Optimization: One Trip
+<a class=heading-link href=#optimization-one-trip><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>What if we render the list of blogs immediately after the first round-trip and then display the follow button once the second round of requests returns to the browser?
+While waiting for that second batch, we could show some sort of loading indicator (like a spinner).
+Thanks for the awesome features provided by <a href=https://reactrouter.com/en/main class=external-link target=_blank rel=noopener>React Router</a>, this is easily doable!
+The project refers to this behavior as <a href=https://reactrouter.com/en/main/guides/deferred class=external-link target=_blank rel=noopener>deferred data</a>.
+By taking the pseudocode above, wrapping it with <a href=https://reactrouter.com/en/main/utils/defer class=external-link target=_blank rel=noopener>defer</a>, and rendering the follow/unfollow button inside of an <a href=https://reactrouter.com/en/main/components/await class=external-link target=_blank rel=noopener>Await</a> block, we can achieve this desired behavior:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-jsx data-lang=jsx><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>loader</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// Fetch list of blogs and wait for the response.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>blogs</span> <span style=color:#f92672>=</span> <span style=color:#66d9ef>await</span> <span style=color:#a6e22e>fetch</span>(<span style=color:#e6db74>&#34;/api/v1/blogs&#34;</span>);
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// Start fetching each blog&#39;s follow status but don&#39;t wait (index by ID).
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>const</span> <span style=color:#a6e22e>following</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>blogs</span>.<span style=color:#a6e22e>blogs</span>.<span style=color:#a6e22e>reduce</span>((<span style=color:#a6e22e>acc</span>, <span style=color:#a6e22e>blog</span>) =&gt; {
+</span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> {
+</span></span><span style=display:flex><span>      ...<span style=color:#a6e22e>acc</span>,
+</span></span><span style=display:flex><span>      [<span style=color:#a6e22e>blog</span>.<span style=color:#a6e22e>id</span>]<span style=color:#f92672>:</span> <span style=color:#a6e22e>fetch</span>(<span style=color:#e6db74>`/api/v1/blogs/</span><span style=color:#e6db74>${</span><span style=color:#a6e22e>blog</span>.<span style=color:#a6e22e>id</span><span style=color:#e6db74>}</span><span style=color:#e6db74>/following`</span>),
+</span></span><span style=display:flex><span>    };
+</span></span><span style=display:flex><span>  }, {});
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// Return the blogs (awaited) and following (still waiting).
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>defer</span>({ <span style=color:#a6e22e>blogs</span>, <span style=color:#a6e22e>following</span> });
+</span></span><span style=display:flex><span>}
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>function</span> <span style=color:#a6e22e>BlogsPage</span>() {
+</span></span><span style=display:flex><span>  <span style=color:#75715e>// Get the blogs and following from the loader.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>  <span style=color:#66d9ef>const</span> { <span style=color:#a6e22e>blogs</span>, <span style=color:#a6e22e>following</span> } <span style=color:#f92672>=</span> <span style=color:#a6e22e>useLoaderData</span>();
+</span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> (
+</span></span><span style=display:flex><span>    &lt;<span style=color:#f92672>div</span>&gt;
+</span></span><span style=display:flex><span>      <span style=color:#75715e>// For each blog...
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>      {<span style=color:#a6e22e>blogs</span>.<span style=color:#a6e22e>map</span>((<span style=color:#a6e22e>blog</span>) =&gt; (
+</span></span><span style=display:flex><span>        &lt;<span style=color:#f92672>div</span>&gt;
+</span></span><span style=display:flex><span>          <span style=color:#75715e>// Render the title and link immediately.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>          &lt;<span style=color:#f92672>Link</span> <span style=color:#a6e22e>to</span><span style=color:#f92672>=</span>{<span style=color:#e6db74>`/blogs/</span><span style=color:#e6db74>${</span><span style=color:#a6e22e>blog</span>.<span style=color:#a6e22e>id</span><span style=color:#e6db74>}</span><span style=color:#e6db74>`</span>}&gt;{<span style=color:#a6e22e>blog</span>.<span style=color:#a6e22e>title</span>}&lt;/<span style=color:#f92672>Link</span>&gt;
+</span></span><span style=display:flex><span>          <span style=color:#75715e>// Show a fallback state until the blog&#39;s follow status loads.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>          &lt;<span style=color:#f92672>React.Suspense</span> <span style=color:#a6e22e>fallback</span><span style=color:#f92672>=</span>{&lt;<span style=color:#f92672>p</span>&gt;<span style=color:#a6e22e>LOADING</span>&lt;/<span style=color:#f92672>p</span>&gt;}&gt;
+</span></span><span style=display:flex><span>            &lt;<span style=color:#f92672>Await</span> <span style=color:#a6e22e>resolve</span><span style=color:#f92672>=</span>{<span style=color:#a6e22e>following</span>[<span style=color:#a6e22e>blog</span>.<span style=color:#a6e22e>id</span>]}&gt;
+</span></span><span style=display:flex><span>              <span style=color:#75715e>// Access the follow status internally via useAsyncValue.
+</span></span></span><span style=display:flex><span><span style=color:#75715e></span>              &lt;<span style=color:#f92672>FollowUnfollowButton</span> <span style=color:#a6e22e>blog</span><span style=color:#f92672>=</span>{<span style=color:#a6e22e>blog</span>} /&gt;
+</span></span><span style=display:flex><span>            &lt;/<span style=color:#f92672>Await</span>&gt;
+</span></span><span style=display:flex><span>          &lt;/<span style=color:#f92672>React.Suspense</span>&gt;
+</span></span><span style=display:flex><span>        &lt;/<span style=color:#f92672>div</span>&gt;
+</span></span><span style=display:flex><span>      ))}
+</span></span><span style=display:flex><span>    &lt;/<span style=color:#f92672>div</span>&gt;
+</span></span><span style=display:flex><span>  );
+</span></span><span style=display:flex><span>}
+</span></span></code></pre></div><p>Now, the user experience is even better.
+Instead of having to wait for two round-trips before seeing any content, the user only has to wait for one.
+Sure, they can&rsquo;t follow any new blogs until their respective requests have finished, but I think the quicker, intermediate rendering is worth it.
+At least they can see <em>something</em> and verify that the app is working in the meantime.</p><h3 id=recap>Recap
+<a class=heading-link href=#recap><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>To summarize, it <em>is</em> possible to structure the frontend data loading such that the user-facing performance converges on a single round-trip.
+It also means that the backend REST API can stay granular, normalized, and designed around individual resources.
+This approach does have risks, though.
+Despite the appearance of quick rendering, we <em>are</em> making a bunch of API requests to the backend.
+Any one of those requests being slow could impact the responsiveness of the page.
+Do we really to shift all of this data loading and aggregation responsibility to the client?
+What other options are there?</p><h1 id=bff-endpoints>BFF Endpoints
+<a class=heading-link href=#bff-endpoints><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>What if we took the individualized needs of a specific frontend (web, mobile, etc) and built a backend that was tailored to those needs?
+Instead of only exposing the normalized, underlying data models of the application, what if we exposed the rich, pre-assembled data required to power each page?
+This way, the task of collecting and aggregating data gets shifted to the backend (instead of making the frontend worry about it).
+In a single API call, the frontend could get everything needed to render a page (or at least a section of a page).
+This backend could return JSON or even pre-rendered HTML.</p><p>This concept already exists and is known as the &ldquo;Backend for Frontend Pattern&rdquo; (often shortened to &ldquo;BFF&rdquo;).
+Similar to the &ldquo;N+1 Problem&rdquo;, this pattern is <a href=https://samnewman.io/patterns/architectural/bff/ class=external-link target=_blank rel=noopener>well documented</a>.
+To summarize the general idea:</p><blockquote><p>Rather than have a general-purpose API backend, instead you have one backend per user experience - a Backend For Frontend (BFF).
+The BFF is tightly coupled to a specific user experience, and will typically be maintained by the same team as the user interface, thereby making it easier to define and adapt the API as the UI requires.</p></blockquote><p>For my specific problem, a more BFF-oriented solution would be to include an <code>isFollowed: boolean</code> field alongside any blog objects requested by the frontend.
+On the backend, I could join through the <code>account_blog</code> table and include this data in a single query.
+Then, this page could be powered by one API call and one SQL query.
+Now that I mention it&mldr; I think I&rsquo;ve already done this elsewhere in the app.</p><h3 id=articles>Articles
+<a class=heading-link href=#articles><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h3><p>As it turns out, I&rsquo;ve already solved a similar problem via the &ldquo;BFF Endpoint&rdquo; approach (I just didn&rsquo;t know it had a name).
+Quick refresher: blogs can have multiple posts (one-to-many), and posts can have multiple tags (many-to-many).
+In the API (and database), these are represented as separate resources that can be CRUD&rsquo;d individually.
+However, on the frontend, we frequently need to bundle these disparate models together into something useful for the user.
+Here is a screenshot from the application:</p><p><img src=/images/20240818/bloggulus.webp alt="Bloggulus home page with three posts"></p><p>Let&rsquo;s take the first &ldquo;article&rdquo; as an example.
+You can see how data from all three underlying models are aggregated into a single unit.
+The published date, post title, and post URL all come from the underlying <strong>post</strong> model.
+The blog title and URL come from the <strong>blog</strong> model.
+Lastly, the tag names come from the <strong>tag</strong> model.
+When I first wrote this page, I faced the same problem: how do I efficently fetch and render this data?</p><p>I ended up created new endpoint (and a read-only model) to support it.
+I added a new noun to the project: <strong>article</strong>.
+This represents the &ldquo;post + blog + tags&rdquo; data needed to power the main page of the application.
+With a single call to <code>GET /api/v1/articles</code>, the app&rsquo;s main feature was ready to rock.
+Prior to settling on this approach, I wondered if this was almost a <a href=https://en.wikipedia.org/wiki/Domain-driven_design class=external-link target=_blank rel=noopener>domain-driven design</a> (DDD) problem where the solution was to give &ldquo;post&rdquo; a different meaning in different bounded contexts.
+Could different user interfaces (web and API) be considered different contexts?
+I&rsquo;m not familiar enough with DDD to really know.</p><h1 id=conclusion>Conclusion
+<a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>What I&rsquo;ve learned is this: the needs of a REST API (for programmers) are different that a visual frontend (for users).
+While you <em>can</em> implement a frontend on top of a normalized REST API, you have to take care to avoid the N+1 problem.
+With some clever loading, the user experience penalty of making waterfall API calls can be greatly minimized.</p><p>Bloggulus is a small project and I probably don&rsquo;t need to build two completely separate backends just to accommodate an <code>isFollowing</code> field.
+Instead, I could probably find something more balanced and pragmatic.
+One idea I have is to simply include the <code>isFollowing</code> field if the requesting user is logged in.
+That way, the flow and shape of data is unchanged for regular, anonymous API users.
+Or, I just leave the code as-is for now and see how the app&rsquo;s data needs change and grow over time.
+Perhaps future experience with writing more frontends (mobile) and integrations (browser extention) will help inform these architectural decisions.</p><p>If you made it all the way to the end, I appreciate you!
+Is there a one-size-fits-all solution?
+No, there rarely is.
+Software is about all balance and tradeoffs.
+The best you can do is gather experience and knowledge so that your toolbox of options is large enough to handle most scenarios.</p><p>Thanks for reading!</p></div><footer></footer></article></section></div><footer class=footer><section class=container>©
+2024
+Andrew Dailey
+·
+Powered by <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> & <a href=https://github.com/luizdepra/hugo-coder/ target=_blank rel=noopener>Coder</a>.</section></footer></main><script src=/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script></body></html>
