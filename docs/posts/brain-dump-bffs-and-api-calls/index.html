@@ -125,7 +125,10 @@ I&rsquo;m not familiar enough with DDD to really know.</p><h1 id=conclusion>Conc
 <a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>What I&rsquo;ve learned is this: the needs of a REST API (for programmers) are different that a visual frontend (for users).
 While you <em>can</em> implement a frontend on top of a normalized REST API, you have to take care to avoid the N+1 problem.
-With some clever loading, the user experience penalty of making waterfall API calls can be greatly minimized.</p><p>Bloggulus is a small project and I probably don&rsquo;t need to build two completely separate backends just to accommodate an <code>isFollowing</code> field.
+With some clever loading, the user experience penalty of making waterfall API calls can be greatly minimized.
+When building a backend, I think it is important to ask: who is this data for and what are their needs?
+For example, are an API consumer&rsquo;s expectations the same as a regular web user?
+Spoiler alert: it depends.</p><p>Bloggulus is a small project and I probably don&rsquo;t need to build two completely separate backends just to accommodate an <code>isFollowing</code> field.
 Instead, I could probably find something more balanced and pragmatic.
 One idea I have is to simply include the <code>isFollowing</code> field if the requesting user is logged in.
 That way, the flow and shape of data is unchanged for regular, anonymous API users.

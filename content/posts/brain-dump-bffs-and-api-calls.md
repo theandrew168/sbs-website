@@ -168,6 +168,9 @@ I'm not familiar enough with DDD to really know.
 What I've learned is this: the needs of a REST API (for programmers) are different that a visual frontend (for users).
 While you _can_ implement a frontend on top of a normalized REST API, you have to take care to avoid the N+1 problem.
 With some clever loading, the user experience penalty of making waterfall API calls can be greatly minimized.
+When building a backend, I think it is important to ask: who is this data for and what are their needs?
+For example, are an API consumer's expectations the same as a regular web user?
+Spoiler alert: it depends.
 
 Bloggulus is a small project and I probably don't need to build two completely separate backends just to accommodate an `isFollowing` field.
 Instead, I could probably find something more balanced and pragmatic.
