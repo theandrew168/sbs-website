@@ -2,6 +2,7 @@
 date: 2024-08-18
 title: "Brain Dump: BFFs and N+1 API Calls"
 slug: "brain-dump-bffs-and-api-calls"
+tags: ["Go", "TypeScript", "React"]
 ---
 
 Writing software is hard.
