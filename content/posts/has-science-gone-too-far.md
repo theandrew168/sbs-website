@@ -38,3 +38,6 @@ I’m not sure.
 Maybe I just skip it since the site is already mobile-friendly from a CSS point of view.
 Or perhaps there is a quick way to bundle up an SPA as a web-view and still publish it as a standalone app.
 It seems like there has been [some work](https://developers.google.com/codelabs/pwa-in-play) done on this concept.
+
+If I decide to make any major changes, I'll be sure to post an update.
+Thanks for reading!
