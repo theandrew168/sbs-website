@@ -1,13 +1,13 @@
 ---
 date: 2024-07-28
-title: "Errors Are Lists, Not Maps"
-slug: "errors-are-lists-not-maps"
+title: "Errors as Lists, Not Maps"
+slug: "errors-as-lists-not-maps"
 ---
 
 All REST APIs must decide how to handle and represent errors.
 There are many ways to accomplish this task and they all come with varying pros and cons.
 This post starts by describing the strategy I've historically used when dealing with errors.
-After examining some limitations with that pattern, I present a better and more flexible alternative.
+After examining some limitations with that pattern, I present an alternative.
 
 # Errors as Maps
 
@@ -144,6 +144,5 @@ Errors are a big topic with countless approaches and opinions.
 The internet is full of awesome discussions about [strategies](https://stackoverflow.com/questions/39759906/validation-responses-in-rest-api) and [examples](https://www.baeldung.com/rest-api-error-handling-best-practices) of how big companies do it.
 Overall, both of the approaches outlined in this post are capable of getting the job done.
 At the end of the day, it mostly comes down to personal preference and the requirements of the project at hand.
-For [Bloggulus](https://github.com/theandrew168/bloggulus), I'll be sticking with "errors as lists".
 
 Thanks for reading!

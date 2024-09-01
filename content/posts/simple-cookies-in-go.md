@@ -1,5 +1,5 @@
 ---
-date: 2024-08-31
+date: 2024-09-01
 title: "Simple Cookies in Go"
 slug: "simple-cookies-in-go"
 draft: true

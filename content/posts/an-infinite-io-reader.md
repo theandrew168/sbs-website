@@ -1,5 +1,5 @@
 ---
-date: 2024-08-31
+date: 2024-09-01
 title: "An Infinite io.Reader"
 slug: "an-infinite-io-reader"
 tags: ["Go"]
