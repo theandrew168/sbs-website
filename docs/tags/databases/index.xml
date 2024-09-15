@@ -35,7 +35,12 @@ Unfortunately, this led to some automated tests failing in GitHub Actions!&lt;/p
  &lt;span class="sr-only">Link to heading&lt;/span>
  &lt;/a>
 &lt;/h1>
-&lt;p>Thankfully, the error was very clear:&lt;/p></description></item><item><title>Testing with Transactions</title><link>https://shallowbrooksoftware.com/posts/testing-with-transactions/</link><pubDate>Sun, 24 Mar 2024 00:00:00 +0000</pubDate><guid>https://shallowbrooksoftware.com/posts/testing-with-transactions/</guid><description>&lt;p>Most web applications eventually end up with tests that need to interact with a database.
+&lt;p>Thankfully, the error was very clear:&lt;/p>
+&lt;pre tabindex="0">&lt;code>pg_dump: error: server version: 16.2 (Debian 16.2-1.pgdg120+2); pg_dump version: 14.11 (Ubuntu 14.11-1.pgdg22.04+1)
+pg_dump: error: aborting because of server version mismatch
+&lt;/code>&lt;/pre>&lt;p>Classic version mismatch.
+The PostgreSQL 16 server (running in a container) was not compatible with the PostgreSQL 14 client tools (installed on the GitHub Actions runner).
+For some context, pg2s3 uses &lt;code>pg_dump&lt;/code> and &lt;code>pg_restore&lt;/code> to quickly export and import data.&lt;/p></description></item><item><title>Testing with Transactions</title><link>https://shallowbrooksoftware.com/posts/testing-with-transactions/</link><pubDate>Sun, 24 Mar 2024 00:00:00 +0000</pubDate><guid>https://shallowbrooksoftware.com/posts/testing-with-transactions/</guid><description>&lt;p>Most web applications eventually end up with tests that need to interact with a database.
 Perhaps your business logic is tightly coupled to the database or maybe you are wanting to test a clearly-defined storage layer.
 Either way, a common problem arises: how do you clean up the data used during testing? What should you do with all those scattered rows?&lt;/p>
 &lt;p>Most of the time, developers will resort to a few common strategies:&lt;/p></description></item></channel></rss>
