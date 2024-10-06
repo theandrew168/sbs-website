@@ -2,6 +2,7 @@
 date: 2024-09-22
 title: "Bloggulus: Seems Fine"
 slug: "bloggulus-seems-fine"
+tags: ["Bloggulus"]
 ---
 
 A few weeks ago, [Rachel by the Bay](https://rachelbythebay.com) made another [update post](https://rachelbythebay.com/w/2024/09/13/fs/) regarding the RSS correctness system that she's been running.

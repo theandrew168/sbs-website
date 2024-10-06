@@ -2,6 +2,7 @@
 date: 2024-06-02
 title: "Bloggulus: A Responsible RSS Reader"
 slug: "bloggulus-a-responsible-rss-reader"
+tags: ["Bloggulus"]
 ---
 
 Recently, Rachel by the Bay [wrote about an idea](https://rachelbythebay.com/w/2024/05/29/score/) for "scoring" RSS feed readers.

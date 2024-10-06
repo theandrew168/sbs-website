@@ -2,6 +2,7 @@
 date: 2024-08-11
 title: "More Bloggulus RSS Improvements"
 slug: "more-bloggulus-rss-improvements"
+tags: ["Bloggulus"]
 ---
 
 Thanks to [Rachel by the Bay](https://rachelbythebay.com/w/) and her posts about RSS correctness / etiquette, I’ve been able to more deeply understand the relationship between feeds and readers.

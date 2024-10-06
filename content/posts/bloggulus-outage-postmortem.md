@@ -2,6 +2,7 @@
 date: 2024-06-09
 title: "Bloggulus Outage Postmortem"
 slug: "bloggulus-outage-postmortem"
+tags: ["Bloggulus"]
 ---
 
 On June 4, 2024, [Bloggulus](https://bloggulus.com) was down for just under 7 hours.
