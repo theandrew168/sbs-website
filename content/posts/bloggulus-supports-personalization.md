@@ -50,7 +50,7 @@ If you have an account and are logged in, you'll gain access to the blogs page.
 From here, you'll be able to add, follow, and unfollow the blogs that Bloggulus knows about.
 This includes the blogs you added as well as those added by other users (added by myself, probably).
 One neat thing about this page is that it is powered by [HTMX](https://htmx.org/)!
-All three blog operations (add, follow, and unfollow) get submitted without requiring a full page reload.
+The actions for following and unfollowing blogs get submitted asynchronously without requiring a full page reload.
 Instead, only the affected HTML sections get swapped out when actions are taken.
 
 <div style="display:flex;justify-content:center">
