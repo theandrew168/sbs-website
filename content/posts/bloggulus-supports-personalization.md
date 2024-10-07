@@ -51,7 +51,7 @@ From here, you'll be able to add, follow, and unfollow the blogs that Bloggulus 
 This includes the blogs you added as well as those added by other users (added by myself, probably).
 One neat thing about this page is that it is powered by [HTMX](https://htmx.org/)!
 The actions for following and unfollowing blogs get submitted asynchronously without requiring a full page reload.
-Instead, only the affected HTML sections get swapped out when actions are taken.
+Instead, only the affected HTML sections get swapped out when these operations occur.
 
 <div style="display:flex;justify-content:center">
 	<img style="max-width:400px" src="/images/20241006/blogs.webp" alt="Screenshot of the Bloggulus blogs page">
