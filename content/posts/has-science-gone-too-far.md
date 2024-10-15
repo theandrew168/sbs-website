@@ -6,7 +6,7 @@ slug: "has-science-gone-too-far"
 
 I recently [wrote an article](/posts/brain-dump-bffs-and-api-calls/) explaining my difficulty with trying to reconcile “traditional API design” with BFFs (backend for frontend) and N+1 API calls.
 It seemed tough to arrive at a "best" solution (and maybe one doesn't even really exist).
-Do I build my API for general consupmtion (granular and resource-based) or specifically for my web frontend (coarse with multiple resources joined together)?
+Do I build my API for general consumption (granular and resource-based) or specifically for my web frontend (coarse with multiple resources joined together)?
 I settled for a middleground: use intentional frontend techniques to load secondary data _after_ rendering the initial, primary data.
 Then, if that was too cumbersome, create a BFF endpoint to power heavier pages.
 

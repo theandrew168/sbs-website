@@ -20,7 +20,7 @@ All `If-None-Match` header values (this is a cache-related header) have been val
 No useless cookies, referrers, or query params have been sent, either.
 Not bad!
 
-Sometimes, however, Bloggulus ends up polling slightly more oftan than the intended hourly schedule.
+Sometimes, however, Bloggulus ends up polling slightly more often than the intended hourly schedule.
 Occasionally, it'll re-poll after 59 minutes which isn't huge deal (just subtle timing variance).
 Once, though, it re-requested content after only 44 minutes.
 I'm not 100% sure _why_ this happened but it could be that the server restarted.

@@ -16,7 +16,7 @@ Her previous posts have directly influenced my ability to make Bloggulus more ef
 I messaged Rachel with interest in participating and she promptly replied with instructions on how to set things up.</p><p>Fast-forward a few days and Bloggulus is scoring quite well!</p><p><img src=/images/20240602/rss-score.webp alt="RSS reader score"></p><p>It has only sent one unconditional request (which is expected when a new feed is added).
 All <code>If-None-Match</code> header values (this is a cache-related header) have been valid.
 No useless cookies, referrers, or query params have been sent, either.
-Not bad!</p><p>Sometimes, however, Bloggulus ends up polling slightly more oftan than the intended hourly schedule.
+Not bad!</p><p>Sometimes, however, Bloggulus ends up polling slightly more often than the intended hourly schedule.
 Occasionally, it&rsquo;ll re-poll after 59 minutes which isn&rsquo;t huge deal (just subtle timing variance).
 Once, though, it re-requested content after only 44 minutes.
 I&rsquo;m not 100% sure <em>why</em> this happened but it could be that the server restarted.
