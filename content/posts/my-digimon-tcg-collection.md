@@ -1,5 +1,5 @@
 ---
-date: 2024-11-10
+date: 2024-11-16
 title: "My Digimon TCG Collection"
 slug: "my-digimon-tcg-collection"
 draft: true
