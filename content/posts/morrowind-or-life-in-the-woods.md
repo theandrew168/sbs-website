@@ -1,6 +1,6 @@
 ---
 date: 2024-11-17
-title: "Morrowind; Or, Life in the Woods"
+title: "Morrowind; or, Life in the Woods"
 slug: "morrowind-or-life-in-the-woods"
 ---
 
