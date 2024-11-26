@@ -1,5 +1,4 @@
-<!doctype html><html lang=en><head><title>Migrating Numeric IDs to UUIDs · Shallow Brook Software
-</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="There are a few ways to represent primary keys within a database.
+<!doctype html><html lang=en><head><title>Migrating Numeric IDs to UUIDs · Shallow Brook Software</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="There are a few ways to represent primary keys within a database.
 The most common way (in my experience) to use auto-incrementing integers.
 This means that first row&rsquo;s key will be 1, the second&rsquo;s will be 2, and so on.
 When it comes to my preferred style of software development, however, this approach has a major downside: new domain objects must first consult the database to determine their ID.

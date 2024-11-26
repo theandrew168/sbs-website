@@ -1,5 +1,4 @@
-<!doctype html><html lang=en><head><title>Limiting Concurrency with Semaphores · Shallow Brook Software
-</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="I recently encountered some slowness while executing a bunch of tasks within a program.
+<!doctype html><html lang=en><head><title>Limiting Concurrency with Semaphores · Shallow Brook Software</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="I recently encountered some slowness while executing a bunch of tasks within a program.
 Specifically, I was working on how Bloggulus syncs all of the blogs that it tracks (there are only 40 or so right now but I expect the number to grow).
 Instead of naively syncing each blog serially, maybe concurrency can help.
 Let&rsquo;s find some ways to speed it up!

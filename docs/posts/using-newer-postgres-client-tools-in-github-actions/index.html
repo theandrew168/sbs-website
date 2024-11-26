@@ -1,5 +1,4 @@
-<!doctype html><html lang=en><head><title>Using Newer PostgreSQL Client Tools in GitHub Actions · Shallow Brook Software
-</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="Recently, while updating my pg2s3 utility, I noticed that the project&rsquo;s docker-compose.yml file was pinning PostgreSQL to version 14.
+<!doctype html><html lang=en><head><title>Using Newer PostgreSQL Client Tools in GitHub Actions · Shallow Brook Software</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="Recently, while updating my pg2s3 utility, I noticed that the project&rsquo;s docker-compose.yml file was pinning PostgreSQL to version 14.
 I couldn&rsquo;t remember why I did that, so I went ahead and removed it (what could go wrong?).
 Unfortunately, this led to some automated tests failing in GitHub Actions!
 
