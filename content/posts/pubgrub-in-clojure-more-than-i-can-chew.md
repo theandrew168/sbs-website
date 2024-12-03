@@ -22,7 +22,7 @@ Maybe I should take a beat, reflect on where I'm at, and alter my plan to better
 After doing so, I decided to make a small pivot.
 Instead of starting with Clojure, I'll instead implement the algorithm in a familiar and algorithm-friendly language: [Python](https://www.python.org/).
 I use Python for [Advent of Code](https://adventofcode.com/) so I’m quite a bit more familiar with writing short, focused, algorithm-heavy programs.
-This isolates the third variable and lets me focus on the hard part first: PubGrub.
+This isolates the third concept and lets me focus on the hard part first: PubGrub.
 
 Eventually, once I fully understand the algorithm and have written my own reference implementation, I’ll write the code again in Clojure.
 This isolates concepts 1 and 2 which are similar enough to tackle at the same point (plus, you can't really separate them in the first place).
