@@ -1,4 +1,5 @@
-<!doctype html><html lang=en><head><title>A Better Pattern for Go HTTP Handlers · Shallow Brook Software</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="In most web applications, handlers have dependencies.
+<!doctype html><html lang=en><head><title>A Better Pattern for Go HTTP Handlers · Shallow Brook Software
+</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="In most web applications, handlers have dependencies.
 These could be things like database connection pools, queue clients, or loggers.
 For most of my Go-based web development projects, I&rsquo;ve embraced the &ldquo;application struct&rdquo; pattern as described by Alex Edwards in his &ldquo;Let&rsquo;s Go&rdquo; book series (and a blog post) to manage these dependencies.
 Despite serving my quite well over the past few years, I recently found myself wanting something a bit more flexible.

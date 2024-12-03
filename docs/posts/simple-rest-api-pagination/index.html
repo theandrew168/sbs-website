@@ -1,4 +1,5 @@
-<!doctype html><html lang=en><head><title>Simple REST API Pagination · Shallow Brook Software</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="Recently, I&rsquo;ve been working on revamping my Bloggulus project to a split REST API + SPA architecture (for fun and as an excuse to learn SvelteKit).
+<!doctype html><html lang=en><head><title>Simple REST API Pagination · Shallow Brook Software
+</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="Recently, I&rsquo;ve been working on revamping my Bloggulus project to a split REST API + SPA architecture (for fun and as an excuse to learn SvelteKit).
 As a part of this effort, I took a moment to research and revisit how the API handles pagination.
 Since the system holds hundreds of blogs and thousands of posts, returning all items from a request would be slow and unwieldy.
 Instead, the user (or web frontend) should be allowed to specify which set of items they want to view.

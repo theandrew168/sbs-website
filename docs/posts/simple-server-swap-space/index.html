@@ -1,4 +1,5 @@
-<!doctype html><html lang=en><head><title>Simple Server Swap Space · Shallow Brook Software</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="Since the recent Bloggulus outage, I&rsquo;ve been keeping a close eye on things.
+<!doctype html><html lang=en><head><title>Simple Server Swap Space · Shallow Brook Software
+</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="Since the recent Bloggulus outage, I&rsquo;ve been keeping a close eye on things.
 While the server has mostly been stable, I still noticed the occasional OOM kill after creating backups via pg2s3.
 Here is an example from journalctl -u pg2s3 logs (notice that this was happening nearly a month after the most-outage memory increase):
 Jul 01 09:00:03 bloggulus pg2s3[32400]: created bloggulus_2024-07-01T09:00:00Z.backup.age
