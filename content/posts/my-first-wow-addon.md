@@ -1,5 +1,5 @@
 ---
-date: 2024-12-15
+date: 2024-12-22
 title: "My First WoW Addon"
 slug: "my-first-wow-addon"
 draft: true
