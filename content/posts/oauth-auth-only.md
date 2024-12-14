@@ -64,7 +64,7 @@ While this could be a downside, I find it to be a good balance!
 
 ![Sign in options with local debug auth](/images/20241027/debug.webp)
 
-## Conlusion
+## Conclusion
 
 Well reader, what do you think?
 Is this an amazing idea that respects user privacy?
