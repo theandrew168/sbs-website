@@ -6,6 +6,7 @@ draft: true
 ---
 
 2024 was also a great of great personal accomplishment: both personal and professional.
+From new friends to new skills, a lot has changed and I've experience a lot of growth!
 
 # Home Ownership
 
