@@ -155,7 +155,7 @@ Let me know if you end up giving it a shot!
 Overall, this has been a short, fun, and only mildly frustrating experience.
 If it weren't for the nameplate pooling behavior, I would've had this completely done and sorted within an hour.
 However, troubleshooting the pooling cost me quite a few hours.
-Thankfully, SDPhantom and the WoW Interface Forums community showed up to help me out.
+Thankfully, SDPhantom and the WoW Interface forum community showed up to help me out.
 With their support, I was able to get everything working before the project turned into a stressful time sink.
 
 I might iterate on DerzPlates in the future.
