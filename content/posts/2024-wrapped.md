@@ -5,8 +5,11 @@ slug: "2024-wrapped"
 draft: true
 ---
 
-2024 was also a great of great personal accomplishment: both personal and professional.
+2024 was a year of great personal accomplishment: both personal and professional.
 From new friends to new skills, a lot has changed and I've experience a lot of growth!
+2024 was also the year of balance: balancing work, life, and the nuances within each.
+Within work, I balanced regular development work with tech leading and planning.
+Within life, I balanced relationships: welcoming new friends who all come with unique and exciting interests, experiences, and perspectives.
 
 # Home Ownership
 
@@ -50,6 +53,7 @@ Now that I’m at the end, it feels nice to look back and reflect on everything 
 1. Add user accounts and personalization to Bloggulus
 2. Completed all 25 days of Advent of Code
 3. Wrote and published my first WoW addon
+4. Turned 30 years old (still thriving)
 
 # Looking Forward
 
