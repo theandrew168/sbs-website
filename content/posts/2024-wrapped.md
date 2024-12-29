@@ -1,5 +1,5 @@
 ---
-date: 2024-12-23
+date: 2024-12-29
 title: "2024 Wrapped"
 slug: "2024-wrapped"
 draft: true
