@@ -36,24 +36,72 @@ The first few definitely caused me quite a bit of stress but things have gotten 
 
 # Weekly Blogging
 
-At the start of 2024, my buddy Nick and I set a goal for ourselves: write a blog post every week. I’m very hyped to say that I’ve made it! This is my final, 52nd post of the year. Some posts were good, some posts were… less good. But overall I think these writings will serve as a great additional to my portfolio as a professional developer. I (well, Bloggulus) got a very minimal shout out from Rachel by the Bay. That really made my week!
+At the start of 2024, my buddy Nick and I set a goal for ourselves: write a blog post every week.
+I'm very hyped to say that I've made it!
+This is my final, 52nd post of the year.
+Some posts were good, some posts were… less good.
+But overall I think these writings will serve as a great additional to my portfolio as a professional developer.
+I (well, Bloggulus) got a very minimal shout out from Rachel by the Bay.
+That really made my week!
 
-Was it fun? Sometimes. To be honest, writing these posts rarely felt “more-ish” to me. Rarely did I find myself super eager and excited to write a post (thought it did happen a few times). Initially, I put a lot of pressure on myself to make each post long, detailed, and objectively useful. I let some of that pressure go midway though the year, though. Instead, I let myself write about anything: what I did that week, opinions on non-technical subjects, and the occasional technical deep dive.
+Was it fun? Sometimes.
+To be honest, writing these posts rarely felt “more-ish” to me.
+Rarely did I find myself super eager and excited to write a post (thought it did happen a few times).
+Initially, I put a lot of pressure on myself to make each post long, detailed, and objectively useful.
+I let some of that pressure go midway though the year, though.
+Instead, I let myself write about anything: what I did that week, opinions on non-technical subjects, and the occasional technical deep dive.
 
-Now that I’m at the end, it feels nice to look back and reflect on everything I’ve written. Some posts fill me with joy to re-read while others fall a bit flat (they can’t all be winners). Here are some of my favorite posts from the past year.
+Now that I'm at the end, it feels nice to look back and reflect on everything I've written.
+Some posts fill me with joy to re-read while others fall a bit flat (they can't all be winners).
+Here are some of my favorite posts from the past year.
 
-1. https://shallowbrooksoftware.com/posts/automating-a-golden-age-minecraft-server/
-2. https://shallowbrooksoftware.com/posts/a-multi-platform-modern-webgl-demo/
-3. https://shallowbrooksoftware.com/posts/mario-kart-and-the-makers-schedule/
-4. https://shallowbrooksoftware.com/posts/bloggulus-outage-postmortem/
-5. https://shallowbrooksoftware.com/posts/reinforcing-indirect-joins/
+### [Automating a Golden Age Minecraft Server](/posts/automating-a-golden-age-minecraft-server/)
 
-# Other Projects
+This was a really fun post about how I researched, configured, and automated the hosting process for a "Golden Age" minecraft server.
+This refers to servers of older versions: Beta 1.8 for me.
+I ran the server on a moderately-specced DigitalOcean droplet and a few friends played on it.
+It was an interesting problem from a security perspective since these older servers aren't compabitle with the game's modern auth systems.
+Instead, I had to implement a "best effort" security posture by allow-listing usernames and restricting IP addresses.
+
+### [A Multi-Plateform WebGL Demo](/posts/a-multi-platform-modern-webgl-demo/)
+
+This post was a fun throwback to the [second blog post](/posts/a-multi-platform-modern-opengl-demo-with-sdl2/) I ever wrote (back in June 2020).
+That post was about writing and building a cross-platform OpenGL demo in C.
+The demo itself was pretty basic: a spinning red square.
+Despite its simplicity, it required dealing with quite a few aspects of the OpenGL API: buffers, vertex arrays, and shaders.
+It used [SDL2](https://www.libsdl.org/) for handling the native window and input support.
+
+One downside of writing native OpenGL programs is that they are difficult to distribute.
+As it turns out, modern computers don't want to let users run untrusted binaries (and fair enough)!
+It meant that I had to tell my friends: "Just download, trust, and run this binary. I swear it isn't a virus!".
+So, for the throwback post, I wanted to recreate the same demo but in a way that could run in the reader's browser.
+This is where [WebGL](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API) (a browser-based implementation of the modern OpenGL API) comes in!
+In just a few hundred lines of JavaScript, I had the same demo running within the blog post itself.
+I really loved how this post showed growth: both in technology (OpenGL to WebGL) and in my own experience (C to JavaScript).
+
+### [Mario Kart and the Maker's Schedule](/posts/mario-kart-and-the-makers-schedule/)
+
+### [Bloggulus Outage Postmortem](/posts/bloggulus-outage-postmortem/)
+
+### [Reinforcing Indirect Joins](/posts/reinforcing-indirect-joins/)
+
+# Personal Projects
 
 1. Add user accounts and personalization to Bloggulus
+   1. Svelte, React, and back to server-side templating (gomponents soon?).
+   2. HTMX for some facets.
+   3. From TailwindCSS to simple BEM-based CSS.
 2. Completed all 25 days of Advent of Code
+   1. Only a few days gave me trouble.
+   2. I relied on the subreddit for hints when I got stuck.
+   3. I ordered the mug! Always feels good.
 3. Wrote and published my first WoW addon
+   1. I wrote a post about this. It was quite a bit of fun!
+   2. The WoW Interface forum community really showed up for me.
 4. Turned 30 years old (still thriving)
+   1. Health is important!
+   2. I did a lot more walking this year: long walks between 60 and 90 minutes.
+   3. I like it for music, podcasts, and even audiobooks.
 
 # Looking Forward
 
