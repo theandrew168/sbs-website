@@ -7,7 +7,7 @@ slug: "mario-kart-and-the-makers-schedule"
 Many years ago, I stumbled onto Paul Graham's book [Hackers and Painters](https://paulgraham.com/hp.html).
 It is a series of essays regarding software development, startup life, and spam filters.
 Reading that book led me to Paul's other writings and, more specifically, [his blog](https://www.paulgraham.com/articles.html).
-One of the posts that I remember clearly and think about often is titled [Makers's Schedule, Manager's Schedule](https://www.paulgraham.com/makersschedule.html).
+One of the posts that I remember clearly and think about often is titled [Maker's Schedule, Manager's Schedule](https://www.paulgraham.com/makersschedule.html).
 
 In this essay, Paul contrasts the high-level schedules that power many makers (programmers) and managers.
 Makers tend to find their maximum productivity within long spans of uninterrupted time (often four hours or more).
