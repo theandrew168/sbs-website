@@ -53,7 +53,7 @@ Instead, I let myself write about anything: what I did that week, opinions on no
 
 Now that I'm at the end, it feels nice to look back and reflect on everything I've written.
 Some posts fill me with joy to re-read while others fall a bit flat (they can't all be winners).
-Here are some of my favorite posts from the past year.
+Here are some of my favorite posts from the past year (in no particular order).
 
 ## [1. Automating a Golden Age Minecraft Server](/posts/automating-a-golden-age-minecraft-server/)
 
@@ -61,7 +61,7 @@ This was a really fun post about how I researched, configured, and automated the
 This refers to servers of older versions: [Beta 1.7.3](https://minecraft.fandom.com/wiki/Java_Edition_Beta_1.7.3) for me.
 I ran the server on a moderately-specced DigitalOcean droplet and a few friends played on it.
 It was an interesting problem from a security perspective since these older servers aren't compabitle with the game's modern auth systems.
-Instead, I had to implement a "best effort" security posture by allow-listing usernames and restricting IP addresses.\
+Instead, I had to implement a "best effort" security posture by allow-listing usernames and restricting IP addresses.
 I still really love the aesthetic of early Minecraft builds: cobblestone, trees, and planks.
 
 ## [2. A Multi-Plateform WebGL Demo](/posts/a-multi-platform-modern-webgl-demo/)
