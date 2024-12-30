@@ -2,7 +2,6 @@
 date: 2024-12-29
 title: "2024 Wrapped"
 slug: "2024-wrapped"
-draft: true
 ---
 
 This year, 2024, was one of great accomplishment: both personal and professional.
@@ -133,51 +132,54 @@ It came in super handy and was probably my most objectively impactful post of 20
 ## Bloggulus
 
 As always, [Bloggulus](https://bloggulus.com/) saw quite a few enhancements.
-I added the ability for users to register (via OAuth) and personalize the site with their own favorite blogs.
+I added the ability for users to register (via OAuth) and personalize their experience with their own favorite blogs.
 I made the choice to _only_ support OAuth authentication which came with some [interesting tradeoffs](/posts/oauth-auth-only/).
+The current version of the app also uses a bit of [HTMX](https://htmx.org/) for reload-free interactivity.
+I'd been wanting to mess with HTMX so this was a great excuse.
+Overall, I like it!
+I think it strikes a nice balance between server-side simplicity and client-side responsiveness.
+
 This project has really been my personal tech stack playground.
-It started as server-side rendered Go program, then I wrote another version of the app in SvelteKit, migrated the original to a React-based SPA architecture, then back to server-side templating.
-It made a big circle back to the original plan but I learned so much from the process.
+It started as server-side rendered Go program.
+Then, for fun, I wrote another version of the app in [SvelteKit](https://svelte.dev/).
+After that, I migrated the original codebase to a [React](https://react.dev/) single-page application.
+Eventually, I landed right back where I'd started: with server-side templating.
+Despite the circle of redundancy, it was far from a waste a time because I [learned](/posts/brain-dump-bffs-and-api-calls/) so [much](/posts/has-science-gone-too-far/) from the process.
 There is no free lunch and all tech stacks have pros and cons: there is rarely a "best choice" across all criteria.
 
-The current version of the app also uses a bit of HTMX for reload-free interactivity.
-I've always to mess with HTMX so this was a great excuse.
-Overall, I like it!
-I think it strikes a nice balance between server-side simplicity and client-side interactivity / responsiveness.
-
 I also use this project to explore multiple CSS strategies.
-First was [TailwindCSS](https://tailwindcss.com/).
+First came [TailwindCSS](https://tailwindcss.com/).
 This was super hyped in 2024 so I figured I'd give it a shot.
-While I really like the amount of pre-made components out there, I found that I quickly lost my hold on "what is this CSS actually doing and why is it necessary".
+While I really liked the availability of pre-made, "off the shelf" components, I found myself quickly losing track of what each class actually did and why it was necessary.
 I'd eventually end up with a massive wall of classes and have no idea _why_ they were there.
-The UI looked correct but I didn't fully understand this.
+The UI might've looked absolutely amazing but I didn't fully understand it.
 
-I hate this feeling of not grokking my own code and try to avoid it.
-So, I ditched TailwindCSS for something simpler (and kinda old school): vanilla CSS with [BEM](https://getbem.com/introduction/) (block, element, modified) naming.
-Honestly, I love this.
-I get all the power of vanilla CSS (it has come a long way and doesn't need much extra) with specific, granular naming.
+I hate this feeling of not grokking my own code and ultimately try to avoid it.
+So, I ditched TailwindCSS for something simpler (and kinda old school): vanilla CSS with [BEM](https://getbem.com/introduction/) (Block, Element, Modifier) naming.
+Honestly, I love it.
+I get all the power of vanilla CSS (which has come a long way and doesn't even need many extra features) with specific, granular naming.
 I never worry about naming collisions or style leaks.
-Perfect solution to my current problems, honestly.
+It's the perfect solution for the scale of web sites that I build, honestly.
 
 ## Advent of Code
 
-2024 was the second year in a row (third year ever) that I completed [Advent of Code]().
-This challenge of increasingly-difficult programming puzzles is always a double-edged sword for me.
-While I love the feeling of accomplishment for figuring out the puzzles, I can easily get obsessive and fixated on tough problem.
-At its worst, I'll spend 8+ hours of a day banging my head against the keyboard just trying to figure things out.
+2024 was the second year in a row (third year ever) that I completed [Advent of Code](https://adventofcode.com/).
+This challenge of solving increasingly difficult programming puzzles is always a double-edged sword for me.
+While I love the feeling of accomplishment that comes with every successful solution, I can easily get obsessive and fixated on tough problems.
+At its worst, I'll spend 8+ hours of a day banging my head against the keyboard trying to work things out.
 My time management suffers and my mood suffers.
 Is it worth?
 Is it a net positive experience for me?
 Honestly, I don't know.
 
-But! I did finish again this year and only had a couple days of problematic frustration.
-I do check the subreddit for hints if I'm completely stuck, though.
+But! I did finish again this year and only encountered a couple days of problematic frustration.
+I do check the [subreddit](https://old.reddit.com/r/adventofcode/) for hints if I'm completely stuck, though.
 Since I finished, I ordered myself the real trophy: the Advent of Code coffee mug.
-This will live on the shelf next my mugs from victories in prior years.
-I love the ability to write so many "throwaway" programs in quick succession.
-These days, I only use Python for AoC and it feels good to go back to it.
-Python was the first language I learned deeply so I'll always have a nostalgic fondness for it.
+This will live on the shelf next to my other victory mugs.
 
+I love the ability to write so many "throwaway" programs in quick succession.
+These days, I typically only use Python for solving these puzzles and it feels good to come back home.
+Python was the first language I deeply learned so I'll always have a nostalgic fondness for it.
 I got to refresh my knowledge of some classic algorithms ([Dijkstra's](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)) and even learned some new ones ([Bron-Kerbosch](https://en.wikipedia.org/wiki/Bron%E2%80%93Kerbosch_algorithm)).
 We'll see if I can stay away from Advent of Code in 2025...
 
@@ -185,28 +187,25 @@ We'll see if I can stay away from Advent of Code in 2025...
 
 Despite playing WoW since roughly 2007, I never applied my software engineering mindset to it.
 That changed just a few weeks ago when I wrote and published my first WoW addon: [DerzPlates](https://github.com/theandrew168/derzplates).
-I wrote a [blog post](/posts/derzplates-my-first-wow-addon/) about the process and how the WoW Interface forum community really showed up for me.
-I've written Lua in the past so that wasn't new to me.
-The WoW client API, however, was totally foreign and required so much research to even partially grok.
-My initial version was kinda buggy but SDPhantom gave me solid guidance and advice to get it working properly.
-They get my personal "Best Tech Advice of 2024" award, for sure!
+I wrote a [blog post](/posts/derzplates-my-first-wow-addon/) about the process and how the [WoW Interface](https://www.wowinterface.com/community.php) forum communityreally showed up for me.
 
-## Health and Body
-
-I turned 30 this year!
-I also decided to take health a bit more seriously, too.
-I know 30 isn't even that old but I want to lock in my good habits now and focus on activites that I can still do as I get older.
-I did a lot more walking this year: long walks between 60 and 90 minutes 3-4 times per week.
-I like it for music, podcasts, and even audiobooks.
-I didn't bike as much as I did two years prior (the new house kept us busy).
-2025 will include even more walking, more biking, more kayaking, and maybe even some running.
+I've written [Lua](https://www.lua.org/) in the past so that aspect of addon development was familiar to me, at least.
+The WoW client API, however, was totally foreign and required so much research to even partially understand.
+My initial version was kinda buggy but SDPhantom (on the forums) gave me some incredible [guidance and advice](https://www.wowinterface.com/forums/showthread.php?p=344701) to get it working properly.
+They get my personal "Best Tech Support of 2024" award, for sure!
 
 # Looking Forward
 
 What do I hope to achieve in 2025?
-I still want to blog, but likely not every week.
+I still want to blog but it likely won't be every week.
 I also plan on [writing more Clojure](/posts/2025-the-year-of-clojure/) which I'm super excited for!
-I'm not sure if I'll do AoC again.
-On December 25th, I always tell myself that it wasn't worth the stress and that I won't do it next year... but then I can't stay away.
-It's the hype!
-People at work are talking about it, friends are talking about it, and I _know_ that thousands of devs are having a great time with the early puzzles.
+Software development is one of my favorite hobbies so I'm sure some new and exciting projects will reveal themselves.
+I'm also hoping to go on more long walks (perhaps with some mild jogging mixed in).
+Walking with music, podcasts, or audiobooks has really been my jam this year and I plan to keep it up.
+Weather permitting, I also want to do more biking on the local trails and kayaking on the river.
+
+This was an amazing year for personal and professional growth.
+I honestly think it might've been my most successful and satisfying year ever.
+It really set the bar high but hopefully 2025 can be even better.
+Either way, I'll be sure to summarize the year's happenings in another "wrapped" post.
+See you all next year!
