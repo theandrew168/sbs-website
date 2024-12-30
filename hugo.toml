@@ -3,7 +3,6 @@ title = "Shallow Brook Software"
 theme = "hugo-coder"
 languagecode = "en"
 defaultcontentlaguage = "en"
-paginate = 50
 
 pluralizeListTitles = false
 capitalizeListTitles = false
@@ -45,6 +44,9 @@ weight = 1
 name = "Blog"
 url = "/posts/"
 weight = 2
+
+[pagination]
+pagerSize = 100
 
 [taxonomies]
 category = "categories"
