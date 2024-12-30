@@ -5,123 +5,130 @@ slug: "2024-wrapped"
 draft: true
 ---
 
-2024 was a year of great personal accomplishment: both personal and professional.
-From new friends to new skills, a lot has changed and I've experience a lot of growth!
-2024 was also the year of balance: balancing work, life, and the nuances within each.
-Within work, I balanced regular development work with tech leading and planning.
-Within life, I balanced relationships: welcoming new friends who all come with unique and exciting interests, experiences, and perspectives.
+This year, 2024, was one of great accomplishment: both personal and professional.
+From new friends to new skills, must has changed and I've experienced a huge amount of growth!
+2024 was also the "Year of Balance": balancing the nuances of both work and life.
+Within work, I balanced regular development work with tech leadership and project planning.
+Within life, I balanced relationships and welcomed new friends who all come with unique and exciting interests, experiences, and perspectives.
 
 # Home Ownership
 
-Personally, my wife and I bought a house!
-We are home owners for the first time our lives and it has been amazing.
+My biggest personal personal achievement was buying a house!
+My wife and I are home owners for the first time in our lives and it has been amazing.
 Sure, there is a lot of work to do, but overall it has been a tremendous benefit.
-We both work from home and have separate offices now.
-Our dog, Maple, has a big yard to run around it.
-The ground-floor living room has no TV: just a bay window, plenty of seating, and our vinyl setup.
+We both work from home and finally have separate offices (no more working from the couch).
+Our dog, Maple, now has a big yard to run around in.
+
+The house's ground-floor living room has no TV: just a bay window, plenty of seating, and our ever-growing vinyl setup.
 We jokingly refer to this as our "regen" living room.
-Downstairs, we have a 2x3 arrangement of short floor couches (corgis have short legs) that puts us at the perfect height for TV-realted activities.
-This is the "degen" living room.
+Downstairs, we have a large, flat arrangement of short floor couches (corgis have short legs) that puts us at the perfect height for watching TV and playing video games.
+This is known as the "degen" living room.
 
 # Technical Leadership
 
 Professionally, I saw a lot of growth in 2024.
-At work, I took my first dive into technical leadership: leading teams of 2-3 through multi-month software projects.
-I learned techniques ([Mikado Method](https://mikadomethod.info/) and [Two Ways to Build a Pyramid](/posts/two-ways-to-build-a-pyramid/), for exmaple) for breaking down large, abstracts features into bite-sized, actionable tasks.
-The biggest thing I learned is this: if the tickets are clear and correctly-sized, developers are able to complete them at a quick, consistent pace.
-This, in turn, leads to increased team morale since everyone feels like they are crushing it (because they are)!
+At work, I took my first dive into technical leadership: leading teams of 2-3 developers through multi-month software projects.
+I learned techniques for breaking down large, abstracts features into bite-sized, actionable tasks (the [Mikado Method](https://mikadomethod.info/) and [Two Ways to Build a Pyramid](/posts/two-ways-to-build-a-pyramid/), for example).
+One of the biggest and most important things I learned was this: if tickets are small, clear, and actionable, developers will be able to complete them at a quick, consistent pace.
+
+This will, in turn, lead to increased team morale since everyone feels like they are crushing it (because they are)!
 Selfishly, this reflects positively on my planning and leadership capabilities.
 Since the year began, I've led three projects to successful, on-time completion.
 The first few definitely caused me quite a bit of stress but things have gotten easier.
+Tech leadership is a skill that gets better with experience just like anything else.
 
 # Weekly Blogging
 
-At the start of 2024, my buddy Nick and I set a goal for ourselves: write a blog post every week.
+At the start of 2024, my buddy [Nick](https://nickherrig.com/) and I set a goal for ourselves: write a new blog post every week.
 I'm very hyped to say that I've made it!
-This is my final, 52nd post of the year.
+This is my last post of the year: number 52.
 Some posts were good, some posts were… less good.
-But overall I think these writings will serve as a great additional to my portfolio as a professional developer.
-I (well, Bloggulus) got a very minimal shout out from Rachel by the Bay.
-That really made my week!
+But overall I think these writings will serve as a great addition to my portfolio.
+It also demonstrates my writing capabilities which are somewhat underrepresented by my GitHub profile.
 
 Was it fun? Sometimes.
-To be honest, writing these posts rarely felt “more-ish” to me.
+To be honest, writing these posts didn't often feel “more-ish” to me.
 Rarely did I find myself super eager and excited to write a post (thought it did happen a few times).
-Initially, I put a lot of pressure on myself to make each post long, detailed, and objectively useful.
-I let some of that pressure go midway though the year, though.
-Instead, I let myself write about anything: what I did that week, opinions on non-technical subjects, and the occasional technical deep dive.
+Initially, I put a lot of pressure on myself to make each post long, detailed, and objectively useful to any readers.
+I let some of that pressure dissipate midway though the year, though.
+Instead, I let myself write about anything: what I did that week, opinions on non-technical subjects, and smaller "Today I Learned" style posts.
 
 Now that I'm at the end, it feels nice to look back and reflect on everything I've written.
-Some posts fill me with joy to re-read while others fall a bit flat (they can't all be winners).
-Here are some of my favorite posts from the past year (in no particular order).
+Some posts fill me with joy to re-read while others fall a bit flat (they can't _all_ be winners, after all).
+Here are some of my favorite posts from the year (in no particular order):
 
 ## [1. Automating a Golden Age Minecraft Server](/posts/automating-a-golden-age-minecraft-server/)
 
 This was a really fun post about how I researched, configured, and automated the hosting process for a "Golden Age" Minecraft server.
-This refers to servers of older versions: [Beta 1.7.3](https://minecraft.fandom.com/wiki/Java_Edition_Beta_1.7.3) for me.
-I ran the server on a moderately-specced DigitalOcean droplet and a few friends played on it.
-It was an interesting problem from a security perspective since these older servers aren't compabitle with the game's modern auth systems.
-Instead, I had to implement a "best effort" security posture by allow-listing usernames and restricting IP addresses.
+The term "Golden Age" refers to versions of Minecraft prior to the [Adventure Update](https://minecraft.fandom.com/wiki/Adventure_Update) (I chose [Beta 1.7.3](https://minecraft.fandom.com/wiki/Java_Edition_Beta_1.7.3) for my server).
 I still really love the aesthetic of early Minecraft builds: cobblestone, trees, and planks.
+The post includes some nostalgic screenshots of the original server I hosted back in high school.
+
+I ran the server on a medium-sized [DigitalOcean](https://www.digitalocean.com/) droplet for myself and a few friends.
+It presented an interesting problem from a security perspective since these older servers aren't compabitle with the game's modern authentication system.
+Instead, I had to implement a "best effort" security posture by allow-listing usernames and restricting IP addresses.
+It definitely wasn't perfectly locked down, but we never had any issues with malicious actors showing up.
 
 ## [2. A Multi-Plateform WebGL Demo](/posts/a-multi-platform-modern-webgl-demo/)
 
-This post was a fun throwback to the [second blog post](/posts/a-multi-platform-modern-opengl-demo-with-sdl2/) I ever wrote (back in June 2020).
-That post was about writing and building a cross-platform OpenGL demo in C.
-The demo itself was pretty basic: a spinning red square.
-Despite its simplicity, it required dealing with quite a few aspects of the OpenGL API: buffers, vertex arrays, and shaders.
-It used [SDL2](https://www.libsdl.org/) for handling the native window and input support.
+This one was a fun throwback to the [second blog post](/posts/a-multi-platform-modern-opengl-demo-with-sdl2/) I ever wrote (back in June 2020).
+That post was about writing and building a cross-platform [OpenGL](https://en.wikipedia.org/wiki/OpenGL) demo in C.
+The demo itself was very basic: just a spinning red square.
+Despite its simplicity, it required understanding and interacting with multiple aspects of the OpenGL API: buffers, vertex arrays, and shaders.
+It used [SDL2](https://www.libsdl.org/) for handling the native window creation and input events.
 
-One downside of writing native OpenGL programs is that they are difficult to distribute.
+A big downside of writing native OpenGL programs is that they are difficult to distribute.
 As it turns out, modern computers don't want to let users run untrusted binaries (and fair enough)!
-It meant that I had to tell my friends: "Just download, trust, and run this binary. I swear it isn't a virus!".
-So, for the throwback post, I wanted to recreate the same demo but in a way that could run in the reader's browser.
+It meant that I always had to tell my friends:
+
+> Just download, trust, and run this binary. I swear it isn't a virus!
+
+So, for the throwback post, I wanted to recreate the same demo but in a way that could run directly in the reader's browser (no virus warnings necessary).
 This is where [WebGL](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API) (a browser-based implementation of the modern OpenGL API) comes in!
-In just a few hundred lines of JavaScript, I had the same demo running within the blog post itself.
+In just a few hundred lines of JavaScript, I had the same demo running [within the blog post](https://github.com/theandrew168/sbs-website/blob/25a3797d8e16ef93fe49e3f068313148d6791275/content/posts/a-multi-platform-modern-webgl-demo.md?plain=1#L89-L222) itself.
 I really loved how this post showed growth: both in technology (OpenGL to WebGL) and in my own experience (C to JavaScript).
 
 ## [3. Mario Kart and the Maker's Schedule](/posts/mario-kart-and-the-makers-schedule/)
 
-This was an opinion piece I wrote reflecting upon Paul Graham's [Maker's Schedule, Manager's Schedule](https://www.paulgraham.com/makersschedule.html) essay as well as my own experiences.
+This was an opinion piece I wrote as a personal reflection on Paul Graham's [Maker's Schedule, Manager's Schedule](https://www.paulgraham.com/makersschedule.html) essay.
 Often, deep work requires prolonged, uninterrupted periods of focus.
-A fragmented schedule full of meetings can disrupt this flow and lead to stress, anxiety, and feeling behind.
-This post summarizes these sentiments and compares the two schedules (Maker vs Manager) to Mario Kart.
+A fragmented schedule full of meetings can disrupt this flow and can lead feeling anxious and stressed.
+My post summarizes these sentiments and compares the two schedules to Mario Kart.
 Some karts have slow acceleration but a high top speed (this is how I categorize myself).
-Others have a faster acceleration but at the cost of a lower top speed.
-I'm sure some folks have both, though.
-If you do, that's awesome!
+Others have faster acceleration but at the cost of lower top speed.
 
 This post had great pacing and flow, in my opinion.
-Early on in the post, I used the example of how my dog, Maple, can break my flow while barking.
+In the beginning, I used the example of how my dog, Maple, can break my flow with her unexpected and surprising barks.
 Then, near the end, I talk about how I sometimes do my most productive work late at night when work chat is quiet.
 In addition, Maple is usually snoozing at night so I was able to callback to her prior disruption by including a photo of her sleeping on the couch.
-She's such a cutie.
-It was a nice "circling back" moment to me which was further boosted by including a cute dog pic.
+It was a nice "circle back" moment which was further elevated by including a cute dog pic!
 
 ## [4. Bloggulus Outage Postmortem](/posts/bloggulus-outage-postmortem/)
 
-This post was a technical postmortem into a ~7 hour outage that affected my [Bloggulus](https://bloggulus.com/) web site.
+This post was a technical postmortem into an outage that affected my [Bloggulus](https://bloggulus.com/) web site back in June.
 While no one was actually affected by the outage (I'm the only user and I was sleeping), it was an interesting case study into both what went wrong and why it took so long for me to notice.
-The post really went down the failure rabbit hole: the app was down, the database was down, and the server's locale was messed up.
-Ultimately, the cause was quite simple: the server ran out of memory why trying to regenerate the locale database after automatic updates.
+The post really went down the failure rabbit hole: why the app was down, why the database was down, and why the server's locale database was messed up.
+
+Ultimately, the cause was quite simple: the server ran out of memory while trying to regenerate the locale database after a round of automatic updates.
 The fix was also simple: enable and allocate swap space on the server.
-I even wrote a [blog post](/posts/simple-server-swap-space/) about that, too.
-For what it's worth, Bloggulus has no outages (or even OOM-killed processes) since!
+I wrote a [blog post](/posts/simple-server-swap-space/) about that, too.
+For what it's worth, Bloggulus has had no outages (or even OOM-killed processes) ever since!
 
 ## [5. Reinforcing Indirect Joins](/posts/reinforcing-indirect-joins/)
 
 This post summarized an issue I kept running into at work where database queries were taking a shocking amount of time to plan.
-To clarify, the actual execution of the query was fast, but the planning was taking multiple orders of magnitude longer.
+To clarify, the actual **execution** of the query was fast, but the **planning** was taking multiple orders of magnitude longer.
 I eventually identified a pattern shared between these slow queries: they were trying to join between "indirect" tables.
+
 The post goes into more detail about what this means and how to fix it.
-In the months following the post, I kept encountering and fixing these indirect joins.
-I can't even count how many times I would look at query, see the indirect join, and then immediately slash the planning time by adding a single extra join.
-I used this post to explain the problem to coworkers during PRs, too.
-It came in super handy was probably my most tangibly impactful post of 2024.
+In the months following, I kept encountering, identifying, and fixing these indirect joins.
+I can't even count how many times I would look at query, see the indirect join, and then immediately slash the planning time just by adding a single join.
+I used this post to explain the problem to coworkers within PRs, too.
+It came in super handy and was probably my most objectively impactful post of 2024.
 
 # Personal Projects
 
-2024 was also a great year for my personal projects!
+2024 was also a great year for personal projects!
 
 ## Bloggulus
 
