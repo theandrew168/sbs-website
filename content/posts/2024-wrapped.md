@@ -5,14 +5,14 @@ slug: "2024-wrapped"
 ---
 
 This year, 2024, was one of great accomplishment: both personal and professional.
-From new friends to new skills, must has changed and I've experienced a huge amount of growth!
+From new friends to new skills, much has changed and I've experienced a huge amount of growth!
 2024 was also the "Year of Balance": balancing the nuances of both work and life.
 Within work, I balanced regular development work with tech leadership and project planning.
 Within life, I balanced relationships and welcomed new friends who all come with unique and exciting interests, experiences, and perspectives.
 
 # Home Ownership
 
-My biggest personal personal achievement was buying a house!
+My biggest personal achievement was buying a house!
 My wife and I are home owners for the first time in our lives and it has been amazing.
 Sure, there is a lot of work to do, but overall it has been a tremendous benefit.
 We both work from home and finally have separate offices (no more working from the couch).
@@ -27,7 +27,7 @@ This is known as the "degen" living room.
 
 Professionally, I saw a lot of growth in 2024.
 At work, I took my first dive into technical leadership: leading teams of 2-3 developers through multi-month software projects.
-I learned techniques for breaking down large, abstracts features into bite-sized, actionable tasks (the [Mikado Method](https://mikadomethod.info/) and [Two Ways to Build a Pyramid](/posts/two-ways-to-build-a-pyramid/), for example).
+I learned techniques for breaking down large, abstract features into bite-sized, actionable tasks (the [Mikado Method](https://mikadomethod.info/) and [Two Ways to Build a Pyramid](/posts/two-ways-to-build-a-pyramid/), for example).
 One of the biggest and most important things I learned was this: if tickets are small, clear, and actionable, developers will be able to complete them at a quick, consistent pace.
 
 This will, in turn, lead to increased team morale since everyone feels like they are crushing it (because they are)!
@@ -47,9 +47,9 @@ It also demonstrates my writing capabilities which are somewhat underrepresented
 
 Was it fun? Sometimes.
 To be honest, writing these posts didn't often feel “more-ish” to me.
-Rarely did I find myself super eager and excited to write a post (thought it did happen a few times).
+Rarely did I find myself super eager and excited to write a post (though it did happen a few times).
 Initially, I put a lot of pressure on myself to make each post long, detailed, and objectively useful to any readers.
-I let some of that pressure dissipate midway though the year, though.
+I let some of that pressure dissipate midway through the year, however.
 Instead, I let myself write about anything: what I did that week, opinions on non-technical subjects, and smaller "Today I Learned" style posts.
 
 Now that I'm at the end, it feels nice to look back and reflect on everything I've written.
