@@ -37,13 +37,13 @@ Instead, we have to make clever use of Go&rsquo;s interface system in order to e
 <a class=heading-link href=#algebraic-data-types><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>Credit for this approach goes to Eli Bendersky&rsquo;s amazing blog post: <a href=https://eli.thegreenplace.net/2018/go-and-algebraic-data-types/ class=external-link target=_blank rel=noopener>Go and Algebraic Data Types </a>.
 Since we can&rsquo;t define a rule as the sum of two other types, we need to flip things around a bit.
-Instead, we define an interface that represents a <code>Rule</code> and contains a single, private method named <code>isRule</code>:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// A Rule can be either Basic or Composite.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Rule</span> <span style=color:#66d9ef>interface</span> {
+Instead, we define an interface that represents a <code>Rule</code> and contains a single, private method named <code>isRule</code>:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// A Rule can be either Basic or Composite.</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Rule</span> <span style=color:#66d9ef>interface</span> {
 </span></span><span style=display:flex><span>	<span style=color:#a6e22e>isRule</span>()
 </span></span><span style=display:flex><span>}
 </span></span></code></pre></div><p>Now, any specific subtypes of <code>Rule</code> can implement this private method and Go will understand that it &ldquo;is a rule&rdquo;.
-Let&rsquo;s fill in the two concrete rule subtypes: <code>Basic</code> and <code>Composite</code>:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// A Basic rule is a single regex pattern.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Basic</span> <span style=color:#66d9ef>struct</span> {
+Let&rsquo;s fill in the two concrete rule subtypes: <code>Basic</code> and <code>Composite</code>:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// A Basic rule is a single regex pattern.</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Basic</span> <span style=color:#66d9ef>struct</span> {
 </span></span><span style=display:flex><span>	<span style=color:#a6e22e>Pattern</span> <span style=color:#66d9ef>string</span> <span style=color:#e6db74>`json:&#34;pattern&#34;`</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
@@ -57,16 +57,16 @@ Let&rsquo;s fill in the two concrete rule subtypes: <code>Basic</code> and <code
 </span></span><span style=display:flex><span>	<span style=color:#a6e22e>OperationNot</span> <span style=color:#a6e22e>Operation</span> = <span style=color:#e6db74>&#34;not&#34;</span>
 </span></span><span style=display:flex><span>)
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// A Composite rule combines other rules with a logical operation.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Composite</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span><span style=color:#75715e>// A Composite rule combines other rules with a logical operation.</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Composite</span> <span style=color:#66d9ef>struct</span> {
 </span></span><span style=display:flex><span>	<span style=color:#a6e22e>Operation</span> <span style=color:#a6e22e>Operation</span> <span style=color:#e6db74>`json:&#34;operation&#34;`</span>
 </span></span><span style=display:flex><span>	<span style=color:#a6e22e>Rules</span>     []<span style=color:#a6e22e>Rule</span>    <span style=color:#e6db74>`json:&#34;rules&#34;`</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>Composite</span>) <span style=color:#a6e22e>isRule</span>() {}
 </span></span></code></pre></div><p>Now that we have defined a <code>Basic</code> rule, a <code>Composite</code> rule, and a simple string type for <code>Operation</code>, we can represent arbitrary combinations of rules.
-Here are a few examples:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// This rule matches the text &#34;foo&#34; or &#34;bar&#34;.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>fooOrBar</span> <span style=color:#a6e22e>Rule</span> = <span style=color:#a6e22e>Composite</span>{
+Here are a few examples:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// This rule matches the text &#34;foo&#34; or &#34;bar&#34;.</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>fooOrBar</span> <span style=color:#a6e22e>Rule</span> = <span style=color:#a6e22e>Composite</span>{
 </span></span><span style=display:flex><span>	<span style=color:#a6e22e>Operation</span>: <span style=color:#a6e22e>OperationOr</span>,
 </span></span><span style=display:flex><span>	<span style=color:#a6e22e>Rules</span>: []<span style=color:#a6e22e>Rule</span>{
 </span></span><span style=display:flex><span>		<span style=color:#a6e22e>Basic</span>{<span style=color:#a6e22e>Pattern</span>: <span style=color:#e6db74>&#34;foo&#34;</span>},
@@ -74,8 +74,8 @@ Here are a few examples:</p><div class=highlight><pre tabindex=0 style=color:#f8
 </span></span><span style=display:flex><span>	},
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// This rule matches &#34;foo&#34; and not &#34;bar&#34;.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>fooAndNotBar</span> <span style=color:#a6e22e>Rule</span> = <span style=color:#a6e22e>Composite</span>{
+</span></span><span style=display:flex><span><span style=color:#75715e>// This rule matches &#34;foo&#34; and not &#34;bar&#34;.</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>fooAndNotBar</span> <span style=color:#a6e22e>Rule</span> = <span style=color:#a6e22e>Composite</span>{
 </span></span><span style=display:flex><span>	<span style=color:#a6e22e>Operation</span>: <span style=color:#a6e22e>OperationAnd</span>,
 </span></span><span style=display:flex><span>	<span style=color:#a6e22e>Rules</span>: []<span style=color:#a6e22e>Rule</span>{
 </span></span><span style=display:flex><span>		<span style=color:#a6e22e>Basic</span>{<span style=color:#a6e22e>Pattern</span>: <span style=color:#e6db74>&#34;foo&#34;</span>},
@@ -176,22 +176,22 @@ The two types look pretty similar, with the latter using <code>json.RawMessage</
 </span></span><span style=display:flex><span>	<span style=color:#a6e22e>Rules</span>     []<span style=color:#a6e22e>json</span>.<span style=color:#a6e22e>RawMessage</span> <span style=color:#e6db74>`json:&#34;rules&#34;`</span>
 </span></span><span style=display:flex><span>}
 </span></span></code></pre></div><p>Okay, at this point we have everything we need to parse our polymorphic JSON structure.
-Let&rsquo;s get recursive!</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// Recursively parse a dynamic, polymorphic rule structure.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>ParseRule</span>(<span style=color:#a6e22e>data</span> []<span style=color:#66d9ef>byte</span>) (<span style=color:#a6e22e>Rule</span>, <span style=color:#66d9ef>error</span>) {
-</span></span><span style=display:flex><span>	<span style=color:#75715e>// 1. Try to decode a basic rule
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>basic</span> <span style=color:#a6e22e>Basic</span>
+Let&rsquo;s get recursive!</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// Recursively parse a dynamic, polymorphic rule structure.</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>ParseRule</span>(<span style=color:#a6e22e>data</span> []<span style=color:#66d9ef>byte</span>) (<span style=color:#a6e22e>Rule</span>, <span style=color:#66d9ef>error</span>) {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 1. Try to decode a basic rule</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>basic</span> <span style=color:#a6e22e>Basic</span>
 </span></span><span style=display:flex><span>	<span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>json</span>.<span style=color:#a6e22e>Unmarshal</span>(<span style=color:#a6e22e>data</span>, <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>basic</span>)
 </span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
 </span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>, <span style=color:#a6e22e>err</span>
 </span></span><span style=display:flex><span>	}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	<span style=color:#75715e>// 2. If that succeeds, return it
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>basic</span>.<span style=color:#a6e22e>Pattern</span> <span style=color:#f92672>!=</span> <span style=color:#e6db74>&#34;&#34;</span> {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 2. If that succeeds, return it</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>basic</span>.<span style=color:#a6e22e>Pattern</span> <span style=color:#f92672>!=</span> <span style=color:#e6db74>&#34;&#34;</span> {
 </span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>basic</span>, <span style=color:#66d9ef>nil</span>
 </span></span><span style=display:flex><span>	}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	<span style=color:#75715e>// 3. Otherwise, partially decode a composite rule
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>partial</span> <span style=color:#66d9ef>struct</span> {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 3. Otherwise, partially decode a composite rule</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>partial</span> <span style=color:#66d9ef>struct</span> {
 </span></span><span style=display:flex><span>		<span style=color:#a6e22e>Operation</span> <span style=color:#a6e22e>Operation</span>         <span style=color:#e6db74>`json:&#34;operation&#34;`</span>
 </span></span><span style=display:flex><span>		<span style=color:#a6e22e>Rules</span>     []<span style=color:#a6e22e>json</span>.<span style=color:#a6e22e>RawMessage</span> <span style=color:#e6db74>`json:&#34;rules&#34;`</span>
 </span></span><span style=display:flex><span>	}
@@ -200,8 +200,8 @@ Let&rsquo;s get recursive!</p><div class=highlight><pre tabindex=0 style=color:#
 </span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>, <span style=color:#a6e22e>err</span>
 </span></span><span style=display:flex><span>	}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	<span style=color:#75715e>// 4. Recursively parse and collect each sub-rule
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>rules</span> []<span style=color:#a6e22e>Rule</span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 4. Recursively parse and collect each sub-rule</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>rules</span> []<span style=color:#a6e22e>Rule</span>
 </span></span><span style=display:flex><span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>ruleData</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>partial</span>.<span style=color:#a6e22e>Rules</span> {
 </span></span><span style=display:flex><span>		<span style=color:#a6e22e>rule</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>ParseRule</span>(<span style=color:#a6e22e>ruleData</span>)
 </span></span><span style=display:flex><span>		<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
@@ -211,8 +211,8 @@ Let&rsquo;s get recursive!</p><div class=highlight><pre tabindex=0 style=color:#
 </span></span><span style=display:flex><span>		<span style=color:#a6e22e>rules</span> = append(<span style=color:#a6e22e>rules</span>, <span style=color:#a6e22e>rule</span>)
 </span></span><span style=display:flex><span>	}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	<span style=color:#75715e>// 5. Construct the composite rule and return it
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>composite</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>Composite</span>{
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// 5. Construct the composite rule and return it</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>composite</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>Composite</span>{
 </span></span><span style=display:flex><span>		<span style=color:#a6e22e>Operation</span>: <span style=color:#a6e22e>partial</span>.<span style=color:#a6e22e>Operation</span>,
 </span></span><span style=display:flex><span>		<span style=color:#a6e22e>Rules</span>:     <span style=color:#a6e22e>rules</span>,
 </span></span><span style=display:flex><span>	}

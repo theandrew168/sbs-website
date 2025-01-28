@@ -89,21 +89,21 @@ How does it work?</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;ba
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
-</span></span><span style=display:flex><span>	<span style=color:#75715e>// initialize a WaitGroup
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>wg</span> <span style=color:#a6e22e>sync</span>.<span style=color:#a6e22e>WaitGroup</span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// initialize a WaitGroup</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>wg</span> <span style=color:#a6e22e>sync</span>.<span style=color:#a6e22e>WaitGroup</span>
 </span></span><span style=display:flex><span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#ae81ff>16</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
-</span></span><span style=display:flex><span>		<span style=color:#75715e>// add a counter to the WaitGroup
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>		<span style=color:#a6e22e>wg</span>.<span style=color:#a6e22e>Add</span>(<span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// add a counter to the WaitGroup</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>wg</span>.<span style=color:#a6e22e>Add</span>(<span style=color:#ae81ff>1</span>)
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>		<span style=color:#66d9ef>go</span> <span style=color:#66d9ef>func</span>() {
-</span></span><span style=display:flex><span>			<span style=color:#75715e>// remove a counter from the WaitGroup after doWork completes
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>			<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>wg</span>.<span style=color:#a6e22e>Done</span>()
+</span></span><span style=display:flex><span>			<span style=color:#75715e>// remove a counter from the WaitGroup after doWork completes</span>
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>wg</span>.<span style=color:#a6e22e>Done</span>()
 </span></span><span style=display:flex><span>			<span style=color:#a6e22e>doWork</span>()
 </span></span><span style=display:flex><span>		}()
 </span></span><span style=display:flex><span>	}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	<span style=color:#75715e>// wait for all jobs to finish
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>wg</span>.<span style=color:#a6e22e>Wait</span>()
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// wait for all jobs to finish</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>wg</span>.<span style=color:#a6e22e>Wait</span>()
 </span></span><span style=display:flex><span>}
 </span></span></code></pre></div><p><img src=/images/20240421/waitgroup-min.gif alt="WaitGroup Example"></p><p>There we go, all the jobs executed and completed in roughly a quarter second!
 In this example, we&rsquo;ve added a <code>sync.WaitGroup</code> and ensured that each job increments the group&rsquo;s counter when it starts and decrements the group&rsquo;s counter when it finishes.
@@ -126,8 +126,8 @@ At creation, you give the semaphore a number and it&rsquo;ll only permit concurr
 </span></span><span style=display:flex><span>	<span style=color:#e6db74>&#34;golang.org/x/sync/semaphore&#34;</span>
 </span></span><span style=display:flex><span>)
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// limit the number of concurrent workers
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>MaxWorkers</span> = <span style=color:#ae81ff>4</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>// limit the number of concurrent workers</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>const</span> <span style=color:#a6e22e>MaxWorkers</span> = <span style=color:#ae81ff>4</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>doWork</span>() {
 </span></span><span style=display:flex><span>	<span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Sleep</span>(<span style=color:#ae81ff>250</span> <span style=color:#f92672>*</span> <span style=color:#a6e22e>time</span>.<span style=color:#a6e22e>Millisecond</span>)
@@ -135,22 +135,22 @@ At creation, you give the semaphore a number and it&rsquo;ll only permit concurr
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
-</span></span><span style=display:flex><span>	<span style=color:#75715e>// initialize a semaphore
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>sem</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>semaphore</span>.<span style=color:#a6e22e>NewWeighted</span>(<span style=color:#a6e22e>MaxWorkers</span>)
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// initialize a semaphore</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>sem</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>semaphore</span>.<span style=color:#a6e22e>NewWeighted</span>(<span style=color:#a6e22e>MaxWorkers</span>)
 </span></span><span style=display:flex><span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>i</span> <span style=color:#f92672>:=</span> <span style=color:#ae81ff>0</span>; <span style=color:#a6e22e>i</span> &lt; <span style=color:#ae81ff>16</span>; <span style=color:#a6e22e>i</span><span style=color:#f92672>++</span> {
-</span></span><span style=display:flex><span>		<span style=color:#75715e>// acquire a single counter from the semaphore
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>		<span style=color:#75715e>// (this blocks if all counters are in use)
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>		<span style=color:#a6e22e>sem</span>.<span style=color:#a6e22e>Acquire</span>(<span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Background</span>(), <span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// acquire a single counter from the semaphore</span>
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// (this blocks if all counters are in use)</span>
+</span></span><span style=display:flex><span>		<span style=color:#a6e22e>sem</span>.<span style=color:#a6e22e>Acquire</span>(<span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Background</span>(), <span style=color:#ae81ff>1</span>)
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>		<span style=color:#66d9ef>go</span> <span style=color:#66d9ef>func</span>() {
-</span></span><span style=display:flex><span>			<span style=color:#75715e>// release a counter to the semaphore after doWork completes
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>			<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>sem</span>.<span style=color:#a6e22e>Release</span>(<span style=color:#ae81ff>1</span>)
+</span></span><span style=display:flex><span>			<span style=color:#75715e>// release a counter to the semaphore after doWork completes</span>
+</span></span><span style=display:flex><span>			<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>sem</span>.<span style=color:#a6e22e>Release</span>(<span style=color:#ae81ff>1</span>)
 </span></span><span style=display:flex><span>			<span style=color:#a6e22e>doWork</span>()
 </span></span><span style=display:flex><span>		}()
 </span></span><span style=display:flex><span>	}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	<span style=color:#75715e>// wait for all jobs to finish by acquiring all counters
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>sem</span>.<span style=color:#a6e22e>Acquire</span>(<span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Background</span>(), <span style=color:#a6e22e>MaxWorkers</span>)
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// wait for all jobs to finish by acquiring all counters</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>sem</span>.<span style=color:#a6e22e>Acquire</span>(<span style=color:#a6e22e>context</span>.<span style=color:#a6e22e>Background</span>(), <span style=color:#a6e22e>MaxWorkers</span>)
 </span></span><span style=display:flex><span>}
 </span></span></code></pre></div><p><img src=/images/20240421/semaphore-min.gif alt="Semaphore Example"></p><p>This is exactly what I&rsquo;m after: the best of both worlds!
 The jobs execute concurrently but only four (the value of <code>MaxWorkers</code>) are able to run at the same time.

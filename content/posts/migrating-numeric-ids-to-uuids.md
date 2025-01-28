@@ -159,7 +159,7 @@ ALTER TABLE blog_new DROP COLUMN original_id;
 There we go!
 That was certainly a lot of SQL.
 I hope that seeing an example makes the process a bit more clear but I apologize if I haven't done a great job explaining how this works.
-If you want to see the full migration complete with all of the nuances, [take a look](<(https://github.com/theandrew168/bloggulus/blob/main/migrations/0005_convert_ids_to_uuid.sql)>).
+If you want to see the full migration complete with all of the nuances, [take a look](https://github.com/theandrew168/bloggulus/blob/main/migrations/0005_convert_ids_to_uuid.sql).
 
 I'll say this: the problem of tracking and joining on the original IDs definitely gets more complex the larger your data model becomes.
 At some scale, I think things could quickly get out of hand.

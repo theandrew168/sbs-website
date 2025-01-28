@@ -134,7 +134,7 @@ More specifically, we need to temporarily persist the original IDs of the &ldquo
 </span></span></span></code></pre></div><p>There we go!
 That was certainly a lot of SQL.
 I hope that seeing an example makes the process a bit more clear but I apologize if I haven&rsquo;t done a great job explaining how this works.
-If you want to see the full migration complete with all of the nuances, <a href=%28https://github.com/theandrew168/bloggulus/blob/main/migrations/0005_convert_ids_to_uuid.sql%29>take a look</a>.</p><p>I&rsquo;ll say this: the problem of tracking and joining on the original IDs definitely gets more complex the larger your data model becomes.
+If you want to see the full migration complete with all of the nuances, <a href=https://github.com/theandrew168/bloggulus/blob/main/migrations/0005_convert_ids_to_uuid.sql class=external-link target=_blank rel=noopener>take a look</a>.</p><p>I&rsquo;ll say this: the problem of tracking and joining on the original IDs definitely gets more complex the larger your data model becomes.
 At some scale, I think things could quickly get out of hand.
 I got luckly, though, and merely had to deal with the simplest of relationships between only two tables.</p><h2 id=conclusion>Conclusion
 <a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>

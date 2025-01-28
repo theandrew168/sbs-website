@@ -17,21 +17,21 @@ This post describes the original pattern, its limitations, and how I iterated on
 <a class=heading-link href=#application-struct><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>This code snippet showcases the original pattern.
 Essentially, we gather the union of all of our handlers&rsquo; dependencies together in a centralized &ldquo;application struct&rdquo;.
-Then, we attach all handlers to this struct so that they can access the shared resources.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// Keep all handler dependencies in a centralized struct.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Application</span> <span style=color:#66d9ef>struct</span> {
+Then, we attach all handlers to this struct so that they can access the shared resources.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// Keep all handler dependencies in a centralized struct.</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Application</span> <span style=color:#66d9ef>struct</span> {
 </span></span><span style=display:flex><span>    <span style=color:#a6e22e>store</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>storage</span>.<span style=color:#a6e22e>Storage</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// Constructor for the application struct.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>NewApplication</span>(<span style=color:#a6e22e>store</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>storage</span>.<span style=color:#a6e22e>Storage</span>) <span style=color:#f92672>*</span><span style=color:#a6e22e>Application</span> {
+</span></span><span style=display:flex><span><span style=color:#75715e>// Constructor for the application struct.</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>NewApplication</span>(<span style=color:#a6e22e>store</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>storage</span>.<span style=color:#a6e22e>Storage</span>) <span style=color:#f92672>*</span><span style=color:#a6e22e>Application</span> {
 </span></span><span style=display:flex><span>    <span style=color:#a6e22e>app</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>Application</span>{
 </span></span><span style=display:flex><span>        <span style=color:#a6e22e>store</span>: <span style=color:#a6e22e>store</span>,
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#f92672>&amp;</span><span style=color:#a6e22e>app</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// The program&#39;s routing handler.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>app</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Application</span>) <span style=color:#a6e22e>Handler</span>() <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Handler</span> {
+</span></span><span style=display:flex><span><span style=color:#75715e>// The program&#39;s routing handler.</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>app</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Application</span>) <span style=color:#a6e22e>Handler</span>() <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Handler</span> {
 </span></span><span style=display:flex><span>    <span style=color:#a6e22e>mux</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>NewServeMux</span>()
 </span></span><span style=display:flex><span>    <span style=color:#a6e22e>mux</span>.<span style=color:#a6e22e>Handle</span>(<span style=color:#e6db74>&#34;GET /foo&#34;</span>, <span style=color:#a6e22e>app</span>.<span style=color:#a6e22e>HandleFoo</span>())
 </span></span><span style=display:flex><span>    <span style=color:#a6e22e>mux</span>.<span style=color:#a6e22e>Handle</span>(<span style=color:#e6db74>&#34;GET /bar&#34;</span>, <span style=color:#a6e22e>app</span>.<span style=color:#a6e22e>HandleBar</span>())
@@ -39,15 +39,15 @@ Then, we attach all handlers to this struct so that they can access the shared r
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// Handler for a simple route without any dependencies.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>app</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Application</span>) <span style=color:#a6e22e>HandleFoo</span>() <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Handler</span> {
+</span></span><span style=display:flex><span><span style=color:#75715e>// Handler for a simple route without any dependencies.</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>app</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Application</span>) <span style=color:#a6e22e>HandleFoo</span>() <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Handler</span> {
 </span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>HandlerFunc</span>(<span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>w</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>ResponseWriter</span>, <span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Request</span>) {
 </span></span><span style=display:flex><span>        <span style=color:#a6e22e>w</span>.<span style=color:#a6e22e>Write</span>([]byte(<span style=color:#e6db74>&#34;Hello, World!&#34;</span>))
 </span></span><span style=display:flex><span>    })
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// Handler for an average route with dependencies.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>app</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Application</span>) <span style=color:#a6e22e>HandleBar</span>() <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Handler</span> {
+</span></span><span style=display:flex><span><span style=color:#75715e>// Handler for an average route with dependencies.</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> (<span style=color:#a6e22e>app</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Application</span>) <span style=color:#a6e22e>HandleBar</span>() <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Handler</span> {
 </span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>HandlerFunc</span>(<span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>w</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>ResponseWriter</span>, <span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Request</span>) {
 </span></span><span style=display:flex><span>        <span style=color:#a6e22e>foo</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>app</span>.<span style=color:#a6e22e>store</span>.<span style=color:#a6e22e>Foo</span>().<span style=color:#a6e22e>Read</span>()
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
@@ -69,23 +69,23 @@ I wanted to find a better way.</p><h1 id=dependency-closures>Dependency Closures
 <a class=heading-link href=#dependency-closures><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h1><p>The solution is quite simple: just pass each handler&rsquo;s dependencies into its creation function.
 This creates a closure around the dependency such that the handler can still see and use it even after being returned.
-Let&rsquo;s take a look.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// The program&#39;s routing handler.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>Handler</span>(<span style=color:#a6e22e>store</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>storage</span>.<span style=color:#a6e22e>Storage</span>) <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Handler</span> {
+Let&rsquo;s take a look.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// The program&#39;s routing handler.</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>Handler</span>(<span style=color:#a6e22e>store</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>storage</span>.<span style=color:#a6e22e>Storage</span>) <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Handler</span> {
 </span></span><span style=display:flex><span>    <span style=color:#a6e22e>mux</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>NewServeMux</span>()
 </span></span><span style=display:flex><span>    <span style=color:#a6e22e>mux</span>.<span style=color:#a6e22e>Handle</span>(<span style=color:#e6db74>&#34;GET /foo&#34;</span>, <span style=color:#a6e22e>HandleFoo</span>())
 </span></span><span style=display:flex><span>    <span style=color:#a6e22e>mux</span>.<span style=color:#a6e22e>Handle</span>(<span style=color:#e6db74>&#34;GET /bar&#34;</span>, <span style=color:#a6e22e>HandleBar</span>(<span style=color:#a6e22e>store</span>))
 </span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>mux</span>
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// Handler for a simple route without any dependencies.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>HandleFoo</span>() <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Handler</span> {
+</span></span><span style=display:flex><span><span style=color:#75715e>// Handler for a simple route without any dependencies.</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>HandleFoo</span>() <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Handler</span> {
 </span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>HandlerFunc</span>(<span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>w</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>ResponseWriter</span>, <span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Request</span>) {
 </span></span><span style=display:flex><span>        <span style=color:#a6e22e>w</span>.<span style=color:#a6e22e>Write</span>([]byte(<span style=color:#e6db74>&#34;Hello, World!&#34;</span>))
 </span></span><span style=display:flex><span>    })
 </span></span><span style=display:flex><span>}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>// Handler for an average route with dependencies.
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>HandleBar</span>(<span style=color:#a6e22e>store</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>storage</span>.<span style=color:#a6e22e>Storage</span>) <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Handler</span> {
+</span></span><span style=display:flex><span><span style=color:#75715e>// Handler for an average route with dependencies.</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>HandleBar</span>(<span style=color:#a6e22e>store</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>storage</span>.<span style=color:#a6e22e>Storage</span>) <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Handler</span> {
 </span></span><span style=display:flex><span>    <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>HandlerFunc</span>(<span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>w</span> <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>ResponseWriter</span>, <span style=color:#a6e22e>r</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Request</span>) {
 </span></span><span style=display:flex><span>        <span style=color:#a6e22e>foo</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>store</span>.<span style=color:#a6e22e>Foo</span>().<span style=color:#a6e22e>Read</span>()
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {

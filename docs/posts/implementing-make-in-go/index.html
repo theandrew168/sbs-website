@@ -85,8 +85,8 @@ Since I execute each dependency concurrently, I need a way to track errors from 
 <span class=sr-only>Link to heading</span></a></h3><p>The execution of each target uses a <a href=https://pkg.go.dev/sync#WaitGroup class=external-link target=_blank rel=noopener>sync.WaitGroup</a> to ensure all dependencies have ran before moving onto its own commands.
 Additionally, Go&rsquo;s <a href=https://pkg.go.dev/sync#Once class=external-link target=_blank rel=noopener>sync.Once</a> utility is used to ensure that a target&rsquo;s commands only run once regardless of how many goroutines are competing.
 A simple modification gives the <code>Target</code> struct this new superpower:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Target</span> <span style=color:#66d9ef>struct</span> {
-</span></span><span style=display:flex><span>	<span style=color:#75715e>// embed sync.Once to enable &#34;execute once&#34; behavior
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>sync</span>.<span style=color:#a6e22e>Once</span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// embed sync.Once to enable &#34;execute once&#34; behavior</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>sync</span>.<span style=color:#a6e22e>Once</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>	<span style=color:#a6e22e>Dependencies</span> []<span style=color:#66d9ef>string</span>
 </span></span><span style=display:flex><span>	<span style=color:#a6e22e>Commands</span>     []<span style=color:#66d9ef>string</span>
@@ -94,24 +94,24 @@ A simple modification gives the <code>Target</code> struct this new superpower:<
 </span></span></code></pre></div><p>Executing a target&rsquo;s commands now requires calling <code>.Do</code> but gives us safety against race conditions:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>executeCommands</span>(<span style=color:#a6e22e>target</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>Target</span>) <span style=color:#66d9ef>error</span> {
 </span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>commandErr</span> <span style=color:#66d9ef>error</span>
 </span></span><span style=display:flex><span>	<span style=color:#a6e22e>target</span>.<span style=color:#a6e22e>Do</span>(<span style=color:#66d9ef>func</span>() {
-</span></span><span style=display:flex><span>		<span style=color:#75715e>// execute commands via os/exec
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	})
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// execute commands via os/exec</span>
+</span></span><span style=display:flex><span>	})
 </span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>commandErr</span>
 </span></span><span style=display:flex><span>}
 </span></span></code></pre></div><p>Any errors returned from the execution of a dependency are delivered to the current execute&rsquo;s context via a channel.
 If any dependencies return an error, then execution stops and the error is propagated without running the current target&rsquo;s commands.</p><p>Once all deps are kicked off, a <code>select</code> is used to wait for either: the success of <strong>all</strong> deps or the failure of <strong>any</strong> deps.
 This is the full, unsimplifed execution logic in Go:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>execute</span>(<span style=color:#a6e22e>graph</span> <span style=color:#a6e22e>Graph</span>, <span style=color:#a6e22e>name</span> <span style=color:#66d9ef>string</span>) <span style=color:#66d9ef>error</span> {
-</span></span><span style=display:flex><span>	<span style=color:#75715e>// lookup current target by name
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>target</span>, <span style=color:#a6e22e>ok</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>graph</span>[<span style=color:#a6e22e>name</span>]
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// lookup current target by name</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>target</span>, <span style=color:#a6e22e>ok</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>graph</span>[<span style=color:#a6e22e>name</span>]
 </span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> !<span style=color:#a6e22e>ok</span> {
 </span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Errorf</span>(<span style=color:#e6db74>&#34;target does not exist: %s&#34;</span>, <span style=color:#a6e22e>name</span>)
 </span></span><span style=display:flex><span>	}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	<span style=color:#75715e>// create a channel for receiving errors from dependencies
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>errors</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>error</span>)
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// create a channel for receiving errors from dependencies</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>errors</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>error</span>)
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	<span style=color:#75715e>// recursively execute all dependencies
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>wg</span> <span style=color:#a6e22e>sync</span>.<span style=color:#a6e22e>WaitGroup</span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// recursively execute all dependencies</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>var</span> <span style=color:#a6e22e>wg</span> <span style=color:#a6e22e>sync</span>.<span style=color:#a6e22e>WaitGroup</span>
 </span></span><span style=display:flex><span>	<span style=color:#66d9ef>for</span> <span style=color:#a6e22e>_</span>, <span style=color:#a6e22e>dependency</span> <span style=color:#f92672>:=</span> <span style=color:#66d9ef>range</span> <span style=color:#a6e22e>target</span>.<span style=color:#a6e22e>Dependencies</span> {
 </span></span><span style=display:flex><span>		<span style=color:#a6e22e>dependency</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>dependency</span>
 </span></span><span style=display:flex><span>
@@ -119,30 +119,30 @@ This is the full, unsimplifed execution logic in Go:</p><div class=highlight><pr
 </span></span><span style=display:flex><span>		<span style=color:#66d9ef>go</span> <span style=color:#66d9ef>func</span>() {
 </span></span><span style=display:flex><span>			<span style=color:#66d9ef>defer</span> <span style=color:#a6e22e>wg</span>.<span style=color:#a6e22e>Done</span>()
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>			<span style=color:#75715e>// submit any dependency errors to the errors channel
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>			<span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>execute</span>(<span style=color:#a6e22e>graph</span>, <span style=color:#a6e22e>dependency</span>)
+</span></span><span style=display:flex><span>			<span style=color:#75715e>// submit any dependency errors to the errors channel</span>
+</span></span><span style=display:flex><span>			<span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>execute</span>(<span style=color:#a6e22e>graph</span>, <span style=color:#a6e22e>dependency</span>)
 </span></span><span style=display:flex><span>			<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
 </span></span><span style=display:flex><span>				<span style=color:#a6e22e>errors</span> <span style=color:#f92672>&lt;-</span> <span style=color:#a6e22e>err</span>
 </span></span><span style=display:flex><span>			}
 </span></span><span style=display:flex><span>		}()
 </span></span><span style=display:flex><span>	}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	<span style=color:#75715e>// turn wg.Wait() into a select-able channel
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#a6e22e>done</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>struct</span>{})
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// turn wg.Wait() into a select-able channel</span>
+</span></span><span style=display:flex><span>	<span style=color:#a6e22e>done</span> <span style=color:#f92672>:=</span> make(<span style=color:#66d9ef>chan</span> <span style=color:#66d9ef>struct</span>{})
 </span></span><span style=display:flex><span>	<span style=color:#66d9ef>go</span> <span style=color:#66d9ef>func</span>() {
 </span></span><span style=display:flex><span>		<span style=color:#a6e22e>wg</span>.<span style=color:#a6e22e>Wait</span>()
 </span></span><span style=display:flex><span>		close(<span style=color:#a6e22e>done</span>)
 </span></span><span style=display:flex><span>	}()
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	<span style=color:#75715e>// wait for dependencies to finish / check for errors
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>select</span> {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// wait for dependencies to finish / check for errors</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>select</span> {
 </span></span><span style=display:flex><span>	<span style=color:#66d9ef>case</span> <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>done</span>:
 </span></span><span style=display:flex><span>	<span style=color:#66d9ef>case</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#f92672>&lt;-</span><span style=color:#a6e22e>errors</span>:
 </span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
 </span></span><span style=display:flex><span>	}
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>	<span style=color:#75715e>// execute the current target&#39;s commands
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>executeCommands</span>(<span style=color:#a6e22e>target</span>)
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// execute the current target&#39;s commands</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>executeCommands</span>(<span style=color:#a6e22e>target</span>)
 </span></span><span style=display:flex><span>}
 </span></span></code></pre></div><h1 id=lessons-learned>Lessons Learned
 <a class=heading-link href=#lessons-learned><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>

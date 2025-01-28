@@ -57,15 +57,15 @@ This basic interface is implemented across three files:</p><ol><li><code>fronten
 </span></span><span style=display:flex><span>)
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
-</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...</span>
+</span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>frontendFS</span> <span style=color:#a6e22e>fs</span>.<span style=color:#a6e22e>FS</span>
 </span></span><span style=display:flex><span>    <span style=color:#66d9ef>if</span> <span style=color:#a6e22e>frontend</span>.<span style=color:#a6e22e>IsEmbedded</span> {
-</span></span><span style=display:flex><span>        <span style=color:#75715e>// use the embedded frontend output files if they are there
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>        <span style=color:#a6e22e>frontendFS</span> = <span style=color:#a6e22e>frontend</span>.<span style=color:#a6e22e>Frontend</span>
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// use the embedded frontend output files if they are there</span>
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>frontendFS</span> = <span style=color:#a6e22e>frontend</span>.<span style=color:#a6e22e>Frontend</span>
 </span></span><span style=display:flex><span>    } <span style=color:#66d9ef>else</span> {
-</span></span><span style=display:flex><span>        <span style=color:#75715e>// otherwise just open the frontend output dir directly
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>        <span style=color:#a6e22e>frontendFS</span> = <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>DirFS</span>(<span style=color:#e6db74>&#34;./frontend/output&#34;</span>)
+</span></span><span style=display:flex><span>        <span style=color:#75715e>// otherwise just open the frontend output dir directly</span>
+</span></span><span style=display:flex><span>        <span style=color:#a6e22e>frontendFS</span> = <span style=color:#a6e22e>os</span>.<span style=color:#a6e22e>DirFS</span>(<span style=color:#e6db74>&#34;./frontend/output&#34;</span>)
 </span></span><span style=display:flex><span>    }
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>    <span style=color:#a6e22e>app</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>web</span>.<span style=color:#a6e22e>NewApplication</span>(<span style=color:#a6e22e>logger</span>, <span style=color:#a6e22e>store</span>, <span style=color:#a6e22e>frontendFS</span>)
@@ -86,8 +86,8 @@ Let&rsquo;s dive in, starting with the one-var interface that this package expos
 </span></span></code></pre></div><p>As simple as it gets!
 Just export an <code>fs.FS</code> that will be initialized when the package is imported.</p><h3 id=frontendfrontend_embedgo>frontend/frontend_embed.go
 <a class=heading-link href=#frontendfrontend_embedgo><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>//go:build embed
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+<span class=sr-only>Link to heading</span></a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>//go:build embed</span>
+</span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>frontend</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
@@ -95,8 +95,8 @@ Just export an <code>fs.FS</code> that will be initialized when the package is i
 </span></span><span style=display:flex><span>    <span style=color:#e6db74>&#34;io/fs&#34;</span>
 </span></span><span style=display:flex><span>)
 </span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#75715e>//go:embed all:build
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>frontend</span> <span style=color:#a6e22e>embed</span>.<span style=color:#a6e22e>FS</span>
+</span></span><span style=display:flex><span><span style=color:#75715e>//go:embed all:build</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>var</span> <span style=color:#a6e22e>frontend</span> <span style=color:#a6e22e>embed</span>.<span style=color:#a6e22e>FS</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>init</span>() {
 </span></span><span style=display:flex><span>    <span style=color:#66d9ef>var</span> <span style=color:#a6e22e>err</span> <span style=color:#66d9ef>error</span>
@@ -109,8 +109,8 @@ Just export an <code>fs.FS</code> that will be initialized when the package is i
 It embeds the <code>./frontend/build</code> directory which holds all of the frontend&rsquo;s compiled output files.</p><p>The call to <a href=https://pkg.go.dev/io/fs#Sub class=external-link target=_blank rel=noopener>fs.Sub</a> is in here because <code>embed.FS</code> includes the embedded directory&rsquo;s top-level folder by default.
 Calling <code>fs.Sub</code> lets us drill down one level so that the exported <code>fs.FS</code> includes just the internal files and not the top-level folder.</p><h3 id=frontendfrontend_noembedgo>frontend/frontend_noembed.go
 <a class=heading-link href=#frontendfrontend_noembedgo><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>//go:build !embed
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>
+<span class=sr-only>Link to heading</span></a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>//go:build !embed</span>
+</span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>frontend</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#f92672>import</span> (
@@ -133,8 +133,8 @@ Any changes to the frontend will be immediately visible to readers of the export
 </span></span><span style=display:flex><span>)
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
-</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...
-</span></span></span><span style=display:flex><span><span style=color:#75715e></span>    <span style=color:#a6e22e>app</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>web</span>.<span style=color:#a6e22e>NewApplication</span>(<span style=color:#a6e22e>logger</span>, <span style=color:#a6e22e>store</span>, <span style=color:#a6e22e>frontend</span>.<span style=color:#a6e22e>Frontend</span>)
+</span></span><span style=display:flex><span>    <span style=color:#75715e>// ...</span>
+</span></span><span style=display:flex><span>    <span style=color:#a6e22e>app</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>web</span>.<span style=color:#a6e22e>NewApplication</span>(<span style=color:#a6e22e>logger</span>, <span style=color:#a6e22e>store</span>, <span style=color:#a6e22e>frontend</span>.<span style=color:#a6e22e>Frontend</span>)
 </span></span><span style=display:flex><span>}
 </span></span></code></pre></div><p>As you can see, the caller&rsquo;s code is now much cleaner: it doesn&rsquo;t have to know anything about <em>how</em> the <code>frontend.Frontend</code> FS is populated.
 It just imports the frontend package and passes the exposed <code>fs.FS</code> down to whatever part of the code plans to serve it.</p><h1 id=conclusion>Conclusion
