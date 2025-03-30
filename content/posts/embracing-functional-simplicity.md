@@ -1,30 +1,73 @@
 ---
-date: 2025-03-23
+date: 2025-03-30
 title: "Embracing Functional Simplicity"
 slug: "embracing-functional-simplicity"
 draft: true
 ---
 
-I’ve been thinking a lot about software design and how to write better code.
-Better here means more correct, more readable, easier to follow, and easier to test.
-Two books have been influencing me lately: [Grokking Simplicity](https://grokkingsimplicity.com/) by Eric Normand and [Architecture Patterns with Python](https://www.cosmicpython.com/) by Harry Percival and Bob Gregory.
+I’ve been thinking a lot recently about software design and how to write better code.
+Here, "better" means more correct, more readable, easier to follow, and easier to test.
+Two books have been of exceptional influene lately: [Grokking Simplicity](https://grokkingsimplicity.com/) by Eric Normand and [Architecture Patterns with Python](https://www.cosmicpython.com/) by Harry Percival and Bob Gregory.
 The former focuses on functional design: emboldening pure, data-in-data-out functions.
-The latter hoists the ideas up to a higher level and thinks about project / application architecture and how to write code that complements the domain of your problem.
-This idea was also expressed in Brandon Rhodes' [Hoist Your I/O](https://www.youtube.com/watch?v=PBQN62oUnN8) talk.
+The latter hoists the ideas up to a higher level and thinks about overall application architecture and how to write code that best represents the domain of your problem.
 
-These ideas have already led me toward better code in my Bloggulus project.
-More so on the functional side, so far.
-The nastiest, most critical part of the app is the “sync” process.
-Isn’t that usually how it goes: the most important part of the system is the one that is tightly-coupled to the outside world and therefore difficult to test, verify, and trust?
-Here are some meaningful refactorings that I’ve done.
+# Lessons
 
-We’re going to separate what we want to do from how to do it.
-Actions vs Calculations.
-Note that the fetching of RSS feeds is implemented as an interface, but testing this can _still_ be painful.
+These ideas have already led me toward better code in my [Bloggulus](https://bloggulus.com/) project ([source code](https://github.com/theandrew168/bloggulus)): specifically with respect to functional design.
+For some background context, the nastiest yet most critical part of Bloggulus is the “sync” process.
+This is the code that enumerates all blogs in the system, checks their RSS feeds for updates, and then syncs any new / updated posts with the database.
+It almost seems like an unfortunate pattern, sometimes: where the most important part of a system is the one that is most tightly-coupled to the outside world and therefore difficult to test, verify, and trust.
 
-# Before
+## Data, Calculations, and Actions
+
+Early on, Eric Normand's [Grokking Simplicity](https://grokkingsimplicity.com/) book explores an idea of bucketing your code into three separate categories:
+
+1. Data
+2. Calculations
+3. Actions
+
+Data is what you'd expect: just data!
+It could be a string, an array, a map, or anything else where its value comes from its identity.
+Calculations and actions are where things get more interesting.
+Calculations are "pure" functions that have zero interaction with the outside world.
+They never have side effects and the same input yields the same output.
+Lastly, actions are functions that _do_ interact with the world outside of your program.
+For example, perhaps they talk to a database or call a remote API.
+
+Eric argues (and I agree) that data is "better" than calculations which are "better" than actions.
+Once again, "better" here means more correct, more readable, easier to follow, and easier to test.
+Because calculations are pure by definition, they are much simpler to test and verify.
+The lack of interaction with external systems means that tests can always be written as: "does this output match what I expect for a given input?".
+
+See, one of the things that makes Bloggulus' sync process so nasty and tangled is the logic for fetching RSS feeds, querying the database, and deciding which posts to create / update are all heavily intertwined.
+Prior to refactoring, I couldn't verify the small yet critical decisions that dictate what should happen.
+Sure, the actual fetching of RSS feeds and interacting with the database are decoupled via interfaces (thankfully), but the tests still require a large amount of tiresome faking.
+In many other systems I've worked on, these decouping abstractions are _not_ in place and therefore the test are even more difficult to setup, write, and teardown.
+
+Refactoring your code to make more frequent usage of pure functions (calculations) will lead simpler, more reliable code and smaller, more powerful tests.
+
+## Separating "What" from "How"
+
+This next idea is so simple but it absolutely blew my mind when I first read it!
+I immediately starting thinking about all the different places where I could apply it.
+Taken from [Chapter 3](https://www.cosmicpython.com/book/chapter_03_abstractions.html) of [Architecture Patterns with Python](https://www.cosmicpython.com/), the idea is this: separate **what** we want to do from **how** to do it.
+The example in the book involves syncing files between two directories.
+The initial version of the code looks like any developer's first pass at the problem: iterate through each directory and, when necessary, immediately move / copy / delete the files that require action.
+This effectively merges the "what" (which files require action) and "how" (actually performing the action) into a single, intertwined step.
+
+We can already imagine the pain of testing this, especially without any fake-able filesystem abstractions in place.
+Is there a better way?
+Can we slice of a of pure function (calculation) that handles the most important question of the process: which directores should be moved / copied / deleted?
+Their analysis of the problem and its required data yields an amazing result: represent the contents of each directory as a dictionary (data) and then write a pure function (calculation) to decide which files _should_ be moved / copied / deleted.
+
+# Impact
+
+With these two big ideas in mind, let's take a look at the sync process and see how we can make it better.
+
+## Before
 
 This version is kind of a mess: domain logic is mixed in with reckless abandon, actions and calculations are poorly defined yet heavily intertwined, and "what" vs "how" is confusingly mixed.
+How can we isolate the most import question here: which posts should be created and which posts should be updated?
 
 ```python
 # List all blogs in the database.
@@ -32,26 +75,8 @@ blogs = db.list_blogs()
 
 # Process each blog individually.
 for blog in blogs:
-	# Skip the blog if it has been recently synced.
-	delta = now - blog.synced_at
-	if delta < sync_interval:
-		continue
-
-	# Update the blog's synced_at time.
-	db.update_blog_synced_at(blog, now)
-
 	# Fetch the blog's RSS / Atom feed.
 	feed = fetch_feed(blog)
-
-	# If changed, update the blog's cache headers.
-	if feed.etag:
-		db.update_blog_cache_headers(blog, feed.etag)
-	if feed.last_modified:
-		db.update_blog_cache_headers(blog, feed.last_modified)
-
-	# If the feed indicates no new content, skip it.
-	if not feed.has_changed:
-		continue
 
 	# Process each feed post individually.
 	for feed_post in feed.posts:
@@ -67,36 +92,7 @@ for blog in blogs:
 			db.update_post_content(post, feed_post.content)
 ```
 
-# Breakdown
-
-Grokking Simplicity focuses on this idea of bucketing your code into two distinct categories: actions and calculations.
-Actions are places where your code interacts with the outside world: a database, the internet, etc.
-Calculations are pure functions where data goes in and data comes out: the outside world is completely irrelevant and unaffected.
-In general, calculations are "better" than actions.
-They are easier to write, test, and understand.
-
-```
-// Action: List all blogs in the database
-// Calculation: Determine which blogs need to be synced (FilterSyncableBlogs)
-// Calculation: For each sync-able blog, create it's FetchFeedRequest (CreateSyncRequest)
-// Action: Update sync time for each sync-able blog
-// Action: Exchange the request to fetch the blog for a response (with limited concurrency)
-// Calculation: Update the blog's cache headers if changed
-// Action: If changed, save the updated blog cache headers to the database
-// Calculation: If the response includes data, parse the RSS / Atom feed for posts
-// Action: List all posts for the current blog
-// Calculation: Determine if any posts in the feed are new / updated
-// Action: Create / update posts in the database
-```
-
-# Helpers
-
-1. [CanBeSynced](https://github.com/theandrew168/bloggulus/blob/f4be7f7edaefdfa485d7d30bccfc3af17482d4e3/backend/model/blog.go#L104)
-2. [FilterSyncableBlogs](https://github.com/theandrew168/bloggulus/blob/f4be7f7edaefdfa485d7d30bccfc3af17482d4e3/backend/service/sync.go#L43)
-3. [UpdateCacheHeaders](https://github.com/theandrew168/bloggulus/blob/f4be7f7edaefdfa485d7d30bccfc3af17482d4e3/backend/service/sync.go#L54)
-4. [ComparePosts](https://github.com/theandrew168/bloggulus/blob/f4be7f7edaefdfa485d7d30bccfc3af17482d4e3/backend/service/sync.go#L76)
-
-# After
+## After
 
 This version feels much better.
 Domain concepts are bit more separated: `can_be_synced`, `filter_syncable_blogs`, `update_cache_headers`.
@@ -111,26 +107,10 @@ This is better in multiple ways:
 # List all blogs in the database.
 blogs = db.list_blogs()
 
-# Filter blogs down to those that are able to be synced.
-syncable_blogs = filter_syncable_blogs(blogs)
-
-# Update the synced_at date for all syncable blogs.
-for blog in syncable_blog:
-	db.update_blog_synced_at(blog, now)
-
 # Process each syncable blog individually.
-for blog in syncable_blogs:
+for blog in blogs:
 	# Fetch the blog's RSS / Atom feed.
 	feed = fetch_feed(blog)
-
-	# Check if the blog's cache headers have changed and update.
-	has_changed = update_cache_headers(blog, feed)
-	if has_changed:
-		db.update_blog_cache_headers(blog)
-
-	# If the feed indicates no new content, skip it.
-	if not feed.has_changed:
-		continue
 
 	# List all of this blog's posts in the database.
 	posts = db.list_posts(blog)
