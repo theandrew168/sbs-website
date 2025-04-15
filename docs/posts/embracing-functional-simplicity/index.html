@@ -1,0 +1,118 @@
+<!doctype html><html lang=en><head><title>Embracing Functional Simplicity · Shallow Brook Software
+</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="I’ve been thinking a lot recently about software design and how to write better code.
+Here, &ldquo;better&rdquo; means more correct, more readable, easier to follow, and easier to test.
+Two books have been of exceptional influence as of late: Grokking Simplicity by Eric Normand and Architecture Patterns with Python by Harry Percival and Bob Gregory.
+The former focuses on functional design: emboldening pure, &ldquo;data in, data out&rdquo; functions.
+The latter zooms out a bit and considers overall application architecture: how to write code that best represents the domain of your problem.
+More content in the same vein includes Brandon Rhodes&rsquo; Hoist Your I/O talk and Gary Bernhardt&rsquo;s Functional Core, Imperative Shell screencast."><meta name=keywords content="blog,developer,personal"><meta name=fediverse:creator content><meta name=twitter:card content="summary"><meta name=twitter:title content="Embracing Functional Simplicity"><meta name=twitter:description content="I’ve been thinking a lot recently about software design and how to write better code. Here, “better” means more correct, more readable, easier to follow, and easier to test. Two books have been of exceptional influence as of late: Grokking Simplicity by Eric Normand and Architecture Patterns with Python by Harry Percival and Bob Gregory.
+The former focuses on functional design: emboldening pure, “data in, data out” functions. The latter zooms out a bit and considers overall application architecture: how to write code that best represents the domain of your problem. More content in the same vein includes Brandon Rhodes’ Hoist Your I/O talk and Gary Bernhardt’s Functional Core, Imperative Shell screencast."><meta property="og:url" content="https://shallowbrooksoftware.com/posts/embracing-functional-simplicity/"><meta property="og:site_name" content="Shallow Brook Software"><meta property="og:title" content="Embracing Functional Simplicity"><meta property="og:description" content="I’ve been thinking a lot recently about software design and how to write better code. Here, “better” means more correct, more readable, easier to follow, and easier to test. Two books have been of exceptional influence as of late: Grokking Simplicity by Eric Normand and Architecture Patterns with Python by Harry Percival and Bob Gregory.
+The former focuses on functional design: emboldening pure, “data in, data out” functions. The latter zooms out a bit and considers overall application architecture: how to write code that best represents the domain of your problem. More content in the same vein includes Brandon Rhodes’ Hoist Your I/O talk and Gary Bernhardt’s Functional Core, Imperative Shell screencast."><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2025-04-14T00:00:00+00:00"><meta property="article:modified_time" content="2025-04-14T00:00:00+00:00"><link rel=canonical href=https://shallowbrooksoftware.com/posts/embracing-functional-simplicity/><link rel=preload href=/fonts/fa-brands-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-regular-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-solid-900.woff2 as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.e927f7340e309d76dcb8fda85f1531ae7341aa9cd0b7f3ab77885dae77b1a0a2.css integrity="sha256-6Sf3NA4wnXbcuP2oXxUxrnNBqpzQt/Ord4hdrnexoKI=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.a00e6364bacbc8266ad1cc81230774a1397198f8cfb7bcba29b7d6fcb54ce57f.css integrity="sha256-oA5jZLrLyCZq0cyBIwd0oTlxmPjPt7y6KbfW/LVM5X8=" crossorigin=anonymous media=screen><link rel=icon type=image/svg+xml href=/images/favicon.svg sizes=any><link rel=icon type=image/png href=/images/favicon-32x32.png sizes=32x32><link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16><link rel=apple-touch-icon href=/images/apple-touch-icon.png><link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><a class=navigation-title href=https://shallowbrooksoftware.com/>Shallow Brook Software
+</a><input type=checkbox id=menu-toggle>
+<label class="menu-button float-right" for=menu-toggle><i class="fa-solid fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/about/>About</a></li><li class=navigation-item><a class=navigation-link href=/posts/>Blog</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://shallowbrooksoftware.com/posts/embracing-functional-simplicity/>Embracing Functional Simplicity</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa-solid fa-calendar" aria-hidden=true></i>
+<time datetime=2025-04-14T00:00:00Z>April 14, 2025
+</time></span><span class=reading-time><i class="fa-solid fa-clock" aria-hidden=true></i>
+7-minute read</span></div></div></header><div class=post-content><p>I’ve been thinking a lot recently about software design and how to write better code.
+Here, &ldquo;better&rdquo; means more correct, more readable, easier to follow, and easier to test.
+Two books have been of exceptional influence as of late: <a href=https://grokkingsimplicity.com/ class=external-link target=_blank rel=noopener>Grokking Simplicity</a> by Eric Normand and <a href=https://www.cosmicpython.com/ class=external-link target=_blank rel=noopener>Architecture Patterns with Python</a> by Harry Percival and Bob Gregory.</p><p>The former focuses on functional design: emboldening pure, &ldquo;data in, data out&rdquo; functions.
+The latter zooms out a bit and considers overall application architecture: how to write code that best represents the domain of your problem.
+More content in the same vein includes Brandon Rhodes&rsquo; <a href="https://www.youtube.com/watch?v=PBQN62oUnN8" class=external-link target=_blank rel=noopener>Hoist Your I/O</a> talk and Gary Bernhardt&rsquo;s <a href=https://www.destroyallsoftware.com/screencasts/catalog/functional-core-imperative-shell class=external-link target=_blank rel=noopener>Functional Core, Imperative Shell</a> screencast.</p><h1 id=lessons>Lessons
+<a class=heading-link href=#lessons><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>Let&rsquo;s discuss each lesson in a bit more detail.</p><h2 id=1-data-calculations-and-actions>1. Data, Calculations, and Actions
+<a class=heading-link href=#1-data-calculations-and-actions><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>Early on, Eric Normand&rsquo;s <a href=https://grokkingsimplicity.com/ class=external-link target=_blank rel=noopener>Grokking Simplicity</a> book explores an idea of partitioning your code into three distinct categories:</p><ol><li>Data</li><li>Calculations</li><li>Actions</li></ol><p>Data is what you&rsquo;d expect: just data!
+It could be a string, an array, a map, or anything else where its value comes from its identity.
+Calculations and actions are where things get more interesting.
+Calculations are &ldquo;pure&rdquo; functions that have zero interaction with the outside world.
+They never have side effects and the same input always yields the same output.
+Lastly, actions are functions that <em>do</em> interact with the world outside of your program.
+For example, perhaps they talk to a database or call a remote API.</p><p>One of my takeaways is that data is &ldquo;better&rdquo; than calculations which are &ldquo;better&rdquo; than actions.
+Once again, &ldquo;better&rdquo; here means more correct, more readable, easier to follow, and easier to test.
+Because calculations are pure by definition, they are much simpler to test and verify.
+The lack of interaction with external systems means that tests can always be written as: &ldquo;does this output match what I expect for a given input?&rdquo;.</p><p>See, one of the things that makes Bloggulus&rsquo; sync process so fragile and finnicky is that the logic for fetching RSS feeds, querying the database, and deciding which posts to create / update are all heavily intertwined.
+<strong>Prior to refactoring, I couldn&rsquo;t verify the small yet critical decisions that dictate what should happen.</strong>
+Sure, the actual fetching of RSS feeds and interacting with the database are decoupled via interfaces (thankfully), but the tests still require a large amount of tiresome faking.</p><p>In many other systems I&rsquo;ve worked on, these decouping abstractions are <em>not</em> in place and therefore the test are even more difficult to setup, write, and tear down.
+Refactoring your code to make more frequent usage of pure functions (calculations) will lead to simpler, more reliable code and smaller, more powerful tests.</p><h2 id=2-separating-what-from-how>2. Separating &ldquo;What&rdquo; From &ldquo;How&rdquo;
+<a class=heading-link href=#2-separating-what-from-how><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>This next idea is so simple but it absolutely blew my mind when I first read it!
+I immediately starting thinking about all the different places where I could apply it.
+Taken from <a href=https://www.cosmicpython.com/book/chapter_03_abstractions.html class=external-link target=_blank rel=noopener>Chapter 3</a> of <a href=https://www.cosmicpython.com/ class=external-link target=_blank rel=noopener>Architecture Patterns with Python</a>, the idea is this: separate <strong>what</strong> we want to do from <strong>how</strong> to do it.</p><p>The example in the book involves syncing files between two directories.
+The initial version of the code looks like any developer&rsquo;s first imperative pass at the problem: iterate through each directory and, when necessary, immediately move / copy / delete the files that require action.
+This effectively merges the &ldquo;what&rdquo; (which files require action) and &ldquo;how&rdquo; (actually performing the action) of this process into a single, intertwined step.
+One can already imagine the pain of testing this, especially without an easily fake-able filesystem abstraction in place.</p><p>Is there a better way?
+Can we slice off a pure function (calculation) that handles the most important question of the process: which directores should be moved / copied / deleted?
+Their analysis of the problem and its required data yields an amazing result: represent the contents of each directory as a dictionary (data) and then write a pure function (calculation) to decide which files <em>should</em> be moved / copied / deleted.</p><p>Instead of directly mixing decisions and actions, they first analyze and compare each directory and then use data to describe what <em>should</em> happen:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span>(<span style=color:#e6db74>&#34;COPY&#34;</span>, <span style=color:#e6db74>&#34;sourcepath&#34;</span>, <span style=color:#e6db74>&#34;destpath&#34;</span>),
+</span></span><span style=display:flex><span>(<span style=color:#e6db74>&#34;MOVE&#34;</span>, <span style=color:#e6db74>&#34;old&#34;</span>, <span style=color:#e6db74>&#34;new&#34;</span>),
+</span></span></code></pre></div><p>Now that all of the decisions (the &ldquo;what&rdquo;) have been made, the actual filesystem operations (the &ldquo;how&rdquo;) can be performed:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>for</span> action, <span style=color:#f92672>*</span>paths <span style=color:#f92672>in</span> actions:
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> action <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;COPY&#34;</span>:
+</span></span><span style=display:flex><span>		shutil<span style=color:#f92672>.</span>copyfile(<span style=color:#f92672>*</span>paths)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> action <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;MOVE&#34;</span>:
+</span></span><span style=display:flex><span>		shutil<span style=color:#f92672>.</span>move(<span style=color:#f92672>*</span>paths)
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> action <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;DELETE&#34;</span>:
+</span></span><span style=display:flex><span>		os<span style=color:#f92672>.</span>remove(paths[<span style=color:#ae81ff>0</span>])
+</span></span></code></pre></div><h1 id=impact>Impact
+<a class=heading-link href=#impact><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>Together, these lessons have already led me toward better code in my <a href=https://bloggulus.com/ class=external-link target=_blank rel=noopener>Bloggulus</a> project (<a href=https://github.com/theandrew168/bloggulus class=external-link target=_blank rel=noopener>source code</a>): specifically with respect to functional design.
+As mentioned earlier, the most critical (and unfortunately most tangled) part of Bloggulus is the “sync” process.
+Sometimes, this almost feels like an unintentional anti-pattern: where the most important part of a system is the one that is most tightly-coupled to the outside world and therefore the most difficult to test, verify, and trust&mldr;</p><p>Anyways, back to the refactoring!
+With these two big ideas in mind, let&rsquo;s take a look at the sync process and see how we can make it better (more correct, more readable, easier to follow, and easier to test).</p><h2 id=before>Before
+<a class=heading-link href=#before><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># List all blogs in the database.</span>
+</span></span><span style=display:flex><span>blogs <span style=color:#f92672>=</span> db<span style=color:#f92672>.</span>list_blogs()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Process each blog individually.</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>for</span> blog <span style=color:#f92672>in</span> blogs:
+</span></span><span style=display:flex><span>	<span style=color:#75715e># Fetch the blog&#39;s RSS / Atom feed.</span>
+</span></span><span style=display:flex><span>	feed <span style=color:#f92672>=</span> fetch_feed(blog)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e># Process each feed post individually.</span>
+</span></span><span style=display:flex><span>	<span style=color:#66d9ef>for</span> feed_post <span style=color:#f92672>in</span> feed<span style=color:#f92672>.</span>posts:
+</span></span><span style=display:flex><span>		<span style=color:#75715e># Check if the post already exists in the database</span>
+</span></span><span style=display:flex><span>		post <span style=color:#f92672>=</span> db<span style=color:#f92672>.</span>read_post(feed_post<span style=color:#f92672>.</span>url)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		<span style=color:#75715e># If it doesn&#39;t, create it.</span>
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>if</span> <span style=color:#f92672>not</span> post:
+</span></span><span style=display:flex><span>			post <span style=color:#f92672>=</span> db<span style=color:#f92672>.</span>create_post(feed_post)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>		<span style=color:#75715e># If the post&#39;s content has changed, update it.</span>
+</span></span><span style=display:flex><span>		<span style=color:#66d9ef>if</span> feed_post<span style=color:#f92672>.</span>content <span style=color:#f92672>and</span> <span style=color:#f92672>not</span> post<span style=color:#f92672>.</span>content:
+</span></span><span style=display:flex><span>			db<span style=color:#f92672>.</span>update_post_content(post, feed_post<span style=color:#f92672>.</span>content)
+</span></span></code></pre></div><p>This version is kind of a mess: domain logic is mixed in with reckless abandon, actions and calculations are poorly defined yet heavily intertwined, and &ldquo;what&rdquo; vs &ldquo;how&rdquo; is confusingly mixed.
+How can we isolate the most import question here: which posts should be created and which posts should be updated?</p><h2 id=after>After
+<a class=heading-link href=#after><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># List all blogs in the database.</span>
+</span></span><span style=display:flex><span>blogs <span style=color:#f92672>=</span> db<span style=color:#f92672>.</span>list_blogs()
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span><span style=color:#75715e># Process each blog individually.</span>
+</span></span><span style=display:flex><span><span style=color:#66d9ef>for</span> blog <span style=color:#f92672>in</span> blogs:
+</span></span><span style=display:flex><span>	<span style=color:#75715e># Fetch the blog&#39;s RSS / Atom feed.</span>
+</span></span><span style=display:flex><span>	feed <span style=color:#f92672>=</span> fetch_feed(blog)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e># List all of this blog&#39;s posts in the database.</span>
+</span></span><span style=display:flex><span>	posts <span style=color:#f92672>=</span> db<span style=color:#f92672>.</span>list_posts(blog)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e># Compare the known posts to the posts present in the feed.</span>
+</span></span><span style=display:flex><span>	posts_to_create, posts_to_update <span style=color:#f92672>=</span> compare_posts(posts, feed<span style=color:#f92672>.</span>posts)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e># Create all posts that need to be created.</span>
+</span></span><span style=display:flex><span>	db<span style=color:#f92672>.</span>create_posts(post)
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e># Update all posts that need to be updated.</span>
+</span></span><span style=display:flex><span>	db<span style=color:#f92672>.</span>update_posts(post)
+</span></span></code></pre></div><p>This version feels much better!
+Firstly, each blog&rsquo;s posts are fetched in bulk prior to comparison with the RSS feed data.
+Not only is this faster than reading each post one by one, it enables the second improvment.
+Instead of the deciding which posts need to be created / updated and then immediately performing that action, we instead utilize a pure function (<code>compare_posts</code>) to separate the &ldquo;what&rdquo; (create vs update) from the &ldquo;how&rdquo; (interacting with the database).
+<strong>In short, the most critical decision that the system has to make is now a pure function.</strong></p><p>Given some known, existing posts and a list of current posts from the RSS feed, we can easily test and verify which ones should be created and which ones should be updated.
+Then, the actual database interaction happens <em>after</em> the decision has been mode.
+The &ldquo;what&rdquo; is separated from the &ldquo;how&rdquo;.
+Another benefit of this approach is that since all new / changed posts are known together, we can batch their creation / updating instead of having to process them invidiually.</p><p>If you are curious, the real, Go-based implementation of the <code>compare_posts</code> helper can be read <a href=https://github.com/theandrew168/bloggulus/blob/72eeeeb2ce949e59d9c5e59a08ff4fe204a1c8c7/backend/service/sync.go#L76 class=external-link target=_blank rel=noopener>here</a>.</p><h1 id=conclusion>Conclusion
+<a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>Through all of the concepts and ideas I&rsquo;ve been reading about lately, two have made the most impact.
+The first is to categorize code as either data, calculations, or actions.
+The second is to separate the &ldquo;what&rdquo; from the &ldquo;how&rdquo; when performing state-changing or IO-based operations.</p><p>If you&rsquo;re already familiar with these concepts, then consider this a simple refresher.
+If not, then I hope you can find as much value and inspiration in these patterns as I have.
+There are surely more lessons to learn but I wanted to write about these two, specifically, because they have already proven themselves to be immensely useful in helping me write better, cleaner code.</p><p>Thanks for reading!</p></div><footer></footer></article></section></div><footer class=footer><section class=container>©
+2025
+Andrew Dailey
+·
+Powered by <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> & <a href=https://github.com/luizdepra/hugo-coder/ target=_blank rel=noopener>Coder</a>.</section></footer></main><script src=/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script></body></html>

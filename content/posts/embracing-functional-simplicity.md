@@ -2,7 +2,6 @@
 date: 2025-04-14
 title: "Embracing Functional Simplicity"
 slug: "embracing-functional-simplicity"
-draft: true
 ---
 
 I’ve been thinking a lot recently about software design and how to write better code.
@@ -60,7 +59,22 @@ Is there a better way?
 Can we slice off a pure function (calculation) that handles the most important question of the process: which directores should be moved / copied / deleted?
 Their analysis of the problem and its required data yields an amazing result: represent the contents of each directory as a dictionary (data) and then write a pure function (calculation) to decide which files _should_ be moved / copied / deleted.
 
-TODO: More here, maybe an example?
+Instead of directly mixing decisions and actions, they first analyze and compare each directory and then use data to describe what _should_ happen:
+```python
+("COPY", "sourcepath", "destpath"),
+("MOVE", "old", "new"),
+```
+
+Now that all of the decisions (the "what") have been made, the actual filesystem operations (the "how") can be performed:
+```python
+for action, *paths in actions:
+	if action == "COPY":
+		shutil.copyfile(*paths)
+	if action == "MOVE":
+		shutil.move(*paths)
+	if action == "DELETE":
+		os.remove(paths[0])
+```
 
 # Impact
 
