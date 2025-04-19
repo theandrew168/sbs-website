@@ -41,14 +41,14 @@ See, one of the things that makes Bloggulus' sync process so fragile and finnick
 **Prior to refactoring, I couldn't verify the small yet critical decisions that dictate what should happen.**
 Sure, the actual fetching of RSS feeds and interacting with the database are decoupled via interfaces (thankfully), but the tests still require a large amount of tiresome faking.
 
-In many other systems I've worked on, these decouping abstractions are _not_ in place and therefore the test are even more difficult to setup, write, and tear down.
-Refactoring your code to make more frequent usage of pure functions (calculations) will lead to simpler, more reliable code and smaller, more powerful tests.
+In many other systems I've worked on, these decouping abstractions are _not_ in place and therefore the tests are even more difficult to setup, write, and tear down.
+Refactoring your code to make more frequent use of pure functions (calculations) will lead to simpler, more reliable code and smaller, more powerful tests.
 
 ## 2. Separating "What" From "How"
 
-This next idea is so simple but it absolutely blew my mind when I first read it!
+This next idea is so simple but absolutely blew my mind!
 I immediately starting thinking about all the different places where I could apply it.
-Taken from [Chapter 3](https://www.cosmicpython.com/book/chapter_03_abstractions.html) of [Architecture Patterns with Python](https://www.cosmicpython.com/), the idea is this: separate **what** we want to do from **how** to do it.
+Taken from [Chapter 3](https://www.cosmicpython.com/book/chapter_03_abstractions.html) of [Architecture Patterns with Python](https://www.cosmicpython.com/), the idea is this: separate **what** we want to do from **how** to actually do it.
 
 The example in the book involves syncing files between two directories.
 The initial version of the code looks like any developer's first imperative pass at the problem: iterate through each directory and, when necessary, immediately move / copy / delete the files that require action.
@@ -56,7 +56,7 @@ This effectively merges the "what" (which files require action) and "how" (actua
 One can already imagine the pain of testing this, especially without an easily fake-able filesystem abstraction in place.
 
 Is there a better way?
-Can we slice off a pure function (calculation) that handles the most important question of the process: which directores should be moved / copied / deleted?
+Can we slice off a pure function (calculation) that handles the most important question of this process: **which directores should be moved / copied / deleted?**
 Their analysis of the problem and its required data yields an amazing result: represent the contents of each directory as a dictionary (data) and then write a pure function (calculation) to decide which files _should_ be moved / copied / deleted.
 
 Instead of directly mixing decisions and actions, they first analyze and compare each directory and then use data to describe what _should_ happen:
@@ -76,13 +76,19 @@ for action, *paths in actions:
 		os.remove(paths[0])
 ```
 
+With this change in place, testing the logic becomes much simpler: nearly trivial, in fact.
+Each test can now say: "given these source and destination directories (data), which files should be moved / copied / deleted (also data)".
+The underlying, real filesystem doesn't matter anymore.
+We don't have to prepare and provide a fake filesystem abstraction, either: just pass data in and get data out.
+Isn't that an amazing and powerful idea?!
+
 # Impact
 
-Together, these lessons have already led me toward better code in my [Bloggulus](https://bloggulus.com/) project ([source code](https://github.com/theandrew168/bloggulus)): specifically with respect to functional design.
-As mentioned earlier, the most critical (and unfortunately most tangled) part of Bloggulus is the “sync” process.
-Sometimes, this almost feels like an unintentional anti-pattern: where the most important part of a system is the one that is most tightly-coupled to the outside world and therefore the most difficult to test, verify, and trust...
+Together, these lessons have already led me toward better code in my [Bloggulus](https://bloggulus.com/) project ([source code](https://github.com/theandrew168/bloggulus)).
+As mentioned earlier, the most critical (and unfortunately most tangled) part of Bloggulus was the “sync process".
+Sometimes, this almost feels like an unintentional anti-pattern: where the most important part of a system is the one that is most tightly-coupled to the outside world and therefore the most difficult to test, verify, and trust.
 
-Anyways, back to the refactoring!
+Anyhow, let's get back to the refactoring!
 With these two big ideas in mind, let's take a look at the sync process and see how we can make it better (more correct, more readable, easier to follow, and easier to test).
 
 ## Before
@@ -110,7 +116,7 @@ for blog in blogs:
 			db.update_post_content(post, feed_post.content)
 ```
 
-This version is kind of a mess: domain logic is mixed in with reckless abandon, actions and calculations are poorly defined yet heavily intertwined, and "what" vs "how" is confusingly mixed.
+This version is kind of a mess: actions and calculations are poorly defined yet heavily intertwined and the "what" vs "how" details are confusingly mixed.
 How can we isolate the most import question here: which posts should be created and which posts should be updated?
 
 ## After
@@ -131,16 +137,16 @@ for blog in blogs:
 	posts_to_create, posts_to_update = compare_posts(posts, feed.posts)
 
 	# Create all posts that need to be created.
-	db.create_posts(post)
+	db.create_posts(posts_to_create)
 
 	# Update all posts that need to be updated.
-	db.update_posts(post)
+	db.update_posts(posts_to_update)
 ```
 
 This version feels much better!
 Firstly, each blog's posts are fetched in bulk prior to comparison with the RSS feed data.
-Not only is this faster than reading each post one by one, it enables the second improvment.
-Instead of the deciding which posts need to be created / updated and then immediately performing that action, we instead utilize a pure function (`compare_posts`) to separate the "what" (create vs update) from the "how"  (interacting with the database).
+Not only is this faster than reading each post one by one, but it also enables the second improvement.
+Instead of the deciding which posts need to be created / updated and then immediately performing that action, we utilize a pure function (`compare_posts`) to separate the "what" (create vs update) from the "how"  (interacting with the database).
 **In short, the most critical decision that the system has to make is now a pure function.**
 
 Given some known, existing posts and a list of current posts from the RSS feed, we can easily test and verify which ones should be created and which ones should be updated.

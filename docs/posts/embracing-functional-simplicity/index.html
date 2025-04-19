@@ -30,16 +30,16 @@ Once again, &ldquo;better&rdquo; here means more correct, more readable, easier 
 Because calculations are pure by definition, they are much simpler to test and verify.
 The lack of interaction with external systems means that tests can always be written as: &ldquo;does this output match what I expect for a given input?&rdquo;.</p><p>See, one of the things that makes Bloggulus&rsquo; sync process so fragile and finnicky is that the logic for fetching RSS feeds, querying the database, and deciding which posts to create / update are all heavily intertwined.
 <strong>Prior to refactoring, I couldn&rsquo;t verify the small yet critical decisions that dictate what should happen.</strong>
-Sure, the actual fetching of RSS feeds and interacting with the database are decoupled via interfaces (thankfully), but the tests still require a large amount of tiresome faking.</p><p>In many other systems I&rsquo;ve worked on, these decouping abstractions are <em>not</em> in place and therefore the test are even more difficult to setup, write, and tear down.
-Refactoring your code to make more frequent usage of pure functions (calculations) will lead to simpler, more reliable code and smaller, more powerful tests.</p><h2 id=2-separating-what-from-how>2. Separating &ldquo;What&rdquo; From &ldquo;How&rdquo;
+Sure, the actual fetching of RSS feeds and interacting with the database are decoupled via interfaces (thankfully), but the tests still require a large amount of tiresome faking.</p><p>In many other systems I&rsquo;ve worked on, these decouping abstractions are <em>not</em> in place and therefore the tests are even more difficult to setup, write, and tear down.
+Refactoring your code to make more frequent use of pure functions (calculations) will lead to simpler, more reliable code and smaller, more powerful tests.</p><h2 id=2-separating-what-from-how>2. Separating &ldquo;What&rdquo; From &ldquo;How&rdquo;
 <a class=heading-link href=#2-separating-what-from-how><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h2><p>This next idea is so simple but it absolutely blew my mind when I first read it!
+<span class=sr-only>Link to heading</span></a></h2><p>This next idea is so simple but absolutely blew my mind!
 I immediately starting thinking about all the different places where I could apply it.
-Taken from <a href=https://www.cosmicpython.com/book/chapter_03_abstractions.html class=external-link target=_blank rel=noopener>Chapter 3</a> of <a href=https://www.cosmicpython.com/ class=external-link target=_blank rel=noopener>Architecture Patterns with Python</a>, the idea is this: separate <strong>what</strong> we want to do from <strong>how</strong> to do it.</p><p>The example in the book involves syncing files between two directories.
+Taken from <a href=https://www.cosmicpython.com/book/chapter_03_abstractions.html class=external-link target=_blank rel=noopener>Chapter 3</a> of <a href=https://www.cosmicpython.com/ class=external-link target=_blank rel=noopener>Architecture Patterns with Python</a>, the idea is this: separate <strong>what</strong> we want to do from <strong>how</strong> to actually do it.</p><p>The example in the book involves syncing files between two directories.
 The initial version of the code looks like any developer&rsquo;s first imperative pass at the problem: iterate through each directory and, when necessary, immediately move / copy / delete the files that require action.
 This effectively merges the &ldquo;what&rdquo; (which files require action) and &ldquo;how&rdquo; (actually performing the action) of this process into a single, intertwined step.
 One can already imagine the pain of testing this, especially without an easily fake-able filesystem abstraction in place.</p><p>Is there a better way?
-Can we slice off a pure function (calculation) that handles the most important question of the process: which directores should be moved / copied / deleted?
+Can we slice off a pure function (calculation) that handles the most important question of this process: <strong>which directores should be moved / copied / deleted?</strong>
 Their analysis of the problem and its required data yields an amazing result: represent the contents of each directory as a dictionary (data) and then write a pure function (calculation) to decide which files <em>should</em> be moved / copied / deleted.</p><p>Instead of directly mixing decisions and actions, they first analyze and compare each directory and then use data to describe what <em>should</em> happen:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span>(<span style=color:#e6db74>&#34;COPY&#34;</span>, <span style=color:#e6db74>&#34;sourcepath&#34;</span>, <span style=color:#e6db74>&#34;destpath&#34;</span>),
 </span></span><span style=display:flex><span>(<span style=color:#e6db74>&#34;MOVE&#34;</span>, <span style=color:#e6db74>&#34;old&#34;</span>, <span style=color:#e6db74>&#34;new&#34;</span>),
 </span></span></code></pre></div><p>Now that all of the decisions (the &ldquo;what&rdquo;) have been made, the actual filesystem operations (the &ldquo;how&rdquo;) can be performed:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#66d9ef>for</span> action, <span style=color:#f92672>*</span>paths <span style=color:#f92672>in</span> actions:
@@ -49,11 +49,15 @@ Their analysis of the problem and its required data yields an amazing result: re
 </span></span><span style=display:flex><span>		shutil<span style=color:#f92672>.</span>move(<span style=color:#f92672>*</span>paths)
 </span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> action <span style=color:#f92672>==</span> <span style=color:#e6db74>&#34;DELETE&#34;</span>:
 </span></span><span style=display:flex><span>		os<span style=color:#f92672>.</span>remove(paths[<span style=color:#ae81ff>0</span>])
-</span></span></code></pre></div><h1 id=impact>Impact
+</span></span></code></pre></div><p>With this change in place, testing the logic becomes much simpler: nearly trivial, in fact.
+Each test can now say: &ldquo;given these source and destination directories (data), which files should be moved / copied / deleted (also data)&rdquo;.
+The underlying, real filesystem doesn&rsquo;t matter anymore.
+We don&rsquo;t have to prepare and provide a fake filesystem abstraction, either: just pass data in and get data out.
+Isn&rsquo;t that an amazing and powerful idea?!</p><h1 id=impact>Impact
 <a class=heading-link href=#impact><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Together, these lessons have already led me toward better code in my <a href=https://bloggulus.com/ class=external-link target=_blank rel=noopener>Bloggulus</a> project (<a href=https://github.com/theandrew168/bloggulus class=external-link target=_blank rel=noopener>source code</a>): specifically with respect to functional design.
-As mentioned earlier, the most critical (and unfortunately most tangled) part of Bloggulus is the “sync” process.
-Sometimes, this almost feels like an unintentional anti-pattern: where the most important part of a system is the one that is most tightly-coupled to the outside world and therefore the most difficult to test, verify, and trust&mldr;</p><p>Anyways, back to the refactoring!
+<span class=sr-only>Link to heading</span></a></h1><p>Together, these lessons have already led me toward better code in my <a href=https://bloggulus.com/ class=external-link target=_blank rel=noopener>Bloggulus</a> project (<a href=https://github.com/theandrew168/bloggulus class=external-link target=_blank rel=noopener>source code</a>).
+As mentioned earlier, the most critical (and unfortunately most tangled) part of Bloggulus was the “sync process".
+Sometimes, this almost feels like an unintentional anti-pattern: where the most important part of a system is the one that is most tightly-coupled to the outside world and therefore the most difficult to test, verify, and trust.</p><p>Anyhow, let&rsquo;s get back to the refactoring!
 With these two big ideas in mind, let&rsquo;s take a look at the sync process and see how we can make it better (more correct, more readable, easier to follow, and easier to test).</p><h2 id=before>Before
 <a class=heading-link href=#before><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># List all blogs in the database.</span>
@@ -76,7 +80,7 @@ With these two big ideas in mind, let&rsquo;s take a look at the sync process an
 </span></span><span style=display:flex><span>		<span style=color:#75715e># If the post&#39;s content has changed, update it.</span>
 </span></span><span style=display:flex><span>		<span style=color:#66d9ef>if</span> feed_post<span style=color:#f92672>.</span>content <span style=color:#f92672>and</span> <span style=color:#f92672>not</span> post<span style=color:#f92672>.</span>content:
 </span></span><span style=display:flex><span>			db<span style=color:#f92672>.</span>update_post_content(post, feed_post<span style=color:#f92672>.</span>content)
-</span></span></code></pre></div><p>This version is kind of a mess: domain logic is mixed in with reckless abandon, actions and calculations are poorly defined yet heavily intertwined, and &ldquo;what&rdquo; vs &ldquo;how&rdquo; is confusingly mixed.
+</span></span></code></pre></div><p>This version is kind of a mess: actions and calculations are poorly defined yet heavily intertwined and the &ldquo;what&rdquo; vs &ldquo;how&rdquo; details are confusingly mixed.
 How can we isolate the most import question here: which posts should be created and which posts should be updated?</p><h2 id=after>After
 <a class=heading-link href=#after><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># List all blogs in the database.</span>
@@ -94,14 +98,14 @@ How can we isolate the most import question here: which posts should be created 
 </span></span><span style=display:flex><span>	posts_to_create, posts_to_update <span style=color:#f92672>=</span> compare_posts(posts, feed<span style=color:#f92672>.</span>posts)
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>	<span style=color:#75715e># Create all posts that need to be created.</span>
-</span></span><span style=display:flex><span>	db<span style=color:#f92672>.</span>create_posts(post)
+</span></span><span style=display:flex><span>	db<span style=color:#f92672>.</span>create_posts(posts_to_create)
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span>	<span style=color:#75715e># Update all posts that need to be updated.</span>
-</span></span><span style=display:flex><span>	db<span style=color:#f92672>.</span>update_posts(post)
+</span></span><span style=display:flex><span>	db<span style=color:#f92672>.</span>update_posts(posts_to_update)
 </span></span></code></pre></div><p>This version feels much better!
 Firstly, each blog&rsquo;s posts are fetched in bulk prior to comparison with the RSS feed data.
-Not only is this faster than reading each post one by one, it enables the second improvment.
-Instead of the deciding which posts need to be created / updated and then immediately performing that action, we instead utilize a pure function (<code>compare_posts</code>) to separate the &ldquo;what&rdquo; (create vs update) from the &ldquo;how&rdquo; (interacting with the database).
+Not only is this faster than reading each post one by one, but it also enables the second improvement.
+Instead of the deciding which posts need to be created / updated and then immediately performing that action, we utilize a pure function (<code>compare_posts</code>) to separate the &ldquo;what&rdquo; (create vs update) from the &ldquo;how&rdquo; (interacting with the database).
 <strong>In short, the most critical decision that the system has to make is now a pure function.</strong></p><p>Given some known, existing posts and a list of current posts from the RSS feed, we can easily test and verify which ones should be created and which ones should be updated.
 Then, the actual database interaction happens <em>after</em> the decision has been mode.
 The &ldquo;what&rdquo; is separated from the &ldquo;how&rdquo;.
