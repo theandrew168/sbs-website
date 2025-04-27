@@ -38,7 +38,8 @@ The function <code>ForEach</code> accepts a list of items, a task function to pr
 </span></span><span style=display:flex><span>	<span style=color:#75715e>// Wait for all tasks to finish and return the first non-nil error (if any).</span>
 </span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>g</span>.<span style=color:#a6e22e>Wait</span>()
 </span></span><span style=display:flex><span>}
-</span></span></code></pre></div><p>Let&rsquo;s see how this helper can be used to (in a basic &ldquo;download some flags&rdquo; example):</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span></code></pre></div><p>Let&rsquo;s see how this helper can be used in a basic &ldquo;download some flags&rdquo; example:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>main</span>() {
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// List of flags to be downloaded.</span>
 </span></span><span style=display:flex><span>	<span style=color:#a6e22e>urls</span> <span style=color:#f92672>:=</span> []<span style=color:#66d9ef>string</span>{
 </span></span><span style=display:flex><span>		<span style=color:#e6db74>&#34;https://flagsapi.com/US/flat/64.png&#34;</span>,
 </span></span><span style=display:flex><span>		<span style=color:#e6db74>&#34;https://flagsapi.com/GB/flat/64.png&#34;</span>,
@@ -47,7 +48,9 @@ The function <code>ForEach</code> accepts a list of items, a task function to pr
 </span></span><span style=display:flex><span>		<span style=color:#e6db74>&#34;https://flagsapi.com/BE/flat/64.png&#34;</span>,
 </span></span><span style=display:flex><span>	}
 </span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// Download all flags two at a time.</span>
 </span></span><span style=display:flex><span>	<span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>ForEach</span>(<span style=color:#ae81ff>2</span>, <span style=color:#a6e22e>urls</span>, <span style=color:#66d9ef>func</span>(<span style=color:#a6e22e>url</span> <span style=color:#66d9ef>string</span>) <span style=color:#66d9ef>error</span> {
+</span></span><span style=display:flex><span>		<span style=color:#75715e>// Fetch the data for a single flag.</span>
 </span></span><span style=display:flex><span>		<span style=color:#a6e22e>body</span>, <span style=color:#a6e22e>err</span> <span style=color:#f92672>:=</span> <span style=color:#a6e22e>GetURL</span>(<span style=color:#a6e22e>url</span>)
 </span></span><span style=display:flex><span>		<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
 </span></span><span style=display:flex><span>			<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>err</span>
@@ -58,6 +61,8 @@ The function <code>ForEach</code> accepts a list of items, a task function to pr
 </span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;Fetched %d bytes from %s\n&#34;</span>, len(<span style=color:#a6e22e>body</span>), <span style=color:#a6e22e>url</span>)
 </span></span><span style=display:flex><span>		<span style=color:#66d9ef>return</span> <span style=color:#66d9ef>nil</span>
 </span></span><span style=display:flex><span>	})
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>	<span style=color:#75715e>// If an error occurred while fetching a flag, print it.</span>
 </span></span><span style=display:flex><span>	<span style=color:#66d9ef>if</span> <span style=color:#a6e22e>err</span> <span style=color:#f92672>!=</span> <span style=color:#66d9ef>nil</span> {
 </span></span><span style=display:flex><span>		<span style=color:#a6e22e>fmt</span>.<span style=color:#a6e22e>Printf</span>(<span style=color:#e6db74>&#34;Failed to download flag: %v\n&#34;</span>, <span style=color:#a6e22e>err</span>)
 </span></span><span style=display:flex><span>	}

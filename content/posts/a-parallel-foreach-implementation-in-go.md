@@ -43,10 +43,11 @@ func ForEach[T any](concurrency int, items []T, taskFn func(T) error) error {
 }
 ```
 
-Let's see how this helper can be used to (in a basic "download some flags" example):
+Let's see how this helper can be used in a basic "download some flags" example:
 
 ```go
 func main() {
+	// List of flags to be downloaded.
 	urls := []string{
 		"https://flagsapi.com/US/flat/64.png",
 		"https://flagsapi.com/GB/flat/64.png",
@@ -55,7 +56,9 @@ func main() {
 		"https://flagsapi.com/BE/flat/64.png",
 	}
 
+	// Download all flags two at a time.
 	err := ForEach(2, urls, func(url string) error {
+		// Fetch the data for a single flag.
 		body, err := GetURL(url)
 		if err != nil {
 			return err
@@ -66,6 +69,8 @@ func main() {
 		fmt.Printf("Fetched %d bytes from %s\n", len(body), url)
 		return nil
 	})
+
+	// If an error occurred while fetching a flag, print it.
 	if err != nil {
 		fmt.Printf("Failed to download flag: %v\n", err)
 	}
