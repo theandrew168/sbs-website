@@ -5,6 +5,9 @@ slug: "limiting-concurrency-with-semaphores"
 tags: ["Go"]
 ---
 
+> EDIT (4/27/25): I've since found an even better approach to solving this problem that both encapsulates the logic into a generic helper function and propagates errors back to the caller.
+> Feel free to give it a read [here](/posts/a-parallel-foreach-implementation-in-go/)!
+
 I recently encountered some slowness while executing a bunch of tasks within a program.
 Specifically, I was working on how [Bloggulus](https://bloggulus.com/) syncs all of the blogs that it tracks (there are only 40 or so right now but I expect the number to grow).
 Instead of naively syncing each blog serially, maybe concurrency can help.
