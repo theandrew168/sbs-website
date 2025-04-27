@@ -29,7 +29,7 @@ func ForEach[T any](concurrency int, items []T, taskFn func(T) error) error {
 
 	// Perform tasks in parallel (up to "concurrency" at once).
 	for _, item := range items {
-		// Ensure the proper item value is captured for Go versions earlier than 1.22.
+		// Ensure the proper item value is captured for Go versions older than 1.22.
 		item := item
 		// For each item, attempt to acquire a "task slot" from the error group.
 		// If the maximum number of tasks are already running, this will block.
