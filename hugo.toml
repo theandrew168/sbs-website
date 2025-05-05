@@ -19,6 +19,8 @@ avatarurl = "images/avatar2.jpg"
 dateFormat = "January 2, 2006"
 footercontent = "simple software that babbles loudly"
 colorScheme = "auto"
+[params.goatCounter]
+code = "shallowbrooksoftware"
 [[params.social]]
 name = "GitHub"
 icon = "fa fa-2x fa-github"
