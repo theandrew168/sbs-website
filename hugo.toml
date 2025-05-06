@@ -3,6 +3,7 @@ title = "Shallow Brook Software"
 theme = "hugo-coder"
 languagecode = "en"
 defaultcontentlaguage = "en"
+enableRobotsTXT = true
 
 pluralizeListTitles = false
 capitalizeListTitles = false
