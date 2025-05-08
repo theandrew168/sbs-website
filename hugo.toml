@@ -13,25 +13,28 @@ unsafe = true
 
 [params]
 author = "Andrew Dailey"
-description = "Simple software that babbles loudly"
+description = "The developer blog of Software Engineer Andrew Dailey. Includes a range of topics from Linux system administration to modern web development."
 keywords = "blog,developer,personal"
 info = ["Software Engineer"]
 avatarurl = "images/avatar2.jpg"
 dateFormat = "January 2, 2006"
-footercontent = "simple software that babbles loudly"
 colorScheme = "auto"
+
 [params.goatCounter]
 code = "shallowbrooksoftware"
+
 [[params.social]]
 name = "GitHub"
 icon = "fa fa-2x fa-github"
 url = "https://github.com/theandrew168/"
 weight = 1
+
 [[params.social]]
 name = "Email"
 icon = "fa fa-2x fa-envelope"
 url = "mailto:andrew@shallowbrooksoftware.com"
 weight = 2
+
 [[params.social]]
 name = "RSS"
 icon = "fa fa-2x fa-rss"
@@ -39,10 +42,12 @@ url = "/posts/index.xml"
 weight = 3
 
 [menu]
+
 [[menu.main]]
 name = "About"
 url = "/about/"
 weight = 1
+
 [[menu.main]]
 name = "Blog"
 url = "/posts/"

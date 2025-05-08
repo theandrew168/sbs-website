@@ -15,7 +15,7 @@ This was due to the uncertainty surrounding how the project would look at that p
 As another downside, this approach would've deferred delivering a usable frontend until the last few weeks of the project.
 I eventually discovered that there was a better way to go about all of this.
 
-# Iterative Development
+## Iterative Development
 
 What I realized was the importance of "iterative development".
 In short, this means delivering a tangible, usable artifact at much smaller intervals throughout the project's lifecycle.
@@ -35,7 +35,7 @@ Does the frontend feel good to use?
 Does the addition of these features make the application better?
 Getting early answers to these crucial questions and adapting as soon as possible is paramount to a project's success.
 
-# Pyramids
+## Pyramids
 
 How does all of this relate to building pyramids?
 Well, while reading Daniel Hooper's amazing [blog post](https://danielchasehooper.com/posts/shapeup/) about building a 3D modeling tool, he explained this concept with a very simple image.
@@ -57,7 +57,7 @@ Additionally, it corresponds quite strongly to the third principle of the [Agile
 
 > Deliver working software frequently, from a couple of weeks to a couple of months, with a preference to the shorter timescale.
 
-# Conclusion
+## Conclusion
 
 This line of thinking impacted how I planned my first multi-developer, multi-month software development project.
 Despite trying to plan the entire project upfront (waterfall style), I adjusted my strategy to prioritize delivering an MVP of the new features as soon as possible.

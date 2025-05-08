@@ -11,17 +11,17 @@ This was a problem of query complexity and trying to get the PostgreSQL planner/
 <span class=tag><a href=/tags/databases/>Databases</a></span></div></div></header><div class=post-content><p>Recently, I ran into an issue where a very large PostgreSQL query (involving roughly 30 tables) was taking much longer to plan than to execute.
 At its worst, it was taking multiple <em>seconds</em> to plan and a few hundred milliseconds to execute.
 My problem wasn&rsquo;t really about standard query optimization: I was already past that.
-This was a problem of query complexity and trying to get the PostgreSQL <a href=https://www.postgresql.org/docs/current/planner-optimizer.html class=external-link target=_blank rel=noopener>planner/optimizer</a> to more quickly arrive at an ideal query.</p><h1 id=research>Research
+This was a problem of query complexity and trying to get the PostgreSQL <a href=https://www.postgresql.org/docs/current/planner-optimizer.html class=external-link target=_blank rel=noopener>planner/optimizer</a> to more quickly arrive at an ideal query.</p><h2 id=research>Research
 <a class=heading-link href=#research><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Early research made me realize that there is much less content to be found on this specific topic.
+<span class=sr-only>Link to heading</span></a></h2><p>Early research made me realize that there is much less content to be found on this specific topic.
 There are endless articles explaining how to speed up a query&rsquo;s <em>execution</em> with tools like indexes and clustering.
 However, reading material surrounding speeding up the planner/optimizer itself is much more rare.</p><p>I was at least able to find some <a href=https://www.postgresql.eu/events/pgconfeu2017/sessions/session/1617/slides/9/FromMinutesToMilliseconds.pdf class=external-link target=_blank rel=noopener>slides from a presentation</a> at the PostgreSQL Conference Europe 2017 that pointed me in the right direction.
 I started by messing around with some planner tweaks (like <a href=https://www.postgresql.org/docs/current/runtime-config-query.html#GUC-JOIN-COLLAPSE-LIMIT class=external-link target=_blank rel=noopener>join_collapse_limit</a>) which did help a bit but didn&rsquo;t completely solve my problem: planning was still the query&rsquo;s bottleneck.</p><p>I decided to try a new strategy.
 I reassembled the query join by join and measured how long the planner/optimizer took at every step.
 Once the planning time eventually jumped, I took a moment to think about the data model and how the tables were being joined.
-I eventually noticed a pattern that was causing the planner to take extra time and even came up with a name for the fix: <strong>reinforcing indirect joins</strong>.</p><h1 id=an-example>An Example
+I eventually noticed a pattern that was causing the planner to take extra time and even came up with a name for the fix: <strong>reinforcing indirect joins</strong>.</p><h2 id=an-example>An Example
 <a class=heading-link href=#an-example><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>I&rsquo;ll try to explain this concept with an example.
+<span class=sr-only>Link to heading</span></a></h2><p>I&rsquo;ll try to explain this concept with an example.
 Consider a simple schema with three tables: <code>post</code>, <code>tag</code>, and <code>comment</code>.
 One post can have many tags and many comments.
 Therefore, both the <code>tag</code> and <code>comment</code> tables have a foreign key reference back to <code>post</code>.</p><p><img src=/images/20240616/schema.webp alt="Simple schema for posts, tags, and comments"></p><p>Now, perhaps you are in a position to ask questions about the relationship between tags and comments.
@@ -34,15 +34,15 @@ Since you only really care about tags and comments and they can be easily linked
 </span></span><span style=display:flex><span><span style=color:#66d9ef>from</span> <span style=color:#e6db74>&#34;tag&#34;</span>
 </span></span><span style=display:flex><span><span style=color:#66d9ef>inner</span> <span style=color:#66d9ef>join</span> <span style=color:#e6db74>&#34;comment&#34;</span>
 </span></span><span style=display:flex><span>  <span style=color:#66d9ef>on</span> <span style=color:#e6db74>&#34;comment&#34;</span>.<span style=color:#e6db74>&#34;post_id&#34;</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;tag&#34;</span>.<span style=color:#e6db74>&#34;post_id&#34;</span>;
-</span></span></code></pre></div><h1 id=the-problem>The Problem
+</span></span></code></pre></div><h2 id=the-problem>The Problem
 <a class=heading-link href=#the-problem><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Now, based on my what I&rsquo;ve seen and experienced, we&rsquo;ve just thrown a curveball at the planner/optimizer.
+<span class=sr-only>Link to heading</span></a></h2><p>Now, based on my what I&rsquo;ve seen and experienced, we&rsquo;ve just thrown a curveball at the planner/optimizer.
 The tables <code>tag</code> and <code>comment</code> are indirectly linked to each other: they link to each other &ldquo;through&rdquo; the <code>post</code> table.
 Despite this indirect join returning the correct data, PostgreSQL may have trouble deciding how best to optimally execute the query.
 With large enough queries, this type of short-cutting can lead to the planner/optimizer taking way longer than expected.</p><p>What can we do about it?
-Well, we can take this indirect join and reinforce it!</p><h1 id=the-solution>The Solution
+Well, we can take this indirect join and reinforce it!</p><h2 id=the-solution>The Solution
 <a class=heading-link href=#the-solution><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>The solution is actually quite simple: add a join to the &ldquo;missing link&rdquo; table even if you don&rsquo;t need any data from it.
+<span class=sr-only>Link to heading</span></a></h2><p>The solution is actually quite simple: add a join to the &ldquo;missing link&rdquo; table even if you don&rsquo;t need any data from it.
 Here&rsquo;s what the fix looks this looks for our current example:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#66d9ef>select</span>
 </span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;tag&#34;</span>.<span style=color:#e6db74>&#34;name&#34;</span>,
 </span></span><span style=display:flex><span>  <span style=color:#e6db74>&#34;comment&#34;</span>.<span style=color:#e6db74>&#34;message&#34;</span>
@@ -55,9 +55,9 @@ Here&rsquo;s what the fix looks this looks for our current example:</p><div clas
 </span></span></code></pre></div><p>To be honest, I&rsquo;m not exactly sure <em>why</em> this helps, but I have a guess.
 PostgreSQL only understands (from a statistics point of view) the relationships between two individual tables.
 It knows hows tags relate to posts and how comments relate to posts, but not how tags relate to comments.
-By adding posts into the query, the planner/optimizer is able to say &ldquo;Ahh, I understand: they want the comments assocated with this tag&rsquo;s post&rdquo;.</p><p>Perhaps, without the extra join, the database has to search through more plans and therefore takes longer to find one that is optimal.</p><h1 id=another-example>Another Example
+By adding posts into the query, the planner/optimizer is able to say &ldquo;Ahh, I understand: they want the comments assocated with this tag&rsquo;s post&rdquo;.</p><p>Perhaps, without the extra join, the database has to search through more plans and therefore takes longer to find one that is optimal.</p><h2 id=another-example>Another Example
 <a class=heading-link href=#another-example><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Another sneaky way that this problem can manifest is when using CTEs to build smaller subsets of data into a larger response.
+<span class=sr-only>Link to heading</span></a></h2><p>Another sneaky way that this problem can manifest is when using CTEs to build smaller subsets of data into a larger response.
 Maybe you were first querying for tags that meet a certain condition before joining to comments:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-sql data-lang=sql><span style=display:flex><span><span style=color:#75715e>-- build a CTE of relevant tags
 </span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>with</span> <span style=color:#e6db74>&#34;relevant_tag&#34;</span> <span style=color:#66d9ef>as</span> (
 </span></span><span style=display:flex><span>  <span style=color:#66d9ef>select</span> <span style=color:#f92672>*</span>
@@ -86,9 +86,9 @@ Thankfully, the fix is the same: just reinforce the indirect join by adding the 
 </span></span><span style=display:flex><span>  <span style=color:#66d9ef>on</span> <span style=color:#e6db74>&#34;post&#34;</span>.<span style=color:#e6db74>&#34;id&#34;</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;relevant_tag&#34;</span>.<span style=color:#e6db74>&#34;post_id&#34;</span>;
 </span></span><span style=display:flex><span><span style=color:#66d9ef>inner</span> <span style=color:#66d9ef>join</span> <span style=color:#e6db74>&#34;comment&#34;</span>
 </span></span><span style=display:flex><span>  <span style=color:#66d9ef>on</span> <span style=color:#e6db74>&#34;comment&#34;</span>.<span style=color:#e6db74>&#34;post_id&#34;</span> <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;post&#34;</span>.<span style=color:#e6db74>&#34;id&#34;</span>;
-</span></span></code></pre></div><h1 id=conclusion>Conclusion
+</span></span></code></pre></div><h2 id=conclusion>Conclusion
 <a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>There you have it!
+<span class=sr-only>Link to heading</span></a></h2><p>There you have it!
 If you ever run into large queries with slow plan times, consider checking for (and reinforcing) any indirect joins.
 For smaller queries (like the examples in this post), the planner/optimizer is unlikely to be a bottleneck.
 In my experience, this problem only occurs on extra large queries with many tables being joined together.

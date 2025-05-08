@@ -16,22 +16,22 @@ What language are they written in?
 What API does the client expose to addon developers?
 Despite being unanswered for so many years, I finally flipped that stone over and started reading.
 Then, a few weeks ago, I wrote and published my very first WoW addon!
-This post talks about what the addon does, how it works, and the struggles I went through during development.</p><h1 id=derzplates>DerzPlates
+This post talks about what the addon does, how it works, and the struggles I went through during development.</p><h2 id=derzplates>DerzPlates
 <a class=heading-link href=#derzplates><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>I&rsquo;m rolling a bear druid (a tanking spec) for the latest round of WoW Classic (the <a href=http://worldofwarcraft.blizzard.com/en-us/news/24156594 class=external-link target=_blank rel=noopener>20th Anniversary Edition</a>).
+<span class=sr-only>Link to heading</span></a></h2><p>I&rsquo;m rolling a bear druid (a tanking spec) for the latest round of WoW Classic (the <a href=http://worldofwarcraft.blizzard.com/en-us/news/24156594 class=external-link target=_blank rel=noopener>20th Anniversary Edition</a>).
 As a tank, my goal to get all of the enemies to attack me while the damage dealers kill them and the healers keep everyone alive.
 Unfortunately, the default UI in classic doesn&rsquo;t provide a way to indicate which enemies are attacking you.
 The addon I wrote is called <a href=https://github.com/theandrew168/derzplates class=external-link target=_blank rel=noopener>DerzPlates</a> and it has single, simple goal: <strong>make it visually clear (via nameplate color) which enemy units are attacking me</strong>.</p><p>I&rsquo;m aware that some addons already exist for this (<a href=https://www.curseforge.com/wow/addons/tidy-plates-threat-plates class=external-link target=_blank rel=noopener>ThreatPlates</a> is a very popular one), but I feel like those are too heavy-handed and make too many changes to the default UI.
 I <em>only</em> want to change the plate&rsquo;s color (to magenta because purple is cool) and nothing else.
 Here&rsquo;s a screenshot of the addon in action.
-Bonus points if you notice the Wicked reference!</p><p><img src=/images/20241222/screenshot.webp alt="Screenshot of modified nameplate color"></p><h1 id=addon-structure>Addon Structure
+Bonus points if you notice the Wicked reference!</p><p><img src=/images/20241222/screenshot.webp alt="Screenshot of modified nameplate color"></p><h2 id=addon-structure>Addon Structure
 <a class=heading-link href=#addon-structure><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>As it turns out, WoW addons are written in <a href=https://www.lua.org/ class=external-link target=_blank rel=noopener>Lua</a>!
+<span class=sr-only>Link to heading</span></a></h2><p>As it turns out, WoW addons are written in <a href=https://www.lua.org/ class=external-link target=_blank rel=noopener>Lua</a>!
 They live as self-contained directories within the game&rsquo;s <code>Interface/AddOns</code> folder.
 To be identified and executed by the game client, the folder needs at least two files: a table of contents (<code>.toc</code>) file and a Lua (<code>.lua</code>) source code file.
-That&rsquo;s it!</p><h2 id=table-of-contents>Table of Contents
+That&rsquo;s it!</p><h3 id=table-of-contents>Table of Contents
 <a class=heading-link href=#table-of-contents><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h2><p>The <code>.toc</code> file contains basic metadata about the addon: its name, description, version, and which version of WoW client (interface) it was built for.
+<span class=sr-only>Link to heading</span></a></h3><p>The <code>.toc</code> file contains basic metadata about the addon: its name, description, version, and which version of WoW client (interface) it was built for.
 It then lists out any source files that the client should execute.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ini data-lang=ini><span style=display:flex><span><span style=color:#75715e>## Title: DerzPlates</span>
 </span></span><span style=display:flex><span><span style=color:#75715e>## Notes: The simplest threat plates addon on the market.</span>
 </span></span><span style=display:flex><span><span style=color:#75715e>## Author: theandrew168</span>
@@ -39,9 +39,9 @@ It then lists out any source files that the client should execute.</p><div class
 </span></span><span style=display:flex><span><span style=color:#75715e>## Interface: 11505</span>
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#a6e22e>main.lua</span>
-</span></span></code></pre></div><h2 id=lua-sources>Lua Sources
+</span></span></code></pre></div><h3 id=lua-sources>Lua Sources
 <a class=heading-link href=#lua-sources><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h2><p>The simplest addon could be <code>print("Hello World!")</code> which would print &ldquo;Hello World!&rdquo; to the chat window whenever the UI loads.
+<span class=sr-only>Link to heading</span></a></h3><p>The simplest addon could be <code>print("Hello World!")</code> which would print &ldquo;Hello World!&rdquo; to the chat window whenever the UI loads.
 DerzPlates does a bit more than that but I won&rsquo;t dump all of the code here.
 Instead, I&rsquo;ll just a give you a sample of what addon code looks like.
 Here is the main decision logic: it decides whether a given nameplate should use my special color or fallback to its default color.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-lua data-lang=lua><span style=display:flex><span><span style=color:#75715e>-- This is a custom implementation of the CompactUnitFrame_UpdateHealthColorOverride</span>
@@ -83,9 +83,9 @@ Here is the main decision logic: it decides whether a given nameplate should use
 </span></span><span style=display:flex><span><span style=color:#66d9ef>end</span>
 </span></span></code></pre></div><p>In my opinion, Lua is pretty readable!
 I haven&rsquo;t written it for a while but I did use it for a few projects back in college.
-I also did a <a href=https://love2d.org/ class=external-link target=_blank rel=noopener>Love2D</a> (a Lua 2D game development framework) <a href=https://github.com/theandrew168/lovejam2023 class=external-link target=_blank rel=noopener>game jam</a> last year so my Lua skills aren&rsquo;t as dull as they otherwise would&rsquo;ve been.</p><h1 id=development-struggles>Development Struggles
+I also did a <a href=https://love2d.org/ class=external-link target=_blank rel=noopener>Love2D</a> (a Lua 2D game development framework) <a href=https://github.com/theandrew168/lovejam2023 class=external-link target=_blank rel=noopener>game jam</a> last year so my Lua skills aren&rsquo;t as dull as they otherwise would&rsquo;ve been.</p><h2 id=development-struggles>Development Struggles
 <a class=heading-link href=#development-struggles><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>At first, I thought that writing the addon would be quite trivial:</p><ol><li>Listen for a few specific events: nameplate created and threat situation updated.</li><li>When these events occur, loop through every nameplate visible on the screen.</li><li>If the nameplate belongs to a unit that is attacking me, change its color!</li></ol><p>This did get me to a mostly working (but buggy) iteration of the addon.
+<span class=sr-only>Link to heading</span></a></h2><p>At first, I thought that writing the addon would be quite trivial:</p><ol><li>Listen for a few specific events: nameplate created and threat situation updated.</li><li>When these events occur, loop through every nameplate visible on the screen.</li><li>If the nameplate belongs to a unit that is attacking me, change its color!</li></ol><p>This did get me to a mostly working (but buggy) iteration of the addon.
 It wasn&rsquo;t perfect, however, and I quickly hit a snag.
 You see, in the WoW client, nameplates are &ldquo;pooled&rdquo;.
 This means that instead of creating and destroying nameplates objects for each unit, they are reused from a pre-allocated pool (similar to database connections).
@@ -99,16 +99,16 @@ Thanks to SDPhantom, I was able to release a much more stable v0.0.2.</p><p>This
 How did SDPhantom instantly know what was wrong with my code and how to fix it?
 Surely experience plays a role but what about examples and documentation?
 From what I understand, there are two primary resources:</p><ol><li>The <a href=https://warcraft.wiki.gg/wiki/Warcraft_Wiki:Interface_customization class=external-link target=_blank rel=noopener>Warcraft Wiki</a></li><li>The Blizzard UI <a href=https://github.com/tomrus88/BlizzardInterfaceCode/tree/classic class=external-link target=_blank rel=noopener>source code</a></li></ol><p>When writing new addons, programmers will often scour the existing code to get a sense of how it works.
-Then, they can apply this knowledge to identify where and how their logic should hook in and override default behavior.</p><h1 id=automation>Automation
+Then, they can apply this knowledge to identify where and how their logic should hook in and override default behavior.</p><h2 id=automation>Automation
 <a class=heading-link href=#automation><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>The code itself is hosted on GitHub.
+<span class=sr-only>Link to heading</span></a></h2><p>The code itself is hosted on GitHub.
 I wrote a quick <a href=https://github.com/theandrew168/derzplates/blob/main/.github/workflows/release.yml class=external-link target=_blank rel=noopener>GitHub Action</a> to zip the addon code and create a release whenever a new tag is added.
 I don&rsquo;t write new actions very often so I always have to revisit the docs and my previous workflows to relearn.
 The heavy lifting of this particular action is handled by the <a href=https://github.com/TheDoctor0/zip-release class=external-link target=_blank rel=noopener>TheDoctor0/zip-release</a> and <a href=https://github.com/ncipollo/release-action class=external-link target=_blank rel=noopener>ncipollo/release-action</a> actions.
 Being able to compose these simple and specific building blocks together to create specialized workflows is really awesome!</p><p>If you want to download the addon and try it for yourself, just grab the latest <code>DerzFiles.zip</code> file from the <a href=https://github.com/theandrew168/derzplates/releases class=external-link target=_blank rel=noopener>releases page</a> and unzip it into your addons folder.
-Let me know if you end up giving it a shot!</p><p><img src=/images/20241222/release.webp alt="Screenshot of a recent release"></p><h1 id=conclusion>Conclusion
+Let me know if you end up giving it a shot!</p><p><img src=/images/20241222/release.webp alt="Screenshot of a recent release"></p><h2 id=conclusion>Conclusion
 <a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Overall, this has been a short, fun, and only mildly frustrating experience.
+<span class=sr-only>Link to heading</span></a></h2><p>Overall, this has been a short, fun, and only mildly frustrating experience.
 If it weren&rsquo;t for the nameplate pooling behavior, I would&rsquo;ve had this completely done and sorted within an hour.
 However, troubleshooting the pooling cost me quite a few hours.
 Thankfully, SDPhantom and the WoW Interface forum community showed up to help me out.

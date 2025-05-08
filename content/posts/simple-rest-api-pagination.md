@@ -15,7 +15,7 @@ Before I go any further, I want to give a special shoutout to Tania Rascia's [bl
 She has one of the best blogs on the internet and I always find myself coming back to it.
 Thanks, Tania!
 
-# Pagination
+## Pagination
 
 Pagination is the process of splitting up a large set of results into smaller, individual "pages".
 Let's use Bloggulus' concept of "posts" as an example.
@@ -27,7 +27,7 @@ How can we tell the server to only give us a specific subset of posts?
 There are two common approaches but they have one thing in common: **results must have a consistent and deterministic ordering**.
 Whether you choose to order results alphabetically, chronologically, or by some other means, the order must be consistent for pagination to work correctly.
 
-# Limit and Offset
+## Limit and Offset
 
 The first approach is somewhat "no-frills" and feels a bit like "computer speak".
 Instead of even bothering with the word "page", just think like a database and use the terms "limit" and "offset".
@@ -51,7 +51,7 @@ For example, if you want to iterate through all pages of results, you'll have to
 Additionally, "limit" and "offset" aren't the most natural terms to describe this concept.
 It might be more straightforward to think about things a bit more literally.
 
-# Page and Size
+## Page and Size
 
 Instead of thinking about this problem like a database, let's think about it like actual pages (it _is_ called pagination, after all).
 We'll swap out "limilt" and "offset" for two new values: "page" and "size".
@@ -91,7 +91,7 @@ func PageSizeToLimitOffset(page, size int) (int, int) {
 }
 ```
 
-# Conclusion
+## Conclusion
 
 This post outlined the need for pagination in REST APIs and explored two techniques for describing specific pages.
 While "limit" and "offset" map more cleanly to underlying databases, "page" and "size" are a bit more user-friendly and defer some the calculations to the server.

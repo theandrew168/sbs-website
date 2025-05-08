@@ -12,7 +12,7 @@ Fear of criticism?
 Worried about wasting people's time?
 Regardless of the reason, I did end up posting a few and I think it went okay!
 
-# Solid Start
+## Solid Start
 
 I first shared my recent post about [Parsing Recursive Polymorhpic JSON](https://old.reddit.com/r/golang/comments/1cw3egv/parsing_recursive_polymorphic_json_in_go/).
 This was one received super well!
@@ -25,7 +25,7 @@ Now _that_ feels great to hear.
 If my writing can help even one other development make progress, then I'm happy.
 I mainly write these posts to solidify my own learning, but adding value to others is a nice bonus.
 
-# Mixed Middle
+## Mixed Middle
 
 The second blog I posted was an older one called [Conditional Embedding in Go](https://old.reddit.com/r/golang/comments/1czkqa9/conditional_embedding_in_go/).
 I feel like the reception here was a bit more mixed.
@@ -38,7 +38,7 @@ Instead of using two different servers for local development and embedding the f
 Did I get bit tunnel-visioned on that specific facet of the problem?
 Maybe, but I still prefer my "conditional embedding" strategy at the end of the day.
 
-# Foggy Finish
+## Foggy Finish
 
 When readers are critical, my gut reaction is to be defensive or delete the post altogether.
 However, after some consideration, I realize that the reality isn't so bleak.
@@ -46,7 +46,7 @@ After all, 2024 is the year of balance.
 What I realized what twofold: perhaps they don't fully understand the exact nature of the problem I was solving and perhaps I don't understand their experience and knowledge.
 We should probably all listen, ask questions, and eventually meet in the middle.
 
-# P.S.
+## P.S.
 
 Also, my wife and I just bought a house!
 Since then, I've been very busy fixing things, cleaning, and painting.

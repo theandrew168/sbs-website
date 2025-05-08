@@ -20,7 +20,7 @@ My list of requirements is short:
 
 Let's start with creating the bucket.
 
-# Infra
+## Infra
 
 Creating Digital Ocean buckets [via Terraform](https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/spaces_bucket) is super simple and something I've done before.
 You really can't mess this up: give it a name, give it a region, and make it private!
@@ -37,7 +37,7 @@ resource "digitalocean_spaces_bucket" "derztunes" {
 This satisfies my first requirement by ensuring that files added to the bucket will be private.
 Now for the actual upload!
 
-# Upload
+## Upload
 
 In my head, I told myself: "I want something like rsync but for S3".
 To put this another way, I want something fast and idempotent.
@@ -64,7 +64,7 @@ Unsurprisingly, it ended up working perfectly!
 The CLI first checks for any missing files and then uploads them concurrently (the max concurrency is [configurable](https://docs.aws.amazon.com/cli/latest/topic/s3-config.html#max-concurrent-requests)).
 The process took roughly 90 minutes for the initial sync while subsequent "no-op" syncs took only a minute or two.
 
-# Optimize
+## Optimize
 
 After the fact, I did learn of a [small optimization](https://stackoverflow.com/a/65321940).
 When doing the initial sync (before any files have been uploaded), you can avoid the "comparing files" work by simply performing a recursive copy.

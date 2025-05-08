@@ -15,7 +15,7 @@ The actual data could be anything: text, images, [SQLite](https://www.sqlite.org
 It doesn't matter!
 Everything is just bytes at the end of the day.
 
-# Discoveries
+## Discoveries
 
 The trick that first caught my eye was how the project implemented volume servers.
 I cracked open the solitary [volume](https://github.com/geohot/minikeyvalue/blob/master/volume) executable and saw that it was nothing more than a Bash script that started an [NGINX](http://nginx.org/en/) in the foreground.
@@ -32,7 +32,7 @@ George's approach slashes this complexity by allowing NGINX to be something that
 As well as using NGINX for the volume servers, my Python version also starts its own reverse proxy (as a child process) for the index server.
 I get all the benefits of NGINX (great performance, high extensibility, multiple workers) without the fuss of managing a persistent config file.
 
-# The Volume Servers
+## The Volume Servers
 
 A volume stores the data associated with a given key.
 NGINX's [WebDAV module](http://nginx.org/en/docs/http/ngx_http_dav_module.html) is used to obtain the desired behavior out of the box: GET reads data, PUT stores data, and DELETE removes data.
@@ -80,7 +80,7 @@ They both run NGINX as a child process and wait for interruption.
 The "kickoff" language doesn't really matter here.
 Could be Bash, Go, Python, C, or anything else: the result is the same.
 
-# The Index Server
+## The Index Server
 
 The index server is the brain of the application.
 It keeps track of what keys are currently in the system and where they are located (on which volume server and at what path).
@@ -127,7 +127,7 @@ with run_in_background(['nginx', '-c', ...]):
         pass
 ```
 
-# Performance
+## Performance
 
 I wanted to see how the two versions of this project performed in a small set of benchmarks.
 I'm not a fan of testing locally so I spun up a small cluster of $5 [Digital Ocean](https://www.digitalocean.com/) droplets in order to introduce proper network latency.
@@ -153,7 +153,7 @@ On the _most_ important benchmark which simulates realistic client behavior, our
 Some other common factor must be the bottleneck here.
 I'm assuming that the time spent waiting on network communication between components is the dominating factor.
 
-# Takeaways
+## Takeaways
 
 The full project with source code and documentation can be found [here](https://github.com/theandrew168/pymkv).
 Overall, this was really fun!

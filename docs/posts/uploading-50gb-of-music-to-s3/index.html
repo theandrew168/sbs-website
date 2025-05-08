@@ -14,9 +14,9 @@ Part of this project involves hosting my ~50GB of music (~7500 files) somewhere 
 To me, there was one obvious choice: S3-compatible object storage.
 Since I use <a href=https://www.digitalocean.com/ class=external-link target=_blank rel=noopener>Digital Ocean</a> for infrastructure, this means utilizing <a href=https://www.digitalocean.com/products/spaces class=external-link target=_blank rel=noopener>Spaces Object Storage</a>.</p><p>Today, my music files live on an external USB hard drive (a Seagate FreeAgent from the mid-2010s).
 The big question is this: what is the best way to get these files off of the hard drive and safely uploaded to S3?
-My list of requirements is short:</p><ol><li>The uploaded files should be private</li><li>The upload should be fast and concurrent</li><li>The upload should be idempotent and restartable</li></ol><p>Let&rsquo;s start with creating the bucket.</p><h1 id=infra>Infra
+My list of requirements is short:</p><ol><li>The uploaded files should be private</li><li>The upload should be fast and concurrent</li><li>The upload should be idempotent and restartable</li></ol><p>Let&rsquo;s start with creating the bucket.</p><h2 id=infra>Infra
 <a class=heading-link href=#infra><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Creating Digital Ocean buckets <a href=https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/spaces_bucket class=external-link target=_blank rel=noopener>via Terraform</a> is super simple and something I&rsquo;ve done before.
+<span class=sr-only>Link to heading</span></a></h2><p>Creating Digital Ocean buckets <a href=https://registry.terraform.io/providers/digitalocean/digitalocean/latest/docs/resources/spaces_bucket class=external-link target=_blank rel=noopener>via Terraform</a> is super simple and something I&rsquo;ve done before.
 You really can&rsquo;t mess this up: give it a name, give it a region, and make it private!
 Nice and easy.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-hcl data-lang=hcl><span style=display:flex><span><span style=color:#66d9ef>resource</span> <span style=color:#e6db74>&#34;digitalocean_spaces_bucket&#34; &#34;derztunes&#34;</span> {
 </span></span><span style=display:flex><span>  name   <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;derztunes&#34;</span>
@@ -24,9 +24,9 @@ Nice and easy.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;backg
 </span></span><span style=display:flex><span>  acl    <span style=color:#f92672>=</span> <span style=color:#e6db74>&#34;private&#34;</span>
 </span></span><span style=display:flex><span>}
 </span></span></code></pre></div><p>This satisfies my first requirement by ensuring that files added to the bucket will be private.
-Now for the actual upload!</p><h1 id=upload>Upload
+Now for the actual upload!</p><h2 id=upload>Upload
 <a class=heading-link href=#upload><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>In my head, I told myself: &ldquo;I want something like rsync but for S3&rdquo;.
+<span class=sr-only>Link to heading</span></a></h2><p>In my head, I told myself: &ldquo;I want something like rsync but for S3&rdquo;.
 To put this another way, I want something fast and idempotent.
 If the upload were to get interrupted midway through, I don&rsquo;t want to start over from zero.
 Instead, I want to use a program that can compare the local files to what exists in S3 and only upload <em>missing</em> files.</p><p>Based on my personal experience and brief research, I was considering three different tools for the job.</p><ol><li><a href=https://aws.amazon.com/cli/ class=external-link target=_blank rel=noopener>AWS CLI</a> (the de-facto, first-party choice)</li><li><a href=https://s3tools.org/s3cmd class=external-link target=_blank rel=noopener>S3cmd</a> (recommended by Digital Ocean)</li><li><a href=https://min.io/docs/minio/linux/reference/minio-mc.html class=external-link target=_blank rel=noopener>MinIO Client</a> (I&rsquo;m a fan of the <a href=https://github.com/minio/minio class=external-link target=_blank rel=noopener>MinIO project</a> and its <a href=https://github.com/minio/minio-go class=external-link target=_blank rel=noopener>client libraries</a>)</li></ol><p>I figured I&rsquo;d start with the official AWS CLI since it is widely used and built to scale (I&rsquo;m assuming).
@@ -36,9 +36,9 @@ After installing the CLI and exporting the standard AWS credentials, performing 
 </span></span><span style=display:flex><span>aws s3 sync --endpoint<span style=color:#f92672>=</span>https://nyc3.digitaloceanspaces.com . s3://derztunes
 </span></span></code></pre></div><p>Unsurprisingly, it ended up working perfectly!
 The CLI first checks for any missing files and then uploads them concurrently (the max concurrency is <a href=https://docs.aws.amazon.com/cli/latest/topic/s3-config.html#max-concurrent-requests class=external-link target=_blank rel=noopener>configurable</a>).
-The process took roughly 90 minutes for the initial sync while subsequent &ldquo;no-op&rdquo; syncs took only a minute or two.</p><h1 id=optimize>Optimize
+The process took roughly 90 minutes for the initial sync while subsequent &ldquo;no-op&rdquo; syncs took only a minute or two.</p><h2 id=optimize>Optimize
 <a class=heading-link href=#optimize><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>After the fact, I did learn of a <a href=https://stackoverflow.com/a/65321940 class=external-link target=_blank rel=noopener>small optimization</a>.
+<span class=sr-only>Link to heading</span></a></h2><p>After the fact, I did learn of a <a href=https://stackoverflow.com/a/65321940 class=external-link target=_blank rel=noopener>small optimization</a>.
 When doing the initial sync (before any files have been uploaded), you can avoid the &ldquo;comparing files&rdquo; work by simply performing a recursive copy.
 This unconditionally copies all files present in the source directory to the destination bucket.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-bash data-lang=bash><span style=display:flex><span>export AWS_ACCESS_KEY_ID<span style=color:#f92672>=</span>$SPACES_ACCESS_KEY_ID
 </span></span><span style=display:flex><span>export AWS_SECRET_ACCESS_KEY<span style=color:#f92672>=</span>$SPACES_SECRET_ACCESS_KEY

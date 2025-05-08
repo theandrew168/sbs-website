@@ -10,7 +10,7 @@ That being said, most things on the island were quite expensive (especially food
 One day, while sitting on the beach, I asked myself: "What would my ideal vacation look like?".
 I started jotting down some ideas.
 
-# Criteria
+## Criteria
 
 What follows is my personalized list of tenets for a great vacation.
 This experience would be somewhat niche and wouldn't likely be everyone's cup of tea.
@@ -30,7 +30,7 @@ In no particular order:
 9. Can be located in a climate that is **warm OR cold**. It doesn't really matter to me: beaches aren't required and I'm okay with hiking in the snow.
 10. A **bearable amount of travel**. Travelling to and from Hawaii was _long_. So much time spent in a plane and waiting on layovers. I'd love a place that was reasonably close to the midwest. I'm fine with driving if the spot isn't too far away.
 
-# Conclusion
+## Conclusion
 
 This list is wishful but I don't think that it would be impossible to satisfy.
 No individual item stands out as being difficult to achieve but finding the intersection of _all_ of them could be difficult.

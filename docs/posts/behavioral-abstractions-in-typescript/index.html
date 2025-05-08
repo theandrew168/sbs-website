@@ -13,9 +13,9 @@ I think that this is one of the most important facets of system design."><meta n
 It could be by scraping a web page, hitting a REST API, or simply talking to a database.
 If an application depends on the specific details of any of these communications, however, then it becomes much more difficult to test.
 Instead, a program&rsquo;s domain logic should depend on <em>abstract behaviors</em> instead of concrete implementations.
-I think that this is one of the most important facets of system design.</p><h1 id=fetching-web-pages>Fetching Web Pages
+I think that this is one of the most important facets of system design.</p><h2 id=fetching-web-pages>Fetching Web Pages
 <a class=heading-link href=#fetching-web-pages><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>I&rsquo;ve recently been implementing my <a href=https://bloggulus.com/ class=external-link target=_blank rel=noopener>Bloggulus</a> web application in <a href=https://github.com/theandrew168/bloggulus-svelte/tree/main class=external-link target=_blank rel=noopener>Svelte + TypeScript</a> for fun and experience.
+<span class=sr-only>Link to heading</span></a></h2><p>I&rsquo;ve recently been implementing my <a href=https://bloggulus.com/ class=external-link target=_blank rel=noopener>Bloggulus</a> web application in <a href=https://github.com/theandrew168/bloggulus-svelte/tree/main class=external-link target=_blank rel=noopener>Svelte + TypeScript</a> for fun and experience.
 One step of the syncing process involves manually retrieving a post&rsquo;s content if it isn&rsquo;t present in the RSS / Atom feed.
 My initial approach to this was to simply use <a href=https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch class=external-link target=_blank rel=noopener>fetch</a> inline:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ts data-lang=ts><span style=display:flex><span><span style=color:#66d9ef>async</span> <span style=color:#66d9ef>function</span> <span style=color:#a6e22e>syncPost</span>(<span style=color:#a6e22e>post</span>: <span style=color:#66d9ef>Post</span>)<span style=color:#f92672>:</span> <span style=color:#a6e22e>Promise</span>&lt;<span style=color:#f92672>void</span>&gt; {
 </span></span><span style=display:flex><span>  <span style=color:#66d9ef>let</span> <span style=color:#a6e22e>content</span> <span style=color:#f92672>=</span> <span style=color:#a6e22e>post</span>.<span style=color:#a6e22e>content</span>;
@@ -31,9 +31,9 @@ If I want to verify that posts with missing content are handled correctly, I hav
 Otherwise, the code will attempt to fetch an invalid page and throw an error.
 Sure, I <em>could</em> test against a real web page (like <a href=https://example.com/ class=external-link target=_blank rel=noopener>example.com</a> or one of my own sites) but do I really want to write tests that depend on:</p><ol><li>Having an active internet connection</li><li>The internet connection being stable and consistent</li><li>The permanent existence of a specific web page</li></ol><p>That sounds like a pain.
 Perhaps I could spin up a small web server as part of the testing to serve mock pages on a local port?
-Again, I <em>could</em> do that, but surely there must be a better way.</p><h1 id=basic-behavior>Basic Behavior
+Again, I <em>could</em> do that, but surely there must be a better way.</p><h2 id=basic-behavior>Basic Behavior
 <a class=heading-link href=#basic-behavior><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>What does my application actually depend on?
+<span class=sr-only>Link to heading</span></a></h2><p>What does my application actually depend on?
 What does it need here?
 It doesn&rsquo;t really need to know about the <a href=https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API class=external-link target=_blank rel=noopener>Fetch API</a> at all.
 In more abstract terms, the application just needs a bit of behavior that says: here is a URL, give me some content.
@@ -73,9 +73,9 @@ Instead of having to jump through some the painful aforementioned hoops, we can 
 </span></span><span style=display:flex><span>});
 </span></span></code></pre></div><p>I don&rsquo;t know about you, but I think that this is very powerful!
 Because our domain logic doesn&rsquo;t care about <em>how</em> we fetch pages, we can pass it a special, hand-crafted implementation of the interface and it won&rsquo;t know the difference.
-It only knows that it needs to fetch a page and has been provided with the tools to make it happen.</p><h1 id=complex-behaviors>Complex Behaviors
+It only knows that it needs to fetch a page and has been provided with the tools to make it happen.</p><h2 id=complex-behaviors>Complex Behaviors
 <a class=heading-link href=#complex-behaviors><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>This idea can be extended to encompass sets of behaviors, as well.
+<span class=sr-only>Link to heading</span></a></h2><p>This idea can be extended to encompass sets of behaviors, as well.
 Consider how this can be applied to decoupling your application code from a database.
 You code doesn&rsquo;t <em>need</em> to know about database connections and SQL queries.
 It only needs to know how to perform basic storage operations on domain types (create, read, update, and delete).</p><p>Bloggulus has the concept of a tag.
@@ -90,9 +90,9 @@ Since we know what the behaviors are, let&rsquo;s put them into an interface!</p
 </span></span></code></pre></div><p>Just like before, the rest of the application depends only on this interface and not any specific implementation.
 Any class or object that has the matching method signatures can be used in places where <code>TagStorage</code> is required.
 The &ldquo;real&rdquo; implementation can be a class that hides the database connection and uses SQL to talk to a PostgreSQL database.
-A &ldquo;fake&rdquo; implementation (for testing) can be one that stores tags in memory (likely in a <code>Record&lt;string, Tag></code>) and manipulates them with standard object operations.</p><h1 id=conclusion>Conclusion
+A &ldquo;fake&rdquo; implementation (for testing) can be one that stores tags in memory (likely in a <code>Record&lt;string, Tag></code>) and manipulates them with standard object operations.</p><h2 id=conclusion>Conclusion
 <a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>I think that it is always a good idea to separate behavior and implementation when it comes to how your app interacts with the world around it.
+<span class=sr-only>Link to heading</span></a></h2><p>I think that it is always a good idea to separate behavior and implementation when it comes to how your app interacts with the world around it.
 By representing behavior as an interface, you gain the freedom to implement the described functionality in different ways.
 Despite only likely having one true implementation at runtime, the opportunities to provide finely-controlled mock implementations during testing adds a large amount of value.
 It allows you to more easily test the most important (and often undertested) areas of your code: those that interact with external systems.</p><p>The concept of an interface is ubiquitous across software engineering and I use this pattern everywhere.

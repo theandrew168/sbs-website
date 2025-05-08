@@ -12,7 +12,7 @@ My most recent head-scratcher has been about balancing "purist" REST API design 
 I'm beginning to realize a truth: **they are different**.
 As always, I'm talking about [Bloggulus](https://bloggulus.com).
 
-# The Problem
+## The Problem
 
 I've recently been working on adding support for individualized feeds.
 This means that users can create an account and follow their own favorite blogs.
@@ -27,7 +27,7 @@ Pardon the ugliness...
 
 ![Bloggulus blogs page with follow and unfollow buttons](/images/20240818/blogs.webp)
 
-# N+1 API Calls
+## N+1 API Calls
 
 If the goal is to maintain "REST API purity", then the frontend has no choice but to make multiple calls.
 Since the underlying resources are **granular and normalized**, the frontend needs to **collect and aggregate** the disparate pieces that compose a single page (or element).
@@ -119,7 +119,7 @@ Any one of those requests being slow could impact the responsiveness of the page
 Do we really to shift all of this data loading and aggregation responsibility to the client?
 What other options are there?
 
-# BFF Endpoints
+## BFF Endpoints
 
 What if we took the individualized needs of a specific frontend (web, mobile, etc) and built a backend that was tailored to those needs?
 Instead of only exposing the normalized, underlying data models of the application, what if we exposed the rich, pre-assembled data required to power each page?
@@ -164,7 +164,7 @@ Prior to settling on this approach, I wondered if this was almost a [domain-driv
 Could different user interfaces (web and API) be considered different contexts?
 I'm not familiar enough with DDD to really know.
 
-# Conclusion
+## Conclusion
 
 What I've learned is this: the needs of a REST API (for programmers) are different that a visual frontend (for users).
 While you _can_ implement a frontend on top of a normalized REST API, you have to take care to avoid the N+1 problem.

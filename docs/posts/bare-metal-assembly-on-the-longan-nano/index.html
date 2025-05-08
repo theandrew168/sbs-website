@@ -29,9 +29,9 @@ GigaDevice GD32VF103[CBT6] 32-bit CPU 8 MHz default clock speed (IRC8M) 108 MHz 
 </span><span class=separator>•</span>
 <span class=tag><a href=/tags/assembly/>Assembly</a></span></div></div></header><div class=post-content><p>The <a href=https://www.seeedstudio.com/Sipeed-Longan-Nano-RISC-V-GD32VF103CBT6-Development-Board-p-4205.html class=external-link target=_blank rel=noopener>Sipeed Longan Nano</a> is a small, affordable, 32-bit <a href=https://en.wikipedia.org/wiki/RISC-V class=external-link target=_blank rel=noopener>RISC-V</a> chip.
 Despite its minimalism, the Longan Nano provides enough power and peripherals to learn RISC-V assembly and build exciting programs along the way.</p><p>The Longan Nano comes with the following components:</p><ul><li>GigaDevice GD32VF103[CBT6] 32-bit CPU</li><li>8 MHz default clock speed (IRC8M)</li><li>108 MHz maximum clock speed</li><li>128 KB flash storage</li><li>32 KB sram memory</li><li>3 LEDs (red, green, and blue)</li><li>1 USB Type-C port</li><li>1 microSD card slot</li><li>160x80 pixel LCD (0.96 inches)</li><li>2 Buttons (RESET and BOOT)</li></ul><p>With the specs out of the way, we can begin the journey of figuring out how to go from a blank text file to controlling all aspects of our hardware.
-Get ready to discuss registers, design clean programs, and dive into some datasheets.</p><p><strong>The rest of the Longan Nano series requires that the device be connected to your host system via a USB-C cable! Go ahead get things wired up!</strong></p><h1 id=the-worlds-smallest-risc-v-program>The world&rsquo;s smallest RISC-V program
+Get ready to discuss registers, design clean programs, and dive into some datasheets.</p><p><strong>The rest of the Longan Nano series requires that the device be connected to your host system via a USB-C cable! Go ahead get things wired up!</strong></p><h2 id=the-worlds-smallest-risc-v-program>The world&rsquo;s smallest RISC-V program
 <a class=heading-link href=#the-worlds-smallest-risc-v-program><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Seen below is a valid RISC-V program that does absolutely nothing!</p><pre tabindex=0><code>addi zero, zero, 0
+<span class=sr-only>Link to heading</span></a></h2><p>Seen below is a valid RISC-V program that does absolutely nothing!</p><pre tabindex=0><code>addi zero, zero, 0
 </code></pre><p>This particular combination of words and numbers tells the computer to add 0 to a special register named <code>zero</code>.
 More specifically, <code>addi</code> (shorthand for &ldquo;add immediate&rdquo;) is an instruction that tells the CPU to add the literal number 0 to the value currently stored in register <code>zero</code> and then store the resulting sum back into register <code>zero</code>.</p><p>What is a register, though?</p><p>One analogy for explaining the relationship between a CPU and its registers is to consider a librarian.
 The librarian&rsquo;s job is to organize and repair books.
@@ -50,9 +50,9 @@ These parameters are arranged as follows:</p><pre tabindex=0><code>addi rd, rs1,
 This sum (0 + 0 = 0) is then stored back into register <code>zero</code>.
 Even though the program appears to write 0 to the <code>zero</code> register, it doesn&rsquo;t affect it at all.
 As we learned with the special <code>zero</code> register, all values placed in it disappear.
-Even if the result of the sum had been non-zero, the instruction would not have changed the <code>zero</code> register.</p><p>Now that our simple program is written and understood, how do we convert it to something that CPUs understand?</p><h1 id=ready-set-assemble>Ready, set, assemble!
+Even if the result of the sum had been non-zero, the instruction would not have changed the <code>zero</code> register.</p><p>Now that our simple program is written and understood, how do we convert it to something that CPUs understand?</p><h2 id=ready-set-assemble>Ready, set, assemble!
 <a class=heading-link href=#ready-set-assemble><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>This section details the steps necessary to &ldquo;assemble&rdquo; our simple program.
+<span class=sr-only>Link to heading</span></a></h2><p>This section details the steps necessary to &ldquo;assemble&rdquo; our simple program.
 Assembling is the process of converting human-readable assembly language text to a specific binary representation that a CPU can understand.</p><p>Since the <a href=https://en.wikipedia.org/wiki/Assembly_language#Assembler class=external-link target=_blank rel=noopener>assembler</a> we are going to use is written in <a href=https://www.python.org class=external-link target=_blank rel=noopener>Python</a>, we will install all of the system packages necessary to install additional Python modules.</p><pre tabindex=0><code>sudo apt install python3-pip python3-venv
 </code></pre><p>To keep things organized, we will use a <a href=https://docs.python.org/3/library/venv.html class=external-link target=_blank rel=noopener>virtual environment</a> to isolate our project-specific Python modules from the rest of our system.</p><pre tabindex=0><code>python3 -m venv venv/
 . ./venv/bin/activate
@@ -60,9 +60,9 @@ Assembling is the process of converting human-readable assembly language text to
 </code></pre><p>Last but not least, we can write our simple program to a file and assemble it.</p><pre tabindex=0><code>echo &#34;addi zero, zero, 0&#34; &gt; smallest.asm
 bronzebeard smallest.asm
 </code></pre><p>Congratulations!
-You just wrote and assembled the world&rsquo;s smallest RISC-V program!</p><h1 id=preparing-for-dfu>Preparing for DFU
+You just wrote and assembled the world&rsquo;s smallest RISC-V program!</p><h2 id=preparing-for-dfu>Preparing for DFU
 <a class=heading-link href=#preparing-for-dfu><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Without our assembled <code>bb.out</code> file in hand, the next step is to hook up our Longan Nano and upload the program to the chip&rsquo;s flash storage.
+<span class=sr-only>Link to heading</span></a></h2><p>Without our assembled <code>bb.out</code> file in hand, the next step is to hook up our Longan Nano and upload the program to the chip&rsquo;s flash storage.
 To accomplish this task, we must use the <a href=https://en.wikipedia.org/wiki/USB#Device_Firmware_Upgrade class=external-link target=_blank rel=noopener>Device Firmware Upgrade</a> protocol.
 This protocol enables a very simple method for upgrading the firmware of devices connected to your system over USB.
 If you are curious about the details, the official specification for DFU can be found <a href=https://www.usb.org/sites/default/files/DFU_1.1.pdf class=external-link target=_blank rel=noopener>here</a>.
@@ -75,9 +75,9 @@ It resets the chip&rsquo;s power connection which clears all of the CPU&rsquo;s 
 This is exactly what we&rsquo;re after!
 In order to be sure that the CPU sees the signal from the BOOT button, it must be held down the while the chip is powered on or reset via the RESET button.
 Since the buttons are so small, I find it easiest to hold the BOOT button down, then press and release the RESET button.
-In short: press BOOT, press RESET, release RESET, release BOOT.</p><p><strong>Take note of this BOOT / RESET process! It will be used everytime we to download a new program to the device!</strong></p><h1 id=programming-the-device>Programming the device
+In short: press BOOT, press RESET, release RESET, release BOOT.</p><p><strong>Take note of this BOOT / RESET process! It will be used everytime we to download a new program to the device!</strong></p><h2 id=programming-the-device>Programming the device
 <a class=heading-link href=#programming-the-device><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>We now have all the information we need to upload our <code>bb.out</code> program to the device.
+<span class=sr-only>Link to heading</span></a></h2><p>We now have all the information we need to upload our <code>bb.out</code> program to the device.
 One thing that the DFU uploader needs is the USB identifier for the device.
 If you are on a Linux or macOS system, the command <code>lsusb</code> can be helpful for finding this info.</p><p>In our case, we are programming the Longan Nano so the device ID is already known:</p><pre tabindex=0><code>bronzebeard-dfu 28e9:0189 bb.out
 </code></pre><p>To take the Longan Nano out of DFU mode and back to normal, simply press the RESET button.
@@ -85,9 +85,9 @@ Get ready for the excitement!
 Just kidding.
 This program won&rsquo;t do anything.
 Nothing will light up, nothing will flash, nothing will beep.
-Do not discredit this achievement, though!</p><h1 id=all-that-work-for-nothing>All that work for nothing?
+Do not discredit this achievement, though!</p><h2 id=all-that-work-for-nothing>All that work for nothing?
 <a class=heading-link href=#all-that-work-for-nothing><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Who knew that doing absolutely nothing could be so much work?
+<span class=sr-only>Link to heading</span></a></h2><p>Who knew that doing absolutely nothing could be so much work?
 Most of what we covered wasn&rsquo;t even related to RISC-V or the code: it was just setup work and preparation.
 Don&rsquo;t let that worry you, though.
 Executing bare-metal code like this is the first step in achieving great things.

@@ -22,7 +22,7 @@ The process can be fussy because there are a number of different OpenGL-isms and
 However, with some careful reading and planning, a minimal loader can be written in a clean, simple, and data-driven fashion.
 When all is said and done, adding / removing specific OpenGL functions will only require changing a single line of code!
 
-# Functions vs Function Pointers
+## Functions vs Function Pointers
 
 An important distinction to understand when tackling this topic is the difference between C functions and C function pointers.
 From a caller's perspective they behave exactly the same: pass the args in parentheses and get a return value back.
@@ -74,7 +74,7 @@ However, the function `setup_add_pointer` can be called to point `add_pointer` t
 In this case, we point it to the same function body as `add_normal`.
 This mechanism of changing a function pointer's target at runtime is known as [dynamic loading](https://en.wikipedia.org/wiki/Dynamic_loading).
 
-# Dynamic Loading
+## Dynamic Loading
 
 Dynamic loading is an important facet of using OpenGL because the locations of most of the library's functions aren't known at compile time.
 They also aren't necessarily known even at [dynamic link time](https://en.wikipedia.org/wiki/Dynamic_linker)!
@@ -86,7 +86,7 @@ If you refer to the previous code snippet, we can initially define a function po
 That way, the rest of our application can use these initial definitions when being built.
 We just have to be absolutely sure to point these definitions at something valid _before_ calling them.
 
-# The Gameplan
+## The Gameplan
 
 With all of that background context out of the way, we can start to bring everything together.
 I'll be using [SDL2](https://www.libsdl.org/) for this demo in order to keep the code consistent and portable.
@@ -200,7 +200,7 @@ It even only shows up when building with `-Wpedantic` enabled...
 ISO C forbids conversion of object pointer to function pointer type
 ```
 
-# The Problem
+## The Problem
 
 What we have encountered is a historic nuance in the C standard: objects pointers and function pointers are not convertible.
 Also, it's not that the standard mandates that the two types _not_ be compatible, it just doesn't explicitly say that they are.
@@ -225,7 +225,7 @@ Lastly, the [C11 standard](http://port70.net/~nsz/c/c11/n1570.html) actually con
 
 **"A pointer to an object or to void may be cast to a pointer to a function, allowing data to be invoked as a function"**
 
-# Appeasing the Compiler
+## Appeasing the Compiler
 
 Even though this warning isn't something that we need to be very worried about, it's still there: cluttering up our compilation output.
 How can we make the compiler happy and still compile with pedantic warnings enabled?
@@ -259,7 +259,7 @@ With this code now in place, the compiler is quiet again!
 We can compile with all warnings enabled (all, extra, pedantic) and no fuss is raised.
 The only thing left to do is to find a way to wrap all of these fiddly concepts together in a concise collection of macros.
 
-# Macros to the Rescue
+## Macros to the Rescue
 
 In order to keep things simple and extensible, our custom OpenGL function loader two goals:
 
@@ -361,7 +361,7 @@ bool opengl_load_functions(void) {
 
 Not _too_ complicated once all is said and done!
 
-# Conclusion
+## Conclusion
 
 This post has discussed quite a few code snippets in isolation.
 To bring it all together, [here is a gist](https://gist.github.com/theandrew168/2eec79a145396c5d08b774096f91c922) containing a complete header and implementation for the loader we’ve built.

@@ -22,9 +22,9 @@ Once I cleaned them up and got the finished the project, I moved on and never to
 You can find this old version at <a href=https://github.com/theandrew168/skylark/tree/a24585b48de2923fd016f379c7b0ad8cbb0a9d75 class=external-link target=_blank rel=noopener>this commit</a>.</p><p>In subsequent years I continued to write more C and hone my overall programming skills.
 Recently, I walked through this project again and my interim years of experience became clear.
 Almost every aspect of the code and how it was structured was outdated relative to my modern habits.
-I knew that a good amount of tender loving care was going to be needed in order to get the project up to my current standards.</p><h1 id=lingering-problems>Lingering Problems
+I knew that a good amount of tender loving care was going to be needed in order to get the project up to my current standards.</p><h2 id=lingering-problems>Lingering Problems
 <a class=heading-link href=#lingering-problems><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>The issues I found upon reviewing this code can be grouped into the following categories:</p><ul><li><strong>Naive Makefile</strong> - The Makefile I originally wrote was simple and effective.
+<span class=sr-only>Link to heading</span></a></h2><p>The issues I found upon reviewing this code can be grouped into the following categories:</p><ul><li><strong>Naive Makefile</strong> - The Makefile I originally wrote was simple and effective.
 However, it wasn&rsquo;t <a href=https://pubs.opengroup.org/onlinepubs/009695399/utilities/make.html class=external-link target=_blank rel=noopener>POSIX-compliant</a> and relied on extensions that are specific to <a href=https://www.gnu.org/software/make/ class=external-link target=_blank rel=noopener>GNU Make</a>.
 This lack of compliance meant that the build was unlikely to work on non-GNU systems such as <a href=https://en.wikipedia.org/wiki/MacOS class=external-link target=_blank rel=noopener>macOS</a> or <a href=https://en.wikipedia.org/wiki/Comparison_of_BSD_operating_systems class=external-link target=_blank rel=noopener>BSD variants</a>.
 In addition to the lack of compatibility, the original Makefile only builds the target binary and nothing else.
@@ -43,9 +43,9 @@ I didn&rsquo;t understand Makefiles or libraries enough to add test execution in
 Second, the global state mentioned previously made it hard to decide <em>what</em> to test.
 The whole project was this big tangle of code which made any test look daunting.</li><li><strong>Poor Platform Support</strong> - Another facet of my inexperience with C and building C projects was the absense of portability.
 The project was only ever built and ran on Linux.
-I&rsquo;ve since learned an effective approach for writing cross-platform C applications and would like to see this emulator working on Linux, macOS, and Windows.</li></ul><h1 id=mighty-makefile>Mighty Makefile
+I&rsquo;ve since learned an effective approach for writing cross-platform C applications and would like to see this emulator working on Linux, macOS, and Windows.</li></ul><h2 id=mighty-makefile>Mighty Makefile
 <a class=heading-link href=#mighty-makefile><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>The <a href=https://github.com/theandrew168/skylark/blob/a24585b48de2923fd016f379c7b0ad8cbb0a9d75/Makefile class=external-link target=_blank rel=noopener>original Makefile</a> had a fairly linear process: use GNU Make extensions to list all of the source files, use a suffix rule to compile C source files into object files, and then link the target binary.
+<span class=sr-only>Link to heading</span></a></h2><p>The <a href=https://github.com/theandrew168/skylark/blob/a24585b48de2923fd016f379c7b0ad8cbb0a9d75/Makefile class=external-link target=_blank rel=noopener>original Makefile</a> had a fairly linear process: use GNU Make extensions to list all of the source files, use a suffix rule to compile C source files into object files, and then link the target binary.
 Simplified, it looks like this:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-Makefile data-lang=Makefile><span style=display:flex><span>SRCS <span style=color:#f92672>=</span> <span style=color:#66d9ef>$(</span>wildcard src/*.c<span style=color:#66d9ef>)</span>
 </span></span><span style=display:flex><span>HEAD <span style=color:#f92672>=</span> <span style=color:#66d9ef>$(</span>wildcard src/*.h<span style=color:#66d9ef>)</span>
 </span></span><span style=display:flex><span>OBJS <span style=color:#f92672>=</span> <span style=color:#66d9ef>$(</span>patsubst %.c, %.o, <span style=color:#66d9ef>$(</span>SRCS<span style=color:#66d9ef>))</span>
@@ -101,9 +101,9 @@ Additionally, the explicit expression of interdependencies between modules allow
 <span class=sr-only>Link to heading</span></a></h3><p>That wraps the Makefile revamp!
 It is definitely a lot more flexible than the old version and does a lot more work.
 I&rsquo;m much happier with the way it is written now.
-You can find the full, current version here:</p><ul><li><a href=https://github.com/theandrew168/skylark/blob/master/Makefile class=external-link target=_blank rel=noopener>https://github.com/theandrew168/skylark/blob/master/Makefile</a></li></ul><h1 id=functional-foundations>Functional Foundations
+You can find the full, current version here:</p><ul><li><a href=https://github.com/theandrew168/skylark/blob/master/Makefile class=external-link target=_blank rel=noopener>https://github.com/theandrew168/skylark/blob/master/Makefile</a></li></ul><h2 id=functional-foundations>Functional Foundations
 <a class=heading-link href=#functional-foundations><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Some of the functions in the original version are very &ldquo;messy&rdquo; in terms of what they do.
+<span class=sr-only>Link to heading</span></a></h2><p>Some of the functions in the original version are very &ldquo;messy&rdquo; in terms of what they do.
 In my opinion, a good function should be clear about the data that goes in and the new data that comes out.
 In addition to this, a good function should have no side-effects.
 Side-effects make a function more difficult to reason about in isolation and harder to test.</p><p>Here is an example of a function from the old version that I&rsquo;m not satisfied by:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-C data-lang=C><span style=display:flex><span><span style=color:#66d9ef>void</span> <span style=color:#a6e22e>chip8_emulate_cycle</span>(<span style=color:#66d9ef>void</span>);
@@ -126,9 +126,9 @@ This strategy might not be <a href=https://en.wikipedia.org/wiki/Referential_tra
 Dealing with I/O (keyboard input, graphical output, etc) is always an exception to this, however.
 Due to this, I always leave I/O-based code at the top of the project (as close to <code>main</code> as possible) and don&rsquo;t let it seep down into the rest of the functional core.
 This idea stems from a great talk by Brandon Rhodes called <a href="https://www.youtube.com/watch?v=PBQN62oUnN8" class=external-link target=_blank rel=noopener>Hoist Your I/O</a>.
-In this Python-based presentation, he explains the value of keeping I/O-based and pure functional code separated.</p><h1 id=tactical-testing>Tactical Testing
+In this Python-based presentation, he explains the value of keeping I/O-based and pure functional code separated.</p><h2 id=tactical-testing>Tactical Testing
 <a class=heading-link href=#tactical-testing><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>To be completely honest, most of the C code that I&rsquo;ve written hasn&rsquo;t ever been &ldquo;formally&rdquo; tested.
+<span class=sr-only>Link to heading</span></a></h2><p>To be completely honest, most of the C code that I&rsquo;ve written hasn&rsquo;t ever been &ldquo;formally&rdquo; tested.
 I would sometimes throw in minimal testing header like <a href=http://www.jera.com/techinfo/jtns/jtn002.html class=external-link target=_blank rel=noopener>minunit</a> but wouldn&rsquo;t fully utilize it.
 This lack of testing isn&rsquo;t a problem when writing in other languages such as Python or Go.
 For Python I use <a href=https://docs.pytest.org/en/stable/ class=external-link target=_blank rel=noopener>pytest</a> and for Go I use the builtin <a href=https://golang.org/pkg/testing/ class=external-link target=_blank rel=noopener>testing</a> package.
@@ -149,9 +149,9 @@ In a similar fasion, all of the tests are collected and iterated over in <a href
 For one, the error messages contain no test idenfitication by default.
 This means that all error message must be extra verbose and include <em>what</em> is being tested.
 There might be a way to make this cleaner with some macros but thus far I&rsquo;ve not found a system that works well and is worth the added complexity.
-I strictly want just enough testing power to verify a function&rsquo;s behavior, lock it in place, and move on.</p><h1 id=plentiful-platforms>Plentiful Platforms
+I strictly want just enough testing power to verify a function&rsquo;s behavior, lock it in place, and move on.</p><h2 id=plentiful-platforms>Plentiful Platforms
 <a class=heading-link href=#plentiful-platforms><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>The original version of Skylark was limited to Linux mainly because I didn&rsquo;t know how to achieve anything else.
+<span class=sr-only>Link to heading</span></a></h2><p>The original version of Skylark was limited to Linux mainly because I didn&rsquo;t know how to achieve anything else.
 However, cross-platform C programs are now something that I can confidently build.
 Most of this progress is thanks for Chris Wellons and his <a href=https://nullprogram.com/ class=external-link target=_blank rel=noopener>amazing blog</a>.
 He has written many posts about writing portable C.
@@ -164,9 +164,9 @@ The Linux and macOS builds expect libraries to be installed prior to building (S
 For Windows, however, it is simpler to download the pre-built libraries at build time and statically link them into the target binary.</p><p>This method for handling libraries for Windows builds is very simple and effective.
 By linking them in statically, the resulting <code>.exe</code> is able to be distributed with <em>zero</em> extra dependencies.
 Just build, distribute, and run!
-It is a great solution to a potentially very messy problem.</p><h1 id=conclusion>Conclusion
+It is a great solution to a potentially very messy problem.</p><h2 id=conclusion>Conclusion
 <a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>There we go!
+<span class=sr-only>Link to heading</span></a></h2><p>There we go!
 My CHIP-8 emulator is now completely revamped and modernized.
 I&rsquo;ve thrown all of my newfound experience at it and made it shine.
 I hope that this journey has been interesting and that you picked up a useful trick or two.

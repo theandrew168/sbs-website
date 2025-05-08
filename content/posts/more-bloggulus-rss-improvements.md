@@ -18,7 +18,7 @@ Recently, while on vacation, I decided to fix the remaining three issues with Bl
 3. Using Go's default user agent when making HTTP requests ([commit](https://github.com/theandrew168/bloggulus/commit/15042284ccffeb714655f40456c0ad8b499fc89b))
    1. Requests now set their user agent to: `Bloggulus/X.Y.Z (+https://bloggulus.com)`
 
-# The Data
+## The Data
 
 Looking at the data Rachel presents to those in the program, you can immediately see when the first change took effect (fixing the polling interval to always be at least one hour):
 
@@ -28,7 +28,7 @@ Further down, we can see the impact of the other two improvements (adding a user
 
 ![Better user agent and modified detection](/images/20240811/user-agent-last-modified.webp)
 
-# Conclusion
+## Conclusion
 
 At this point, I think Bloggulus is as well behaved as an RSS reader can be!
 This is awesome and I'm grateful to Rachel for being so vocal about how these applications _should_ work.

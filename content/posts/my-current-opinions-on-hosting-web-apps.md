@@ -10,7 +10,7 @@ Between these two services and their low pricing for small projects, my total bi
 I shared how Fly and Neon seemed like a great fit for projects that are a work in progress but that I'm not sure if I'd use them for production services.
 I'd have to do more pricing estimations and stability testing before having the trust and confidence needed to rely on these tools for anything that had users or was generating income.
 
-# The Question
+## The Question
 
 Given that summary, my friend [Minh](https://github.com/minhio) asked a follow-up question:
 
@@ -20,7 +20,7 @@ Given that summary, my friend [Minh](https://github.com/minhio) asked a follow-u
 I wrote a lengthy answer in Discord but wanted to share it here for visibility and preservation.
 That being said, my opinions are still changing as I write more code, deploy more services, and experience the pros and cons of different strategies.
 
-# My Answer
+## My Answer
 
 Honestly, I'm not sure since none of my personal projects have ever made it that far.
 If I was using a stack that builds into a single binary (like a [Go](https://go.dev/)-based app), then I'd probably deploy it onto a standard VPS (virtual private server) via [Digital Ocean](https://www.digitalocean.com/) or [Linode](https://www.linode.com/) (I'm a bit biased against AWS but that's mostly subjective).
@@ -51,7 +51,7 @@ Given that, I'd probably use a managed database if I had any sort of income or a
 Maybe even one of the fancier new ones like Neon as I mentioned earlier.
 I'd have to do some pricing estimation, of course.
 
-# TL:DR
+## TL:DR
 
 There are so many options and I'm still undecided on a "best stack".
 I do know that I'll always avoid "one-way door" stacks such as fully-serverless AWS or CloudFlare.

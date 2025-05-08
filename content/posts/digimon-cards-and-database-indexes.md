@@ -13,7 +13,7 @@ I set my eyes on building and maintaining a complete collection: four copies of 
 With enough spreadsheets and time, this would allow me build any deck that I wanted.
 This was honestly a breath of fresh air coming from [Magic: The Gathering](https://magic.wizards.com/en).
 
-# Digimon Cards
+## Digimon Cards
 
 That being said, I've collected quite a few cards.
 In addition to the minimum four copies of each card, I also have extra copies of most common and uncommon cards (and even some rares).
@@ -33,7 +33,7 @@ This way, to find a card of a specific color, I'd only have to look through a su
 I ultimately decided to sort my collection by even more than just color: I further sorted them by card type and level.
 Now, to find any specific card, I'd have to search through _even fewer_ cards (around 1/36th or so).
 
-# Database Indexes
+## Database Indexes
 
 While sorting my cards and thinking about software (a classic combination), I realized a connection to database indexes.
 By sorting my collection, I was effectively transforming it into an [index](https://www.postgresql.org/docs/current/indexes-intro.html).

@@ -10,7 +10,7 @@ Back in the day, the frontend was implemented via server-rendered HTML pages.
 This worked reasonably well, but I always felt like Go's HTML templates were a bit painful to work with.
 I also wanted to transition the application's backend to a REST API so that I could use it as a foundation for learning how to build native apps (someday...).
 
-# Background
+## Background
 
 Ultimately, I chose [SvelteKit](https://kit.svelte.dev/) because it has seen a lot of hype lately and I had just finished using it to completely rewrite Bloggulus as a "learn a new skill" project.
 SvelteKit is a full-stack web development framework built to handle both the frontend _and backend_ of your application.
@@ -24,7 +24,7 @@ I deploy my apps onto bare-ish metal servers so "ease of deployment" is importan
 Go's ability to bundle the entire application (frontend and backend) into a single, static binary greatly simplifies the deployment process.
 Despite being marketed as a full-stack framework, SvelteKit _can_ be used to build single-page applications (SPAs).
 
-# Pain Points
+## Pain Points
 
 It's sort of hard to explain, but using SvelteKit this way feels like trying to fit a square peg into a round hole.
 Trying to figure out how to utilize basic features while in SPA mode is difficult: **handling errors and implementing client-side auth** are just a few examples.
@@ -38,7 +38,7 @@ I often had to rely on [Reddit posts](https://www.reddit.com/r/sveltejs/comments
 If fact, there is only [one page](https://kit.svelte.dev/docs/single-page-apps) in the docs on how to use SvelteKit as an SPA.
 Perhaps I'd have a better time if, instead of using SvelteKit, I just used vanilla [Svelte](https://svelte.dev/) with a third-party router.
 
-# Moving Forward
+## Moving Forward
 
 I think I'm going to respect the lessons I've learned here (and the frustration I've felt) and transition to something that is a better fit.
 At the moment, I'm planning to swap to React + React Router since I'm quite familiar with both.

@@ -21,7 +21,7 @@ The stability of Windows is the source of many jokes.
 Backup plans are necessary for inconsistent meeting room reservations.
 Are these situations an inevitability of computer interactions or has something gone wrong?
 
-# Existing Opinions
+## Existing Opinions
 
 In his blog post [Software Disenchantment](https://tonsky.me/blog/disenchantment/), Nikita Prokopov (tonsky) presents evidence for "industry's lack of care for efficiency, simplicity, and excellence".
 In his presentation [The 30 Million Line Problem](https://caseymuratori.com/blog_0031), Casey Muratori argues that the interaction between software and hardware has the potential to be simplified.
@@ -31,7 +31,7 @@ Lastly, in his 1995 essay [A Plea for Lean Software](https://cr.yp.to/bib/1995/w
 1995!
 This problem has a history.
 
-# My Opinion
+## My Opinion
 
 I agree with the sentiments expressed in each of these posts.
 In some sense, it leaves me with a feeling of helplessness: what can we do about this?
@@ -51,7 +51,7 @@ In short:
 4. There are other routes to actualizing useful behavior from computers
 5. The Bronzebeard project is my attempt to enable one alternate route
 
-# Idea 1: Where Things Went Wrong
+## Idea 1: Where Things Went Wrong
 
 Are modern operating systems the epitome of software efficiency?
 By this, I mean to ask if they bring enough value to the table to justify their costs.
@@ -65,7 +65,7 @@ However, there do exist veteran programmers who take issue with the state of mod
 Through his [YouTube channel](https://www.youtube.com/user/renerebe), René presents frequent ideas and criticisms relating to operating system design and implementation.
 He explains how better languages and better designs (such as [microkernel](https://en.wikipedia.org/wiki/Microkernel)) could be an important step in future OS innovation.
 
-# Idea 2: Too Much Code, Too Much Complexity
+## Idea 2: Too Much Code, Too Much Complexity
 
 Most of the time, code quantity is really a poor measure of anything.
 Talking about a project's "lines of code" doesn't usually amount to much.
@@ -81,7 +81,7 @@ As soon as a project grows to the point where no single developer can understand
 At such a scale, achieving optimal performance and reliability becomes nearly impossible because human intercommunication is lossy and inefficient.
 I think that innovation will come not from writing _safer_ code, but from writing _less_ code.
 
-# Idea 3: What Makes Something Useful?
+## Idea 3: What Makes Something Useful?
 
 Is a fully-featured, multi-user OS necessary for a computer to be useful?
 Do specific, targeted applications such as a webserver need that?
@@ -95,7 +95,7 @@ If a program can do the same thing with half the code, that's value added.
 If it can do the same task in half the time, that's also value added.
 If you could accomplish 90% of the existing features with only 10% of the code, that may be a big win!
 
-# Idea 4: Other Paths to Success
+## Idea 4: Other Paths to Success
 
 What about writing your program or application directly in [assembly](https://en.wikipedia.org/wiki/Assembly_language)?
 Oof, that'd hurt portability... right?
@@ -118,7 +118,7 @@ Perhaps it would even be fairly secure.
 
 **"There are two ways of constructing a software design: One way is to make it so simple that there are obviously no deficiencies, and the other way is to make it so complicated that there are no obvious deficiencies. The first method is far more difficult."** - C. A. R. Hoare
 
-# Idea 5: The Bronzebeard Project
+## Idea 5: The Bronzebeard Project
 
 [Bronzebeard](https://github.com/theandrew168/bronzebeard) is a minimal ecosystem for bare-metal RISC-V development.
 I've written a basic, standalone [assembler](https://github.com/theandrew168/bronzebeard/blob/master/bronzebeard/asm.py) with no dependency on existing toolchains.
@@ -139,7 +139,7 @@ Furthermore, I think that Forth's design is rooted so literally upon these three
 It limits you to the "good" kind of abstraction: combining smaller units of low-level functionality into larger and larger high-level procedures.
 I consider a "bad" abstraction to be when extra code is added in preemptive concern for future changes that rarely occur.
 
-# Conclusion
+## Conclusion
 
 In short, there is simply too much code and complexity underlying most modern systems.
 The rise of RISC-V will enable programmers to embrace and control hardware at its lowest and most powerful level.

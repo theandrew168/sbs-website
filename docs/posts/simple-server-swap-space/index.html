@@ -28,9 +28,9 @@ Jul 02 09:00:05 bloggulus systemd[1]: pg2s3.service: Failed with result &#39;oom
 Jul 02 09:00:05 bloggulus systemd[1]: pg2s3.service: Consumed 9.452s CPU time.
 </code></pre><p>Okay, so it seems like the 1GB of RAM isn&rsquo;t quite enough when backups are taking place.
 The server works just fine under normal operation, however, but backups push it over the edge.
-If only there was a way to &ldquo;download more RAM&rdquo; and give the server a bit more breathing room&mldr;</p><h1 id=swap-space>Swap Space
+If only there was a way to &ldquo;download more RAM&rdquo; and give the server a bit more breathing room&mldr;</p><h2 id=swap-space>Swap Space
 <a class=heading-link href=#swap-space><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Enter the <a href=https://wiki.archlinux.org/title/Swap class=external-link target=_blank rel=noopener>swap space</a>!
+<span class=sr-only>Link to heading</span></a></h2><p>Enter the <a href=https://wiki.archlinux.org/title/Swap class=external-link target=_blank rel=noopener>swap space</a>!
 This is a Linux concept for giving servers additional memory capabilities without increasing the amount of physical RAM installed.
 It works by using a regular file (on the filesystem) for memory overflow.
 It isn&rsquo;t as fast as regular RAM, but it is better than having processes getting OOM killed!
@@ -40,9 +40,9 @@ The combined sizes of the physical memory and the swap space is the amount of vi
 Thankfully, it is quite easy to set up and will hopefully help eliminate those pesky remaining OOM kills.
 Digital Ocean has a <a href=https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-22-04 class=external-link target=_blank rel=noopener>great guide</a> for setting up and configuring swap space on an Ubuntu server.
 Initially, I followed these steps manually.
-Then, once I got things working, I decided to &ldquo;lock it in&rdquo; via my Ansible automation.</p><h1 id=ansible-tasks>Ansible Tasks
+Then, once I got things working, I decided to &ldquo;lock it in&rdquo; via my Ansible automation.</p><h2 id=ansible-tasks>Ansible Tasks
 <a class=heading-link href=#ansible-tasks><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>The automation was quite simple: it only takes five tasks!
+<span class=sr-only>Link to heading</span></a></h2><p>The automation was quite simple: it only takes five tasks!
 I used Jeff Geerling&rsquo;s awesome <a href=https://github.com/geerlingguy/ansible-role-swap/tree/master class=external-link target=_blank rel=noopener>ansible-role-swap</a> for inspiration and guidance.
 In short, these tasks create, initialize, and enable a 1GB swap file on the root filesystem (at <code>/swapfile</code>).
 It also adds an entry to <a href=https://wiki.archlinux.org/title/Fstab class=external-link target=_blank rel=noopener>fstab</a> so that the swap space is automatically enabled on subsequent restarts.</p><p>Let&rsquo;s take a look:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=display:flex><span>- <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Create swapfile</span>
@@ -83,11 +83,11 @@ It also adds an entry to <a href=https://wiki.archlinux.org/title/Fstab class=ex
 </span></span><span style=display:flex><span>    <span style=color:#f92672>state</span>: <span style=color:#ae81ff>present</span>
 </span></span><span style=display:flex><span>  <span style=color:#f92672>become</span>: <span style=color:#66d9ef>yes</span>
 </span></span><span style=display:flex><span>  <span style=color:#f92672>become_user</span>: <span style=color:#ae81ff>root</span>
-</span></span></code></pre></div><h1 id=bonus-tuning>Bonus Tuning
+</span></span></code></pre></div><h2 id=bonus-tuning>Bonus Tuning
 <a class=heading-link href=#bonus-tuning><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>The Digital Ocean guide also <a href=https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-22-04#step-6-tuning-your-swap-settings class=external-link target=_blank rel=noopener>details</a> a few &ldquo;bonus&rdquo; settings that can help a server manage its swap more efficiently.</p><h2 id=swappiness>swappiness
+<span class=sr-only>Link to heading</span></a></h2><p>The Digital Ocean guide also <a href=https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-22-04#step-6-tuning-your-swap-settings class=external-link target=_blank rel=noopener>details</a> a few &ldquo;bonus&rdquo; settings that can help a server manage its swap more efficiently.</p><h3 id=swappiness>swappiness
 <a class=heading-link href=#swappiness><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h2><p>This <a href=https://docs.kernel.org/admin-guide/sysctl/vm.html#swappiness class=external-link target=_blank rel=noopener>setting</a> controls how eager a system is to boot data out of main memory and into the swapfile.
+<span class=sr-only>Link to heading</span></a></h3><p>This <a href=https://docs.kernel.org/admin-guide/sysctl/vm.html#swappiness class=external-link target=_blank rel=noopener>setting</a> controls how eager a system is to boot data out of main memory and into the swapfile.
 Since we only want the server to use the swap space when absolutely necessary, we adjust this setting to a low value.
 The default value is <code>60</code>.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=display:flex><span>- <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Configure swappiness</span>
 </span></span><span style=display:flex><span>  <span style=color:#f92672>sysctl</span>:
@@ -95,9 +95,9 @@ The default value is <code>60</code>.</p><div class=highlight><pre tabindex=0 st
 </span></span><span style=display:flex><span>    <span style=color:#f92672>value</span>: <span style=color:#ae81ff>10</span>
 </span></span><span style=display:flex><span>  <span style=color:#f92672>become</span>: <span style=color:#66d9ef>yes</span>
 </span></span><span style=display:flex><span>  <span style=color:#f92672>become_user</span>: <span style=color:#ae81ff>root</span>
-</span></span></code></pre></div><h2 id=vfs_cache_pressure>vfs_cache_pressure
+</span></span></code></pre></div><h3 id=vfs_cache_pressure>vfs_cache_pressure
 <a class=heading-link href=#vfs_cache_pressure><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h2><p>This <a href=https://docs.kernel.org/admin-guide/sysctl/vm.html#vfs-cache-pressure class=external-link target=_blank rel=noopener>setting</a> controls how quickly the server releases directory and inode (file) information from the cache.
+<span class=sr-only>Link to heading</span></a></h3><p>This <a href=https://docs.kernel.org/admin-guide/sysctl/vm.html#vfs-cache-pressure class=external-link target=_blank rel=noopener>setting</a> controls how quickly the server releases directory and inode (file) information from the cache.
 Lowering this value causes filesystem data (which can be expensive to retrieve) to remain in the cache for longer periods of time.
 The default value is <code>100</code>.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yml data-lang=yml><span style=display:flex><span>- <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Configure vfs_cache_pressure</span>
 </span></span><span style=display:flex><span>  <span style=color:#f92672>sysctl</span>:
@@ -105,9 +105,9 @@ The default value is <code>100</code>.</p><div class=highlight><pre tabindex=0 s
 </span></span><span style=display:flex><span>    <span style=color:#f92672>value</span>: <span style=color:#ae81ff>50</span>
 </span></span><span style=display:flex><span>  <span style=color:#f92672>become</span>: <span style=color:#66d9ef>yes</span>
 </span></span><span style=display:flex><span>  <span style=color:#f92672>become_user</span>: <span style=color:#ae81ff>root</span>
-</span></span></code></pre></div><h1 id=conclusion>Conclusion
+</span></span></code></pre></div><h2 id=conclusion>Conclusion
 <a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>You can view all of these tasks together in my <a href=https://github.com/theandrew168/devops/blob/main/roles/server/tasks/swap.yml class=external-link target=_blank rel=noopener>devops repo</a>.
+<span class=sr-only>Link to heading</span></a></h2><p>You can view all of these tasks together in my <a href=https://github.com/theandrew168/devops/blob/main/roles/server/tasks/swap.yml class=external-link target=_blank rel=noopener>devops repo</a>.
 I also decided that my server role had gotten a bit messy and decided to split it into separate files using Ansible&rsquo;s <a href=https://docs.ansible.com/ansible/latest/collections/ansible/builtin/include_tasks_module.html class=external-link target=_blank rel=noopener>include_tasks</a> directive.
 Now I&rsquo;ve got a clean separation of tasks which is much easier to navigate and understand.</p><p>Since I added swap space to the Bloggulus server, I haven&rsquo;t seen a single OOM kill.
 Things have been running smoothly for weeks and only a small portion of the swap is being used:</p><pre tabindex=0><code>               total        used        free      shared  buff/cache   available

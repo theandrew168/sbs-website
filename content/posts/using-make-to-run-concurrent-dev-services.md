@@ -15,7 +15,7 @@ For example, one of my recent web projects required three active services in ord
 Historically, I'd run each of these programs in a separate terminal window (or use something fancy like [tmux](https://github.com/tmux/tmux/wiki)).
 This is a fairly straightforward solution but I always found it somewhat clunky: alt-tabbing between terminals to restart or stop the services.
 
-# The Trick
+## The Trick
 
 If you are using Make to manage your project, you can utilize its builtin concurrency to run each service in parallel.
 With only a single terminal and one command, you can start and stop all services effortlessly.
@@ -60,7 +60,7 @@ Within a few seconds, all services will be running simultaneously!
 Note that without concurrency, Make would execute until it encounters the first service and try to wait for it to finish.
 However, since a service never truly finishes execution, none of the others would ever get a chance to start.
 
-# Conclusion
+## Conclusion
 
 Ever since discovering this trick, I use it everywhere.
 For my personal develop workflow, it "just works".

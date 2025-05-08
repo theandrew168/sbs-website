@@ -16,7 +16,7 @@ As a longtime fan of [Make](<https://en.wikipedia.org/wiki/Make_(software)>), I 
 Additionally, there isn't much Make support on Windows so writing it in an easily cross-platform language would be a boon.
 So, I decided to implement Make in [Go](https://go.dev/)!
 
-# What is Make?
+## What is Make?
 
 [Make](<https://en.wikipedia.org/wiki/Make_(software)>) is a simple build automation tool for expressing arbitrary command-line actions and their dependencies on other commands.
 While Make has historically had a close relationship with C/C++ development, I have found that it adds value to any software project that has various build steps and tasks (running tests, formatting code, etc).
@@ -56,7 +56,7 @@ From this simple foundation, an incredibly useful toolbox of targets can be buil
 When expressed with proper dependencies, you never have to worry about running commands in the wrong order.
 Combine that value with the speed of executing non-dependent targets in parallel and you've got a perfect project assistant.
 
-# The Code
+## The Code
 
 The source code for this project can be found on [GitHub](https://github.com/theandrew168/make).
 
@@ -211,7 +211,7 @@ func execute(graph Graph, name string) error {
 }
 ```
 
-# Lessons Learned
+## Lessons Learned
 
 In many aspects, this project was a success: I was able implement a useful Make clone in a short cabin trip!
 It was one of those rare occurrences where a project ended up being _less_ work than expected.

@@ -22,9 +22,9 @@ Many folks call this type of thing a &ldquo;distributed key-value store&rdquo;.
 The project was originally inspired by <a href=https://github.com/chrislusf/seaweedfs class=external-link target=_blank rel=noopener>SeaweedFS</a> but had the goal of being much, much simpler (ideally less than 1000 lines of code).</p><p>The architecture of the program is straightforward: a single &ldquo;index server&rdquo; distributes and organizes data between any number of &ldquo;volume servers&rdquo;.
 The actual data could be anything: text, images, <a href=https://www.sqlite.org/index.html class=external-link target=_blank rel=noopener>SQLite</a> databases.
 It doesn&rsquo;t matter!
-Everything is just bytes at the end of the day.</p><h1 id=discoveries>Discoveries
+Everything is just bytes at the end of the day.</p><h2 id=discoveries>Discoveries
 <a class=heading-link href=#discoveries><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>The trick that first caught my eye was how the project implemented volume servers.
+<span class=sr-only>Link to heading</span></a></h2><p>The trick that first caught my eye was how the project implemented volume servers.
 I cracked open the solitary <a href=https://github.com/geohot/minikeyvalue/blob/master/volume class=external-link target=_blank rel=noopener>volume</a> executable and saw that it was nothing more than a Bash script that started an <a href=http://nginx.org/en/ class=external-link target=_blank rel=noopener>NGINX</a> in the foreground.
 Even more interesting was how the NGINX config file was handled.
 Instead of requiring any prerequisite setup, he just templated some env vars into a string and threw it out to a temporary file via <a href=https://man7.org/linux/man-pages/man3/mktemp.3.html class=external-link target=_blank rel=noopener>mktemp</a>.</p><p>This blew my mind!
@@ -33,9 +33,9 @@ I always believed that NGINX had to be configured separately due to having a man
 I would write a role to run the <a href=https://gunicorn.org/ class=external-link target=_blank rel=noopener>WSGI server</a> on some locally-visible port and then the proxy would listen globally on 80/443.
 Each component would also have its own <a href=https://www.freedesktop.org/wiki/Software/systemd/ class=external-link target=_blank rel=noopener>systemd</a> unit file.</p><p>George&rsquo;s approach slashes this complexity by allowing NGINX to be something that the application manages itself.
 As well as using NGINX for the volume servers, my Python version also starts its own reverse proxy (as a child process) for the index server.
-I get all the benefits of NGINX (great performance, high extensibility, multiple workers) without the fuss of managing a persistent config file.</p><h1 id=the-volume-servers>The Volume Servers
+I get all the benefits of NGINX (great performance, high extensibility, multiple workers) without the fuss of managing a persistent config file.</p><h2 id=the-volume-servers>The Volume Servers
 <a class=heading-link href=#the-volume-servers><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>A volume stores the data associated with a given key.
+<span class=sr-only>Link to heading</span></a></h2><p>A volume stores the data associated with a given key.
 NGINX&rsquo;s <a href=http://nginx.org/en/docs/http/ngx_http_dav_module.html class=external-link target=_blank rel=noopener>WebDAV module</a> is used to obtain the desired behavior out of the box: GET reads data, PUT stores data, and DELETE removes data.
 George used Bash NGINX but I wanted to explore this idea using Python as the host language in order to be consistent with the index server.
 Plus, I knew that Python ships with two modules that are perfect for the job: <a href=https://docs.python.org/3/library/tempfile.html class=external-link target=_blank rel=noopener>tempfile</a> and <a href=https://docs.python.org/3/library/subprocess.html class=external-link target=_blank rel=noopener>subprocess</a>.</p><p>The first step was to generate the NGINX config as a string.
@@ -65,9 +65,9 @@ These args can be assembled into a list, passed to <a href=https://docs.python.o
 As far as performance goes, there is no meaningful difference between George&rsquo;s Bash script and my Python script.
 They both run NGINX as a child process and wait for interruption.
 The &ldquo;kickoff&rdquo; language doesn&rsquo;t really matter here.
-Could be Bash, Go, Python, C, or anything else: the result is the same.</p><h1 id=the-index-server>The Index Server
+Could be Bash, Go, Python, C, or anything else: the result is the same.</p><h2 id=the-index-server>The Index Server
 <a class=heading-link href=#the-index-server><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>The index server is the brain of the application.
+<span class=sr-only>Link to heading</span></a></h2><p>The index server is the brain of the application.
 It keeps track of what keys are currently in the system and where they are located (on which volume server and at what path).
 George&rsquo;s current version of this component contains more features than I wanted to implement so I instead based my design on an <a href=https://github.com/geohot/minikeyvalue/blob/a60f742e59b8c11dccaf0f1bef97b605c027a220/server.go class=external-link target=_blank rel=noopener>earlier version</a>.</p><p>The core of the index server is a persistent lookup table for keys and the location of their values.
 To accomplish this, George used <a href=https://github.com/syndtr/goleveldb class=external-link target=_blank rel=noopener>goleveldb</a> which is a pure-Go implementation of the <a href=https://github.com/google/leveldb class=external-link target=_blank rel=noopener>LevelDB</a> database.
@@ -99,17 +99,17 @@ Once the server is told to stop, the context manager exits and the reverse proxy
 </span></span><span style=display:flex><span>        waitress<span style=color:#f92672>.</span>serve(app, host<span style=color:#f92672>=</span><span style=color:#e6db74>&#39;127.0.0.1&#39;</span>, port<span style=color:#f92672>=</span><span style=color:#ae81ff>8080</span>)
 </span></span><span style=display:flex><span>    <span style=color:#66d9ef>except</span> <span style=color:#a6e22e>KeyboardInterrupt</span>:
 </span></span><span style=display:flex><span>        <span style=color:#66d9ef>pass</span>
-</span></span></code></pre></div><h1 id=performance>Performance
+</span></span></code></pre></div><h2 id=performance>Performance
 <a class=heading-link href=#performance><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>I wanted to see how the two versions of this project performed in a small set of benchmarks.
+<span class=sr-only>Link to heading</span></a></h2><p>I wanted to see how the two versions of this project performed in a small set of benchmarks.
 I&rsquo;m not a fan of testing locally so I spun up a small cluster of $5 <a href=https://www.digitalocean.com/ class=external-link target=_blank rel=noopener>Digital Ocean</a> droplets in order to introduce proper network latency.
 I used one index server and three volume servers for all of the benchmarks and ensured that each version was tested under the same circumstances.</p><table><thead><tr><th><strong>Benchmark</strong></th><th><strong>Description</strong></th></tr></thead><tbody><tr><td><strong>fetch missing</strong></td><td>fetch a key that doesn&rsquo;t exist</td></tr><tr><td><strong>fetch present</strong></td><td>fetch a key that exists</td></tr><tr><td><strong>thrasher.go</strong></td><td>simulate create, read, and delete behavior</td></tr></tbody></table><p>Benchmark results measured in &ldquo;requests per second&rdquo;:</p><table><thead><tr><th><strong>Benchmark</strong></th><th><strong>My Python Version</strong></th><th><strong>George&rsquo;s Go Version</strong></th></tr></thead><tbody><tr><td><strong>fetch missing</strong></td><td>1397</td><td>2152</td></tr><tr><td><strong>fetch present</strong></td><td>1012</td><td>941</td></tr><tr><td><strong>thrasher.go</strong></td><td>99</td><td>102</td></tr></tbody></table><p>The results were decent!
 My server was able to hang with George&rsquo;s on the two more important benchmarks (in my opinion).
 On the <em>most</em> important benchmark which simulates realistic client behavior, our servers were matched.
 Some other common factor must be the bottleneck here.
-I&rsquo;m assuming that the time spent waiting on network communication between components is the dominating factor.</p><h1 id=takeaways>Takeaways
+I&rsquo;m assuming that the time spent waiting on network communication between components is the dominating factor.</p><h2 id=takeaways>Takeaways
 <a class=heading-link href=#takeaways><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>The full project with source code and documentation can be found <a href=https://github.com/theandrew168/pymkv class=external-link target=_blank rel=noopener>here</a>.
+<span class=sr-only>Link to heading</span></a></h2><p>The full project with source code and documentation can be found <a href=https://github.com/theandrew168/pymkv class=external-link target=_blank rel=noopener>here</a>.
 Overall, this was really fun!
 After finishing things up, I decided to write my own <a href=https://github.com/theandrew168/pymkv/blob/main/index.go class=external-link target=_blank rel=noopener>Go version</a> of the index server just to see how the language feels.
 To be honest, I think that Go is the better language choice for this type of problem.

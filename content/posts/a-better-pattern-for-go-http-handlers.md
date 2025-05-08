@@ -11,7 +11,7 @@ For most of my Go-based web development projects, I've embraced the "application
 Despite serving my quite well over the past few years, I recently found myself wanting something a bit more flexible.
 This post describes the original pattern, its limitations, and how I iterated on it to arrive at something even better (in my opinion, of course).
 
-# Application Struct
+## Application Struct
 
 This code snippet showcases the original pattern.
 Essentially, we gather the union of all of our handlers' dependencies together in a centralized "application struct".
@@ -75,7 +75,7 @@ For me, personally, that second detail started to become a nuisance.
 Even for a handler that returns static HTML, I have to instantiate a database connection?
 I wanted to find a better way.
 
-# Dependency Closures
+## Dependency Closures
 
 The solution is quite simple: just pass each handler's dependencies into its creation function.
 This creates a closure around the dependency such that the handler can still see and use it even after being returned.

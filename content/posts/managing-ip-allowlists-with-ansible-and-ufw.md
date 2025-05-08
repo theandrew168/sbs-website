@@ -15,7 +15,7 @@ I've been doing my best to keep the players' usernames secret but that is just "
 I outlined some options to increase the server's security in my [previous post](/posts/automating-a-golden-age-minecraft-server/) and one stood out as a clear winner: only allowing known IP addresses to connect.
 Since the Minecraft server itself doesn't support this, I decided to move up a level and utilize the operating system's firewall: UFW.
 
-# UFW
+## UFW
 
 [UFW](https://help.ubuntu.com/community/UFW) has been the default firewall on Ubuntu servers since version 8.04 LTS.
 It provides a user-friendly interface for managing open ports and is built on top of the classic [iptables](https://linux.die.net/man/8/iptables) tool.
@@ -44,7 +44,7 @@ Unless you are using a hosting provider that supports native consoles, you'll be
 I learned this lesson the hard way: be sure to allow SSH connections _before_ enabling UFW.
 These days, I use automation ([Terraform](https://www.terraform.io/) and [Ansible](https://www.ansible.com/)) to ensure that these operations always occur in the correct order.
 
-# Ansible
+## Ansible
 
 Ansible has a [builtin module](https://docs.ansible.com/ansible/latest/collections/community/general/ufw_module.html) for idempotently configuring UFW.
 The examples in the documentation are very thorough and even describe setting up rules for multiple source IPs!
@@ -79,7 +79,7 @@ With a small bit of Ansible logic we can split the task into these two cases: on
 The combination of `when` and `with_items` partitions the control flow such that only one of these tasks will run.
 In tandem, these tasks cleanly handle configuring servers that are either "open to just me and my friends" or "open to anyone".
 
-# Conclusion
+## Conclusion
 
 Overall, these changes were [fairly straightforward to implement](https://github.com/theandrew168/devops/commit/9aa74693962d3e2b3a655ddde68eeb59bfcc4e12) and increased my confidence that my golden age Minecraft server won't get compromised.
 In total, it now has three layers of security:

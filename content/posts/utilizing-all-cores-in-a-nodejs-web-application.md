@@ -19,7 +19,7 @@ This means that a single NodeJS thread can keep up with typical web traffic with
 If your web application was CPU intensive, however, then perhaps you'd start experiencing the downsides of this design.
 In such cases, running your application to explicitly utilize all cores could come in handy.
 
-# The Experiment
+## The Experiment
 
 Consider a minimal, CPU-bound web server program.
 It simluates a workload by calculating the square root of ten million numbers before returning "Hello World!".
@@ -84,7 +84,7 @@ The Go version, on the other hand, uses both cores and squeezes the maximum perf
 This is because Go's runtime load balances work across all cores (via goroutines).
 Since the builtin web server handles each incoming request in a separate goroutine, the web traffic is naturally spread across all cores.
 
-# Optimizing NodeJS
+## Optimizing NodeJS
 
 What can we do about the NodeJS version?
 Enter the [cluster](https://nodejs.org/api/cluster.html) module which is built into NodeJS.
@@ -141,7 +141,7 @@ This means that on a four core server, your application could open up to 200 dat
 Your database could get overwhelmed by receiving more incoming connections that it expects or is configured to handle.
 In this scenario, you should think about the multiplicative total across all program instances when setting a connection limit.
 
-# Conclusion
+## Conclusion
 
 For most NodeJS web applications, the single-threaded limitation will not be an issue.
 Between waiting for packets from clients and waiting for rows from a database, your code will be seldom bound by the CPU.

@@ -11,7 +11,7 @@ If an application depends on the specific details of any of these communications
 Instead, a program's domain logic should depend on _abstract behaviors_ instead of concrete implementations.
 I think that this is one of the most important facets of system design.
 
-# Fetching Web Pages
+## Fetching Web Pages
 
 I've recently been implementing my [Bloggulus](https://bloggulus.com/) web application in [Svelte + TypeScript](https://github.com/theandrew168/bloggulus-svelte/tree/main) for fun and experience.
 One step of the syncing process involves manually retrieving a post's content if it isn't present in the RSS / Atom feed.
@@ -42,7 +42,7 @@ That sounds like a pain.
 Perhaps I could spin up a small web server as part of the testing to serve mock pages on a local port?
 Again, I _could_ do that, but surely there must be a better way.
 
-# Basic Behavior
+## Basic Behavior
 
 What does my application actually depend on?
 What does it need here?
@@ -101,7 +101,7 @@ I don't know about you, but I think that this is very powerful!
 Because our domain logic doesn't care about _how_ we fetch pages, we can pass it a special, hand-crafted implementation of the interface and it won't know the difference.
 It only knows that it needs to fetch a page and has been provided with the tools to make it happen.
 
-# Complex Behaviors
+## Complex Behaviors
 
 This idea can be extended to encompass sets of behaviors, as well.
 Consider how this can be applied to decoupling your application code from a database.
@@ -127,7 +127,7 @@ Any class or object that has the matching method signatures can be used in place
 The "real" implementation can be a class that hides the database connection and uses SQL to talk to a PostgreSQL database.
 A "fake" implementation (for testing) can be one that stores tags in memory (likely in a `Record<string, Tag>`) and manipulates them with standard object operations.
 
-# Conclusion
+## Conclusion
 
 I think that it is always a good idea to separate behavior and implementation when it comes to how your app interacts with the world around it.
 By representing behavior as an interface, you gain the freedom to implement the described functionality in different ways.

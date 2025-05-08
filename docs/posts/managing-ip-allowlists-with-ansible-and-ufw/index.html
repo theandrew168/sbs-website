@@ -16,9 +16,9 @@ Despite the initial fun, I&rsquo;ve known that the server&rsquo;s security postu
 The server only allows a specific set of usernames to login, but, since the old authentication servers aren&rsquo;t online anymore, the server has no choice but to trust the client.</p><p>This means that a malicious / hacked client could spoof the username of a known player and immediately connect to the server.
 I&rsquo;ve been doing my best to keep the players&rsquo; usernames secret but that is just &ldquo;security by obscurity&rdquo;.
 I outlined some options to increase the server&rsquo;s security in my <a href=/posts/automating-a-golden-age-minecraft-server/>previous post</a> and one stood out as a clear winner: only allowing known IP addresses to connect.
-Since the Minecraft server itself doesn&rsquo;t support this, I decided to move up a level and utilize the operating system&rsquo;s firewall: UFW.</p><h1 id=ufw>UFW
+Since the Minecraft server itself doesn&rsquo;t support this, I decided to move up a level and utilize the operating system&rsquo;s firewall: UFW.</p><h2 id=ufw>UFW
 <a class=heading-link href=#ufw><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p><a href=https://help.ubuntu.com/community/UFW class=external-link target=_blank rel=noopener>UFW</a> has been the default firewall on Ubuntu servers since version 8.04 LTS.
+<span class=sr-only>Link to heading</span></a></h2><p><a href=https://help.ubuntu.com/community/UFW class=external-link target=_blank rel=noopener>UFW</a> has been the default firewall on Ubuntu servers since version 8.04 LTS.
 It provides a user-friendly interface for managing open ports and is built on top of the classic <a href=https://linux.die.net/man/8/iptables class=external-link target=_blank rel=noopener>iptables</a> tool.
 I&rsquo;ve read that some advanced users prefer to use iptables directly but I really like the balance that UFW offers.
 It provides a simple syntax for restricting network access based protocol (TCP vs UDP), port, and source IP address.</p><p>Here is basic example that allows all incoming TCP connections on port 22 (SSH):</p><pre tabindex=0><code>ufw allow 22/tcp
@@ -29,9 +29,9 @@ Enabling it is as easy as running <code>ufw enable</code> but be careful!
 If you don&rsquo;t have any rules in place when the firewall comes up, you could lock yourself out of the system.
 Unless you are using a hosting provider that supports native consoles, you&rsquo;ll be unable to connect.
 I learned this lesson the hard way: be sure to allow SSH connections <em>before</em> enabling UFW.
-These days, I use automation (<a href=https://www.terraform.io/ class=external-link target=_blank rel=noopener>Terraform</a> and <a href=https://www.ansible.com/ class=external-link target=_blank rel=noopener>Ansible</a>) to ensure that these operations always occur in the correct order.</p><h1 id=ansible>Ansible
+These days, I use automation (<a href=https://www.terraform.io/ class=external-link target=_blank rel=noopener>Terraform</a> and <a href=https://www.ansible.com/ class=external-link target=_blank rel=noopener>Ansible</a>) to ensure that these operations always occur in the correct order.</p><h2 id=ansible>Ansible
 <a class=heading-link href=#ansible><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Ansible has a <a href=https://docs.ansible.com/ansible/latest/collections/community/general/ufw_module.html class=external-link target=_blank rel=noopener>builtin module</a> for idempotently configuring UFW.
+<span class=sr-only>Link to heading</span></a></h2><p>Ansible has a <a href=https://docs.ansible.com/ansible/latest/collections/community/general/ufw_module.html class=external-link target=_blank rel=noopener>builtin module</a> for idempotently configuring UFW.
 The examples in the documentation are very thorough and even describe setting up rules for multiple source IPs!
 To my <a href=https://github.com/theandrew168/devops/tree/master/roles/minecraft class=external-link target=_blank rel=noopener>Minecraft role</a> I added a variable named <code>minecraft_allowed_ips</code> which is a simple list of IP addresses (or ranges) that are allowed to access the server.
 When this list is present and non-empty, a UFW rule should be created <strong>per address</strong> that allows it to connect to port 25565.
@@ -55,9 +55,9 @@ When the list is empty, all connections should be allowed regardless of where th
 </span></span><span style=display:flex><span>  <span style=color:#f92672>become</span>: <span style=color:#66d9ef>yes</span>
 </span></span><span style=display:flex><span>  <span style=color:#f92672>become_user</span>: <span style=color:#ae81ff>root</span>
 </span></span></code></pre></div><p>The combination of <code>when</code> and <code>with_items</code> partitions the control flow such that only one of these tasks will run.
-In tandem, these tasks cleanly handle configuring servers that are either &ldquo;open to just me and my friends&rdquo; or &ldquo;open to anyone&rdquo;.</p><h1 id=conclusion>Conclusion
+In tandem, these tasks cleanly handle configuring servers that are either &ldquo;open to just me and my friends&rdquo; or &ldquo;open to anyone&rdquo;.</p><h2 id=conclusion>Conclusion
 <a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Overall, these changes were <a href=https://github.com/theandrew168/devops/commit/9aa74693962d3e2b3a655ddde68eeb59bfcc4e12 class=external-link target=_blank rel=noopener>fairly straightforward to implement</a> and increased my confidence that my golden age Minecraft server won&rsquo;t get compromised.
+<span class=sr-only>Link to heading</span></a></h2><p>Overall, these changes were <a href=https://github.com/theandrew168/devops/commit/9aa74693962d3e2b3a655ddde68eeb59bfcc4e12 class=external-link target=_blank rel=noopener>fairly straightforward to implement</a> and increased my confidence that my golden age Minecraft server won&rsquo;t get compromised.
 In total, it now has three layers of security:</p><ol><li>Only specific usernames can connect (via the server&rsquo;s config)</li><li>Only specific IP addresses can connect (via UFW)</li><li>Connection attempts are rate limited (via UFW)</li></ol><p>Even still, though, this isn&rsquo;t a bulletproof solution.
 A bad actor could gain access to the server if they: had a hacked client, knew a valid username, and were connecting to server from an allowed IP address / range (perhaps this could happen if both the attacker and an allowed player were behind the same <a href=https://www.rapidseedbox.com/blog/cgnat class=external-link target=_blank rel=noopener>CGNAT</a>).
 I don&rsquo;t think is very likely but it <em>could</em> happen.</p><p>That being said, this is just a Minecraft server.

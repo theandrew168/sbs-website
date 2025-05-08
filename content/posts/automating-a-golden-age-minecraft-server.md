@@ -12,7 +12,7 @@ Prior to this update, Minecraft had no explicit goals and was truly a sandbox.
 The only things to do were explore, build stuff, and find diamonds.
 It was a simple loop that generated hundreds of hours of fun for my friends and I back in high school.
 
-# Simpler Times
+## Simpler Times
 
 Back in the day, I ran a Minecraft server from the utility room in my parent's basement.
 The server itself was a wimpy [Acer Aspire One](https://en.wikipedia.org/wiki/Acer_Aspire_One) with 512MB of RAM and an [Intel Atom](https://en.wikipedia.org/wiki/Intel_Atom) processor.
@@ -44,7 +44,7 @@ Please excuse the fuzzy resolution and "sign of the times" wood + cobblestone ae
 ![Old server valley 2](/images/minecraft/valley2.webp)
 ![Old server lighthouse](/images/minecraft/lighthouse.webp)
 
-# Terraform + Ansible
+## Terraform + Ansible
 
 Since then, I've studied Software Engineering and worked as a professional developer for almost seven years.
 I now have a much better perspective on system administration, networking, and security.
@@ -155,7 +155,7 @@ That's it!
 Fortunately, most of these tasks are things I've written before so a lot of the "work" here was simply copying, pasting, finding, and replacing.
 There weren't as many roadblocks as I expected except for in one major area: security.
 
-# Security
+## Security
 
 Since the official login infrastructure for old school Minecraft servers isn't online anymore, the server can't actually verify that connecting players have legitimate, authenticated accounts.
 This means that, by default, no one will be able to login (unless you want to utilize and trust a third-party proxy).
@@ -195,7 +195,7 @@ I'd also have to know where my friends are playing from and hope that they have 
 If their IP addresses were to change, I'd have to update firewall rules.
 Thanks to our existing automation, this can be added as a configuration task and deployed in a consistent and repeatable way.
 
-# Conclusion
+## Conclusion
 
 Setting up this server wasn't too much work thanks to my existing Terraform and Ansible [experience](https://github.com/theandrew168/devops/tree/master).
 It was a breeze to spin up a new server, attach a domain, and configure it to my standards.

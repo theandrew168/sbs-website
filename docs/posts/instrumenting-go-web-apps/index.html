@@ -39,9 +39,9 @@ promhttp_metric_handler_requests_total{code=&#34;500&#34;} 0
 promhttp_metric_handler_requests_total{code=&#34;503&#34;} 0
 </code></pre><p>When sampled periodically and stored for weeks (or even months), you can begin to assemble a sense of how your application is behaving.
 For example, you can observe garbage collection stats, memory usage, and number of active goroutines.
-You can even track HTTP request traffic but it requires a bit of extra setup.</p><h1 id=http-metrics>HTTP Metrics
+You can even track HTTP request traffic but it requires a bit of extra setup.</p><h2 id=http-metrics>HTTP Metrics
 <a class=heading-link href=#http-metrics><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>For years, I thought that Go&rsquo;s client library included HTTP traffic stats for <em>all</em> routes.
+<span class=sr-only>Link to heading</span></a></h2><p>For years, I thought that Go&rsquo;s client library included HTTP traffic stats for <em>all</em> routes.
 However, this is not the case: it only includes information about the <code>/metrics</code> endpoint.
 I must&rsquo;ve seen a few keywords in the data (like <code>request</code> and <code>code</code>) and jumped to the conclusion that all routes were tracked by default.</p><p>So, how do we fill in this missing info?
 I want per-route information about request volume, latency, and status codes.
@@ -86,9 +86,9 @@ As a general guideline, try to keep the cardinality of your metrics below 10, an
 <span class=sr-only>Link to heading</span></a></h3><p>Instead, I prefer labeling dynamic routes with their generic match pattern:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#a6e22e>mux</span>.<span style=color:#a6e22e>Handle</span>(<span style=color:#e6db74>&#34;/foo/{id}&#34;</span>, <span style=color:#a6e22e>metricsWrapper</span>.<span style=color:#a6e22e>Handler</span>(<span style=color:#e6db74>&#34;/foo/{id}&#34;</span>, <span style=color:#a6e22e>mmw</span>, <span style=color:#a6e22e>specificFooHandler</span>))
 </span></span></code></pre></div><p>With this approach, all requests will be aggregated under the literal label <code>/foo/{id}</code> regardless of what specific ID was provided.
 To put it another way: the route will only ever emit a single series (per metric) and will group the data related to each distinct <code>foo</code> together.
-See the <a href=https://github.com/slok/go-http-metrics/blob/c472df028d97fa53f3e99c760831d55908541bba/examples/custom/main.go#L51-L57 class=external-link target=_blank rel=noopener>custom example</a> for another explanation of this issue how specific labels can be used to solve it.</p><h1 id=conclusion>Conclusion
+See the <a href=https://github.com/slok/go-http-metrics/blob/c472df028d97fa53f3e99c760831d55908541bba/examples/custom/main.go#L51-L57 class=external-link target=_blank rel=noopener>custom example</a> for another explanation of this issue how specific labels can be used to solve it.</p><h2 id=conclusion>Conclusion
 <a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>This post offers a brief introduction to <a href=https://prometheus.io/ class=external-link target=_blank rel=noopener>Prometheus</a> metrics and how you can easily expose them from any Go-based web application.
+<span class=sr-only>Link to heading</span></a></h2><p>This post offers a brief introduction to <a href=https://prometheus.io/ class=external-link target=_blank rel=noopener>Prometheus</a> metrics and how you can easily expose them from any Go-based web application.
 Despite not being tracked by default, I showed how the <a href=https://github.com/slok/go-http-metrics class=external-link target=_blank rel=noopener>go-http-metrics</a> library can be used to track HTTP request metrics for <em>all</em> routes in your application (not just the <code>/metrics</code> endpoint).
 Lastly, you should be careful about how you label your per-route metrics in order to avoid excessive cardinality.
 Thanks for reading!</p></div><footer></footer></article></section></div><footer class=footer><section class=container>©

@@ -15,17 +15,17 @@ Since the system holds hundreds of blogs and thousands of posts, returning <em>a
 Instead, the user (or web frontend) should be allowed to specify which set of items they want to view.
 This is where pagination comes into play.</p><p>Before I go any further, I want to give a special shoutout to Tania Rascia&rsquo;s <a href=https://www.taniarascia.com/ class=external-link target=_blank rel=noopener>blog</a> and her <a href=https://www.taniarascia.com/rest-api-sorting-filtering-pagination/ class=external-link target=_blank rel=noopener>post</a> about REST API design.
 She has one of the best blogs on the internet and I always find myself coming back to it.
-Thanks, Tania!</p><h1 id=pagination>Pagination
+Thanks, Tania!</p><h2 id=pagination>Pagination
 <a class=heading-link href=#pagination><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Pagination is the process of splitting up a large set of results into smaller, individual &ldquo;pages&rdquo;.
+<span class=sr-only>Link to heading</span></a></h2><p>Pagination is the process of splitting up a large set of results into smaller, individual &ldquo;pages&rdquo;.
 Let&rsquo;s use Bloggulus&rsquo; concept of &ldquo;posts&rdquo; as an example.
 By default, the system will return the most recent 20 posts if you call <code>GET /api/v1/posts</code>.
 What if, instead, you want the <em>second</em> page of results?
 Or maybe you only want to see 15 posts instead of 20.
 How can we tell the server to only give us a specific subset of posts?</p><p>There are two common approaches but they have one thing in common: <strong>results must have a consistent and deterministic ordering</strong>.
-Whether you choose to order results alphabetically, chronologically, or by some other means, the order must be consistent for pagination to work correctly.</p><h1 id=limit-and-offset>Limit and Offset
+Whether you choose to order results alphabetically, chronologically, or by some other means, the order must be consistent for pagination to work correctly.</p><h2 id=limit-and-offset>Limit and Offset
 <a class=heading-link href=#limit-and-offset><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>The first approach is somewhat &ldquo;no-frills&rdquo; and feels a bit like &ldquo;computer speak&rdquo;.
+<span class=sr-only>Link to heading</span></a></h2><p>The first approach is somewhat &ldquo;no-frills&rdquo; and feels a bit like &ldquo;computer speak&rdquo;.
 Instead of even bothering with the word &ldquo;page&rdquo;, just think like a database and use the terms &ldquo;limit&rdquo; and &ldquo;offset&rdquo;.
 With this tactic, &ldquo;limit&rdquo; refers to how items you want to fetch and &ldquo;offset&rdquo; refers to how many items you want to skip before fetching the &ldquo;limit&rdquo; number of items.
 Using the two examples from before, let&rsquo;s see how you&rsquo;d achieve them using this technique:</p><table><thead><tr><th>Second Page of 20</th><th>First Page of 15</th></tr></thead><tbody><tr><td><code>GET /api/v2/posts?limit=20&amp;offset=20</code></td><td><code>GET /api/v2/posts?limit=15&amp;offset=0</code></td></tr></tbody></table><p>Note that in this scenario, most APIs implement a default for both values.
@@ -33,9 +33,9 @@ In our current example, the default &ldquo;limit&rdquo; and &ldquo;offset&rdquo;
 The main downside, however, is user experience.
 For example, if you want to iterate through all pages of results, you&rsquo;ll have to compute each page&rsquo;s offset yourself: <code>offset = (page - 1) * limit</code>.
 Additionally, &ldquo;limit&rdquo; and &ldquo;offset&rdquo; aren&rsquo;t the most natural terms to describe this concept.
-It might be more straightforward to think about things a bit more literally.</p><h1 id=page-and-size>Page and Size
+It might be more straightforward to think about things a bit more literally.</p><h2 id=page-and-size>Page and Size
 <a class=heading-link href=#page-and-size><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Instead of thinking about this problem like a database, let&rsquo;s think about it like actual pages (it <em>is</em> called pagination, after all).
+<span class=sr-only>Link to heading</span></a></h2><p>Instead of thinking about this problem like a database, let&rsquo;s think about it like actual pages (it <em>is</em> called pagination, after all).
 We&rsquo;ll swap out &ldquo;limilt&rdquo; and &ldquo;offset&rdquo; for two new values: &ldquo;page&rdquo; and &ldquo;size&rdquo;.
 Here, &ldquo;page&rdquo; refers to the page of results you want to view and defaults to 1 in most REST APIs.
 The other value, &ldquo;size&rdquo;, refers to the number of results per page and defaults to 20 in this example (but will likely be different for different APIs).</p><p>Let&rsquo;s see how the requests look now:</p><table><thead><tr><th>Second Page of 20</th><th>First Page of 15</th></tr></thead><tbody><tr><td><code>GET /api/v2/posts?page=2</code></td><td><code>GET /api/v2/posts?size=15</code></td></tr></tbody></table><p>I find this to be bit more readable!
@@ -53,9 +53,9 @@ Here&rsquo;s a helper I wrote to handle the conversion:</p><div class=highlight>
 </span></span><span style=display:flex><span>	<span style=color:#a6e22e>offset</span> <span style=color:#f92672>:=</span> (<span style=color:#a6e22e>page</span> <span style=color:#f92672>-</span> <span style=color:#ae81ff>1</span>) <span style=color:#f92672>*</span> <span style=color:#a6e22e>limit</span>
 </span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>limit</span>, <span style=color:#a6e22e>offset</span>
 </span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h1 id=conclusion>Conclusion
+</span></span></code></pre></div><h2 id=conclusion>Conclusion
 <a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>This post outlined the need for pagination in REST APIs and explored two techniques for describing specific pages.
+<span class=sr-only>Link to heading</span></a></h2><p>This post outlined the need for pagination in REST APIs and explored two techniques for describing specific pages.
 While &ldquo;limit&rdquo; and &ldquo;offset&rdquo; map more cleanly to underlying databases, &ldquo;page&rdquo; and &ldquo;size&rdquo; are a bit more user-friendly and defer some the calculations to the server.
 In the wild, you&rsquo;ll probably see more terms than just the four mentioned here.
 Some APIs use more descriptive names like &ldquo;results_per_page&rdquo; or &ldquo;page_size&rdquo; but the concepts are generally the same.

@@ -53,7 +53,7 @@ When sampled periodically and stored for weeks (or even months), you can begin t
 For example, you can observe garbage collection stats, memory usage, and number of active goroutines.
 You can even track HTTP request traffic but it requires a bit of extra setup.
 
-# HTTP Metrics
+## HTTP Metrics
 
 For years, I thought that Go's client library included HTTP traffic stats for _all_ routes.
 However, this is not the case: it only includes information about the `/metrics` endpoint.
@@ -135,7 +135,7 @@ With this approach, all requests will be aggregated under the literal label `/fo
 To put it another way: the route will only ever emit a single series (per metric) and will group the data related to each distinct `foo` together.
 See the [custom example](https://github.com/slok/go-http-metrics/blob/c472df028d97fa53f3e99c760831d55908541bba/examples/custom/main.go#L51-L57) for another explanation of this issue how specific labels can be used to solve it.
 
-# Conclusion
+## Conclusion
 
 This post offers a brief introduction to [Prometheus](https://prometheus.io/) metrics and how you can easily expose them from any Go-based web application.
 Despite not being tracked by default, I showed how the [go-http-metrics](https://github.com/slok/go-http-metrics) library can be used to track HTTP request metrics for _all_ routes in your application (not just the `/metrics` endpoint).

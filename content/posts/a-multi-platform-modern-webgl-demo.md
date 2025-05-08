@@ -18,7 +18,7 @@ Here is a screenshot of the demo for reference:
 While not particularly fancy, [the code](https://github.com/theandrew168/sdl2-opengl-demo) serves as a decent foundation for writing this type of program.
 I read through it the other day and wondered if I could **rebuild the same application in a way that was easier to share** with others...
 
-# Enter WebGL
+## Enter WebGL
 
 Lately, I've been quite interested in [WebGL](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API) and how it trades top-end performance for the complete elimination of _all_ distribution woes.
 I even touched on this topic in a [previous post](/posts/why-write/#webgl-rocks).
@@ -31,7 +31,7 @@ People from anywhere in the world (and on any operating system) can **simply cli
 In fact, just by visiting this page, the new version of the demo has already been delivered to your machine!
 Look forward to seeing that at the end of this post.
 
-# Code Structure
+## Code Structure
 
 This is a pretty bare-bones WebGL demo without too many abstractions in place.
 I did write a few helpers for things like resizing the canvas and building shader programs, however.
@@ -82,7 +82,7 @@ function draw() {
 requestAnimationFrame(draw);
 ```
 
-# The Demo
+## The Demo
 
 Enough talk, let's see this thing!
 

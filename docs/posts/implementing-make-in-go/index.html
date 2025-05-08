@@ -18,9 +18,9 @@ Despite being an outdoorsy trip, I still brought my laptop because programming i
 The internet in such remote locations is typically unreliable so I still consider it to be a nice disconnect.</p><p>Part of my prep for this trip was coming up with a narrowly-scoped, interesting project that I could complete (in some minimally-viable form) within its duration.
 As a longtime fan of <a href=https://en.wikipedia.org/wiki/Make_%28software%29 class=external-link target=_blank rel=noopener>Make</a>, I thought it&rsquo;d be interesting to implement some useful subset of its behavior.
 Additionally, there isn&rsquo;t much Make support on Windows so writing it in an easily cross-platform language would be a boon.
-So, I decided to implement Make in <a href=https://go.dev/ class=external-link target=_blank rel=noopener>Go</a>!</p><h1 id=what-is-make>What is Make?
+So, I decided to implement Make in <a href=https://go.dev/ class=external-link target=_blank rel=noopener>Go</a>!</p><h2 id=what-is-make>What is Make?
 <a class=heading-link href=#what-is-make><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p><a href=https://en.wikipedia.org/wiki/Make_%28software%29 class=external-link target=_blank rel=noopener>Make</a> is a simple build automation tool for expressing arbitrary command-line actions and their dependencies on other commands.
+<span class=sr-only>Link to heading</span></a></h2><p><a href=https://en.wikipedia.org/wiki/Make_%28software%29 class=external-link target=_blank rel=noopener>Make</a> is a simple build automation tool for expressing arbitrary command-line actions and their dependencies on other commands.
 While Make has historically had a close relationship with C/C++ development, I have found that it adds value to any software project that has various build steps and tasks (running tests, formatting code, etc).
 In practice, this ends up being most projects!
 I&rsquo;ve personally used Make to manage Go-based tools, Python projects, and polyglot web applications.</p><p>Here is a small example of using Make to manage building and running a Go program:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-make data-lang=make><span style=display:flex><span><span style=color:#a6e22e>build</span><span style=color:#f92672>:</span>
@@ -37,9 +37,9 @@ The commands for a given target must be indented with a hard tab character (this
 </span></span><span style=display:flex><span>Hello World!
 </span></span></code></pre></div><p>From this simple foundation, an incredibly useful toolbox of targets can be built.
 When expressed with proper dependencies, you never have to worry about running commands in the wrong order.
-Combine that value with the speed of executing non-dependent targets in parallel and you&rsquo;ve got a perfect project assistant.</p><h1 id=the-code>The Code
+Combine that value with the speed of executing non-dependent targets in parallel and you&rsquo;ve got a perfect project assistant.</p><h2 id=the-code>The Code
 <a class=heading-link href=#the-code><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>The source code for this project can be found on <a href=https://github.com/theandrew168/make class=external-link target=_blank rel=noopener>GitHub</a>.</p><h3 id=parsing>Parsing
+<span class=sr-only>Link to heading</span></a></h2><p>The source code for this project can be found on <a href=https://github.com/theandrew168/make class=external-link target=_blank rel=noopener>GitHub</a>.</p><h3 id=parsing>Parsing
 <a class=heading-link href=#parsing><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h3><p>While not a full-blown lexer/parser, the subset of Make&rsquo;s syntax that I chose to support can be handled with line-based processing.
 The code starts by reading the user-supplied Make file line by line (using Go&rsquo;s <a href=https://pkg.go.dev/bufio#Scanner class=external-link target=_blank rel=noopener>bufio.Scanner</a>).
@@ -144,9 +144,9 @@ This is the full, unsimplifed execution logic in Go:</p><div class=highlight><pr
 </span></span><span style=display:flex><span>	<span style=color:#75715e>// execute the current target&#39;s commands</span>
 </span></span><span style=display:flex><span>	<span style=color:#66d9ef>return</span> <span style=color:#a6e22e>executeCommands</span>(<span style=color:#a6e22e>target</span>)
 </span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h1 id=lessons-learned>Lessons Learned
+</span></span></code></pre></div><h2 id=lessons-learned>Lessons Learned
 <a class=heading-link href=#lessons-learned><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>In many aspects, this project was a success: I was able implement a useful Make clone in a short cabin trip!
+<span class=sr-only>Link to heading</span></a></h2><p>In many aspects, this project was a success: I was able implement a useful Make clone in a short cabin trip!
 It was one of those rare occurrences where a project ended up being <em>less</em> work than expected.
 As mentioned earlier, I thought that I would have to fully build and topologically sort the graph before execution.
 I learned that using a depth-first recursion and enforcing that each target&rsquo;s dependencies run first does the trick.</p><p>Despite implementing a personally-useful subset of Make behavior, there are many features that this project is missing.

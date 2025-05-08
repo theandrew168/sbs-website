@@ -11,7 +11,7 @@ Either way, I needed to figure out if there was a way to reset the password with
 I do, however, have access to the physical server that hosts Grafana.
 Perhaps it ships with some sort of password reset command line utility?
 
-# Saved by the CLI
+## Saved by the CLI
 
 After a bit of digging, I [discovered](https://community.grafana.com/t/admin-password-reset/19455) that Grafana _does_ include a [password reset utility](https://grafana.com/docs/grafana/latest/cli/#reset-admin-password).
 On the server that hosts Grafana, simply run the following command (as the `root` or `grafana` user):

@@ -15,9 +15,9 @@ I also wanted to transition the application&rsquo;s backend to a REST API so tha
 <span class=tag><a href=/tags/react/>React</a></span></div></div></header><div class=post-content><p>Recently, I&rsquo;ve been working on the frontend for my <a href=https://bloggulus.com/ class=external-link target=_blank rel=noopener>Bloggulus</a> project.
 Back in the day, the frontend was implemented via server-rendered HTML pages.
 This worked reasonably well, but I always felt like Go&rsquo;s HTML templates were a bit painful to work with.
-I also wanted to transition the application&rsquo;s backend to a REST API so that I could use it as a foundation for learning how to build native apps (someday&mldr;).</p><h1 id=background>Background
+I also wanted to transition the application&rsquo;s backend to a REST API so that I could use it as a foundation for learning how to build native apps (someday&mldr;).</p><h2 id=background>Background
 <a class=heading-link href=#background><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Ultimately, I chose <a href=https://kit.svelte.dev/ class=external-link target=_blank rel=noopener>SvelteKit</a> because it has seen a lot of hype lately and I had just finished using it to completely rewrite Bloggulus as a &ldquo;learn a new skill&rdquo; project.
+<span class=sr-only>Link to heading</span></a></h2><p>Ultimately, I chose <a href=https://kit.svelte.dev/ class=external-link target=_blank rel=noopener>SvelteKit</a> because it has seen a lot of hype lately and I had just finished using it to completely rewrite Bloggulus as a &ldquo;learn a new skill&rdquo; project.
 SvelteKit is a full-stack web development framework built to handle both the frontend <em>and backend</em> of your application.
 To be honest, SvelteKit is awesome when using it this way.
 I was able to re-implement the entirety of Bloggulus&rsquo; feature set (and more) in just a couple weeks.
@@ -25,17 +25,17 @@ I want to be clear: using SvelteKit for its intended use-case of being a full-st
 It makes better use of multi-core systems (out of the box) and is much easier to deploy.
 I deploy my apps onto bare-ish metal servers so &ldquo;ease of deployment&rdquo; is important to me.
 Go&rsquo;s ability to bundle the entire application (frontend and backend) into a single, static binary greatly simplifies the deployment process.
-Despite being marketed as a full-stack framework, SvelteKit <em>can</em> be used to build single-page applications (SPAs).</p><h1 id=pain-points>Pain Points
+Despite being marketed as a full-stack framework, SvelteKit <em>can</em> be used to build single-page applications (SPAs).</p><h2 id=pain-points>Pain Points
 <a class=heading-link href=#pain-points><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>It&rsquo;s sort of hard to explain, but using SvelteKit this way feels like trying to fit a square peg into a round hole.
+<span class=sr-only>Link to heading</span></a></h2><p>It&rsquo;s sort of hard to explain, but using SvelteKit this way feels like trying to fit a square peg into a round hole.
 Trying to figure out how to utilize basic features while in SPA mode is difficult: <strong>handling errors and implementing client-side auth</strong> are just a few examples.
 It makes me feel like my use case is orthogonal to the project&rsquo;s goals and ambitions: like my needs were going &ldquo;against the grain&rdquo; of the framework.
 It wasn&rsquo;t <em>impossible</em> to do the things I needed to do, but it also wasn&rsquo;t the use case that the library was optimized / built for.</p><blockquote><p>Using SvelteKit for building SPAs is technically supported but feels like an afterthought.</p></blockquote><p>Being more specific, though, I found that common SPA tasks are not discussed in the official documentation so you end up having to look elsewhere for solutions.
 I often had to rely on <a href=https://www.reddit.com/r/sveltejs/comments/z6x5uj/sveltekit_spa_with_client_side_jwt_auth/ class=external-link target=_blank rel=noopener>Reddit posts</a> from others who found themselves struggling with the same things.
 If fact, there is only <a href=https://kit.svelte.dev/docs/single-page-apps class=external-link target=_blank rel=noopener>one page</a> in the docs on how to use SvelteKit as an SPA.
-Perhaps I&rsquo;d have a better time if, instead of using SvelteKit, I just used vanilla <a href=https://svelte.dev/ class=external-link target=_blank rel=noopener>Svelte</a> with a third-party router.</p><h1 id=moving-forward>Moving Forward
+Perhaps I&rsquo;d have a better time if, instead of using SvelteKit, I just used vanilla <a href=https://svelte.dev/ class=external-link target=_blank rel=noopener>Svelte</a> with a third-party router.</p><h2 id=moving-forward>Moving Forward
 <a class=heading-link href=#moving-forward><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>I think I&rsquo;m going to respect the lessons I&rsquo;ve learned here (and the frustration I&rsquo;ve felt) and transition to something that is a better fit.
+<span class=sr-only>Link to heading</span></a></h2><p>I think I&rsquo;m going to respect the lessons I&rsquo;ve learned here (and the frustration I&rsquo;ve felt) and transition to something that is a better fit.
 At the moment, I&rsquo;m planning to swap to React + React Router since I&rsquo;m quite familiar with both.
 That stack also moves me closer to being able to write a native app (with <a href=https://reactnative.dev/ class=external-link target=_blank rel=noopener>React Native</a>).
 I&rsquo;ll say that it was immediately refreshing to see features like client-side &ldquo;redirect if not authed&rdquo; <a href=https://reactrouter.com/en/main/start/overview#redirects class=external-link target=_blank rel=noopener>documented</a> (with <a href=https://github.com/remix-run/react-router/tree/dev/examples/auth class=external-link target=_blank rel=noopener>examples</a>) within React Router&rsquo;s official docs.</p><p>We&rsquo;ll see how this goes and I&rsquo;ll report back.

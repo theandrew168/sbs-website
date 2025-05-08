@@ -9,7 +9,7 @@ There are many ways to accomplish this task and they all come with varying pros 
 This post starts by describing the strategy I've historically used when dealing with errors.
 After examining some limitations with that pattern, I present an alternative.
 
-# Errors as Maps
+## Errors as Maps
 
 Errors come in many shapes and sizes.
 Since errors often arise in response to input validation, it can be useful to include what specific "field" caused the problem.
@@ -53,7 +53,7 @@ const example: ErrorResponse = {
 While this would probably work, it feels a bit like we are fighting against the design.
 If "fields" are an optional facet of our errors, how else can we represent them?
 
-# Errors as Lists
+## Errors as Lists
 
 Let's rewind a bit and start with what we _know_ about errors:
 
@@ -109,7 +109,7 @@ const example: ErrorResponse = {
 };
 ```
 
-# Benefits
+## Benefits
 
 Now each category of error ("general" and "specific") can be easily represented without fighting against the design of our error response.
 Furthermore, this format support multiple general errors AND multiple specific errors (per field) out of the box.
@@ -138,7 +138,7 @@ export function findSpecificErrors(errors: Error[]): Record<string, string> {
 }
 ```
 
-# Conclusion
+## Conclusion
 
 Errors are a big topic with countless approaches and opinions.
 The internet is full of awesome discussions about [strategies](https://stackoverflow.com/questions/39759906/validation-responses-in-rest-api) and [examples](https://www.baeldung.com/rest-api-error-handling-best-practices) of how big companies do it.

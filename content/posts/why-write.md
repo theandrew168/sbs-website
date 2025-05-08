@@ -18,7 +18,7 @@ Ideally, one post per week for all of 2024.
 Have I learned at least 52 new things in the past 3 years? Definitely!
 I'll start with something short and sweet.
 
-# WebGL Rocks!
+## WebGL Rocks!
 
 I have always had a lingering interest in graphics programming.
 Back in the day, researching how to write graphics code led me to [OpenGL](https://www.opengl.org/).

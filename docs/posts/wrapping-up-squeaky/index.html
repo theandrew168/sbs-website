@@ -21,9 +21,9 @@ If you write a game that utilizes the language&rsquo;s builtin capabilities for 
 It may only be able to draw white lines on a black backgroud, but that proves that arbitrary graphics are possible.
 It may only be able to handle left and right arrow keys, but that proves that arbitrary input is possible.
 Given these facts, I am able to call the project a success even though it didn&rsquo;t meet my initial expectations.
-There are some more advanced topics that I want to explore in smaller subprojects before returning to Squeaky.</p><h1 id=bumps-in-the-road>Bumps in the Road
+There are some more advanced topics that I want to explore in smaller subprojects before returning to Squeaky.</p><h2 id=bumps-in-the-road>Bumps in the Road
 <a class=heading-link href=#bumps-in-the-road><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>One of my biggest gripes with the language is that you need the interpreter to be present to run any code.
+<span class=sr-only>Link to heading</span></a></h2><p>One of my biggest gripes with the language is that you need the interpreter to be present to run any code.
 This is also how <a href=https://www.python.org/ class=external-link target=_blank rel=noopener>Python</a> works but Python&rsquo;s popularity and ecosystem offset that cost.
 What I&rsquo;d really like is a language implementation that generates static binaries like <a href=https://golang.org/ class=external-link target=_blank rel=noopener>Go</a> does.
 Thinking about this led me to a realization: if my language simply takes text as input and emits bytes as output, then the implementation language doesn&rsquo;t actually matter.
@@ -33,9 +33,9 @@ As long as I have the static libraries present during compilation, what prevents
 This is super hand-wavey and complicated but I want to try it out.
 I envision a Scheme compiler written in a friendly language (such as Python) that uses prebuilt static libraries as a sort of toolbox to be utilized during compilation.
 A separate library for each platform can be held to enable cross-platform code generation.
-If the program source wants to create a window, the compiler will reach into the target platform&rsquo;s <code>libSDL2.a</code> static library, find the <code>SDL_CreateWindow</code> symbol, and inline its code into the target binary.</p><h1 id=future-plans>Future Plans
+If the program source wants to create a window, the compiler will reach into the target platform&rsquo;s <code>libSDL2.a</code> static library, find the <code>SDL_CreateWindow</code> symbol, and inline its code into the target binary.</p><h2 id=future-plans>Future Plans
 <a class=heading-link href=#future-plans><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>I don&rsquo;t actually know if this is feasible or not but I&rsquo;m excited to find out!
+<span class=sr-only>Link to heading</span></a></h2><p>I don&rsquo;t actually know if this is feasible or not but I&rsquo;m excited to find out!
 If it does work, you can expect a more detailed write-up on the nuances and trade-offs for this approach to compiling foreign functions.
 In the meantime, I have about 50 years of assembly basics to catch up on.
 Wish me luck!</p></div><footer></footer></article></section></div><footer class=footer><section class=container>©

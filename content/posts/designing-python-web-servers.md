@@ -11,7 +11,7 @@ Are they too slow?
 Are they too insecure for some reason?
 One thing is for sure: performance must always be measured, not guessed.
 
-# Designs
+## Designs
 
 The designs I tested can be grouped into 4 broad categories: sequential, forking, threading, and asynchronous.
 
@@ -43,7 +43,7 @@ They keep all client connections together in such a way that no connections are 
 Only when data is ready to be read from a client does the server "wake up" and process it.
 I expect this approach to perform very well since it is tailored to fit IO-bound workloads.
 
-# Benchmark
+## Benchmark
 
 The servers were tested whilst running on a minimal [DigitalOcean](https://www.digitalocean.com/) Droplet (1 CPU, 1GB RAM).
 All of them are using a TCP listen backlog of 128.
@@ -56,7 +56,7 @@ It performs 2000 requests spread across 50 concurrent connections:
 hey -n 2000 -c 50 http://<hostname>
 ```
 
-# Results
+## Results
 
 I started with a load test against [NGINX](https://nginx.org/en/) as a baseline.
 I then measured all of the other servers in the same way.
@@ -80,7 +80,7 @@ It clearly shows how much room for improvement exists within each design.
 | [nonblocking.py](https://github.com/theandrew168/web-server-designs/blob/master/nonblocking.py) | 79.33  | 0.53         | 0.63         | 5.23          | 11.80         |
 | [async.py](https://github.com/theandrew168/web-server-designs/blob/master/async.py)             | 82.97  | 0.53         | 0.84         | 7.35          | 12.34         |
 
-# Analysis
+## Analysis
 
 Pretty interesting stuff!
 Some designs were awful, some were middle-of-the-road, and some were decent.
@@ -99,7 +99,7 @@ These two designs both multiplex the socket IO handling around which clients are
 The two "pool" designs did decent but not as well as their unpooled counterparts.
 The overhead of managing the pool must be coming into play here.
 
-# Existing Servers
+## Existing Servers
 
 Just for completeness, I wanted to see how a few existing Python-based web servers stacked up against my quick and dirty designs.
 Unsurprisingly, they beat me by a long shot!
@@ -126,7 +126,7 @@ Talk about good engineering.
 I'm definitely going to spend some time reading the source of Waitress to understand more about how they achieve such impressive performance.
 Thankfully, they have a well-written [design overview](https://docs.pylonsproject.org/projects/waitress/en/stable/design.html) which will be a good place to start.
 
-# Conclusion
+## Conclusion
 
 On the surface, it looks like Waitress should be my web server of choice.
 The performance is great (as we've seen) and it supports a "bring your own socket" model of initialization.

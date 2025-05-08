@@ -35,7 +35,7 @@ In software design terminology, `Rule` is a [polymorphic type](<https://en.wikip
 However, Go doesn't (directly) support algebraic types.
 Instead, we have to make clever use of Go's interface system in order to emulate them.
 
-# Algebraic Data Types
+## Algebraic Data Types
 
 Credit for this approach goes to Eli Bendersky's amazing blog post: [Go and Algebraic Data Types ](https://eli.thegreenplace.net/2018/go-and-algebraic-data-types/).
 Since we can't define a rule as the sum of two other types, we need to flip things around a bit.
@@ -108,7 +108,7 @@ I won't go into detail about how the evaluation of these rules is written, but f
 This post isn't about that, though.
 This post is about converting these polymorphic rules to and from JSON!
 
-# Simple JSON
+## Simple JSON
 
 Usually, encoding (marshalling) and decoding (unmarshalling) JSON in Go is quite simple.
 To encode a struct, just pass it to [json.Marshal](https://pkg.go.dev/encoding/json#Marshal).
@@ -151,7 +151,7 @@ This is exactly what we expected: the `Basic` struct can be easily transformed t
 However, things a get a bit tricky once we introduce the polymorphic `Rule` type.
 Let's try this experiment again with a `Composite` struct and see how the [encoding/json](https://pkg.go.dev/encoding/json) package reacts.
 
-# Polymorphic JSON
+## Polymorphic JSON
 
 This snippet is identical to the one above except that we trying to encode and decode a `Composite` rule.
 We'll use the `fooOrBar` example from earlier.
@@ -198,7 +198,7 @@ This is because, when encoding, the specific type and structure of each individu
 When decoding, however, the `encoding/json` package doesn't have enough context and knowledge of the data structure to figure out a way to correctly parse it into concrete structs.
 We are going to need to write some code to help fill in these gaps.
 
-# Recursive Descent
+## Recursive Descent
 
 Figuring out how to make this work took quite a bit of research.
 I owe credit to Kiril Karaatanassov's [go_polymorphic_json](https://github.com/karaatanassov/go_polymorphic_json) project and Alex Kalyvitis's [JSON polymorphism in Go](https://alexkappa.medium.com/json-polymorphism-in-go-4cade1e58ed1) article for guiding me toward a clean, working solution.
@@ -326,7 +326,7 @@ json: {"operation":"or","rules":[{"pattern":"foo"},{"pattern":"bar"}]}
 data: {Operation:or Rules:[{Pattern:foo} {Pattern:bar}]}
 ```
 
-# Conclusion
+## Conclusion
 
 This post explained and demonstrated how recursive, polymorphic data structures can be converted to and from JSON.
 While dealing with this sort of dynamic JSON isn't typically regarded as one of Go's strong suits, it is doable with a bit of recursion and partial decoding via `json.RawMessage`.

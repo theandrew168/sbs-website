@@ -23,9 +23,9 @@ In some ways, yes, but in practice this isn&rsquo;t usually a bottleneck.</p><p>
 In general, web servers spend more time waiting on the internet (connections from users, talking to databases, etc) than they do waiting for the CPU to burn through intense computations.
 This means that a single NodeJS thread can keep up with typical web traffic without breaking a sweat.
 If your web application was CPU intensive, however, then perhaps you&rsquo;d start experiencing the downsides of this design.
-In such cases, running your application to explicitly utilize all cores could come in handy.</p><h1 id=the-experiment>The Experiment
+In such cases, running your application to explicitly utilize all cores could come in handy.</p><h2 id=the-experiment>The Experiment
 <a class=heading-link href=#the-experiment><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Consider a minimal, CPU-bound web server program.
+<span class=sr-only>Link to heading</span></a></h2><p>Consider a minimal, CPU-bound web server program.
 It simluates a workload by calculating the square root of ten million numbers before returning &ldquo;Hello World!&rdquo;.
 How does NodeJS handle this scenario vs a more &ldquo;multi-core aware&rdquo; web server such as Go&rsquo;s builtin <a href=https://pkg.go.dev/net/http#hdr-Servers class=external-link target=_blank rel=noopener>net/http</a> package?</p><p>I performed a load test to examine how these two servers behave with regards to CPU usage.
 On a 2-core <a href=https://www.digitalocean.com/ class=external-link target=_blank rel=noopener>Digital Ocean</a> droplet, I ran each server and bombarded it with web traffic.
@@ -70,9 +70,9 @@ The 2.7% on the other core comes from other, unrelated operating system tasks.</
 </span></span><span style=display:flex><span>}
 </span></span></code></pre></div><p><img src=/images/go-multi.png alt="Go multi-threaded performance"></p><p>The Go version, on the other hand, uses both cores and squeezes the maximum performance out of the server.
 This is because Go&rsquo;s runtime load balances work across all cores (via goroutines).
-Since the builtin web server handles each incoming request in a separate goroutine, the web traffic is naturally spread across all cores.</p><h1 id=optimizing-nodejs>Optimizing NodeJS
+Since the builtin web server handles each incoming request in a separate goroutine, the web traffic is naturally spread across all cores.</p><h2 id=optimizing-nodejs>Optimizing NodeJS
 <a class=heading-link href=#optimizing-nodejs><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>What can we do about the NodeJS version?
+<span class=sr-only>Link to heading</span></a></h2><p>What can we do about the NodeJS version?
 Enter the <a href=https://nodejs.org/api/cluster.html class=external-link target=_blank rel=noopener>cluster</a> module which is built into NodeJS.
 This package allows you to start your web server multiple times: one for each core.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=display:flex><span><span style=color:#66d9ef>import</span> <span style=color:#a6e22e>cluster</span> <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#34;node:cluster&#34;</span>;
 </span></span><span style=display:flex><span><span style=color:#66d9ef>import</span> <span style=color:#a6e22e>http</span> <span style=color:#a6e22e>from</span> <span style=color:#e6db74>&#34;node:http&#34;</span>;
@@ -112,9 +112,9 @@ For example, consider how this would affect database connection pools.
 If your application was configured to support up to 50 database connections and you employed this strategy to run multiple instances of it, then each instance will respect this limit independently.
 This means that on a four core server, your application could open up to 200 database connections!
 Your database could get overwhelmed by receiving more incoming connections that it expects or is configured to handle.
-In this scenario, you should think about the multiplicative total across all program instances when setting a connection limit.</p><h1 id=conclusion>Conclusion
+In this scenario, you should think about the multiplicative total across all program instances when setting a connection limit.</p><h2 id=conclusion>Conclusion
 <a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>For most NodeJS web applications, the single-threaded limitation will not be an issue.
+<span class=sr-only>Link to heading</span></a></h2><p>For most NodeJS web applications, the single-threaded limitation will not be an issue.
 Between waiting for packets from clients and waiting for rows from a database, your code will be seldom bound by the CPU.
 If, by chance, your application <em>does</em> require a heavy amount of CPU usage, the <code>cluster</code> module can help out.
 By running a separate instance of your program per core and allowing Linux to load balance incoming connections, the full potential of your CPU can be realized.</p><p>Thanks for reading!</p></div><footer></footer></article></section></div><footer class=footer><section class=container>©

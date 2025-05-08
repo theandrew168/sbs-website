@@ -25,9 +25,9 @@ That way you can have a better sense of what the library is doing and how it sav
 Plus, if some aspect of the library starts working unexpectedly, having the ability to &ldquo;open the black box&rdquo; and troubleshoot the problem is incredibly valuable.</p><p>The purpose of this post is to present and explain what it takes to load OpenGL functions without using of the aforementioned libraries.
 The process can be fussy because there are a number of different OpenGL-isms and C-isms that must come together in order to keep the compiler happy.
 However, with some careful reading and planning, a minimal loader can be written in a clean, simple, and data-driven fashion.
-When all is said and done, adding / removing specific OpenGL functions will only require changing a single line of code!</p><h1 id=functions-vs-function-pointers>Functions vs Function Pointers
+When all is said and done, adding / removing specific OpenGL functions will only require changing a single line of code!</p><h2 id=functions-vs-function-pointers>Functions vs Function Pointers
 <a class=heading-link href=#functions-vs-function-pointers><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>An important distinction to understand when tackling this topic is the difference between C functions and C function pointers.
+<span class=sr-only>Link to heading</span></a></h2><p>An important distinction to understand when tackling this topic is the difference between C functions and C function pointers.
 From a caller&rsquo;s perspective they behave exactly the same: pass the args in parentheses and get a return value back.
 Both representations of a function delineate the same thing: an address in memory containing instructions that implement a procedure.
 A function is typically initiated by a CALL instruction and finalized by a RET instruction.
@@ -54,17 +54,17 @@ void setup_add_pointer(void) {
 If called in this state, the program would quickly hit a <a href=https://en.wikipedia.org/wiki/Segmentation_fault class=external-link target=_blank rel=noopener>segfault</a>.
 However, the function <code>setup_add_pointer</code> can be called to point <code>add_pointer</code> to something valid.
 In this case, we point it to the same function body as <code>add_normal</code>.
-This mechanism of changing a function pointer&rsquo;s target at runtime is known as <a href=https://en.wikipedia.org/wiki/Dynamic_loading class=external-link target=_blank rel=noopener>dynamic loading</a>.</p><h1 id=dynamic-loading>Dynamic Loading
+This mechanism of changing a function pointer&rsquo;s target at runtime is known as <a href=https://en.wikipedia.org/wiki/Dynamic_loading class=external-link target=_blank rel=noopener>dynamic loading</a>.</p><h2 id=dynamic-loading>Dynamic Loading
 <a class=heading-link href=#dynamic-loading><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Dynamic loading is an important facet of using OpenGL because the locations of most of the library&rsquo;s functions aren&rsquo;t known at compile time.
+<span class=sr-only>Link to heading</span></a></h2><p>Dynamic loading is an important facet of using OpenGL because the locations of most of the library&rsquo;s functions aren&rsquo;t known at compile time.
 They also aren&rsquo;t necessarily known even at <a href=https://en.wikipedia.org/wiki/Dynamic_linker class=external-link target=_blank rel=noopener>dynamic link time</a>!
 Due to how OpenGL has evolved over the years (and to support more flexibility in handling different platforms and implementations), its modern functions often require dynamical loading before they can be used.</p><p>Okay, so now we know that the OpenGL functions that we want to use are going to have to be loaded sometime after the program is running.
 How can we build an application around these functions if they aren&rsquo;t located until <em>after</em> compiling and linking?
 If you refer to the previous code snippet, we can initially define a function pointer to be <code>NULL</code> and then simply change what it points to at a later time.
 That way, the rest of our application can use these initial definitions when being built.
-We just have to be absolutely sure to point these definitions at something valid <em>before</em> calling them.</p><h1 id=the-gameplan>The Gameplan
+We just have to be absolutely sure to point these definitions at something valid <em>before</em> calling them.</p><h2 id=the-gameplan>The Gameplan
 <a class=heading-link href=#the-gameplan><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>With all of that background context out of the way, we can start to bring everything together.
+<span class=sr-only>Link to heading</span></a></h2><p>With all of that background context out of the way, we can start to bring everything together.
 I&rsquo;ll be using <a href=https://www.libsdl.org/ class=external-link target=_blank rel=noopener>SDL2</a> for this demo in order to keep the code consistent and portable.
 Additionally, most the details on how to write something like this comes from <a href=https://apoorvaj.io/ class=external-link target=_blank rel=noopener>Apoorva Joshi&rsquo;s</a> excellent blog post: <a href=https://apoorvaj.io/loading-opengl-without-glew/ class=external-link target=_blank rel=noopener>Loading OpenGL without GLEW</a>.
 The official <a href=https://www.khronos.org/opengl/wiki/Load_OpenGL_Functions class=external-link target=_blank rel=noopener>Khronos Documentation</a> goes into great detail on the mechanics, as well.</p><table><thead><tr><th>What do we need?</th><th>Where will we get it?</th></tr></thead><tbody><tr><td>OpenGL function type signatures</td><td>The SDL2 header: <a href=https://github.com/spurious/SDL-mirror/blob/master/include/SDL_opengl.h class=external-link target=_blank rel=noopener>SDL2/SDL_opengl.h</a></td></tr><tr><td>OpenGL function declarations</td><td>We will write these ourselves!</td></tr><tr><td>OpenGL function definitions</td><td>We will write these ourselves!</td></tr><tr><td>OpenGL function address getter</td><td>The SDL2 function: <a href=https://wiki.libsdl.org/SDL_GL_GetProcAddress class=external-link target=_blank rel=noopener>SDL_GL_GetProcAddress</a></td></tr><tr><td>OpenGL function loader</td><td>We will write this ourselves!</td></tr></tbody></table><h3 id=opengl-function-type-signatures>OpenGL function type signatures
@@ -121,9 +121,9 @@ As long as <code>opengl_load_functions</code> is called <em>after</em> acquiring
 Even though we&rsquo;ve only loaded two functions, the process is exactly the same for the rest.</p><p>However, something isn&rsquo;t quite right: the compiler isn&rsquo;t happy about this code.
 Even though this is exactly what most OpenGL function loader libraries do, there is still a warning message lingering around in the compilation output.
 It even only shows up when building with <code>-Wpedantic</code> enabled&mldr;</p><pre tabindex=0><code>ISO C forbids conversion of object pointer to function pointer type
-</code></pre><h1 id=the-problem>The Problem
+</code></pre><h2 id=the-problem>The Problem
 <a class=heading-link href=#the-problem><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>What we have encountered is a historic nuance in the C standard: objects pointers and function pointers are not convertible.
+<span class=sr-only>Link to heading</span></a></h2><p>What we have encountered is a historic nuance in the C standard: objects pointers and function pointers are not convertible.
 Also, it&rsquo;s not that the standard mandates that the two types <em>not</em> be compatible, it just doesn&rsquo;t explicitly say that they are.
 On some older platforms (and maybe modern ones, too), function and object pointers were indeed sized differently.</p><p>For us, this means that it is not technically legal to cast the <code>void*</code> pointer we get from <a href=https://wiki.libsdl.org/SDL_GL_GetProcAddress class=external-link target=_blank rel=noopener>SDL_GL_GetProcAddress</a> to a function pointer.
 In practice, however, this is very unlikely to ever cause issues.
@@ -132,9 +132,9 @@ Otherwise, how would we ever call the modern OpenGL functions?
 Some OpenGL loader libraries ignore this warning altogether and that is perfectly reasonable.</p><p>There exists a decent amount of prior conversation of this issue around the web.
 Here are a couple of StackOverflow questions discussing <a href=https://stackoverflow.com/questions/13696918/c-cast-void-pointer-to-function-pointer class=external-link target=_blank rel=noopener>casting void pointers to function pointers</a> and <a href=https://stackoverflow.com/questions/3941793/what-is-guaranteed-about-the-size-of-a-function-pointer class=external-link target=_blank rel=noopener>what is guaranteed about function pointer sizes</a>.
 There have even been <a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=83584" class=external-link target=_blank rel=noopener>bugs reported to GCC</a> that seek clarification on this warning and how seriously it should be taken.</p><p>The POSIX <a href=https://pubs.opengroup.org/onlinepubs/9699919799/basedefs/dlfcn.h.html class=external-link target=_blank rel=noopener>dynamic linking API</a> includes a more generic function address getter.
-The docs for <a href=https://pubs.opengroup.org/onlinepubs/9699919799/functions/dlsym.html class=external-link target=_blank rel=noopener>dlsym</a> make special note of this function-casting behavior:</p><p><strong>&ldquo;Note that conversion from a void * pointer to a function pointer [&mldr;] is not defined by the ISO C standard. This standard requires this conversion to work correctly on conforming implementations.&rdquo;</strong></p><p>Lastly, the <a href=http://port70.net/~nsz/c/c11/n1570.html class=external-link target=_blank rel=noopener>C11 standard</a> actually contains a <a href=http://port70.net/~nsz/c/c11/n1570.html#J.5.7 class=external-link target=_blank rel=noopener>common extension</a> that permits this behavior and makes it valid:</p><p><strong>&ldquo;A pointer to an object or to void may be cast to a pointer to a function, allowing data to be invoked as a function&rdquo;</strong></p><h1 id=appeasing-the-compiler>Appeasing the Compiler
+The docs for <a href=https://pubs.opengroup.org/onlinepubs/9699919799/functions/dlsym.html class=external-link target=_blank rel=noopener>dlsym</a> make special note of this function-casting behavior:</p><p><strong>&ldquo;Note that conversion from a void * pointer to a function pointer [&mldr;] is not defined by the ISO C standard. This standard requires this conversion to work correctly on conforming implementations.&rdquo;</strong></p><p>Lastly, the <a href=http://port70.net/~nsz/c/c11/n1570.html class=external-link target=_blank rel=noopener>C11 standard</a> actually contains a <a href=http://port70.net/~nsz/c/c11/n1570.html#J.5.7 class=external-link target=_blank rel=noopener>common extension</a> that permits this behavior and makes it valid:</p><p><strong>&ldquo;A pointer to an object or to void may be cast to a pointer to a function, allowing data to be invoked as a function&rdquo;</strong></p><h2 id=appeasing-the-compiler>Appeasing the Compiler
 <a class=heading-link href=#appeasing-the-compiler><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Even though this warning isn&rsquo;t something that we need to be very worried about, it&rsquo;s still there: cluttering up our compilation output.
+<span class=sr-only>Link to heading</span></a></h2><p>Even though this warning isn&rsquo;t something that we need to be very worried about, it&rsquo;s still there: cluttering up our compilation output.
 How can we make the compiler happy and still compile with pedantic warnings enabled?
 The issue essentially boils down to a potential difference in sizes: an object pointer <em>might</em> be smaller or larger than a function pointer.
 What feature does C give us that can bridge a size gap between different types?</p><p>A <a href=https://en.cppreference.com/w/c/language/union class=external-link target=_blank rel=noopener>union</a>!
@@ -150,9 +150,9 @@ Using a <a href=https://en.cppreference.com/w/c/language/struct_initialization c
 </code></pre><p>The cast to <code>PFNGLCREATESHADERPROC</code> is required here because the <code>function_ptr</code> in our union is of a different function pointer type.
 It doesn&rsquo;t matter that <code>function_ptr</code> is a different function pointer type than any OpenGL function: it just needs to be a function pointer so that its size is accounted for.</p><p>With this code now in place, the compiler is quiet again!
 We can compile with all warnings enabled (all, extra, pedantic) and no fuss is raised.
-The only thing left to do is to find a way to wrap all of these fiddly concepts together in a concise collection of macros.</p><h1 id=macros-to-the-rescue>Macros to the Rescue
+The only thing left to do is to find a way to wrap all of these fiddly concepts together in a concise collection of macros.</p><h2 id=macros-to-the-rescue>Macros to the Rescue
 <a class=heading-link href=#macros-to-the-rescue><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>In order to keep things simple and extensible, our custom OpenGL function loader two goals:</p><ol><li>It should work on most modern platforms without fuss</li><li>It should be possible to add and remove functions from the project by changing a single line of code</li></ol><p>The good news is that this is possible!
+<span class=sr-only>Link to heading</span></a></h2><p>In order to keep things simple and extensible, our custom OpenGL function loader two goals:</p><ol><li>It should work on most modern platforms without fuss</li><li>It should be possible to add and remove functions from the project by changing a single line of code</li></ol><p>The good news is that this is possible!
 The bad news is that it involves a small amount of <a href=https://en.cppreference.com/w/c/preprocessor class=external-link target=_blank rel=noopener>C preprocessor</a> complexity.
 The core strategy is to develop a set of macros that all accept the same two parameters: the OpenGL function name and its corresponding function pointer name.
 Then, we will be able to define a list of all the functions we need and swap out which macro expands them at different locations throughout the code.</p><pre tabindex=0><code>#define OPENGL_FUNCTIONS                                    \
@@ -201,9 +201,9 @@ It validates that an OpenGL function was successfully loaded and prints an error
 
     return true;
 }
-</code></pre><p>Not <em>too</em> complicated once all is said and done!</p><h1 id=conclusion>Conclusion
+</code></pre><p>Not <em>too</em> complicated once all is said and done!</p><h2 id=conclusion>Conclusion
 <a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>This post has discussed quite a few code snippets in isolation.
+<span class=sr-only>Link to heading</span></a></h2><p>This post has discussed quite a few code snippets in isolation.
 To bring it all together, <a href=https://gist.github.com/theandrew168/2eec79a145396c5d08b774096f91c922 class=external-link target=_blank rel=noopener>here is a gist</a> containing a complete header and implementation for the loader we’ve built.
 You can also see a full version with extra comments in my <a href=https://github.com/theandrew168/sdl2-opengl-demo class=external-link target=_blank rel=noopener>sdl2-opengl-demo</a> project.</p><p>Despite knowing more about how this process works, should you still do it yourself?
 Is it worth reinventing the wheel or would an established function loader library be a better and safer option?

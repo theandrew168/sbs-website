@@ -17,7 +17,7 @@ Despite being unanswered for so many years, I finally flipped that stone over an
 Then, a few weeks ago, I wrote and published my very first WoW addon!
 This post talks about what the addon does, how it works, and the struggles I went through during development.
 
-# DerzPlates
+## DerzPlates
 
 I'm rolling a bear druid (a tanking spec) for the latest round of WoW Classic (the [20th Anniversary Edition](http://worldofwarcraft.blizzard.com/en-us/news/24156594)).
 As a tank, my goal to get all of the enemies to attack me while the damage dealers kill them and the healers keep everyone alive.
@@ -31,14 +31,14 @@ Bonus points if you notice the Wicked reference!
 
 ![Screenshot of modified nameplate color](/images/20241222/screenshot.webp)
 
-# Addon Structure
+## Addon Structure
 
 As it turns out, WoW addons are written in [Lua](https://www.lua.org/)!
 They live as self-contained directories within the game's `Interface/AddOns` folder.
 To be identified and executed by the game client, the folder needs at least two files: a table of contents (`.toc`) file and a Lua (`.lua`) source code file.
 That's it!
 
-## Table of Contents
+### Table of Contents
 
 The `.toc` file contains basic metadata about the addon: its name, description, version, and which version of WoW client (interface) it was built for.
 It then lists out any source files that the client should execute.
@@ -53,7 +53,7 @@ It then lists out any source files that the client should execute.
 main.lua
 ```
 
-## Lua Sources
+### Lua Sources
 
 The simplest addon could be `print("Hello World!")` which would print "Hello World!" to the chat window whenever the UI loads.
 DerzPlates does a bit more than that but I won't dump all of the code here.
@@ -104,7 +104,7 @@ In my opinion, Lua is pretty readable!
 I haven't written it for a while but I did use it for a few projects back in college.
 I also did a [Love2D](https://love2d.org/) (a Lua 2D game development framework) [game jam](https://github.com/theandrew168/lovejam2023) last year so my Lua skills aren't as dull as they otherwise would've been.
 
-# Development Struggles
+## Development Struggles
 
 At first, I thought that writing the addon would be quite trivial:
 
@@ -137,7 +137,7 @@ From what I understand, there are two primary resources:
 When writing new addons, programmers will often scour the existing code to get a sense of how it works.
 Then, they can apply this knowledge to identify where and how their logic should hook in and override default behavior.
 
-# Automation
+## Automation
 
 The code itself is hosted on GitHub.
 I wrote a quick [GitHub Action](https://github.com/theandrew168/derzplates/blob/main/.github/workflows/release.yml) to zip the addon code and create a release whenever a new tag is added.
@@ -150,7 +150,7 @@ Let me know if you end up giving it a shot!
 
 ![Screenshot of a recent release](/images/20241222/release.webp)
 
-# Conclusion
+## Conclusion
 
 Overall, this has been a short, fun, and only mildly frustrating experience.
 If it weren't for the nameplate pooling behavior, I would've had this completely done and sorted within an hour.

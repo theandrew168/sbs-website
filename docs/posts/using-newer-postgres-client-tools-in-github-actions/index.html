@@ -26,16 +26,16 @@ pg_dump: error: server version: 16.2 (Debian 16.2-1.pgdg120+2); pg_dump version:
 3-minute read</span></div><div class=tags><i class="fa-solid fa-tag" aria-hidden=true></i>
 <span class=tag><a href=/tags/databases/>Databases</a></span></div></div></header><div class=post-content><p>Recently, while updating my <a href=https://github.com/theandrew168/pg2s3 class=external-link target=_blank rel=noopener>pg2s3 utility</a>, I noticed that the project&rsquo;s <code>docker-compose.yml</code> file was pinning PostgreSQL to version 14.
 I couldn&rsquo;t remember why I did that, so I went ahead and removed it (what could go wrong?).
-Unfortunately, this led to some automated tests failing in GitHub Actions!</p><h1 id=the-problem>The Problem
+Unfortunately, this led to some automated tests failing in GitHub Actions!</p><h2 id=the-problem>The Problem
 <a class=heading-link href=#the-problem><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Thankfully, the error was very clear:</p><pre tabindex=0><code>pg_dump: error: server version: 16.2 (Debian 16.2-1.pgdg120+2); pg_dump version: 14.11 (Ubuntu 14.11-1.pgdg22.04+1)
+<span class=sr-only>Link to heading</span></a></h2><p>Thankfully, the error was very clear:</p><pre tabindex=0><code>pg_dump: error: server version: 16.2 (Debian 16.2-1.pgdg120+2); pg_dump version: 14.11 (Ubuntu 14.11-1.pgdg22.04+1)
 pg_dump: error: aborting because of server version mismatch
 </code></pre><p>Classic version mismatch.
 The PostgreSQL 16 server (running in a container) was not compatible with the PostgreSQL 14 client tools (installed on the GitHub Actions runner).
 For some context, pg2s3 uses <code>pg_dump</code> and <code>pg_restore</code> to quickly export and import data.</p><p>I had two options: keep the server container pinned to version 14 or figure out how to install and use newer client tools on the Actions runner.
-I opted for the latter since it is the more correct and future-proof solution.</p><h1 id=the-solution>The Solution
+I opted for the latter since it is the more correct and future-proof solution.</p><h2 id=the-solution>The Solution
 <a class=heading-link href=#the-solution><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>As it turns out, the <a href=https://www.postgresql.org/download/linux/ubuntu/ class=external-link target=_blank rel=noopener>PostgreSQL docs</a> include a section about installing newer versions on stable releases of Ubuntu.
+<span class=sr-only>Link to heading</span></a></h2><p>As it turns out, the <a href=https://www.postgresql.org/download/linux/ubuntu/ class=external-link target=_blank rel=noopener>PostgreSQL docs</a> include a section about installing newer versions on stable releases of Ubuntu.
 The docs explain how and why stable Linux releases can fall behind:</p><blockquote><p>PostgreSQL is available in all Ubuntu versions by default. However, Ubuntu &ldquo;snapshots&rdquo; a specific version of PostgreSQL that is then supported throughout the lifetime of that Ubuntu version.
 The PostgreSQL project maintains an Apt repository with all supported of PostgreSQL available.</p></blockquote><p>So, we just need to configure the Actions runner to use the <a href=https://wiki.postgresql.org/wiki/Apt class=external-link target=_blank rel=noopener>PostgreSQL Apt Repository</a> and then install whichever version we need.
 The instructions were pretty straightforward: install <code>postgresql-common</code> and then run the automation script for setting up the apt repository:</p><pre tabindex=0><code>sudo apt install -y postgresql-common
@@ -44,9 +44,9 @@ sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y
 All that remains is removing any existing (older) client versions and then installing the most recent tools:</p><pre tabindex=0><code>sudo apt purge -y postgresql-client-common
 sudo apt install -y postgresql-client
 </code></pre><p>Now both the server container and client tools will both be using the latest version which resolves the <code>version mismatch</code> error.
-With the versions aligned, my tests were all passing once again!</p><h1 id=github-actions>GitHub Actions
+With the versions aligned, my tests were all passing once again!</p><h2 id=github-actions>GitHub Actions
 <a class=heading-link href=#github-actions><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>This process can be bundled into a single GitHub Actions step for usage in any <code>ubuntu-latest</code>-based workflow:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span>- <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Install latest PostgreSQL client tools</span>
+<span class=sr-only>Link to heading</span></a></h2><p>This process can be bundled into a single GitHub Actions step for usage in any <code>ubuntu-latest</code>-based workflow:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-yaml data-lang=yaml><span style=display:flex><span>- <span style=color:#f92672>name</span>: <span style=color:#ae81ff>Install latest PostgreSQL client tools</span>
 </span></span><span style=display:flex><span>  <span style=color:#f92672>run</span>: |<span style=color:#e6db74>
 </span></span></span><span style=display:flex><span><span style=color:#e6db74>    sudo apt install -y postgresql-common
 </span></span></span><span style=display:flex><span><span style=color:#e6db74>    sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y

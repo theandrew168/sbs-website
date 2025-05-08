@@ -14,7 +14,7 @@ Therefore, in my version, I wanted to use SDL2 for the window and input handling
 Loading OpenGL functions is a fiddly, quirky topic that deserves its own [blog post](/posts/loading-opengl-fuctions-for-fun-and-profit/).
 However, it doesn't require too much code once the nuances are understood.
 
-# Modern OpenGL
+## Modern OpenGL
 
 The differences between "legacy" and "modern" OpenGL are well-documented across the web.
 Instead of rewriting the wheel, I'll refer you to this [excellent write-up](https://glumpy.github.io/modern-gl.html) about it over on the docs for the GLUMPY project.
@@ -25,7 +25,7 @@ The newer versions even allow developers to write the actual code that runs on t
 As a quick aside, the [Vulkan graphics library](https://www.khronos.org/vulkan/) is positioned even further in this same direction: more graphical control at the cost of added complexity.
 This tradeoff is definitely worth it, though, given that the graphical needs of modern video games and other technologies are ever-increasing.
 
-# The Demo
+## The Demo
 
 The demo itself is very minimal: a small window containing a rotating red square that exits upon hitting the `ESCAPE`, `Q`, or the close button in the corner.
 
@@ -35,7 +35,7 @@ The source can be found here:
 
 - https://github.com/theandrew168/sdl2-opengl-demo
 
-# Structure
+## Structure
 
 Since this is just a demo, the repo is quite sparse.
 Aside from the usual `LICENSE` and `README.md`, we have a small `src/` directory containing the code itself and then three [Makefiles](https://pubs.opengroup.org/onlinepubs/009695399/utilities/make.html): one for each major platform.
@@ -58,7 +58,7 @@ The `src/opengl.h` and `src/opengl.c` files contain two things: OpenGL function 
 The function `opengl_load_functions()` should be called once after obtaining a valid OpenGL context.
 Lastly, `src/main.c` implements the demo: create a window, initialize an OpenGL context, load the modern OpenGL functions, and render a rotating square.
 
-# Building
+## Building
 
 Building cross-platform C applications isn't that hard but it does require some intentional, upfront planning.
 I have to thank Chris and his writings again for this facet of the demo, too.
@@ -133,7 +133,7 @@ This is because the build actually downloads (using wget), extracts (using tar),
 This is my favorite trick from Chris' original demo!
 He used this approach for statically linking GLFW3 and I realized that it would work just as well for SDL2.
 
-# Why SDL2?
+## Why SDL2?
 
 I have used both GLFW3 and SDL2 in the past and struggled initially to decide which library I preferred.
 Since then, though, I have settled on SDL2 as my de-facto choice for programs that require graphics and user input.
@@ -165,7 +165,7 @@ On the other hand, here are some "cons" related to SDL2:
 - Third-party tutorials and examples are often outdated
 - Third-party tutorials and examples often use legacy OpenGL
 
-# Conclusion
+## Conclusion
 
 There we have it!
 Cross-platform graphical applications don't have to be fussy: they just require a bit of planning.

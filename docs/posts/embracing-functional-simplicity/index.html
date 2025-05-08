@@ -15,11 +15,11 @@ The former focuses on functional design: emboldening pure, “data in, data out�
 Here, &ldquo;better&rdquo; means more correct, more readable, easier to follow, and easier to test.
 Two books have been of exceptional influence as of late: <a href=https://grokkingsimplicity.com/ class=external-link target=_blank rel=noopener>Grokking Simplicity</a> by Eric Normand and <a href=https://www.cosmicpython.com/ class=external-link target=_blank rel=noopener>Architecture Patterns with Python</a> by Harry Percival and Bob Gregory.</p><p>The former focuses on functional design: emboldening pure, &ldquo;data in, data out&rdquo; functions.
 The latter zooms out a bit and considers overall application architecture: how to write code that best represents the domain of your problem.
-More content in the same vein includes Brandon Rhodes&rsquo; <a href="https://www.youtube.com/watch?v=PBQN62oUnN8" class=external-link target=_blank rel=noopener>Hoist Your I/O</a> talk and Gary Bernhardt&rsquo;s <a href=https://www.destroyallsoftware.com/screencasts/catalog/functional-core-imperative-shell class=external-link target=_blank rel=noopener>Functional Core, Imperative Shell</a> screencast.</p><h1 id=lessons>Lessons
+More content in the same vein includes Brandon Rhodes&rsquo; <a href="https://www.youtube.com/watch?v=PBQN62oUnN8" class=external-link target=_blank rel=noopener>Hoist Your I/O</a> talk and Gary Bernhardt&rsquo;s <a href=https://www.destroyallsoftware.com/screencasts/catalog/functional-core-imperative-shell class=external-link target=_blank rel=noopener>Functional Core, Imperative Shell</a> screencast.</p><h2 id=lessons>Lessons
 <a class=heading-link href=#lessons><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Let&rsquo;s discuss each lesson in a bit more detail.</p><h2 id=1-data-calculations-and-actions>1. Data, Calculations, and Actions
+<span class=sr-only>Link to heading</span></a></h2><p>Let&rsquo;s discuss each lesson in a bit more detail.</p><h3 id=1-data-calculations-and-actions>1. Data, Calculations, and Actions
 <a class=heading-link href=#1-data-calculations-and-actions><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h2><p>Early on, Eric Normand&rsquo;s <a href=https://grokkingsimplicity.com/ class=external-link target=_blank rel=noopener>Grokking Simplicity</a> book explores an idea of partitioning your code into three distinct categories:</p><ol><li>Data</li><li>Calculations</li><li>Actions</li></ol><p>Data is what you&rsquo;d expect: just data!
+<span class=sr-only>Link to heading</span></a></h3><p>Early on, Eric Normand&rsquo;s <a href=https://grokkingsimplicity.com/ class=external-link target=_blank rel=noopener>Grokking Simplicity</a> book explores an idea of partitioning your code into three distinct categories:</p><ol><li>Data</li><li>Calculations</li><li>Actions</li></ol><p>Data is what you&rsquo;d expect: just data!
 It could be a string, an array, a map, or anything else where its value comes from its identity.
 Calculations and actions are where things get more interesting.
 Calculations are &ldquo;pure&rdquo; functions that have zero interaction with the outside world.
@@ -31,9 +31,9 @@ Because calculations are pure by definition, they are much simpler to test and v
 The lack of interaction with external systems means that tests can always be written as: &ldquo;does this output match what I expect for a given input?&rdquo;.</p><p>See, one of the things that makes Bloggulus&rsquo; sync process so fragile and finnicky is that the logic for fetching RSS feeds, querying the database, and deciding which posts to create / update are all heavily intertwined.
 <strong>Prior to refactoring, I couldn&rsquo;t verify the small yet critical decisions that dictate what should happen.</strong>
 Sure, the actual fetching of RSS feeds and interacting with the database are decoupled via interfaces (thankfully), but the tests still require a large amount of tiresome faking.</p><p>In many other systems I&rsquo;ve worked on, these decouping abstractions are <em>not</em> in place and therefore the tests are even more difficult to setup, write, and tear down.
-Refactoring your code to make more frequent use of pure functions (calculations) will lead to simpler, more reliable code and smaller, more powerful tests.</p><h2 id=2-separating-what-from-how>2. Separating &ldquo;What&rdquo; From &ldquo;How&rdquo;
+Refactoring your code to make more frequent use of pure functions (calculations) will lead to simpler, more reliable code and smaller, more powerful tests.</p><h3 id=2-separating-what-from-how>2. Separating &ldquo;What&rdquo; From &ldquo;How&rdquo;
 <a class=heading-link href=#2-separating-what-from-how><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h2><p>This next idea is so simple but absolutely blew my mind!
+<span class=sr-only>Link to heading</span></a></h3><p>This next idea is so simple but absolutely blew my mind!
 I immediately starting thinking about all the different places where I could apply it.
 Taken from <a href=https://www.cosmicpython.com/book/chapter_03_abstractions.html class=external-link target=_blank rel=noopener>Chapter 3</a> of <a href=https://www.cosmicpython.com/ class=external-link target=_blank rel=noopener>Architecture Patterns with Python</a>, the idea is this: separate <strong>what</strong> we want to do from <strong>how</strong> to actually do it.</p><p>The example in the book involves syncing files between two directories.
 The initial version of the code looks like any developer&rsquo;s first imperative pass at the problem: iterate through each directory and, when necessary, immediately move / copy / delete the files that require action.
@@ -53,14 +53,14 @@ Their analysis of the problem and its required data yields an amazing result: re
 Each test can now say: &ldquo;given these source and destination directories (data), which files should be moved / copied / deleted (also data)&rdquo;.
 The underlying, real filesystem doesn&rsquo;t matter anymore.
 We don&rsquo;t have to prepare and provide a fake filesystem abstraction, either: just pass data in and get data out.
-Isn&rsquo;t that an amazing and powerful idea?!</p><h1 id=impact>Impact
+Isn&rsquo;t that an amazing and powerful idea?!</p><h2 id=impact>Impact
 <a class=heading-link href=#impact><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Together, these lessons have already led me toward better code in my <a href=https://bloggulus.com/ class=external-link target=_blank rel=noopener>Bloggulus</a> project (<a href=https://github.com/theandrew168/bloggulus class=external-link target=_blank rel=noopener>source code</a>).
+<span class=sr-only>Link to heading</span></a></h2><p>Together, these lessons have already led me toward better code in my <a href=https://bloggulus.com/ class=external-link target=_blank rel=noopener>Bloggulus</a> project (<a href=https://github.com/theandrew168/bloggulus class=external-link target=_blank rel=noopener>source code</a>).
 As mentioned earlier, the most critical (and unfortunately most tangled) part of Bloggulus was the “sync process".
 Sometimes, this almost feels like an unintentional anti-pattern: where the most important part of a system is the one that is most tightly-coupled to the outside world and therefore the most difficult to test, verify, and trust.</p><p>Anyhow, let&rsquo;s get back to the refactoring!
-With these two big ideas in mind, let&rsquo;s take a look at the sync process and see how we can make it better (more correct, more readable, easier to follow, and easier to test).</p><h2 id=before>Before
+With these two big ideas in mind, let&rsquo;s take a look at the sync process and see how we can make it better (more correct, more readable, easier to follow, and easier to test).</p><h3 id=before>Before
 <a class=heading-link href=#before><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># List all blogs in the database.</span>
+<span class=sr-only>Link to heading</span></a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># List all blogs in the database.</span>
 </span></span><span style=display:flex><span>blogs <span style=color:#f92672>=</span> db<span style=color:#f92672>.</span>list_blogs()
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#75715e># Process each blog individually.</span>
@@ -81,9 +81,9 @@ With these two big ideas in mind, let&rsquo;s take a look at the sync process an
 </span></span><span style=display:flex><span>		<span style=color:#66d9ef>if</span> feed_post<span style=color:#f92672>.</span>content <span style=color:#f92672>and</span> <span style=color:#f92672>not</span> post<span style=color:#f92672>.</span>content:
 </span></span><span style=display:flex><span>			db<span style=color:#f92672>.</span>update_post_content(post, feed_post<span style=color:#f92672>.</span>content)
 </span></span></code></pre></div><p>This version is kind of a mess: actions and calculations are poorly defined yet heavily intertwined and the &ldquo;what&rdquo; vs &ldquo;how&rdquo; details are confusingly mixed.
-How can we isolate the most import question here: which posts should be created and which posts should be updated?</p><h2 id=after>After
+How can we isolate the most import question here: which posts should be created and which posts should be updated?</p><h3 id=after>After
 <a class=heading-link href=#after><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h2><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># List all blogs in the database.</span>
+<span class=sr-only>Link to heading</span></a></h3><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-python data-lang=python><span style=display:flex><span><span style=color:#75715e># List all blogs in the database.</span>
 </span></span><span style=display:flex><span>blogs <span style=color:#f92672>=</span> db<span style=color:#f92672>.</span>list_blogs()
 </span></span><span style=display:flex><span>
 </span></span><span style=display:flex><span><span style=color:#75715e># Process each blog individually.</span>
@@ -109,9 +109,9 @@ Instead of the deciding which posts need to be created / updated and then immedi
 <strong>In short, the most critical decision that the system has to make is now a pure function.</strong></p><p>Given some known, existing posts and a list of current posts from the RSS feed, we can easily test and verify which ones should be created and which ones should be updated.
 Then, the actual database interaction happens <em>after</em> the decision has been mode.
 The &ldquo;what&rdquo; is separated from the &ldquo;how&rdquo;.
-Another benefit of this approach is that since all new / changed posts are known together, we can batch their creation / updating instead of having to process them invidiually.</p><p>If you are curious, the real, Go-based implementation of the <code>compare_posts</code> helper can be read <a href=https://github.com/theandrew168/bloggulus/blob/72eeeeb2ce949e59d9c5e59a08ff4fe204a1c8c7/backend/service/sync.go#L76 class=external-link target=_blank rel=noopener>here</a>.</p><h1 id=conclusion>Conclusion
+Another benefit of this approach is that since all new / changed posts are known together, we can batch their creation / updating instead of having to process them invidiually.</p><p>If you are curious, the real, Go-based implementation of the <code>compare_posts</code> helper can be read <a href=https://github.com/theandrew168/bloggulus/blob/72eeeeb2ce949e59d9c5e59a08ff4fe204a1c8c7/backend/service/sync.go#L76 class=external-link target=_blank rel=noopener>here</a>.</p><h2 id=conclusion>Conclusion
 <a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Through all of the concepts and ideas I&rsquo;ve been reading about lately, two have made the most impact.
+<span class=sr-only>Link to heading</span></a></h2><p>Through all of the concepts and ideas I&rsquo;ve been reading about lately, two have made the most impact.
 The first is to categorize code as either data, calculations, or actions.
 The second is to separate the &ldquo;what&rdquo; from the &ldquo;how&rdquo; when performing state-changing or IO-based operations.</p><p>If you&rsquo;re already familiar with these concepts, then consider this a simple refresher.
 If not, then I hope you can find as much value and inspiration in these patterns as I have.

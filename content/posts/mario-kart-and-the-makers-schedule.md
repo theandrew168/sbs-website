@@ -21,7 +21,7 @@ Creation and coordination are different beasts with unique requirements.
 The environments necessary for some makers and managers to succeed are simply not the same.
 Problems arise, however, when either group is forced to conform to the other's schedule.
 
-# Mario Kart?
+## Mario Kart?
 
 I identify quite strongly with the "maker" persona outlined in Paul's essay.
 I can create awesome projects, solve difficult problems, and write meaningful blog posts... when I have the time and freedom from distractions.

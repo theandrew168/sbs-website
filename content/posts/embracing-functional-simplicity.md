@@ -12,11 +12,11 @@ The former focuses on functional design: emboldening pure, "data in, data out" f
 The latter zooms out a bit and considers overall application architecture: how to write code that best represents the domain of your problem.
 More content in the same vein includes Brandon Rhodes' [Hoist Your I/O](https://www.youtube.com/watch?v=PBQN62oUnN8) talk and Gary Bernhardt's [Functional Core, Imperative Shell](https://www.destroyallsoftware.com/screencasts/catalog/functional-core-imperative-shell) screencast.
 
-# Lessons
+## Lessons
 
 Let's discuss each lesson in a bit more detail.
 
-## 1. Data, Calculations, and Actions
+### 1. Data, Calculations, and Actions
 
 Early on, Eric Normand's [Grokking Simplicity](https://grokkingsimplicity.com/) book explores an idea of partitioning your code into three distinct categories:
 
@@ -44,7 +44,7 @@ Sure, the actual fetching of RSS feeds and interacting with the database are dec
 In many other systems I've worked on, these decouping abstractions are _not_ in place and therefore the tests are even more difficult to setup, write, and tear down.
 Refactoring your code to make more frequent use of pure functions (calculations) will lead to simpler, more reliable code and smaller, more powerful tests.
 
-## 2. Separating "What" From "How"
+### 2. Separating "What" From "How"
 
 This next idea is so simple but absolutely blew my mind!
 I immediately starting thinking about all the different places where I could apply it.
@@ -82,7 +82,7 @@ The underlying, real filesystem doesn't matter anymore.
 We don't have to prepare and provide a fake filesystem abstraction, either: just pass data in and get data out.
 Isn't that an amazing and powerful idea?!
 
-# Impact
+## Impact
 
 Together, these lessons have already led me toward better code in my [Bloggulus](https://bloggulus.com/) project ([source code](https://github.com/theandrew168/bloggulus)).
 As mentioned earlier, the most critical (and unfortunately most tangled) part of Bloggulus was the “sync process".
@@ -91,7 +91,7 @@ Sometimes, this almost feels like an unintentional anti-pattern: where the most 
 Anyhow, let's get back to the refactoring!
 With these two big ideas in mind, let's take a look at the sync process and see how we can make it better (more correct, more readable, easier to follow, and easier to test).
 
-## Before
+### Before
 
 ```python
 # List all blogs in the database.
@@ -119,7 +119,7 @@ for blog in blogs:
 This version is kind of a mess: actions and calculations are poorly defined yet heavily intertwined and the "what" vs "how" details are confusingly mixed.
 How can we isolate the most import question here: which posts should be created and which posts should be updated?
 
-## After
+### After
 
 ```python
 # List all blogs in the database.
@@ -156,7 +156,7 @@ Another benefit of this approach is that since all new / changed posts are known
 
 If you are curious, the real, Go-based implementation of the `compare_posts` helper can be read [here](https://github.com/theandrew168/bloggulus/blob/72eeeeb2ce949e59d9c5e59a08ff4fe204a1c8c7/backend/service/sync.go#L76).
 
-# Conclusion
+## Conclusion
 
 Through all of the concepts and ideas I've been reading about lately, two have made the most impact.
 The first is to categorize code as either data, calculations, or actions.

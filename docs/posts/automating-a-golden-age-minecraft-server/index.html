@@ -19,9 +19,9 @@ This term typically refers to versions of Minecraft prior to Beta 1.8 / Release 
 This update added a bunch of new features and, for better or for worse, introduced a true &ldquo;goal&rdquo; into the game: build up supplies, reach <a href=https://minecraft.wiki/w/The_End class=external-link target=_blank rel=noopener>The End</a>, and defeat the <a href=https://minecraft.wiki/w/Ender_Dragon class=external-link target=_blank rel=noopener>Ender Dragon</a>.
 Prior to this update, Minecraft had no explicit goals and was truly a sandbox.
 The only things to do were explore, build stuff, and find diamonds.
-It was a simple loop that generated hundreds of hours of fun for my friends and I back in high school.</p><h1 id=simpler-times>Simpler Times
+It was a simple loop that generated hundreds of hours of fun for my friends and I back in high school.</p><h2 id=simpler-times>Simpler Times
 <a class=heading-link href=#simpler-times><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Back in the day, I ran a Minecraft server from the utility room in my parent&rsquo;s basement.
+<span class=sr-only>Link to heading</span></a></h2><p>Back in the day, I ran a Minecraft server from the utility room in my parent&rsquo;s basement.
 The server itself was a wimpy <a href=https://en.wikipedia.org/wiki/Acer_Aspire_One class=external-link target=_blank rel=noopener>Acer Aspire One</a> with 512MB of RAM and an <a href=https://en.wikipedia.org/wiki/Intel_Atom class=external-link target=_blank rel=noopener>Intel Atom</a> processor.
 Since I knew next to nothing about server administration at the time, I struggled to get everything working.
 The networking aspects were especially difficult to understand: I had no idea what a port even was or how to &ldquo;forward&rdquo; it.
@@ -39,9 +39,9 @@ Simply mine, craft, and have a good time!</p><h3 id=screenshots>Screenshots
 <span class=sr-only>Link to heading</span></a></h3><p>I dug up a few screenshots of the old server.
 Please excuse the fuzzy resolution and &ldquo;sign of the times&rdquo; wood + cobblestone aesthetic.</p><p><img src=/images/minecraft/valley1.webp alt="Old server valley 1">
 <img src=/images/minecraft/valley2.webp alt="Old server valley 2">
-<img src=/images/minecraft/lighthouse.webp alt="Old server lighthouse"></p><h1 id=terraform--ansible>Terraform + Ansible
+<img src=/images/minecraft/lighthouse.webp alt="Old server lighthouse"></p><h2 id=terraform--ansible>Terraform + Ansible
 <a class=heading-link href=#terraform--ansible><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Since then, I&rsquo;ve studied Software Engineering and worked as a professional developer for almost seven years.
+<span class=sr-only>Link to heading</span></a></h2><p>Since then, I&rsquo;ve studied Software Engineering and worked as a professional developer for almost seven years.
 I now have a much better perspective on system administration, networking, and security.
 My first internship was centered around system automation.
 Specifically, how can we easily spin up and configure of a large fleet of Linux servers?
@@ -100,9 +100,9 @@ My usual approach to writing new Ansible roles is three-fold: walk through the p
 At the very end I&rsquo;ll do a full teardown, rebuild, and rerun to verify that the role works for completely fresh systems and idempotently skips completed steps on subsequent runs.</p><p>After a few rounds of iteration I arrived at a <a href=https://github.com/theandrew168/devops/blob/master/roles/minecraft/tasks/main.yml class=external-link target=_blank rel=noopener>completed role</a>.
 There are nine tasks in total:</p><ol><li>Install a Java runtime<ul><li>I chose <code>default-jre-headless</code></li></ul></li><li>Create the <code>minecraft</code> user<ul><li>This user will run the server and own all relevant files</li></ul></li><li>Ensure the data directory is owned by <code>minecraft</code></li><li>Download the server JAR<ul><li>Shoutout to <a href=https://betacraft.uk/ class=external-link target=_blank rel=noopener>BetaCraft</a> for hosting <a href=https://betacraft.uk/server-archive/ class=external-link target=_blank rel=noopener>old server versions</a></li></ul></li><li>Setup the server config file<ul><li>I found a config file reference <a href=https://www.reddit.com/r/GoldenAgeMinecraft/comments/14itvbx/how_to_correctly_set_up_a_minecraft_alphabeta/ class=external-link target=_blank rel=noopener>on reddit</a></li></ul></li><li>Setup the allowed users file<ul><li>Only the usernames found in this file will be able to connect</li></ul></li><li>Expose port 25565 and limit connection attempts<ul><li>This is done with <a href=https://help.ubuntu.com/community/UFW class=external-link target=_blank rel=noopener>ufw</a> and locks users out after 6 attempts</li></ul></li><li>Setup the server&rsquo;s <a href=https://github.com/theandrew168/devops/blob/master/roles/minecraft/templates/minecraft.service.j2 class=external-link target=_blank rel=noopener>systemd service file</a></li><li>Start the server and enable running on boot</li></ol><p>That&rsquo;s it!
 Fortunately, most of these tasks are things I&rsquo;ve written before so a lot of the &ldquo;work&rdquo; here was simply copying, pasting, finding, and replacing.
-There weren&rsquo;t as many roadblocks as I expected except for in one major area: security.</p><h1 id=security>Security
+There weren&rsquo;t as many roadblocks as I expected except for in one major area: security.</p><h2 id=security>Security
 <a class=heading-link href=#security><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Since the official login infrastructure for old school Minecraft servers isn&rsquo;t online anymore, the server can&rsquo;t actually verify that connecting players have legitimate, authenticated accounts.
+<span class=sr-only>Link to heading</span></a></h2><p>Since the official login infrastructure for old school Minecraft servers isn&rsquo;t online anymore, the server can&rsquo;t actually verify that connecting players have legitimate, authenticated accounts.
 This means that, by default, no one will be able to login (unless you want to utilize and trust a third-party proxy).
 However, there is an easy way to get around this limitation but it comes with a significant security penalty.
 By setting <code>online-mode=false</code> in the config file, the Minecraft server will no longer validate that connecting accounts are genuine and therefore allow anyone and everyone to login.</p><h3 id=allow-list>Allow List
@@ -128,9 +128,9 @@ This solution <strong>depends on getting owned</strong> and will struggle to eve
 The Minecraft server doesn&rsquo;t support this feature directly so I&rsquo;d have to implement the restrictions at the firewall layer.
 I&rsquo;d also have to know where my friends are playing from and hope that they have static IP addresses (I&rsquo;m not sure how common these are across the range of small town and large city ISPs).
 If their IP addresses were to change, I&rsquo;d have to update firewall rules.
-Thanks to our existing automation, this can be added as a configuration task and deployed in a consistent and repeatable way.</p><h1 id=conclusion>Conclusion
+Thanks to our existing automation, this can be added as a configuration task and deployed in a consistent and repeatable way.</p><h2 id=conclusion>Conclusion
 <a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Setting up this server wasn&rsquo;t too much work thanks to my existing Terraform and Ansible <a href=https://github.com/theandrew168/devops/tree/master class=external-link target=_blank rel=noopener>experience</a>.
+<span class=sr-only>Link to heading</span></a></h2><p>Setting up this server wasn&rsquo;t too much work thanks to my existing Terraform and Ansible <a href=https://github.com/theandrew168/devops/tree/master class=external-link target=_blank rel=noopener>experience</a>.
 It was a breeze to spin up a new server, attach a domain, and configure it to my standards.
 It had been a while since I dusted off these classic <a href=https://en.wikipedia.org/wiki/DevOps class=external-link target=_blank rel=noopener>DevOps</a> tools but I had fun using them again.
 I&rsquo;m often surprised by how everything continues to work without modification despite many months passing between runs.

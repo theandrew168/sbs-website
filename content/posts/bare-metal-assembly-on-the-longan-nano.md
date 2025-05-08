@@ -26,7 +26,7 @@ Get ready to discuss registers, design clean programs, and dive into some datash
 
 **The rest of the Longan Nano series requires that the device be connected to your host system via a USB-C cable! Go ahead get things wired up!**
 
-# The world's smallest RISC-V program
+## The world's smallest RISC-V program
 
 Seen below is a valid RISC-V program that does absolutely nothing!
 
@@ -76,7 +76,7 @@ Even if the result of the sum had been non-zero, the instruction would not have 
 
 Now that our simple program is written and understood, how do we convert it to something that CPUs understand?
 
-# Ready, set, assemble!
+## Ready, set, assemble!
 
 This section details the steps necessary to "assemble" our simple program.
 Assembling is the process of converting human-readable assembly language text to a specific binary representation that a CPU can understand.
@@ -112,7 +112,7 @@ bronzebeard smallest.asm
 Congratulations!
 You just wrote and assembled the world's smallest RISC-V program!
 
-# Preparing for DFU
+## Preparing for DFU
 
 Without our assembled `bb.out` file in hand, the next step is to hook up our Longan Nano and upload the program to the chip's flash storage.
 To accomplish this task, we must use the [Device Firmware Upgrade](https://en.wikipedia.org/wiki/USB#Device_Firmware_Upgrade) protocol.
@@ -135,7 +135,7 @@ In short: press BOOT, press RESET, release RESET, release BOOT.
 
 **Take note of this BOOT / RESET process! It will be used everytime we to download a new program to the device!**
 
-# Programming the device
+## Programming the device
 
 We now have all the information we need to upload our `bb.out` program to the device.
 One thing that the DFU uploader needs is the USB identifier for the device.
@@ -154,7 +154,7 @@ This program won't do anything.
 Nothing will light up, nothing will flash, nothing will beep.
 Do not discredit this achievement, though!
 
-# All that work for nothing?
+## All that work for nothing?
 
 Who knew that doing absolutely nothing could be so much work?
 Most of what we covered wasn't even related to RISC-V or the code: it was just setup work and preparation.

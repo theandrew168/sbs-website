@@ -13,7 +13,7 @@ Specifically, I was working on how [Bloggulus](https://bloggulus.com/) syncs all
 Instead of naively syncing each blog serially, maybe concurrency can help.
 Let's find some ways to speed it up!
 
-# Serial
+## Serial
 
 As a baseline, consider this simple program that executes multiple tasks in sequence.
 Each job must be performed one after another until all have completed.
@@ -44,7 +44,7 @@ func main() {
 Notice how the program takes roughly four seconds to execute (16 jobs \* 0.25 second per job).
 There is nothing fancy going on here: each job executes one at a time.
 
-# Concurrent
+## Concurrent
 
 Surely, we can do better than that, right?
 This is Go, after all, and Go has goroutines!
@@ -79,7 +79,7 @@ The problem here is that Go's runtime doesn't wait for all goroutines to finish 
 This means that our jobs didn't even get a chance to run.
 How can we tell the program to wait for our jobs to complete?
 
-# WaitGroup
+## WaitGroup
 
 Thankfully, Go's standard library holds the solution: [sync.WaitGroup](https://pkg.go.dev/sync#WaitGroup).
 From the docs:
@@ -135,7 +135,7 @@ With the current approach, if [bloggulus](https://bloggulus.com/) was tracking 5
 This might not be an issue in practice but I'd rather find a way to smooth out the network traffic.
 Maybe there is a way to put an upper limit on the number of simultaneous syncs?
 
-# Semaphore
+## Semaphore
 
 This time, Go's _extended_ standard library holds the solution: [semaphore](https://pkg.go.dev/golang.org/x/sync/semaphore).
 In essence, a semaphore is a mutex that be locked by multiple goroutines at once.
@@ -187,7 +187,7 @@ The jobs execute concurrently but only four (the value of `MaxWorkers`) are able
 With this approach, I can limit how many simultaneous requests Bloggulus makes and prevent clogging up the network.
 Check out the final implementation [on GitHub](https://github.com/theandrew168/bloggulus/blob/981424b37cee14a13f4caec556bcc3042260ab37/backend/service/sync.go#L89-L116).
 
-# Conclusion
+## Conclusion
 
 This post walked through a few basic examples of how Go's concurrency can be used to speedup a program's execution while limiting the number of active goroutines.
 Overall, I'm happy with how readable the final example is despite utilizing moderately-complex concurrency ideas.

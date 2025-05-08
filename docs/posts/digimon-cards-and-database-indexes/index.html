@@ -17,9 +17,9 @@ Plus, I was a big fan of the Digimon anime as a kid so I have a lot of nostalgia
 When I first got into the game, I realized that only a few sets had been released so far.
 I set my eyes on building and maintaining a complete collection: four copies of each card.
 With enough spreadsheets and time, this would allow me build any deck that I wanted.
-This was honestly a breath of fresh air coming from <a href=https://magic.wizards.com/en class=external-link target=_blank rel=noopener>Magic: The Gathering</a>.</p><h1 id=digimon-cards>Digimon Cards
+This was honestly a breath of fresh air coming from <a href=https://magic.wizards.com/en class=external-link target=_blank rel=noopener>Magic: The Gathering</a>.</p><h2 id=digimon-cards>Digimon Cards
 <a class=heading-link href=#digimon-cards><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>That being said, I&rsquo;ve collected quite a few cards.
+<span class=sr-only>Link to heading</span></a></h2><p>That being said, I&rsquo;ve collected quite a few cards.
 In addition to the minimum four copies of each card, I also have extra copies of most common and uncommon cards (and even some rares).
 Historically, I stored these extra cards unsorted in a series of tall, unstable stacks.
 &ldquo;Managing&rdquo; these stacks was simple: whenever a new set releases and I acquire more overflow, just throw &rsquo;em on the stack!
@@ -31,9 +31,9 @@ I&rsquo;d rather buy a large, multi-row trading card box to contain them.
 If I was going to buy a nice box, I might as well use the individual rows to hold cards of a particular color.
 This way, to find a card of a specific color, I&rsquo;d only have to look through a subset (roughly 1/6th of all cards).
 I ultimately decided to sort my collection by even more than just color: I further sorted them by card type and level.
-Now, to find any specific card, I&rsquo;d have to search through <em>even fewer</em> cards (around 1/36th or so).</p><h1 id=database-indexes>Database Indexes
+Now, to find any specific card, I&rsquo;d have to search through <em>even fewer</em> cards (around 1/36th or so).</p><h2 id=database-indexes>Database Indexes
 <a class=heading-link href=#database-indexes><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>While sorting my cards and thinking about software (a classic combination), I realized a connection to database indexes.
+<span class=sr-only>Link to heading</span></a></h2><p>While sorting my cards and thinking about software (a classic combination), I realized a connection to database indexes.
 By sorting my collection, I was effectively transforming it into an <a href=https://www.postgresql.org/docs/current/indexes-intro.html class=external-link target=_blank rel=noopener>index</a>.
 If I had chosen to only sort by color, then it’d mirror a regular, single-column index.
 Instead, sorting by color, type, and level maps more closely to a <a href=https://www.postgresql.org/docs/current/indexes-multicolumn.html class=external-link target=_blank rel=noopener>multi-column index</a>.</p><p>If this configuration was represented in PostgreSQL, the schema and index would look something like:</p><pre tabindex=0><code>CREATE TABLE card (

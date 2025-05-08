@@ -22,7 +22,7 @@ Okay, so it seems like the 1GB of RAM isn't quite enough when backups are taking
 The server works just fine under normal operation, however, but backups push it over the edge.
 If only there was a way to "download more RAM" and give the server a bit more breathing room...
 
-# Swap Space
+## Swap Space
 
 Enter the [swap space](https://wiki.archlinux.org/title/Swap)!
 This is a Linux concept for giving servers additional memory capabilities without increasing the amount of physical RAM installed.
@@ -40,7 +40,7 @@ Digital Ocean has a [great guide](https://www.digitalocean.com/community/tutoria
 Initially, I followed these steps manually.
 Then, once I got things working, I decided to "lock it in" via my Ansible automation.
 
-# Ansible Tasks
+## Ansible Tasks
 
 The automation was quite simple: it only takes five tasks!
 I used Jeff Geerling's awesome [ansible-role-swap](https://github.com/geerlingguy/ansible-role-swap/tree/master) for inspiration and guidance.
@@ -90,11 +90,11 @@ Let's take a look:
   become_user: root
 ```
 
-# Bonus Tuning
+## Bonus Tuning
 
 The Digital Ocean guide also [details](https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-22-04#step-6-tuning-your-swap-settings) a few "bonus" settings that can help a server manage its swap more efficiently.
 
-## swappiness
+### swappiness
 
 This [setting](https://docs.kernel.org/admin-guide/sysctl/vm.html#swappiness) controls how eager a system is to boot data out of main memory and into the swapfile.
 Since we only want the server to use the swap space when absolutely necessary, we adjust this setting to a low value.
@@ -109,7 +109,7 @@ The default value is `60`.
   become_user: root
 ```
 
-## vfs_cache_pressure
+### vfs_cache_pressure
 
 This [setting](https://docs.kernel.org/admin-guide/sysctl/vm.html#vfs-cache-pressure) controls how quickly the server releases directory and inode (file) information from the cache.
 Lowering this value causes filesystem data (which can be expensive to retrieve) to remain in the cache for longer periods of time.
@@ -124,7 +124,7 @@ The default value is `100`.
   become_user: root
 ```
 
-# Conclusion
+## Conclusion
 
 You can view all of these tasks together in my [devops repo](https://github.com/theandrew168/devops/blob/main/roles/server/tasks/swap.yml).
 I also decided that my server role had gotten a bit messy and decided to split it into separate files using Ansible's [include_tasks](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/include_tasks_module.html) directive.

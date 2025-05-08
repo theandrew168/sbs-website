@@ -34,7 +34,7 @@ else:
 
 However, since embedding files into Go binary is a compile-time feature, you can't really say things like "embed these files _if_ some condition is true".
 
-# Research
+## Research
 
 So, I started doing some research.
 Googling for "go conditional embedding" led me to this relevant [GitHub issue](https://github.com/golang/go/issues/44484) (a proposal for direct support for conditional embedding).
@@ -46,7 +46,7 @@ The proposal was rejected for a couple reasons:
 
 2. There exists a workaround: [use build tags](https://github.com/golang/go/issues/44484#issuecomment-948137497)! With some clever file structure and a build tag, the answer to "should these files be embedded" can essentially be pulled up into the build process.
 
-# The Workaround
+## The Workaround
 
 The workaround described in the proposal involves adding a few Go files to your frontend directory.
 These files turn your frontend directory into a Go package that exposes two vars: one for the `embed.FS` itself and an `IsEmbedded` boolean indicating whether or not the data has been embedded.
@@ -93,7 +93,7 @@ func main() {
 Despite working as described and solving my problem, I felt myself wanting something a bit cleaner.
 What I really wanted was a package that encapsulated the decision of "should this directory be embedded or opened" and exposed only a single [fs.FS](https://pkg.go.dev/io/fs#FS) to the importer.
 
-# Enhancements
+## Enhancements
 
 So, I set about making these enhancements.
 To be honest, it was easier than I expected.
@@ -185,7 +185,7 @@ func main() {
 As you can see, the caller's code is now much cleaner: it doesn't have to know anything about _how_ the `frontend.Frontend` FS is populated.
 It just imports the frontend package and passes the exposed `fs.FS` down to whatever part of the code plans to serve it.
 
-# Conclusion
+## Conclusion
 
 I went into this problem with some pessimism: I really didn't think I'd be able to find a clean solution to the problem.
 Thankfully, I'm not the first person to consider "conditional embedding" so there was already some prior discussion and a workaround to build upon.

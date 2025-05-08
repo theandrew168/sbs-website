@@ -24,7 +24,7 @@ Most of the time, developers will resort to a few common strategies:
 
 I want to present a better solution to _all_ of these strategies that depends only on a feature that is aleady at our fingertips: the humble **transaction**.
 
-# Commits and Rollbacks
+## Commits and Rollbacks
 
 At a high level, database transactions are a feature that let you group a set of changes into an atomic operation that either _all_ succeed (and get committed to the database) or _all_ fail (and get rolled back as though they never happened).
 The core idea is this: run your tests inside of a transaction and then roll it back (intentionally) when you are done.
@@ -33,7 +33,7 @@ That's it!
 With this simple idea, you can verify that your storage layer is working as intended and not have to worry about the cleanup.
 Additionally, you can run your database-related tests concurrently without having to worry about conflicts because the changes inside of each test (and therefore each transaction) will never "see" each other.
 
-# In Practice
+## In Practice
 
 In order to support arbitrary transactions within the confines of the [repository pattern](https://medium.com/@pererikbergman/repository-design-pattern-e28c0f3e4a30), I like to attach an extra method to my storage class / struct / interface called something like `Transaction`, `WithTransaction` or `Atomically` (I'm still undecided on which name I like best).
 This method accepts a function that requires a single argument: an instance of the storage "object".
@@ -145,7 +145,7 @@ store.WithTransaction(func(store *storage.Storage) error {
 })
 ```
 
-# Conclusion
+## Conclusion
 
 There you have it!
 This is one of my favorite programming patterns that I've discovered so far in 2024.

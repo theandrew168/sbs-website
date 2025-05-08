@@ -10,7 +10,7 @@ At its worst, it was taking multiple _seconds_ to plan and a few hundred millise
 My problem wasn't really about standard query optimization: I was already past that.
 This was a problem of query complexity and trying to get the PostgreSQL [planner/optimizer](https://www.postgresql.org/docs/current/planner-optimizer.html) to more quickly arrive at an ideal query.
 
-# Research
+## Research
 
 Early research made me realize that there is much less content to be found on this specific topic.
 There are endless articles explaining how to speed up a query's _execution_ with tools like indexes and clustering.
@@ -24,7 +24,7 @@ I reassembled the query join by join and measured how long the planner/optimizer
 Once the planning time eventually jumped, I took a moment to think about the data model and how the tables were being joined.
 I eventually noticed a pattern that was causing the planner to take extra time and even came up with a name for the fix: **reinforcing indirect joins**.
 
-# An Example
+## An Example
 
 I'll try to explain this concept with an example.
 Consider a simple schema with three tables: `post`, `tag`, and `comment`.
@@ -48,7 +48,7 @@ inner join "comment"
   on "comment"."post_id" = "tag"."post_id";
 ```
 
-# The Problem
+## The Problem
 
 Now, based on my what I've seen and experienced, we've just thrown a curveball at the planner/optimizer.
 The tables `tag` and `comment` are indirectly linked to each other: they link to each other "through" the `post` table.
@@ -58,7 +58,7 @@ With large enough queries, this type of short-cutting can lead to the planner/op
 What can we do about it?
 Well, we can take this indirect join and reinforce it!
 
-# The Solution
+## The Solution
 
 The solution is actually quite simple: add a join to the "missing link" table even if you don't need any data from it.
 Here's what the fix looks this looks for our current example:
@@ -82,7 +82,7 @@ By adding posts into the query, the planner/optimizer is able to say "Ahh, I und
 
 Perhaps, without the extra join, the database has to search through more plans and therefore takes longer to find one that is optimal.
 
-# Another Example
+## Another Example
 
 Another sneaky way that this problem can manifest is when using CTEs to build smaller subsets of data into a larger response.
 Maybe you were first querying for tags that meet a certain condition before joining to comments:
@@ -123,7 +123,7 @@ inner join "comment"
   on "comment"."post_id" = "post"."id";
 ```
 
-# Conclusion
+## Conclusion
 
 There you have it!
 If you ever run into large queries with slow plan times, consider checking for (and reinforcing) any indirect joins.

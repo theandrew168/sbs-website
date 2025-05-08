@@ -10,7 +10,7 @@ From new friends to new skills, much has changed and I've experienced a huge amo
 Within work, I balanced regular development work with tech leadership and project planning.
 Within life, I balanced relationships and welcomed new friends who all come with unique and exciting interests, experiences, and perspectives.
 
-# Home Ownership
+## Home Ownership
 
 My biggest personal achievement was buying a house!
 My wife and I are home owners for the first time in our lives and it has been amazing.
@@ -23,7 +23,7 @@ We jokingly refer to this as our "regen" living room.
 Downstairs, we have a large, flat arrangement of short floor couches (corgis have short legs) that puts us at the perfect height for watching TV and playing video games.
 This is known as the "degen" living room.
 
-# Technical Leadership
+## Technical Leadership
 
 Professionally, I saw a lot of growth in 2024.
 At work, I took my first dive into technical leadership: leading teams of 2-3 developers through multi-month software projects.
@@ -36,7 +36,7 @@ Since the year began, I've led three projects to successful, on-time completion.
 The first few definitely caused me quite a bit of stress but things have gotten easier.
 Tech leadership is a skill that gets better with experience just like anything else.
 
-# Weekly Blogging
+## Weekly Blogging
 
 At the start of 2024, my buddy [Nick](https://nickherrig.com/) and I set a goal for ourselves: write a new blog post every week.
 I'm very hyped to say that I've made it!
@@ -56,7 +56,7 @@ Now that I'm at the end, it feels nice to look back and reflect on everything I'
 Some posts fill me with joy to re-read while others fall a bit flat (they can't _all_ be winners, after all).
 Here are some of my favorite posts from the year (in no particular order):
 
-## [1. Automating a Golden Age Minecraft Server](/posts/automating-a-golden-age-minecraft-server/)
+### [1. Automating a Golden Age Minecraft Server](/posts/automating-a-golden-age-minecraft-server/)
 
 This was a really fun post about how I researched, configured, and automated the hosting process for a "Golden Age" Minecraft server.
 The term "Golden Age" refers to versions of Minecraft prior to the [Adventure Update](https://minecraft.fandom.com/wiki/Adventure_Update) (I chose [Beta 1.7.3](https://minecraft.fandom.com/wiki/Java_Edition_Beta_1.7.3) for my server).
@@ -68,7 +68,7 @@ It presented an interesting problem from a security perspective since these olde
 Instead, I had to implement a "best effort" security posture by allow-listing usernames and restricting IP addresses.
 It definitely wasn't perfectly locked down, but we never had any issues with malicious actors showing up.
 
-## [2. A Multi-Plateform WebGL Demo](/posts/a-multi-platform-modern-webgl-demo/)
+### [2. A Multi-Plateform WebGL Demo](/posts/a-multi-platform-modern-webgl-demo/)
 
 This one was a fun throwback to the [second blog post](/posts/a-multi-platform-modern-opengl-demo-with-sdl2/) I ever wrote (back in June 2020).
 That post was about writing and building a cross-platform [OpenGL](https://en.wikipedia.org/wiki/OpenGL) demo in C.
@@ -87,7 +87,7 @@ This is where [WebGL](https://developer.mozilla.org/en-US/docs/Web/API/WebGL_API
 In just a few hundred lines of JavaScript, I had the same demo running [within the blog post](https://github.com/theandrew168/sbs-website/blob/25a3797d8e16ef93fe49e3f068313148d6791275/content/posts/a-multi-platform-modern-webgl-demo.md?plain=1#L89-L222) itself.
 I really loved how this post showed growth: both in technology (OpenGL to WebGL) and in my own experience (C to JavaScript).
 
-## [3. Mario Kart and the Maker's Schedule](/posts/mario-kart-and-the-makers-schedule/)
+### [3. Mario Kart and the Maker's Schedule](/posts/mario-kart-and-the-makers-schedule/)
 
 This was an opinion piece I wrote as a personal reflection on Paul Graham's [Maker's Schedule, Manager's Schedule](https://www.paulgraham.com/makersschedule.html) essay.
 Often, deep work requires prolonged, uninterrupted periods of focus.
@@ -102,7 +102,7 @@ Then, near the end, I talk about how I sometimes do my most productive work late
 In addition, Maple is usually snoozing at night so I was able to callback to her prior disruption by including a photo of her sleeping on the couch.
 It was a nice "circle back" moment which was further elevated by including a cute dog pic!
 
-## [4. Bloggulus Outage Postmortem](/posts/bloggulus-outage-postmortem/)
+### [4. Bloggulus Outage Postmortem](/posts/bloggulus-outage-postmortem/)
 
 This post was a technical postmortem into an outage that affected my [Bloggulus](https://bloggulus.com/) web site back in June.
 While no one was actually affected by the outage (I'm the only user and I was sleeping), it was an interesting case study into both what went wrong and why it took so long for me to notice.
@@ -113,7 +113,7 @@ The fix was also simple: enable and allocate swap space on the server.
 I wrote a [blog post](/posts/simple-server-swap-space/) about that, too.
 For what it's worth, Bloggulus has had no outages (or even OOM-killed processes) ever since!
 
-## [5. Reinforcing Indirect Joins](/posts/reinforcing-indirect-joins/)
+### [5. Reinforcing Indirect Joins](/posts/reinforcing-indirect-joins/)
 
 This post summarized an issue I kept running into at work where database queries were taking a shocking amount of time to plan.
 To clarify, the actual **execution** of the query was fast, but the **planning** was taking multiple orders of magnitude longer.
@@ -125,11 +125,11 @@ I can't even count how many times I would look at query, see the indirect join, 
 I used this post to explain the problem to coworkers within PRs, too.
 It came in super handy and was probably my most objectively impactful post of 2024.
 
-# Personal Projects
+## Personal Projects
 
 2024 was also a great year for personal projects!
 
-## Bloggulus
+### Bloggulus
 
 As always, [Bloggulus](https://bloggulus.com/) saw quite a few enhancements.
 I added the ability for users to register (via OAuth) and personalize their experience with their own favorite blogs.
@@ -161,7 +161,7 @@ I get all the power of vanilla CSS (which has come a long way and doesn't even n
 I never worry about naming collisions or style leaks.
 It's the perfect solution for the scale of web sites that I build, honestly.
 
-## Advent of Code
+### Advent of Code
 
 2024 was the second year in a row (third year ever) that I completed [Advent of Code](https://adventofcode.com/).
 This challenge of solving increasingly difficult programming puzzles is always a double-edged sword for me.
@@ -183,7 +183,7 @@ Python was the first language I deeply learned so I'll always have a nostalgic f
 I got to refresh my knowledge of some classic algorithms ([Dijkstra's](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm)) and even learned some new ones ([Bron-Kerbosch](https://en.wikipedia.org/wiki/Bron%E2%80%93Kerbosch_algorithm)).
 We'll see if I can stay away from Advent of Code in 2025...
 
-## DerzPlates
+### DerzPlates
 
 Despite playing WoW since roughly 2007, I never applied my software engineering mindset to it.
 That changed just a few weeks ago when I wrote and published my first WoW addon: [DerzPlates](https://github.com/theandrew168/derzplates).
@@ -194,7 +194,7 @@ The WoW client API, however, was totally foreign and required so much research t
 My initial version was kinda buggy but SDPhantom (on the forums) gave me some incredible [guidance and advice](https://www.wowinterface.com/forums/showthread.php?p=344701) to get it working properly.
 They get my personal "Best Tech Support of 2024" award, for sure!
 
-# Looking Forward
+## Looking Forward
 
 What do I hope to achieve in 2025?
 I still want to blog but it likely won't be every week.

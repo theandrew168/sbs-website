@@ -9,7 +9,7 @@ Recently, while updating my [pg2s3 utility](https://github.com/theandrew168/pg2s
 I couldn't remember why I did that, so I went ahead and removed it (what could go wrong?).
 Unfortunately, this led to some automated tests failing in GitHub Actions!
 
-# The Problem
+## The Problem
 
 Thankfully, the error was very clear:
 
@@ -25,7 +25,7 @@ For some context, pg2s3 uses `pg_dump` and `pg_restore` to quickly export and im
 I had two options: keep the server container pinned to version 14 or figure out how to install and use newer client tools on the Actions runner.
 I opted for the latter since it is the more correct and future-proof solution.
 
-# The Solution
+## The Solution
 
 As it turns out, the [PostgreSQL docs](https://www.postgresql.org/download/linux/ubuntu/) include a section about installing newer versions on stable releases of Ubuntu.
 The docs explain how and why stable Linux releases can fall behind:
@@ -52,7 +52,7 @@ sudo apt install -y postgresql-client
 Now both the server container and client tools will both be using the latest version which resolves the `version mismatch` error.
 With the versions aligned, my tests were all passing once again!
 
-# GitHub Actions
+## GitHub Actions
 
 This process can be bundled into a single GitHub Actions step for usage in any `ubuntu-latest`-based workflow:
 

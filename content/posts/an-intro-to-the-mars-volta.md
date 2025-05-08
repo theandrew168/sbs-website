@@ -11,7 +11,7 @@ They are a prog-rock band from El Paso, Texas who came into the spotlight in the
 I offered up a variety of suggestions ranging from "mild" to "wild" and figured I might as well share my thoughts with a wider audience.
 Plus, this gives me a good reason to get back into blogging here in 2025!
 
-# My Recommendations
+## My Recommendations
 
 Here's a good intro to The Mars Volta.
 [Wax Simulacra](https://www.youtube.com/watch?v=C5jcgJ3RNpo) is their most popular song (it won a Grammy).
@@ -33,7 +33,7 @@ I wasn't initially a fan but now they are probably my #1 or #2 band.
 They broke up for a while but are back together and making new music.
 They even have a new album coming in April, I've heard!
 
-# Wrapping Up
+## Wrapping Up
 
 If you are on the hunt for new music and enjoy prog-rock, check out some of the tracks I linked.
 Then, if you don't enjoy _any_ of them, no worries!

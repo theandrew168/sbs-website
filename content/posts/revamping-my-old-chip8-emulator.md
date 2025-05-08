@@ -17,7 +17,7 @@ Recently, I walked through this project again and my interim years of experience
 Almost every aspect of the code and how it was structured was outdated relative to my modern habits.
 I knew that a good amount of tender loving care was going to be needed in order to get the project up to my current standards.
 
-# Lingering Problems
+## Lingering Problems
 
 The issues I found upon reviewing this code can be grouped into the following categories:
 
@@ -46,7 +46,7 @@ The issues I found upon reviewing this code can be grouped into the following ca
   The project was only ever built and ran on Linux.
   I've since learned an effective approach for writing cross-platform C applications and would like to see this emulator working on Linux, macOS, and Windows.
 
-# Mighty Makefile
+## Mighty Makefile
 
 The [original Makefile](https://github.com/theandrew168/skylark/blob/a24585b48de2923fd016f379c7b0ad8cbb0a9d75/Makefile) had a fairly linear process: use GNU Make extensions to list all of the source files, use a suffix rule to compile C source files into object files, and then link the target binary.
 Simplified, it looks like this:
@@ -137,7 +137,7 @@ You can find the full, current version here:
 
 - https://github.com/theandrew168/skylark/blob/master/Makefile
 
-# Functional Foundations
+## Functional Foundations
 
 Some of the functions in the original version are very "messy" in terms of what they do.
 In my opinion, a good function should be clear about the data that goes in and the new data that comes out.
@@ -192,7 +192,7 @@ Due to this, I always leave I/O-based code at the top of the project (as close t
 This idea stems from a great talk by Brandon Rhodes called [Hoist Your I/O](https://www.youtube.com/watch?v=PBQN62oUnN8).
 In this Python-based presentation, he explains the value of keeping I/O-based and pure functional code separated.
 
-# Tactical Testing
+## Tactical Testing
 
 To be completely honest, most of the C code that I've written hasn't ever been "formally" tested.
 I would sometimes throw in minimal testing header like [minunit](http://www.jera.com/techinfo/jtns/jtn002.html) but wouldn't fully utilize it.
@@ -240,7 +240,7 @@ This means that all error message must be extra verbose and include _what_ is be
 There might be a way to make this cleaner with some macros but thus far I've not found a system that works well and is worth the added complexity.
 I strictly want just enough testing power to verify a function's behavior, lock it in place, and move on.
 
-# Plentiful Platforms
+## Plentiful Platforms
 
 The original version of Skylark was limited to Linux mainly because I didn't know how to achieve anything else.
 However, cross-platform C programs are now something that I can confidently build.
@@ -273,7 +273,7 @@ By linking them in statically, the resulting `.exe` is able to be distributed wi
 Just build, distribute, and run!
 It is a great solution to a potentially very messy problem.
 
-# Conclusion
+## Conclusion
 
 There we go!
 My CHIP-8 emulator is now completely revamped and modernized.

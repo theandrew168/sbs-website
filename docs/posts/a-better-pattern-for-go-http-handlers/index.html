@@ -13,9 +13,9 @@ This post describes the original pattern, its limitations, and how I iterated on
 These could be things like database connection pools, queue clients, or loggers.
 For most of my Go-based web development projects, I&rsquo;ve embraced the &ldquo;application struct&rdquo; pattern as described by Alex Edwards in his &ldquo;Let&rsquo;s Go&rdquo; <a href=https://lets-go.alexedwards.net/ class=external-link target=_blank rel=noopener>book series</a> (and a <a href=https://www.alexedwards.net/blog/organising-database-access class=external-link target=_blank rel=noopener>blog post</a>) to manage these dependencies.
 Despite serving my quite well over the past few years, I recently found myself wanting something a bit more flexible.
-This post describes the original pattern, its limitations, and how I iterated on it to arrive at something even better (in my opinion, of course).</p><h1 id=application-struct>Application Struct
+This post describes the original pattern, its limitations, and how I iterated on it to arrive at something even better (in my opinion, of course).</p><h2 id=application-struct>Application Struct
 <a class=heading-link href=#application-struct><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>This code snippet showcases the original pattern.
+<span class=sr-only>Link to heading</span></a></h2><p>This code snippet showcases the original pattern.
 Essentially, we gather the union of all of our handlers&rsquo; dependencies together in a centralized &ldquo;application struct&rdquo;.
 Then, we attach all handlers to this struct so that they can access the shared resources.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// Keep all handler dependencies in a centralized struct.</span>
 </span></span><span style=display:flex><span><span style=color:#66d9ef>type</span> <span style=color:#a6e22e>Application</span> <span style=color:#66d9ef>struct</span> {
@@ -65,9 +65,9 @@ Then, we attach all handlers to this struct so that they can access the shared r
 </span></span></code></pre></div><p>This strategy works quite well.
 However, it has a few downsides:</p><ol><li>All handlers must live in the same package as the application struct.</li><li>All dependencies must be setup to test each handler: even those that don&rsquo;t need them.</li></ol><p>For me, personally, that second detail started to become a nuisance.
 Even for a handler that returns static HTML, I have to instantiate a database connection?
-I wanted to find a better way.</p><h1 id=dependency-closures>Dependency Closures
+I wanted to find a better way.</p><h2 id=dependency-closures>Dependency Closures
 <a class=heading-link href=#dependency-closures><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>The solution is quite simple: just pass each handler&rsquo;s dependencies into its creation function.
+<span class=sr-only>Link to heading</span></a></h2><p>The solution is quite simple: just pass each handler&rsquo;s dependencies into its creation function.
 This creates a closure around the dependency such that the handler can still see and use it even after being returned.
 Let&rsquo;s take a look.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#75715e>// The program&#39;s routing handler.</span>
 </span></span><span style=display:flex><span><span style=color:#66d9ef>func</span> <span style=color:#a6e22e>Handler</span>(<span style=color:#a6e22e>store</span> <span style=color:#f92672>*</span><span style=color:#a6e22e>storage</span>.<span style=color:#a6e22e>Storage</span>) <span style=color:#a6e22e>http</span>.<span style=color:#a6e22e>Handler</span> {

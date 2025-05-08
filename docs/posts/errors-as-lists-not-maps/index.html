@@ -23,9 +23,9 @@ Errors as Maps Link to heading Errors come in many shapes and sizes. Since error
 4-minute read</span></div></div></header><div class=post-content><p>All REST APIs must decide how to handle and represent errors.
 There are many ways to accomplish this task and they all come with varying pros and cons.
 This post starts by describing the strategy I&rsquo;ve historically used when dealing with errors.
-After examining some limitations with that pattern, I present an alternative.</p><h1 id=errors-as-maps>Errors as Maps
+After examining some limitations with that pattern, I present an alternative.</p><h2 id=errors-as-maps>Errors as Maps
 <a class=heading-link href=#errors-as-maps><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Errors come in many shapes and sizes.
+<span class=sr-only>Link to heading</span></a></h2><p>Errors come in many shapes and sizes.
 Since errors often arise in response to input validation, it can be useful to include what specific &ldquo;field&rdquo; caused the problem.
 Until recently, I&rsquo;ve represented these errors as a map: the key is the problematic field and the value is the error message for that field.
 This enables the frontend to display the errors right next to the invalid input which is great for user experience.</p><p>In TypeScript, this error response would look something like:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-js data-lang=js><span style=display:flex><span><span style=color:#a6e22e>type</span> <span style=color:#a6e22e>ErrorResponse</span> <span style=color:#f92672>=</span> {
@@ -51,9 +51,9 @@ Our best bet is probably to add another field called &ldquo;general&rdquo; (or s
 </span></span><span style=display:flex><span>  },
 </span></span><span style=display:flex><span>};
 </span></span></code></pre></div><p>While this would probably work, it feels a bit like we are fighting against the design.
-If &ldquo;fields&rdquo; are an optional facet of our errors, how else can we represent them?</p><h1 id=errors-as-lists>Errors as Lists
+If &ldquo;fields&rdquo; are an optional facet of our errors, how else can we represent them?</p><h2 id=errors-as-lists>Errors as Lists
 <a class=heading-link href=#errors-as-lists><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Let&rsquo;s rewind a bit and start with what we <em>know</em> about errors:</p><ol><li>A single request may yield <strong>multiple</strong> errors</li><li>They <strong>always</strong> have a message of some sort</li><li>They are <strong>sometimes</strong> tied to specific fields</li></ol><p>So, errors always have a &ldquo;message&rdquo;, optionally have a &ldquo;field&rdquo;, and can come in multiples.
+<span class=sr-only>Link to heading</span></a></h2><p>Let&rsquo;s rewind a bit and start with what we <em>know</em> about errors:</p><ol><li>A single request may yield <strong>multiple</strong> errors</li><li>They <strong>always</strong> have a message of some sort</li><li>They are <strong>sometimes</strong> tied to specific fields</li></ol><p>So, errors always have a &ldquo;message&rdquo;, optionally have a &ldquo;field&rdquo;, and can come in multiples.
 Thinking about these requirements in isolation points me toward a slightly different design.
 Instead of representing errors as a map, let&rsquo;s represent them as a list:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-ts data-lang=ts><span style=display:flex><span><span style=color:#75715e>// An individual error has a message and an optional field.
 </span></span></span><span style=display:flex><span><span style=color:#75715e></span><span style=color:#66d9ef>type</span> Error <span style=color:#f92672>=</span> {
@@ -86,9 +86,9 @@ Instead of representing errors as a map, let&rsquo;s represent them as a list:</
 </span></span><span style=display:flex><span>    },
 </span></span><span style=display:flex><span>  ],
 </span></span><span style=display:flex><span>};
-</span></span></code></pre></div><h1 id=benefits>Benefits
+</span></span></code></pre></div><h2 id=benefits>Benefits
 <a class=heading-link href=#benefits><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Now each category of error (&ldquo;general&rdquo; and &ldquo;specific&rdquo;) can be easily represented without fighting against the design of our error response.
+<span class=sr-only>Link to heading</span></a></h2><p>Now each category of error (&ldquo;general&rdquo; and &ldquo;specific&rdquo;) can be easily represented without fighting against the design of our error response.
 Furthermore, this format support multiple general errors AND multiple specific errors (per field) out of the box.
 If your frontend is equipped to handle multiple errors per category, go for it!
 Otherwise, you can always just find the first error per category and call it a day.
@@ -110,9 +110,9 @@ I even wrote up a couple helpers to make this &ldquo;pick the first out of multi
 </span></span><span style=display:flex><span>  );
 </span></span><span style=display:flex><span>  <span style=color:#66d9ef>return</span> <span style=color:#a6e22e>errorsByField</span>;
 </span></span><span style=display:flex><span>}
-</span></span></code></pre></div><h1 id=conclusion>Conclusion
+</span></span></code></pre></div><h2 id=conclusion>Conclusion
 <a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Errors are a big topic with countless approaches and opinions.
+<span class=sr-only>Link to heading</span></a></h2><p>Errors are a big topic with countless approaches and opinions.
 The internet is full of awesome discussions about <a href=https://stackoverflow.com/questions/39759906/validation-responses-in-rest-api class=external-link target=_blank rel=noopener>strategies</a> and <a href=https://www.baeldung.com/rest-api-error-handling-best-practices class=external-link target=_blank rel=noopener>examples</a> of how big companies do it.
 Overall, both of the approaches outlined in this post are capable of getting the job done.
 At the end of the day, it mostly comes down to personal preference and the requirements of the project at hand.</p><p>Thanks for reading!</p></div><footer></footer></article></section></div><footer class=footer><section class=container>©

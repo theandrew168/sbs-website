@@ -17,9 +17,9 @@ I recently encountered some slowness while executing a bunch of tasks within a p
 Feel free to give it a read <a href=/posts/a-parallel-foreach-implementation-in-go/>here</a>!</p></blockquote><p>I recently encountered some slowness while executing a bunch of tasks within a program.
 Specifically, I was working on how <a href=https://bloggulus.com/ class=external-link target=_blank rel=noopener>Bloggulus</a> syncs all of the blogs that it tracks (there are only 40 or so right now but I expect the number to grow).
 Instead of naively syncing each blog serially, maybe concurrency can help.
-Let&rsquo;s find some ways to speed it up!</p><h1 id=serial>Serial
+Let&rsquo;s find some ways to speed it up!</p><h2 id=serial>Serial
 <a class=heading-link href=#serial><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>As a baseline, consider this simple program that executes multiple tasks in sequence.
+<span class=sr-only>Link to heading</span></a></h2><p>As a baseline, consider this simple program that executes multiple tasks in sequence.
 Each job must be performed one after another until all have completed.
 Instead of bogging you down the details of reading RSS feeds, I&rsquo;ve simulated some work by sleeping for a quarter second before printing &ldquo;job done!&rdquo;:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
 </span></span><span style=display:flex><span>
@@ -39,9 +39,9 @@ Instead of bogging you down the details of reading RSS feeds, I&rsquo;ve simulat
 </span></span><span style=display:flex><span>	}
 </span></span><span style=display:flex><span>}
 </span></span></code></pre></div><p><img src=/images/20240421/serial-min.gif alt="Serial Example"></p><p>Notice how the program takes roughly four seconds to execute (16 jobs * 0.25 second per job).
-There is nothing fancy going on here: each job executes one at a time.</p><h1 id=concurrent>Concurrent
+There is nothing fancy going on here: each job executes one at a time.</p><h2 id=concurrent>Concurrent
 <a class=heading-link href=#concurrent><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Surely, we can do better than that, right?
+<span class=sr-only>Link to heading</span></a></h2><p>Surely, we can do better than that, right?
 This is Go, after all, and Go has goroutines!
 We can just throw some <code>go</code> keywords in front of our <code>doWork</code> function and we&rsquo;ll be off to the races!</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
 </span></span><span style=display:flex><span>
@@ -65,9 +65,9 @@ The program didn&rsquo;t print anything!
 What happened to our jobs?
 The problem here is that Go&rsquo;s runtime doesn&rsquo;t wait for all goroutines to finish before the program exits.
 This means that our jobs didn&rsquo;t even get a chance to run.
-How can we tell the program to wait for our jobs to complete?</p><h1 id=waitgroup>WaitGroup
+How can we tell the program to wait for our jobs to complete?</p><h2 id=waitgroup>WaitGroup
 <a class=heading-link href=#waitgroup><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>Thankfully, Go&rsquo;s standard library holds the solution: <a href=https://pkg.go.dev/sync#WaitGroup class=external-link target=_blank rel=noopener>sync.WaitGroup</a>.
+<span class=sr-only>Link to heading</span></a></h2><p>Thankfully, Go&rsquo;s standard library holds the solution: <a href=https://pkg.go.dev/sync#WaitGroup class=external-link target=_blank rel=noopener>sync.WaitGroup</a>.
 From the docs:</p><blockquote><p>A WaitGroup waits for a collection of goroutines to finish.</p></blockquote><p>That sounds perfect!
 How does it work?</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
 </span></span><span style=display:flex><span>
@@ -106,9 +106,9 @@ Pretty neat!</p><p>There is one small problem, though, in the scenario I was fac
 I don&rsquo;t actually want to sync every blog at the same exact time.
 With the current approach, if <a href=https://bloggulus.com/ class=external-link target=_blank rel=noopener>bloggulus</a> was tracking 500 blogs, the sync process would blast the network with 500 outgoing requests at once!
 This might not be an issue in practice but I&rsquo;d rather find a way to smooth out the network traffic.
-Maybe there is a way to put an upper limit on the number of simultaneous syncs?</p><h1 id=semaphore>Semaphore
+Maybe there is a way to put an upper limit on the number of simultaneous syncs?</p><h2 id=semaphore>Semaphore
 <a class=heading-link href=#semaphore><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>This time, Go&rsquo;s <em>extended</em> standard library holds the solution: <a href=https://pkg.go.dev/golang.org/x/sync/semaphore class=external-link target=_blank rel=noopener>semaphore</a>.
+<span class=sr-only>Link to heading</span></a></h2><p>This time, Go&rsquo;s <em>extended</em> standard library holds the solution: <a href=https://pkg.go.dev/golang.org/x/sync/semaphore class=external-link target=_blank rel=noopener>semaphore</a>.
 In essence, a semaphore is a mutex that be locked by multiple goroutines at once.
 At creation, you give the semaphore a number and it&rsquo;ll only permit concurrent locks up to that limit.</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-go data-lang=go><span style=display:flex><span><span style=color:#f92672>package</span> <span style=color:#a6e22e>main</span>
 </span></span><span style=display:flex><span>
@@ -149,9 +149,9 @@ At creation, you give the semaphore a number and it&rsquo;ll only permit concurr
 </span></span></code></pre></div><p><img src=/images/20240421/semaphore-min.gif alt="Semaphore Example"></p><p>This is exactly what I&rsquo;m after: the best of both worlds!
 The jobs execute concurrently but only four (the value of <code>MaxWorkers</code>) are able to run at the same time.
 With this approach, I can limit how many simultaneous requests Bloggulus makes and prevent clogging up the network.
-Check out the final implementation <a href=https://github.com/theandrew168/bloggulus/blob/981424b37cee14a13f4caec556bcc3042260ab37/backend/service/sync.go#L89-L116 class=external-link target=_blank rel=noopener>on GitHub</a>.</p><h1 id=conclusion>Conclusion
+Check out the final implementation <a href=https://github.com/theandrew168/bloggulus/blob/981424b37cee14a13f4caec556bcc3042260ab37/backend/service/sync.go#L89-L116 class=external-link target=_blank rel=noopener>on GitHub</a>.</p><h2 id=conclusion>Conclusion
 <a class=heading-link href=#conclusion><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
-<span class=sr-only>Link to heading</span></a></h1><p>This post walked through a few basic examples of how Go&rsquo;s concurrency can be used to speedup a program&rsquo;s execution while limiting the number of active goroutines.
+<span class=sr-only>Link to heading</span></a></h2><p>This post walked through a few basic examples of how Go&rsquo;s concurrency can be used to speedup a program&rsquo;s execution while limiting the number of active goroutines.
 Overall, I&rsquo;m happy with how readable the final example is despite utilizing moderately-complex concurrency ideas.
 It goes to show how well designed the Go programming language is!</p></div><footer></footer></article></section></div><footer class=footer><section class=container>©
 2025
