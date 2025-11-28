@@ -1,0 +1,104 @@
+<!doctype html><html lang=en><head><title>Automating Deployments with mfd · Shallow Brook Software</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"><meta name=color-scheme content="light dark"><meta name=author content="Andrew Dailey"><meta name=description content="In a recent post, I wrote about an idea for how to deploy multi-file web applications.
+Given my background in Go, I was spoiled by the &ldquo;trivially bundle everything into a single binary&rdquo; deployment strategy.
+Life was simple: build the binary, copy it out to the server, and restart the service.
+Other language ecosystems don&rsquo;t have it quite as easy, however.
+In Python or Node.js, for example, you can&rsquo;t really &ldquo;build&rdquo; the app into a single binary.
+Tools like shiv exist, however, than can emulate this deployment simplicity by zipping your app&rsquo;s files together and then extracting them at first run.
+This strategy glosses over another problem, though: what do you do about &ldquo;native&rdquo; dependencies?
+Some Python / Node.js packages require native code to be built as part of the install.
+Given that I develop on an ARM64 Mac and my servers are x86-64 Linux, I would need a way to both cross-compile native dependencies AND bundle everything together."><meta name=keywords content="blog,developer,personal"><meta name=fediverse:creator content><meta name=twitter:card content="summary"><meta name=twitter:title content="Automating Deployments with mfd"><meta name=twitter:description content="In a recent post, I wrote about an idea for how to deploy multi-file web applications. Given my background in Go, I was spoiled by the “trivially bundle everything into a single binary” deployment strategy. Life was simple: build the binary, copy it out to the server, and restart the service. Other language ecosystems don’t have it quite as easy, however.
+In Python or Node.js, for example, you can’t really “build” the app into a single binary. Tools like shiv exist, however, than can emulate this deployment simplicity by zipping your app’s files together and then extracting them at first run. This strategy glosses over another problem, though: what do you do about “native” dependencies? Some Python / Node.js packages require native code to be built as part of the install. Given that I develop on an ARM64 Mac and my servers are x86-64 Linux, I would need a way to both cross-compile native dependencies AND bundle everything together."><meta property="og:url" content="https://shallowbrooksoftware.com/posts/automating-deployments-with-mfd/"><meta property="og:site_name" content="Shallow Brook Software"><meta property="og:title" content="Automating Deployments with mfd"><meta property="og:description" content="In a recent post, I wrote about an idea for how to deploy multi-file web applications. Given my background in Go, I was spoiled by the “trivially bundle everything into a single binary” deployment strategy. Life was simple: build the binary, copy it out to the server, and restart the service. Other language ecosystems don’t have it quite as easy, however.
+In Python or Node.js, for example, you can’t really “build” the app into a single binary. Tools like shiv exist, however, than can emulate this deployment simplicity by zipping your app’s files together and then extracting them at first run. This strategy glosses over another problem, though: what do you do about “native” dependencies? Some Python / Node.js packages require native code to be built as part of the install. Given that I develop on an ARM64 Mac and my servers are x86-64 Linux, I would need a way to both cross-compile native dependencies AND bundle everything together."><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2025-11-16T00:00:00+00:00"><meta property="article:modified_time" content="2025-11-16T00:00:00+00:00"><meta property="article:tag" content="Hosting"><link rel=canonical href=https://shallowbrooksoftware.com/posts/automating-deployments-with-mfd/><link rel=preload href=/fonts/fa-brands-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-regular-400.woff2 as=font type=font/woff2 crossorigin><link rel=preload href=/fonts/fa-solid-900.woff2 as=font type=font/woff2 crossorigin><link rel=stylesheet href=/css/coder.min.a38307e5862a7b0d7417d91e21e15185fb9466f7c137691d5c4d82198bd7cd06.css integrity="sha256-o4MH5YYqew10F9keIeFRhfuUZvfBN2kdXE2CGYvXzQY=" crossorigin=anonymous media=screen><link rel=stylesheet href=/css/coder-dark.min.a00e6364bacbc8266ad1cc81230774a1397198f8cfb7bcba29b7d6fcb54ce57f.css integrity="sha256-oA5jZLrLyCZq0cyBIwd0oTlxmPjPt7y6KbfW/LVM5X8=" crossorigin=anonymous media=screen><link rel=icon type=image/svg+xml href=/images/favicon.svg sizes=any><link rel=icon type=image/png href=/images/favicon-32x32.png sizes=32x32><link rel=icon type=image/png href=/images/favicon-16x16.png sizes=16x16><link rel=apple-touch-icon href=/images/apple-touch-icon.png><link rel=apple-touch-icon sizes=180x180 href=/images/apple-touch-icon.png><link rel=manifest href=/site.webmanifest><link rel=mask-icon href=/images/safari-pinned-tab.svg color=#5bbad5></head><body class="preload-transitions colorscheme-auto"><div class=float-container><a id=dark-mode-toggle class=colorscheme-toggle><i class="fa-solid fa-adjust fa-fw" aria-hidden=true></i></a></div><main class=wrapper><nav class=navigation><section class=container><a class=navigation-title href=https://shallowbrooksoftware.com/>Shallow Brook Software
+</a><input type=checkbox id=menu-toggle>
+<label class="menu-button float-right" for=menu-toggle><i class="fa-solid fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/about/>About</a></li><li class=navigation-item><a class=navigation-link href=/posts/>Blog</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://shallowbrooksoftware.com/posts/automating-deployments-with-mfd/>Automating Deployments with mfd</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa-solid fa-calendar" aria-hidden=true></i>
+<time datetime=2025-11-16T00:00:00Z>November 16, 2025
+</time></span><span class=reading-time><i class="fa-solid fa-clock" aria-hidden=true></i>
+6-minute read</span></div><div class=tags><i class="fa-solid fa-tag" aria-hidden=true></i>
+<span class=tag><a href=/tags/hosting/>Hosting</a></span></div></div></header><div class=post-content><p>In a <a href=/posts/deploying-multi-file-web-applications/>recent post</a>, I wrote about an idea for how to deploy multi-file web applications.
+Given my background in Go, I was spoiled by the &ldquo;trivially bundle everything into a single binary&rdquo; deployment strategy.
+Life was simple: build the binary, copy it out to the server, and restart the service.
+Other language ecosystems don&rsquo;t have it quite as easy, however.</p><p>In <a href=https://www.python.org/ class=external-link target=_blank rel=noopener>Python</a> or <a href=https://nodejs.org class=external-link target=_blank rel=noopener>Node.js</a>, for example, you can&rsquo;t really &ldquo;build&rdquo; the app into a single binary.
+Tools like <a href=https://shiv.readthedocs.io/en/latest/ class=external-link target=_blank rel=noopener>shiv</a> exist, however, than can emulate this deployment simplicity by zipping your app&rsquo;s files together and then extracting them at first run.
+This strategy glosses over another problem, though: what do you do about &ldquo;native&rdquo; dependencies?
+Some Python / Node.js packages require native code to be built as part of the install.
+Given that I develop on an ARM64 Mac and my servers are x86-64 Linux, I would need a way to both cross-compile native dependencies AND bundle everything together.</p><p>At some point I started to wonder if this Go-style &ldquo;push&rdquo; model of deployment wasn&rsquo;t the best fit for other tech stacks.
+Instead, what about exploring the &ldquo;pull&rdquo; model?
+Could that work?
+If you read my <a href=/posts/deploying-multi-file-web-applications/>other post</a> on this topic, you&rsquo;d know that the answer is&mldr; yes!</p><h1 id=the-approach>The Approach
+<a class=heading-link href=#the-approach><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>To summarize the approach, each version (commit hash) of the app will live in a separate directory.
+Then, a symlink will point to whichever version of the app is currently active.
+Lastly, the systemd unit&rsquo;s <code>WorkingDirectory</code> will be the &ldquo;active&rdquo; symlink.
+This ensures that each version&rsquo;s files don&rsquo;t conflict with each other or cause any deployment race conditions.</p><p>When deploying a new version, the steps are as follows:</p><ol><li>Clone and checkout the code into a new directory that correponds to the version&rsquo;s commit hash.</li><li>From this new version directory, run the install and build steps.</li><li>Update the &ldquo;active&rdquo; symlink to point to the new version directly: <code>ln -sfn &lt;deployment> active</code>.</li><li>Restart the systemd service to start using the code and resources from the new version.</li></ol><p>Seems straightfoward, right?
+While it <em>is</em> a simple approach, I figured it&rsquo;d still be nice to have a tool to help automate and orchestrate these steps.</p><h1 id=the-interface>The Interface
+<a class=heading-link href=#the-interface><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>This brings up to the topic of this post: <a href=https://github.com/theandrew168/mfd class=external-link target=_blank rel=noopener>mfd</a>.
+At it&rsquo;s core, mfd is a command-line tool (written in Go) that bundles these steps into a convenient interface.
+By providing the repo URL, build command(s), and an optional systemd unit, mfd will handle the rest: resolving commits, cloning and building new versions, updating the &ldquo;active&rdquo; symlink, and restarting the service.</p><p>The config file is written in TOML.
+Here is an example that builds my <a href=https://bloggulus.com/ class=external-link target=_blank rel=noopener>Bloggulus</a> RSS feed aggregator web app (<a href=https://github.com/theandrew168/bloggulus-svelte class=external-link target=_blank rel=noopener>source</a>).</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-toml data-lang=toml><span style=display:flex><span>[<span style=color:#a6e22e>repo</span>]
+</span></span><span style=display:flex><span><span style=color:#a6e22e>url</span> = <span style=color:#e6db74>&#34;https://github.com/theandrew168/bloggulus-svelte&#34;</span>
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>[<span style=color:#a6e22e>build</span>]
+</span></span><span style=display:flex><span><span style=color:#a6e22e>commands</span> = [
+</span></span><span style=display:flex><span>	[<span style=color:#e6db74>&#34;npm&#34;</span>, <span style=color:#e6db74>&#34;install&#34;</span>],
+</span></span><span style=display:flex><span>	[<span style=color:#e6db74>&#34;npm&#34;</span>, <span style=color:#e6db74>&#34;run&#34;</span>, <span style=color:#e6db74>&#34;build&#34;</span>],
+</span></span><span style=display:flex><span>]
+</span></span><span style=display:flex><span>
+</span></span><span style=display:flex><span>[<span style=color:#a6e22e>systemd</span>]
+</span></span><span style=display:flex><span><span style=color:#a6e22e>unit</span> = <span style=color:#e6db74>&#34;bloggulus&#34;</span>
+</span></span></code></pre></div><p>For private repos, you can add a <code>repo.token</code> field to the config file which contains a GitHub personal access token.
+For basic auth, you can instead provide <code>repo.username</code> and <code>repo.password</code>.</p><p>The mfd CLI exposes a minimal set of necessary commands:</p><div class=highlight><pre tabindex=0 style=color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4><code class=language-console data-lang=console><span style=display:flex><span>usage: mfd &lt;command&gt; [&lt;args&gt;]
+</span></span><span style=display:flex><span>commands:
+</span></span><span style=display:flex><span>  list        List available deployments
+</span></span><span style=display:flex><span>  deploy      Resolve, fetch, build, and activate a revision
+</span></span><span style=display:flex><span>  rollback    Rollback to the previous deployment
+</span></span><span style=display:flex><span>  help        Show this help message
+</span></span></code></pre></div><p>You can use the <code>list</code> command to see which deployments are available and which one is active:</p><pre tabindex=0><code>$ mfd ls
+0cbbb84409331740a8a727ab09f1df163cfa4bc0
+2c3e9dafda1b13f32604df11d6996fc384c9d681
+92965fdb8a7c8da1fd1532ab9e3497990eee0519 (active)
+</code></pre><p>The <code>deploy</code> command is the most useful: it performs all of the necessary deployment steps.
+Without any extra args, it&rsquo;ll resolve the latest commit on the repo&rsquo;s default branch.
+You can also provide tags or specific hashes (full or partial).
+After a successful deployment, mfd will automatically delete all but most recent few versions.
+This way, you don&rsquo;t have to worry about old deployments slowly using up more and more drive space.</p><p>Lastly, <code>rollback</code> can be used to revert to the deployment that came before (chronologically) the active one.
+This is a handy escape hatch that can be utilized if something is amiss with the latest deployment.
+By default, mfd keeps the three most recent deployments around just in case a rollback is necessary.</p><h1 id=continuous-deployment>Continuous Deployment
+<a class=heading-link href=#continuous-deployment><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>Today, my usage of mfd is completely manual.
+When I want to deploy, I have to SSH into the server, change to the <code>/usr/local/src/&lt;project></code> directory, and run <code>mfd deploy</code>.
+On the upside, this process takes less than 30 seconds and, because it happens in the foreground, I&rsquo;m immediately made aware if anything goes wrong.
+<a href=https://nickherrig.com/ class=external-link target=_blank rel=noopener>Some folks</a> have asked me: what about automated continuous deployment?
+It&rsquo;s a reasonable question to ask and there are at least a couple of approaches I could take.</p><h2 id=polling>Polling
+<a class=heading-link href=#polling><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>A polling-based solution is very straightforward: run <code>mfd deploy</code> every N minutes / hours to check for and deploy new versions.
+This could be done as a <a href=https://en.wikipedia.org/wiki/Cron class=external-link target=_blank rel=noopener>cron job</a> or I could build a basic timer into the tool itself.
+This is somewhat wasteful, though, since <strong>most of the time I&rsquo;d be cloning a repo just to do nothing</strong>.
+Despite being trivial to implement and having the least moving parts, I actually think this is the worst option compared to deploying manually or the next strategy: notifying.</p><h2 id=notifying>Notifying
+<a class=heading-link href=#notifying><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h2><p>There are two parts to this problem: triggering the deployment and tracking its status.
+For <a href=https://github.com/ class=external-link target=_blank rel=noopener>GitHub</a> specifically, webhooks could be used to notify mfd that new version of the code is available.
+This <em>would</em> require that an HTTP endpoint be exposed to the internet so that GitHub can successfully deliver events.
+Since GitHub highly recommends SSL verification for webhooks, I&rsquo;d either need to utilize the <a href=https://pkg.go.dev/golang.org/x/crypto/acme/autocert class=external-link target=_blank rel=noopener>autocert</a> package or instead assume that mfd will be deployed behind a reverse proxy (like <a href=https://caddyserver.com/ class=external-link target=_blank rel=noopener>Caddy</a>).
+Furthermore, mfd would itself would need a systemd unit with a dedicated user.
+This is already a non-trival amount of moving parts and architectural overhead.</p><p>Tracking is more difficult approach, as well, because mfd lacks a persistent user interface or way to asynchrously communicate failures.
+When using the CLI, logs get printed directly to stdout and the user is expected to watch that output for any errors (this is an argument in favor of manual deployments).
+When <em>not</em> using the CLI, some other method of communication will need to be used because silent failures aren&rsquo;t really something that I want to support.</p><p>I think <a href="https://docs.github.com/en/rest/commits/statuses?apiVersion=2022-11-28" class=external-link target=_blank rel=noopener>commit statuses</a> could be a good solution here.
+When a deployment starts, I could mark the commit as &ldquo;pending&rdquo; using the existing auth token.
+Once finished, it could then be marked as &ldquo;success&rdquo;.
+If something goes wrong, it&rsquo;d be marked as &ldquo;error&rdquo; with a useful, human-friendly message.
+However, applying these updates requires a GitHub API token with permission to read and write commit statuses on the target repository.
+This is another moving part and another security vector to worry about.</p><h1 id=the-end>The End
+<a class=heading-link href=#the-end><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
+<span class=sr-only>Link to heading</span></a></h1><p>At the end of the day, both of the aforementioned automation strategies have tradeoffs.
+Most importantly, how do I maintain visibility into whether or not the deployment succeeded?
+If it failed, what went wrong?</p><p>For this reason (and the fact that I don&rsquo;t run many services), I&rsquo;m content with simply running <code>mfd deploy</code> manually.
+I can always add a <code>Makefile</code> entry that handles the SSH + <code>mfd deploy</code> command.
+That way I only have to type <code>make deploy</code> and then enter my sudo password.
+This brings the entire deployment process from ~30s down to ~10s which isn&rsquo;t much of a blocker for me.</p><p>Let me know if <a href=https://github.com/theandrew168/mfd class=external-link target=_blank rel=noopener>mfd</a> could be useful to you.
+I&rsquo;m definitely open to any feedback and / or suggestions.
+Thanks for reading!</p></div><footer></footer></article></section></div><footer class=footer><section class=container>©
+2025
+Andrew Dailey
+·
+Powered by <a href=https://gohugo.io/ target=_blank rel=noopener>Hugo</a> & <a href=https://github.com/luizdepra/hugo-coder/ target=_blank rel=noopener>Coder</a>.</section></footer></main><script src=/js/coder.min.6ae284be93d2d19dad1f02b0039508d9aab3180a12a06dcc71b0b0ef7825a317.js integrity="sha256-auKEvpPS0Z2tHwKwA5UI2aqzGAoSoG3McbCw73gloxc="></script><script data-goatcounter=https://shallowbrooksoftware.goatcounter.com/count async src=//gc.zgo.at/count.js></script></body></html>

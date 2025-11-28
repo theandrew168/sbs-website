@@ -3,7 +3,6 @@ date: 2025-11-16
 title: "Automating Deployments with mfd"
 slug: "automating-deployments-with-mfd"
 tags: ["Hosting"]
-draft: true
 ---
 
 In a [recent post](/posts/deploying-multi-file-web-applications/), I wrote about an idea for how to deploy multi-file web applications.
@@ -111,6 +110,7 @@ There are two parts to this problem: triggering the deployment and tracking its 
 For [GitHub](https://github.com/) specifically, webhooks could be used to notify mfd that new version of the code is available.
 This _would_ require that an HTTP endpoint be exposed to the internet so that GitHub can successfully deliver events.
 Since GitHub highly recommends SSL verification for webhooks, I'd either need to utilize the [autocert](https://pkg.go.dev/golang.org/x/crypto/acme/autocert) package or instead assume that mfd will be deployed behind a reverse proxy (like [Caddy](https://caddyserver.com/)).
+Furthermore, mfd would itself would need a systemd unit with a dedicated user.
 This is already a non-trival amount of moving parts and architectural overhead.
 
 Tracking is more difficult approach, as well, because mfd lacks a persistent user interface or way to asynchrously communicate failures.
