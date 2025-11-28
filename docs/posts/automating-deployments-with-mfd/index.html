@@ -81,7 +81,7 @@ For <a href=https://github.com/ class=external-link target=_blank rel=noopener>G
 This <em>would</em> require that an HTTP endpoint be exposed to the internet so that GitHub can successfully deliver events.
 Since GitHub highly recommends SSL verification for webhooks, I&rsquo;d either need to utilize the <a href=https://pkg.go.dev/golang.org/x/crypto/acme/autocert class=external-link target=_blank rel=noopener>autocert</a> package or instead assume that mfd will be deployed behind a reverse proxy (like <a href=https://caddyserver.com/ class=external-link target=_blank rel=noopener>Caddy</a>).
 Furthermore, mfd would itself would need a systemd unit with a dedicated user.
-This is already a non-trival amount of moving parts and architectural overhead.</p><p>Tracking is more difficult approach, as well, because mfd lacks a persistent user interface or way to asynchrously communicate failures.
+This is already a non-trival amount of moving parts and architectural overhead.</p><p>Tracking is more difficult with this approach, as well, because mfd lacks a persistent user interface or way to asynchrously communicate failures.
 When using the CLI, logs get printed directly to stdout and the user is expected to watch that output for any errors (this is an argument in favor of manual deployments).
 When <em>not</em> using the CLI, some other method of communication will need to be used because silent failures aren&rsquo;t really something that I want to support.</p><p>I think <a href="https://docs.github.com/en/rest/commits/statuses?apiVersion=2022-11-28" class=external-link target=_blank rel=noopener>commit statuses</a> could be a good solution here.
 When a deployment starts, I could mark the commit as &ldquo;pending&rdquo; using the existing auth token.

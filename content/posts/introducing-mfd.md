@@ -113,7 +113,7 @@ Since GitHub highly recommends SSL verification for webhooks, I'd either need to
 Furthermore, mfd would itself would need a systemd unit with a dedicated user.
 This is already a non-trival amount of moving parts and architectural overhead.
 
-Tracking is more difficult approach, as well, because mfd lacks a persistent user interface or way to asynchrously communicate failures.
+Tracking is more difficult with this approach, as well, because mfd lacks a persistent user interface or way to asynchrously communicate failures.
 When using the CLI, logs get printed directly to stdout and the user is expected to watch that output for any errors (this is an argument in favor of manual deployments).
 When _not_ using the CLI, some other method of communication will need to be used because silent failures aren't really something that I want to support.
 
