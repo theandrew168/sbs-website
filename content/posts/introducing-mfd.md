@@ -1,5 +1,5 @@
 ---
-date: 2025-11-16
+date: 2025-11-28
 title: "Automating Deployments with mfd"
 slug: "automating-deployments-with-mfd"
 tags: ["Hosting"]
