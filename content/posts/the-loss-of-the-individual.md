@@ -61,6 +61,11 @@ Thinking about Sara Chen testimonials: it's all fake!
 It's all an illusion: just a facade of value.
 Feels like systems are just worse now: slower and less reliable.
 
+I'm realizing more and more (through both observations and my own experience) that LLMs love to blow smoke up your ass and lie about value / correctness.
+It makes sense: they are tuned for engagement just like social media (you're doing so well, keep spending tokens!).
+But that also means that you can't (shouldn't) trust their output despite how convincing they seem.
+You external proof and validation: could be a test harness that someone else wrote (even another LLM, honestly) OR just confirmation of value from people paying real money for it.
+
 Software development is hard.
 I like to think about it like trying to a reach a specific point in an N-dimensional space.
 There are two parts to this: knowing _where_ you want to go and knowing _how_ to get there.
