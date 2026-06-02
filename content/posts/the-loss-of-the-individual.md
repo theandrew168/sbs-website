@@ -80,3 +80,9 @@ Given the vastness of the search space, precision is key.
 Where does that precision come from?
 Experience, craftsmanship, and [tacit knowledge](https://cekrem.github.io/posts/the-tacit-dimension/).
 Maybe this section should be called "The lost of the Craftsman".
+
+Value of non-functionals.
+What would happen if existing, value-proven features were as fast and reliable as possible?
+Maybe that'd only yield linear growth which "isn't good enough", sadly.
+This is due to shareholders wanting the most returns (they want exponential rockets).
+Kind of a conflict of interest that leads good systems into bad systems.
