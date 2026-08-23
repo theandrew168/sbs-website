@@ -2,7 +2,7 @@
 date: 2024-11-10
 title: "Simple Database Migrations in Go"
 slug: "simple-database-migrations-in-go"
-tags: ["Databases", "Go"]
+tags: ["PostgreSQL", "Go"]
 ---
 
 Historically, database migrations were a facet of web development that'd cause me to reach for a third-party library.

@@ -2,7 +2,7 @@
 date: 2024-06-30
 title: "Two Go + PostgreSQL Timestamp Gotchas"
 slug: "two-go-plus-postgresql-timestamp-gotchas"
-tags: ["Databases", "Go"]
+tags: ["PostgreSQL", "Go"]
 ---
 
 This week I added some additional tests to my [Bloggulus](https://github.com/theandrew168/bloggulus) project.

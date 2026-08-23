@@ -2,7 +2,7 @@
 date: 2024-06-16
 title: "Reinforcing Indirect Joins"
 slug: "reinforcing-indirect-joins"
-tags: ["Databases"]
+tags: ["PostgreSQL"]
 ---
 
 Recently, I ran into an issue where a very large PostgreSQL query (involving roughly 30 tables) was taking much longer to plan than to execute.

@@ -2,7 +2,7 @@
 date: 2024-03-24
 title: "Testing with Transactions"
 slug: "testing-with-transactions"
-tags: ["Go", "TypeScript", "Databases"]
+tags: ["Go", "TypeScript", "PostgreSQL"]
 ---
 
 Most web applications eventually end up with tests that need to interact with a database.

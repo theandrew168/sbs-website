@@ -2,7 +2,7 @@
 date: 2024-12-15
 title: "Prepared Statement Caching: An Easy Win?"
 slug: "prepared-statement-caching-an-easy-win"
-tags: ["Databases"]
+tags: ["PostgreSQL"]
 ---
 
 In PostgreSQL, [prepared statements](https://www.postgresql.org/docs/current/sql-prepare.html) are a means of optimization for executing SQL queries.

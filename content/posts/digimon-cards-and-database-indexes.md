@@ -2,7 +2,7 @@
 date: 2024-06-23
 title: "Digimon Cards and Database Indexes"
 slug: "digimon-cards-and-database-indexes"
-tags: ["Databases"]
+tags: ["PostgreSQL"]
 ---
 
 I'm a big fan of the [Digimon Card Game](https://world.digimoncard.com/) (the one released in 2020).

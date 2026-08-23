@@ -102,3 +102,8 @@ Default browser styles are reset using [minireset](https://jgthms.com/minireset.
 When it comes to fonts, a prioritized list of [system fonts](https://systemfontstack.com/) (defined in `src/lib/assets/css/font.css`) are used and no extra fonts are loaded.
 Some commonly-used and shared CSS values (like colors) live in `src/lib/assets/css/global.css`.
 Note that, despite not using [Tailwind CSS](https://tailwindcss.com/) directly, some of its colors are copied for convenience.
+
+Use `rem` for font-size (except for the font-size in global.css) and `em` for all other spaces and sizings.
+Keep spacing and sizing values locked to `0.25` increments (except font-size which can use `0.125` increments).
+Pixel values are okay for borders, box shadows, and for sizing specific small images like logos.
+These are primarily guidelines: exceptions can be made for special cases.

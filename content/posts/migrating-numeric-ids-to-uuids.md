@@ -2,7 +2,7 @@
 date: 2024-11-03
 title: "Migrating Numeric IDs to UUIDs"
 slug: "migrating-numeric-ids-to-uuids"
-tags: ["Databases"]
+tags: ["PostgreSQL"]
 ---
 
 There are a few ways to represent primary keys within a database.
