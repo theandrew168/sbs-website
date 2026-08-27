@@ -1,7 +1,7 @@
 ---
 date: 2026-08-22
-title: "Self-Hosted Metrics, Logs, and Traces"
-slug: "self-hosted-melt"
+title: "Patty: My Self-Hosted MELT Stack"
+slug: "patty-my-self-hosted-melt-stack"
 tags: ["VictoriaMetrics", "VictoriaLogs", "VictoriaTraces"]
 draft: true
 ---

@@ -163,7 +163,7 @@ If you want to see the full migration complete with all of the nuances, [take a 
 
 I'll say this: the problem of tracking and joining on the original IDs definitely gets more complex the larger your data model becomes.
 At some scale, I think things could quickly get out of hand.
-I got luckly, though, and merely had to deal with the simplest of relationships between only two tables.
+I got lucky, though, and merely had to deal with the simplest of relationships between only two tables.
 
 ## Conclusion
 

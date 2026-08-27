@@ -6,7 +6,7 @@ Clicking on a individual helmet gives you some extra details: how its price rank
 <label class="menu-button float-right" for=menu-toggle><i class="fa-solid fa-bars fa-fw" aria-hidden=true></i></label><ul class=navigation-list><li class=navigation-item><a class=navigation-link href=/about/>About</a></li><li class=navigation-item><a class=navigation-link href=/posts/>Blog</a></li></ul></section></nav><div class=content><section class="container post"><article><header><div class=post-title><h1 class=title><a class=title-link href=https://shallowbrooksoftware.com/posts/a-positive-experience-with-gpt-5.6-luna/>A Positive Experience with GPT-5.6 Luna</a></h1></div><div class=post-meta><div class=date><span class=posted-on><i class="fa-solid fa-calendar" aria-hidden=true></i>
 <time datetime=2026-08-23T00:00:00Z>August 23, 2026
 </time></span><span class=reading-time><i class="fa-solid fa-clock" aria-hidden=true></i>
-4-minute read</span></div></div></header><div class=post-content><p>The other day, I was looking at <a href=https://www.helmet.beam.vt.edu/bicycle-helmet-ratings.html class=external-link target=_blank rel=noopener>Virginia Tech&rsquo;s bicycle helmet ratings</a>.
+5-minute read</span></div></div></header><div class=post-content><p>The other day, I was looking at <a href=https://www.helmet.beam.vt.edu/bicycle-helmet-ratings.html class=external-link target=_blank rel=noopener>Virginia Tech&rsquo;s bicycle helmet ratings</a>.
 The data here is quite interesting: a breakdown of over 300 helmets including info about price, impact score (lower is better), and an overall star rating.
 They recommend picking a helmet that is has a 4 or 5 star rating.
 Clicking on a individual helmet gives you some extra details: how its price ranks among <strong>all</strong> helmets and how its score compares to the average of <strong>only the helmets with the same number of stars</strong>.</p><p>Naturally, I was curious to see the distribution of helmet scores across all helmets and not just each helmet against its star group&rsquo;s average.
@@ -17,11 +17,20 @@ If I&rsquo;d had to write the code by hand, it probably would have taken 15-20 m
 <a class=heading-link href=#the-prompt><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h2><p>But, I didn&rsquo;t have 15-20 minutes.
 We were about to leave and I only had 1-2 minutes.
-Since I&rsquo;d recently been experimenting with OpenAI&rsquo;s latest generation of models (GPT-5.6 Sol, Terra, and Luna), I decided to see if this was an appropriately sized / scoped task for Luna.</p><p>On thinking level &ldquo;medium&rdquo;, I gave it the following prompt:</p><blockquote><p>The @ratings.txt file contains a list of ~300 bicycling helmets and their safety ratings. I&rsquo;d like to convert it to a CSV with the following columns: name, score, stars, and price. Can you write a python script to do this conversion? Just call it main.py. It shouldn&rsquo;t need any deps: just the stdlib and csv module, probably.</p></blockquote><p>It one-shot the task perfectly in roughly 30 seconds.
+Since I&rsquo;d recently been experimenting with OpenAI&rsquo;s latest generation of models (GPT-5.6 Sol, Terra, and Luna), I decided to see if this was an appropriately sized / scoped task for Luna.</p><p>On thinking level &ldquo;medium&rdquo;, I gave it the following prompt:</p><blockquote><p>The @ratings.txt file contains a list of ~300 bicycling helmets and their safety ratings. I&rsquo;d like to convert it to a CSV with the following columns: name, score, stars, and price. Can you write a python script to do this conversion? Just call it main.py. It shouldn&rsquo;t need any deps: just the stdlib and csv module, probably.</p></blockquote><p>It <a href=https://github.com/theandrew168/helmet-ratings/blob/main/main.py class=external-link target=_blank rel=noopener>one-shot</a> the task perfectly in roughly 30 seconds.
 Due to my relative unfamiliarity with OpenAI&rsquo;s models, I was surprised.
 Not just with the quality, but also with the speed and the price (it cost $0.007 total: just under a cent).
 Others with more hands-on experience with OpenAI&rsquo;s models (and AI tech in general) probably expected this outcome, but it exceeded my expectations.
-I had the data parsed, converted, and graphed within that tight 1-2 minute window.</p><h2 id=the-takeaway>The Takeaway
+I had the data parsed, converted, and graphed within that tight 1-2 minute window.</p><p>So what about the code?
+Was it any good?
+To be honest, I don&rsquo;t really know.
+I didn&rsquo;t at it look very closely because I didn&rsquo;t need to.
+What I cared about was the output: a CSV of helmet data.
+The code was just a &ldquo;means to an end&rdquo; and the specific details were immaterial as long as it worked.
+To verify correctness, I spot checked the first record, last record, and a handful in the middle.
+Since those passed the check, I interpolated that <em>all</em> records were correct.</p><p>To me, the fact that the code itself didn&rsquo;t really matter here made this a &ldquo;safe&rdquo; application of LLM tech.
+There is a large trust gap between having AI write a basic conversion script and having it write the entirety of your critical-path business application.
+My personal trust for these tools hasn&rsquo;t yet extended to the latter.</p><h2 id=the-takeaway>The Takeaway
 <a class=heading-link href=#the-takeaway><i class="fa-solid fa-link" aria-hidden=true title="Link to heading"></i>
 <span class=sr-only>Link to heading</span></a></h2><p>At work, I have a Claude Code Max subscription.
 Because the tokens are essentially unlimited, I feel like I tend to overlook the nuances of <em>how</em> I&rsquo;m using the LLM.

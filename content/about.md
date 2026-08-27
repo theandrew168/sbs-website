@@ -15,7 +15,7 @@ Simplicity and maintainability are my highest priorities when designing any piec
 My goal is to deliver solutions that perfectly fit the size and scope of the problems they solve: nothing more and nothing less!
 I'm not the type to pitch an over-engineered bundle of technical debt when all you need is a few scripts.
 
-[Digital Ocean](https://www.digitalocean.com/) is currently my hosting platform of choice thanks to its clean interface and fair pricing.
+[DigitalOcean](https://www.digitalocean.com/) is currently my hosting platform of choice thanks to its clean interface and fair pricing.
 I've also played with [Linode](https://www.linode.com/) and think that it is another great provider.
 
 Additionally, I have a large amount of experience automating tasks with [Terraform](https://www.terraform.io/) and [Ansible](https://docs.ansible.com/ansible/latest/index.html).

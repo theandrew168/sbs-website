@@ -24,11 +24,24 @@ Since I'd recently been experimenting with OpenAI's latest generation of models 
 On thinking level "medium", I gave it the following prompt:
 > The @ratings.txt file contains a list of ~300 bicycling helmets and their safety ratings. I'd like to convert it to a CSV with the following columns: name, score, stars, and price. Can you write a python script to do this conversion? Just call it main.py. It shouldn't need any deps: just the stdlib and csv module, probably.
 
-It one-shot the task perfectly in roughly 30 seconds.
+It [one-shot](https://github.com/theandrew168/helmet-ratings/blob/main/main.py) the task perfectly in roughly 30 seconds.
 Due to my relative unfamiliarity with OpenAI's models, I was surprised.
 Not just with the quality, but also with the speed and the price (it cost $0.007 total: just under a cent).
 Others with more hands-on experience with OpenAI's models (and AI tech in general) probably expected this outcome, but it exceeded my expectations.
 I had the data parsed, converted, and graphed within that tight 1-2 minute window.
+
+So what about the code?
+Was it any good?
+To be honest, I don't really know.
+I didn't at it look very closely because I didn't need to.
+What I cared about was the output: a CSV of helmet data.
+The code was just a "means to an end" and the specific details were immaterial as long as it worked.
+To verify correctness, I spot checked the first record, last record, and a handful in the middle.
+Since those passed the check, I interpolated that _all_ records were correct.
+
+To me, the fact that the code itself didn't really matter here made this a "safe" application of LLM tech.
+There is a large trust gap between having AI write a basic conversion script and having it write the entirety of your critical-path business application.
+My personal trust for these tools hasn't yet extended to the latter.
 
 ## The Takeaway
 
